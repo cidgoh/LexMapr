@@ -1,0 +1,2001 @@
+Biosample,Collection_source,term_frequency
+SAMN07444435,feces Cattle (bos taurus),367
+SAMN02989101,Beef,356
+SAMN03218269,Retail Meat,249
+SAMN04961925,Environmental (Pond),160
+SAMN01041083,chicken breast,159
+SAMN03024453,River Water,151
+SAMN06461737,Bovine Feces,141
+SAMN03573590,Suwanee river water,128
+SAMN02902742,Boneless Beef,122
+SAMN03609936,oyster,121
+SAMN05596703,"feces Sow,Sus scrofa",118
+SAMN01816121,peanut butter,99
+SAMN01939055,soil,94
+SAMN05655993,Bos taurus_Feces,93
+SAMN05452899,"bovine, cow-Feces",88
+SAMN02345277,drag swab,81
+SAMN02937445,cantaloupe,77
+SAMN02265306,Bovine (carcass),71
+SAMN01902257,ground beef,70
+SAMN07571646,biological fluid or/and tissue,65
+SAMN03736687,cuban sandwich,58
+SAMN03112861,Seagull,58
+SAMN01939115,Baby Spinach,50
+SAMN04993231,Feces-Bovine,47
+SAMN00862094,sesame seeds,46
+SAMN07503776,Chicken Cecum Pre-Harvest (Poultry),45
+SAMN04993581,GROUND PORK,43
+SAMN01939056,swabs,42
+SAMN06168068,cow paddock straw bedding Bovine (steer),37
+SAMN04530865,salami paste (production),35
+SAMN01041089,"turkey, ground",34
+SAMN03743905,Flour,33
+SAMN02595003,Boneless skinless chicken breast,32
+SAMN06213711,Ground Component Turkey,27
+SAMN03154400,Comminuted poultry,26
+SAMN06841306,Tidal Freshwater,24
+SAMN02918551,"Animal Feed, Canola Meal",23
+SAMN04510378,Bos taurus-Cow Feces,23
+SAMN04962036,Environmental (Forests),22
+SAMN02647038,fresh cheese curd,22
+SAMN05414422,mouse intestine,22
+SAMN02378007,porcine liver,22
+SAMN06220551,Retail Chicken,22
+SAMN01816222,cooked peeled shrimp,21
+SAMN01816134,canal water,20
+SAMN03736693,ham sandwich,20
+SAMN07420442,Intestine (Porcine),20
+SAMN01823703,irrigation water,19
+SAMN01942310,coriander powder,18
+SAMN04993163,"avian, Gallus gallus domesticus-Liver",17
+SAMN07135179,Chicken stool,17
+SAMN06921748,mouse spleen (Mus moluscus),17
+SAMN03015649,Fresh Hass Avocado,16
+SAMN05464556,"avian, parrot-Feces",15
+SAMN01813945,cow milk sample from dairy farm,15
+SAMN02265293,Fertilizer,15
+SAMN02709264,ground cumin,15
+SAMN03275265,Organic Spinach,15
+SAMN04146055,poor boy sandwich,15
+SAMN05289759,Unbleached White Flour,15
+SAMN02483554,Almonds,14
+SAMN04993140,"avian, Gallus gallus domesticus-Blood",14
+SAMN02646827,Bovine Lung,14
+SAMN05452898,"bovine, cow-Intestine-Small",14
+SAMN02721406,"Bovine, feces",14
+SAMN02709312,"environmental sponge, swab, or sponge-stick",14
+SAMN02344962,papayas,14
+SAMN04001785,Rectal contents - porcine,14
+SAMN03897569,walnut tree,14
+SAMN02850648,Beef Blend Dog Food,13
+SAMN03736762,chicken salad sandwich,13
+SAMN01920930,environmental swab: production facility,13
+SAMN04942832,Fecal-calf,13
+SAMN07420441,Feces (Porcine),13
+SAMN01933085,pig,13
+SAMN03462273,raw whole chicken,13
+SAMN06333870,Reptile Cloacal swab (Reptilia),13
+SAMN02419055,Trachemys Scripta in an irrigation pond,13
+SAMN07782574,Yellowfin Tuna Loin -Frozen,13
+SAMN04993095,"avian, Gallus gallus domesticus-Heart",12
+SAMN04993159,"avian, Gallus gallus domesticus-Lung",12
+SAMN03763948,bakery environment - baking production room,12
+SAMN03463701,Chocolate Ice Cream,12
+SAMN05607394,"feces, Ovis aries",12
+SAMN02646783,Avian Liver,11
+SAMN04993039,"avian, pigeon-Cloacae",11
+SAMN02921863,Avocado Pulp,11
+SAMN03763915,bakery environment - assembly production room,11
+SAMN01920880,bovine (necropsy),11
+SAMN04279487,"bovine, cow_Uterus",11
+SAMN05604793,"bovine, cow-Intestine",11
+SAMN07965104,Canine Feces (Canis lupus familiaris),11
+SAMN02689395,Chicken Salad,11
+SAMN01814030,fecal sample from dairy farm,11
+SAMN02441843,Hummus,11
+SAMN02698256,Pine Nuts,11
+SAMN05245391,All-Purpose Flour,10
+SAMN02742063,Avian (necropsy),10
+SAMN04279339,"avian, goose_Feces",10
+SAMN02742073,Bovine (necropsy-intestine),10
+SAMN04279328,"bovine, cow_Feces",10
+SAMN04279344,"bovine, cow_Intestine",10
+SAMN04510555,Calf-Feces,10
+SAMN03702235,Corn,10
+SAMN02709298,frozen lobster tails,10
+SAMN06555237,Intestine-Porcine,10
+SAMN01813412,pistachios,10
+SAMN03577241,Porcine meat,10
+SAMN05717005,Post-chill chicken carcass,10
+SAMN06333925,skin (Bos taurus),10
+SAMN04001774,Swab of truck after porcine transport,10
+SAMN07163252,Tri-tip,10
+SAMN04146035,"turkey, swiss sandwich",10
+SAMN02182889,Turtle,10
+SAMN02844425,Veggie Booty With Spinach and Kale,10
+SAMN05464571,"avian, Meleagris-Feces",9
+SAMN02922150,blue cheese,9
+SAMN02352662,hot smoked salmon,9
+SAMN02678516,Natural and Artificial Vanilla,9
+SAMN03736702,turkey breast,9
+SAMN02843707,white cow cheese,9
+SAMN02918535,"Animal Feed, Blood Meal",8
+SAMN02918749,"Animal Feed, Bone Meal",8
+SAMN02918474,"Animal Feed, Cattle Feed",8
+SAMN02918795,"Animal Feed, Chicken Feed",8
+SAMN02699450,Avian Lung,8
+SAMN04993053,"avian, pigeon-Brain",8
+SAMN05440425,"avian, psittacine-Feces",8
+SAMN06114139,Boneless Beef 85,8
+SAMN02265301,Bovine (milk),8
+SAMN05382642,"BroccoSprouts Deli Blend a blend of broccoli, clover, and mustard",8
+SAMN02709325,cucumbers,8
+SAMN02921346,Environmental sponges,8
+SAMN06049468,feces (Mus musculus),8
+SAMN02678731,Fresh Cheese,8
+SAMN02698403,Frozen Squid,8
+SAMN04517082,Nutritional Powder,8
+SAMN02253050,pet food,8
+SAMN02378041,porcine lung,8
+SAMN04002072,Raw meat/Poultry,8
+SAMN04417886,swine salami,8
+SAMN01816358,"tuna scrape, frozen yellowfin nakaoachi",8
+SAMN02595006,Whole chicken breast,8
+SAMN02345554,whole mango,8
+SAMN03144676,Avocado (Butler)-whole pit fruit,7
+SAMN02953938,Avocado (whole pit fruit),7
+SAMN02923021,Bagged Frz Broccoli,7
+SAMN04958389,Blood/CSF,7
+SAMN04993530,Bovine feces (Bos taurus),7
+SAMN03168665,bovine meat,7
+SAMN04992324,"bovine, cow-Food Sample",7
+SAMN04993016,"bovine, cow-Lung",7
+SAMN04535358,Carcass Rinse,7
+SAMN02845378,Chicken Farm,7
+SAMN02844945,chicken swabs,7
+SAMN02921660,cleaned tote,7
+SAMN02595811,Cow Stool,7
+SAMN02844120,Crab,7
+SAMN06669389,creamy soynut butter,7
+SAMN02921867,Guacamole,7
+SAMN03291465,human feces,7
+SAMN02709353,orange juice,7
+SAMN00710595,pistachio,7
+SAMN02646818,Porcine Tissue Composite,7
+SAMN04002071,Poultry neck skin,7
+SAMN06560521,Sandwiches packaged in plastic,7
+SAMN03168664,sponge,7
+SAMN02921594,Swab - Processing Room,7
+SAMN01933192,toad,7
+SAMN06760094,Ackawi Cheese,6
+SAMN05414490,Bagged Lettuce,6
+SAMN07981697,Bos taurus: Feces,6
+SAMN05224051,Broccoli and cheese stuffed chicken,6
+SAMN03387082,"Calf barn, fecal",6
+SAMN02709133,Chicken carcass,6
+SAMN07965110,Feline Feces (Felis catus),6
+SAMN03015618,FRESH AVOCADOS,6
+SAMN03975962,Fresh Kale,6
+SAMN03487721,Frozen Dessert,6
+SAMN04993001,homo sapiens-Urine,6
+SAMN04858651,Ice Cream Mix,6
+SAMN00862137,poultry meal,6
+SAMN03199610,Product-Raw-Intact-Chicken,6
+SAMN07525940,Raw Pig,6
+SAMN02937529,ricotta salata,6
+SAMN03285271,RTE deli meats - ham,6
+SAMN02678520,"Sesame Seeds, natural",6
+SAMN02352721,tilapia,6
+SAMN04487277,turkey breast sandwich,6
+SAMN02918688,"Animal Feed, Cottonseed Meal",5
+SAMN02849811,Avian (environmental),5
+SAMN05440428,"avian, Meleagris-Liver",5
+SAMN01816271,"beef, ground",5
+SAMN05163868,Bos taurus-Calf Feces,5
+SAMN04279375,"canine, dog_Rectum",5
+SAMN02350519,chicken feed,5
+SAMN02709218,cold smoked salmon,5
+SAMN02922067,Conveyor on Slicing Machine,5
+SAMN02921987,Cubed cheddar cheese,5
+SAMN02921438,Egg Salad Sandwich,5
+SAMN07135143,Environmental (Poultry Litter),5
+SAMN04221434,Environmental Swab from Granny Smith Apple,5
+SAMN05440349,Feces-Sea Gull,5
+SAMN02677690,FROZEN MILD GUACAMOLE,5
+SAMN02344859,frozen milkfish,5
+SAMN02845715,Frz Crawfish,5
+SAMN02709254,frz octopus,5
+SAMN02403207,German Potato Salad,5
+SAMN02344847,organic ground ginger,5
+SAMN02345273,peppers,5
+SAMN07469534,Pig Carcass swab,5
+SAMN02595832,Pig Liver,5
+SAMN06213843,pistachio kernels,5
+SAMN04550946,Pizza flour mix,5
+SAMN05340952,Raw Milk Cheese,5
+SAMN03857083,Raw Tuna,5
+SAMN06213893,Red Pepper Cheese,5
+SAMN01816198,romaine lettuce,5
+SAMN02922004,"Salmon, smoked",5
+SAMN00989083,scallops,5
+SAMN06333886,skin (Sus scrofa),5
+SAMN02709309,snails,5
+SAMN02921375,Soft Ripened Cheese,5
+SAMN06464145,sponges/feces,5
+SAMN07357546,steak hoagie sandwich,5
+SAMN04558295,Taco Seasoning,5
+SAMN02921968,tuna fish salad sand,5
+SAMN02846878,Yellowfin Tuna Nakaochi Scrape,5
+SAMN02849826,Alpaca (feces),4
+SAMN02918836,"Animal Feed, Chicken Meal",4
+SAMN02918581,"Animal Feed, Dairy Cattle Feed",4
+SAMN04279421,"avian, duck_Cloacae",4
+SAMN02721428,"Avian, Emu feces",4
+SAMN05464557,"avian, Gallus gallus domesticus-Egg",4
+SAMN06645607,avocado (pit fruit),4
+SAMN02924029,"AVOCADO,HASS FRESH",4
+SAMN02678674,"Basil, Fresh, Raw",4
+SAMN04510374,Bos taurus-raw milk,4
+SAMN02902760,Bovine (bulk feed),4
+SAMN07682341,Bovine Abortion (Bos taurus),4
+SAMN02378006,bovine tissue,4
+SAMN04279347,"bovine, cow_Spleen",4
+SAMN02923615,breaded cauliflower,4
+SAMN02922587,Burrata Soft Cheese,4
+SAMN01816145,cereal,4
+SAMN02843408,Chicken Blend raw pet food for Dogs and Cats,4
+SAMN06074187,Chicken Carcasse,4
+SAMN03483122,Coconut flakes,4
+SAMN03285159,Cold SalmonSmoked,4
+SAMN02845385,cooked crab,4
+SAMN01942251,"coriander, ground",4
+SAMN02595812,Cow Liver,4
+SAMN02923448,Cow/Sheep Milk Cheese,4
+SAMN02919068,Dog Treat,4
+SAMN02846310,Dried Aloe Vera Tea,4
+SAMN02844957,egg maker feed,4
+SAMN04417900,environment (cutting board - bovine),4
+SAMN02845391,featherback fish meat,4
+SAMN04417936,fish (salmon),4
+SAMN01832088,fresh alfalfa sprouts,4
+SAMN02844202,Fresh Cantaloupes,4
+SAMN01902312,fresh cilantro,4
+SAMN02698253,FRESH FROZEN SHRIMP,4
+SAMN02678635,Fresh Serrano Peppers,4
+SAMN02922433,frozen avocado pulp,4
+SAMN02709250,frozen smoked salmon,4
+SAMN03862053,Frozen Tripe Treat Nibblets,4
+SAMN02921595,Frz Cooked Crawfish,4
+SAMN02845196,frz salted duck yolk,4
+SAMN02844165,Frz Sand Goby,4
+SAMN02345074,frz snails,4
+SAMN02844418,Frz Tuna Steak,4
+SAMN05468030,Gallus gallus domesticus Egg,4
+SAMN04572833,Grapes,4
+SAMN02344872,hulled sesame seed,4
+SAMN04543782,Indian Bay Leaves,4
+SAMN01816115,isolated from sponge,4
+SAMN03736742,Italian hero sub sandwich,4
+SAMN04567716,nova smoked salmon,4
+SAMN02844756,Nutrition/energy Bar,4
+SAMN02921338,"onions, frz",4
+SAMN02344850,organic chile powder,4
+SAMN06074103,Pecked Eggs/Caecum,4
+SAMN02918520,"Pet Treat, Bully Stick",4
+SAMN01902254,pork chops,4
+SAMN06339265,Retail raw milk,4
+SAMN02769759,Rotini with vegetables,4
+SAMN04487220,seafood salad sandwich,4
+SAMN02350511,serrano pepper,4
+SAMN01942293,"shrimp, frozen",4
+SAMN02419867,smoked seafood,4
+SAMN01816200,soybean meal,4
+SAMN02922238,Spent irriagation water,4
+SAMN02844953,steamed bone meal,4
+SAMN03577054,Swine tongue,4
+SAMN02847725,THYME MIX (HOME MADE ZATTAR),4
+SAMN06330653,Tissue pool (Bos taurus),4
+SAMN01939036,tumeric powder,4
+SAMN01939008,"tuna, ground frozen yellowfin",4
+SAMN02845773,Ukazi,4
+SAMN02769795,Various pet foods,4
+SAMN02846034,WILD MINT,4
+SAMN02849782,Alpaca (multiple tissues),3
+SAMN02378016,Alpaca feces,3
+SAMN05209845,Anas Platyrhynchos Feces,3
+SAMN02918703,"Animal Feed, Frozen Adult Mice",3
+SAMN02849945,Avian (carcass rinse water),3
+SAMN02849860,Avian (carcass),3
+SAMN04279462,"avian, duck_Feces",3
+SAMN04992537,"avian, Gallus gallus domesticus-Intestine",3
+SAMN04279519,"avian, sea gull_Feces",3
+SAMN04321434,Avocado Leaves,3
+SAMN02314158,Beef Carcass,3
+SAMN01814035,Beef Meat,3
+SAMN07159356,Boar feces,3
+SAMN03800275,Bologna sausage,3
+SAMN06175262,Boneless Pork,3
+SAMN07765401,Bos taurus-Pooled tissue,3
+SAMN07765398,Bos taurus-Small Intestine,3
+SAMN02952765,Bovine (cottonseed feed),3
+SAMN02742072,Bovine (necropsy-lung),3
+SAMN07682330,Bovine brain stem (Bos taurus),3
+SAMN03734297,Bovine colon,3
+SAMN04279384,"bovine, cow_Lung",3
+SAMN05604788,"bovine, cow-Liver",3
+SAMN02845095,breaded fish,3
+SAMN06133080,Bulk Chicken meal for pets,3
+SAMN04158510,Bulk Pine Nuts,3
+SAMN02849763,Canine,3
+SAMN02844041,Canola Meal,3
+SAMN02698083,CELERY SEED,3
+SAMN02325872,cervid,3
+SAMN02350497,charoli,3
+SAMN05900897,Chicken Carcass Rinse,3
+SAMN04487231,chicken salad wrap in spinach,3
+SAMN04487234,chicken salad wrap on tomato,3
+SAMN04487224,chicken salad wrap sandwich,3
+SAMN02846987,CHILE CHIPOTLE POWDER,3
+SAMN02678672,CHILLI PEPPERS,3
+SAMN02845057,cottonseed,3
+SAMN03357032,deli meat,3
+SAMN03736782,deli roast beef,3
+SAMN02918507,"Dog Food, Daily Vitamin Dog",3
+SAMN02698172,Dried Crayfish,3
+SAMN02846948,"DUCK EGG YOLKS, cooked, frozen",3
+SAMN02769669,environmental (silage),3
+SAMN02698404,Environmental drag swab,3
+SAMN04001956,environmental swab (avian),3
+SAMN05916134,Environmental wall and base board,3
+SAMN05607336,"feces, Oryctolagus cuniculus",3
+SAMN02918479,Fish Feed,3
+SAMN02843636,fish fillet,3
+SAMN06446242,fish-latis herring in oil,3
+SAMN01813424,fishmeal,3
+SAMN02843757,frozen anchovy fish,3
+SAMN02845222,frozen apple snail meat,3
+SAMN02769762,frozen broccoli,3
+SAMN02921582,frozen cooked crawfish,3
+SAMN02345118,frozen mahi mahi fillets,3
+SAMN02921815,frozen prepared eel,3
+SAMN02843624,frozen snapper fillets,3
+SAMN02843866,frz headless shrimp,3
+SAMN02846941,Frz Yellowfin Tuna Cubes,3
+SAMN07682584,Gallus gallus domesticus feces,3
+SAMN02709304,"grated coconut, frz",3
+SAMN04532652,Green Chili Peppers,3
+SAMN02678444,Green Thyme,3
+SAMN02344765,ground hot pepper seed,3
+SAMN02850716,Ham & Green Onion Cheese Spread,3
+SAMN04487263,"ham, turkey and pimento cheese sandwich",3
+SAMN04487266,"ham, turkey, pimento cheese sandwich",3
+SAMN06270135,hazlnuts farm shelled,3
+SAMN04321441,Herbal & Botanical Teas,3
+SAMN05901949,Hybrid Tilapia,3
+SAMN06645657,Iguana Cloacal swab (Iguanidae),3
+SAMN02923337,Imitation Crab Pieces,3
+SAMN06648081,intestine (Bos taurus),3
+SAMN05173325,Jalapeno Egg Salad Sandwich,3
+SAMN03983391,Jejunum,3
+SAMN02350539,mud fish,3
+SAMN02678769,"Oregano, dried",3
+SAMN06461681,Organic Dark Sweet Cherries,3
+SAMN02678704,Peanut Butter Paste,3
+SAMN02352701,pecans,3
+SAMN01813414,pepper,3
+SAMN02918510,"Pet Food, Poultry Blend",3
+SAMN02918564,"Pet Food, Raw Frozen Chicken",3
+SAMN02918542,"Pet Treat, Rawhide Chew Bone",3
+SAMN02403414,"Pig ears, pet treats",3
+SAMN04993529,Pig Intestine (Sus scrofa domesticus),3
+SAMN02844154,Pig's Ears,3
+SAMN02314173,Pork Carcass,3
+SAMN04485928,Powdered Dietary Supplement,3
+SAMN02345250,pumpkin seed,3
+SAMN06339453,Raw Pet Food,3
+SAMN05956172,"Salmon, Turbot, Butterfish Smoked",3
+SAMN06645813,Sheep/Goat,3
+SAMN04543104,Silage,3
+SAMN02843893,Soft Mexican Cheese,3
+SAMN06555532,soy nut butter,3
+SAMN07279161,Spongesicles,3
+SAMN01765626,squid,3
+SAMN02922535,Taleggio Cheese,3
+SAMN00860590,"tilapia, frozen whole",3
+SAMN02345018,"tilapia, frz",3
+SAMN02843849,tinfoil barb fish,3
+SAMN04487225,turkey and cheese wrap sandwich,3
+SAMN04487237,Turkey&cheese wrap,3
+SAMN05509836,Umbilicus,3
+SAMN02912059,"All American Sandwich (Salami, Bologna, Ham, Swiss)",2
+SAMN02849818,Alpaca (blood),2
+SAMN02351399,Amniotic fluid,2
+SAMN04992706,ANAHEIM PEPPER,2
+SAMN02678690,"ANAHEIM PEPPERS, Fresh",2
+SAMN02918742,"Animal Feed, Almond Shells",2
+SAMN02918725,"Animal Feed, Broiler Medicated Feed",2
+SAMN02918587,"Animal Feed, Distilled Corn",2
+SAMN02918693,"Animal Feed, Sunflower Meal",2
+SAMN03216748,Animal-Swine-Market Swine,2
+SAMN02344792,artichoke tea,2
+SAMN01920786,avian (carcass rinse),2
+SAMN02902735,Avian (cloacal swab),2
+SAMN02849874,Avian (liver),2
+SAMN02849963,Avian (swab),2
+SAMN02699549,Avian Brain,2
+SAMN04279374,"avian, chicken_Peritoneum",2
+SAMN04993171,"avian, Gallus gallus domesticus-Airsac",2
+SAMN04992516,"avian, Gallus gallus domesticus-Feces",2
+SAMN05464518,"avian, Gallus gallus domesticus-Sinus",2
+SAMN05464511,"avian, Gallus gallus domesticus-Skin",2
+SAMN04992321,"avian, Meleagris-Intestine",2
+SAMN02922510,Avocado Guacamole,2
+SAMN02922155,avocado halves,2
+SAMN02937463,"avocado puree, frozen",2
+SAMN02921681,bacon egg and cheese pastry,2
+SAMN01816224,"baila fish, frozen",2
+SAMN02923316,baked salmon salad,2
+SAMN03763940,bakery environment - control buttons on face plate of chocolate,2
+SAMN03763956,bakery environment - display walk-in cooler,2
+SAMN03763918,bakery environment - finished product cooler,2
+SAMN03763957,bakery environment - hallway,2
+SAMN03763938,bakery environment - handle of tray storage case on the west,2
+SAMN03763950,bakery environment - ingredients cooler,2
+SAMN03763958,bakery environment - keyboard of computer station at NW corner of,2
+SAMN03763935,bakery environment - light switches on NW wall,2
+SAMN03763980,bakery environment - SW table top of table #3,2
+SAMN03763960,bakery environment - under rotor of the mixer #1,2
+SAMN03763936,bakery environment - white surface of cake slicer machine,2
+SAMN04440921,Beef for fajita,2
+SAMN04100684,Bell Peppers,2
+SAMN07709885,biological tissue and/or fluid -Canis lupus familiaris,2
+SAMN02595852,Bird Composite,2
+SAMN02595872,Bird Liver,2
+SAMN02595829,Bird Tissue,2
+SAMN02845699,Black Drum,2
+SAMN02345054,black natural sesame seed,2
+SAMN02698350,BLACK SESAME SEED,2
+SAMN04932254,blanched peanut kernel,2
+SAMN01939033,blended meat & bone meal,2
+SAMN03700981,Bone Meal,2
+SAMN06175361,Boneless Chicken,2
+SAMN03295439,Boneless skinless chicken thighs,2
+SAMN06307826,Bos taurus feces,2
+SAMN05710975,bos taurus intestine,2
+SAMN05710827,bos taurus lung,2
+SAMN05366686,"Bos taurus,Bovine feces",2
+SAMN04993538,Bovine  Feces (Bos taurus),2
+SAMN02902705,Bovine (bile),2
+SAMN02849881,Bovine (calf shed),2
+SAMN02265284,Bovine (colon),2
+SAMN02782429,Bovine (lymph),2
+SAMN02902662,Bovine (necropsy-intestine-lung-spleen),2
+SAMN02782374,Bovine (necropsy-jejunum),2
+SAMN02782363,Bovine (necropsy-mesenteric lymph node),2
+SAMN02849775,Bovine (post anaerobic diges),2
+SAMN02902806,Bovine (wheat feed),2
+SAMN03577107,Bovine caecum,2
+SAMN03577390,Bovine Carcass swab,2
+SAMN03577059,Bovine minced meat,2
+SAMN04993532,Bovine Pooled sample (Bos taurus),2
+SAMN03734340,Bovine pooled tissue,2
+SAMN07682336,Bovine Septicemia (Bos taurus),2
+SAMN04279365,"bovine, cow_Duodenum",2
+SAMN04993091,"bovine, cow-Blood",2
+SAMN04992316,"bovine, cow-Ileum",2
+SAMN04993082,"bovine, cow-Joint Cavity",2
+SAMN03223267,Brazil Nuts,2
+SAMN02922262,BroccoSprout Blend,2
+SAMN02922260,Broccosprouts,2
+SAMN02922552,BULK FROZEN AVOCADO GUACAMOLE,2
+SAMN06894604,Burritos,2
+SAMN03490966,Butternut Squash,2
+SAMN02922980,"Calamari, salted, w/red pepper",2
+SAMN02709423,california rolls,2
+SAMN03577047,Camel spleen,2
+SAMN02922408,Camembert Goat Cheese,2
+SAMN07965126,Canine  (Canis lupus familiaris),2
+SAMN07410532,Canis lupus familiaris - urine,2
+SAMN07710399,Canis lupus familiaris -Feces,2
+SAMN07229837,Canis lupus familiaris Lung,2
+SAMN03277629,Caprine,2
+SAMN03277745,Caprine NVSL,2
+SAMN04992341,"caprine,  Capra , goat-Intestine-Small",2
+SAMN02344832,carbon monoxide treated tuna strip meat,2
+SAMN03015647,Carrot sticks,2
+SAMN06848943,Cashew Butter,2
+SAMN03462217,Cashew Cheese,2
+SAMN02345059,cashew kernels,2
+SAMN03285117,Cashew Pieces,2
+SAMN02678609,CASHEW SNACK,2
+SAMN02846031,"Catfish, dried",2
+SAMN05604792,"Cephalophus , duiker-Feces",2
+SAMN06240080,Ceremonial Kava Powder,2
+SAMN02483557,Chamomile,2
+SAMN02846343,Cheese Crackers with Peanut Butter,2
+SAMN03610472,Chicken (unknown category),2
+SAMN06645786,Chicken Fecal House 2 - Back,2
+SAMN06554943,Chicken pooled tissue,2
+SAMN03736699,chicken wrap,2
+SAMN02678806,Chili Pepper Powder,2
+SAMN02350529,chili spice,2
+SAMN07510060,Chilli Whole,2
+SAMN02846148,"CILANTRO, FRESH",2
+SAMN02569968,"cilantro, loose",2
+SAMN07205019,CINNAMON IN PET BOTTLE(TONG-GYEPPE),2
+SAMN05756425,Coconut Milk Powder,2
+SAMN02340044,cold smoked white fish,2
+SAMN02769711,cole slaw,2
+SAMN02922631,cooked crab claws,2
+SAMN02845085,cooked mackerel,2
+SAMN02922687,cooked whole crab,2
+SAMN02345097,corn flakes chiwda,2
+SAMN07279719,Cornflex Mix Snack Food,2
+SAMN03464761,Cornish Hen,2
+SAMN02265295,Cornmeal,2
+SAMN01813957,cow feces,2
+SAMN06645884,Cow pasture fecal,2
+SAMN02922935,cow/goat raw milk cheese,2
+SAMN02709433,"crawfish, freshwater",2
+SAMN02921343,"CRAYFISH,  COOKED SEASONED",2
+SAMN02345543,cucumbers plain,2
+SAMN02845062,cumin (ground),2
+SAMN02698209,Cumin seed,2
+SAMN02844465,Curry,2
+SAMN02698096,curry spice,2
+SAMN02182942,Dog treat pig ear,2
+SAMN02847739,Dried Bay Leaves (Laurel Leaves),2
+SAMN02845812,Dried Chile Pods,2
+SAMN02345090,dried conch head,2
+SAMN02709283,dried herbs,2
+SAMN03216744,Dried Okra Spice,2
+SAMN02843789,dried python,2
+SAMN02845622,Dried Seaweed,2
+SAMN02698149,Dried Sesame Seeds,2
+SAMN02698369,Dried Shrimp,2
+SAMN02843630,egg cracklets,2
+SAMN02922984,egg patties,2
+SAMN02905553,Egg White Salad w/ Chives,2
+SAMN07716065,"egg, sausage, cheese biscuit",2
+SAMN02345046,egusi seeds,2
+SAMN06333450,Emu Feces (Dromaius novaehollandiae),2
+SAMN02847776,Enchilada Sauce and Chile Con Carne,2
+SAMN06697621,"Enviromental, Compliance activity",2
+SAMN05829079,equus caballus feces,2
+SAMN01942286,"esomus swaison, whole frozen raw",2
+SAMN06113920,feces (Sus scrofa domesticus),2
+SAMN07965102,Feline Liver (Felis catus),2
+SAMN04992374,"feline, cat-Lung",2
+SAMN01942314,fennel seeds,2
+SAMN02845272,fenugreek,2
+SAMN03462215,Fermenting cashew,2
+SAMN07526065,"Fertilizer, Bone Meal",2
+SAMN02921361,fesh Spinach,2
+SAMN02845492,Fish (Shing),2
+SAMN02921600,"Fish Ball, bulk",2
+SAMN04956470,Fish Masala,2
+SAMN02845309,fish mill,2
+SAMN05756440,Flax Seed Meal,2
+SAMN02698374,FLOUNDER FILLETS,2
+SAMN04329586,Fly-gut,2
+SAMN02769659,French Brie,2
+SAMN02919107,FRESH CACHUCHA PEPPERS,2
+SAMN02923440,Fresh Cheese (Queso Fresco),2
+SAMN06561811,Fresh fish,2
+SAMN02345472,fresh grape tomatoes,2
+SAMN02847780,FRESH PAPAYAS,2
+SAMN02847799,Fresh Roma Tomatoes,2
+SAMN02678820,Fresh White Squash,2
+SAMN02847703,Fried Corn Snacks,2
+SAMN02921906,fried fish,2
+SAMN02846796,"Frog, cleaned, frz",2
+SAMN02844994,frozen baby clam boiled,2
+SAMN07177858,Frozen Beef and Produce Raw Dog Food,2
+SAMN07177862,Frozen Chicken and Produce Raw Dog Food,2
+SAMN04331761,Frozen chicken patties for dogs,2
+SAMN02845368,frozen clearsmoke grouper,2
+SAMN06034626,FROZEN FILLET BANGA,2
+SAMN02845564,Frozen Fresh Water Shrimp,2
+SAMN07279148,frozen golden threadfin bream,2
+SAMN02844015,Frozen Headless Shrimp,2
+SAMN02923443,frozen herring,2
+SAMN02922507,Frozen Homestyle Guacamole,2
+SAMN02845485,Frozen Iguana Meat,2
+SAMN02845401,Frozen Kingfish Steaks,2
+SAMN05545179,FROZEN LONG TAILED ANVOY,2
+SAMN02345433,"frozen mahi strips skinless,boneless",2
+SAMN02677684,Frozen mild green chiles,2
+SAMN02845238,frozen nile perch,2
+SAMN04155491,frozen oriental blend vegetables,2
+SAMN02844093,Frozen Peeled Shrimp,2
+SAMN02847239,FROZEN PREPARED CRAB MIXED,2
+SAMN06760671,Frozen Raw Dog and Cat Food,2
+SAMN03959415,Frozen Raw Dog Food Patties,2
+SAMN07283784,frozen red chilli,2
+SAMN02845231,frozen sand goby fish,2
+SAMN02352656,frozen smoked salmon filets,2
+SAMN02843810,frozen tuna,2
+SAMN02344845,frozen tuna strip meat,2
+SAMN07981384,Frozen Whole Layang Scad,2
+SAMN02847090,FROZEN WHOLE MULLET FISH,2
+SAMN02345048,frozen whole sand goby,2
+SAMN02843505,frozen whole tilapia,2
+SAMN02845882,Frz Channel Catfish,2
+SAMN02923029,Frz Crawfish Salad,2
+SAMN02845751,Frz Cuttlefish,2
+SAMN02846482,Frz Deboned Milkfish,2
+SAMN02345005,frz raw black tiger shrimp,2
+SAMN02678877,FRZ RAW ESCOLAR STEAK,2
+SAMN02843617,frz raw shrimp,2
+SAMN02923540,Frz Smoked Atlantic Salmon,2
+SAMN02846485,Frz Smoked Snapper Fillets,2
+SAMN02698074,Frz Tuna,2
+SAMN02344842,frz tuna cube,2
+SAMN02921584,Frz Whole Cooked Crawfish,2
+SAMN02344801,frz whole goby,2
+SAMN02352748,frz. shrimp,2
+SAMN03577701,gallstone,2
+SAMN07682587,Gallus gallus domesticus cloaca,2
+SAMN06555252,Gallus gallus domesticus Skin,2
+SAMN02846487,Garlic powder,2
+SAMN04992240,"giraffe, okapi-Feces",2
+SAMN06602498,Goat Feces,2
+SAMN02847167,GOLDEN CORVINA FILLET,2
+SAMN02678826,GRATED COCONUT,2
+SAMN02677688,Green Chili NM Mild,2
+SAMN03483120,Ground Egusi Melon Seeds,2
+SAMN02845857,Ground Tomato From Field,2
+SAMN02698351,GUTTED SMOKED CAT FISH,2
+SAMN02678684,Halawa Plain,2
+SAMN03577050,hand,2
+SAMN03743885,Hare,2
+SAMN06213845,hazelnuts,2
+SAMN02345142,herbal tea,2
+SAMN02709290,herbal tea cerina,2
+SAMN05232938,HILSA (TENUALOSA ILISHA),2
+SAMN02844742,"Hot Pepper, fresh",2
+SAMN02922695,Hot smoked herring,2
+SAMN06645743,House 3 Chicken Litter,2
+SAMN02344761,hulled sesame,2
+SAMN04329591,human-stool,2
+SAMN03277620,"Human, Cerebral Spinal Fluid",2
+SAMN01805328,iguana,2
+SAMN02769721,imitation breaded scallops,2
+SAMN02845281,instant seasoning,2
+SAMN03218163,intestine bovine,2
+SAMN06555236,Intestine-Goose,2
+SAMN05464529,Intestine-Mink,2
+SAMN02846951,JEPROX FISH,2
+SAMN05462817,Moringa vegetable powder,2
+SAMN05967929,mushroom,2
+SAMN04992190,"Mustelidae, mink-Lung",2
+SAMN03269318,Necropsy of Colostrium Deprived Calf,2
+SAMN02847268,"Octopus, frz, raw",2
+SAMN04992549,Odocoileus virginianus-Lung,2
+SAMN03402344,Organic Garlic Powder,2
+SAMN02678639,ORGANIC MINI MERLOT HEIRLOOM TOMATOES,2
+SAMN04516959,Party Wings,2
+SAMN02678707,"Peanut butter, Organic",2
+SAMN02922724,peeled cooked prawns,2
+SAMN02678734,"PEPPER - Cayenne Chili, Hot Peppers",2
+SAMN00754303,pepper salami,2
+SAMN01942319,"pepper, ground red",2
+SAMN02918845,"Pet Treat, Beef Backstrap",2
+SAMN02918810,"Pet Treat, Braided Pizzeles",2
+SAMN02918833,"Pet Treat, Pig Ear Strips",2
+SAMN04516956,Picnic Pack,2
+SAMN02595853,Pig Composite,2
+SAMN05181543,"Pistachios, raw",2
+SAMN02845157,pizzle stick,2
+SAMN03277688,Polish Sausage,2
+SAMN02902724,Porcine (necropsy),2
+SAMN02646873,Porcine Heart,2
+SAMN03734280,Porcine intestin,2
+SAMN06034101,Porcine Tissue pool,2
+SAMN04279341,"porcine, pig_Intestine-Small",2
+SAMN04993087,"porcine, pig-Test Strain",2
+SAMN05901939,Premium Palestinian Za'atar Blend (THYME),2
+SAMN02923465,Preserved avocaco pulp,2
+SAMN04992183,"Pseudois nayaur, blue sheep-Rectum",2
+SAMN02350517,quesillo soft cheese,2
+SAMN02921919,QUESO MAHON CHEESE,2
+SAMN02345023,rasam powder,2
+SAMN06276550,Raw beef cat food,2
+SAMN02922062,raw frzn Capelin roe,2
+SAMN06033810,Raw Inshell Peanuts,2
+SAMN04001954,Raw Meat/Porcine,2
+SAMN01816341,raw oysters,2
+SAMN03941116,Raw pork sausage,2
+SAMN02846073,Raw Serrano Peppers,2
+SAMN02378176,raw turkey breast,2
+SAMN03329735,"Raw, Cut Celery",2
+SAMN02845664,red arbol powder,2
+SAMN02845655,Red Chili Pepper,2
+SAMN02847761,RED HABANERO POWDER,2
+SAMN02912051,red pallet jack,2
+SAMN02350538,red pepper powder,2
+SAMN02742092,Reptile-iguana (feces),2
+SAMN04001851,Retail Pork chop,2
+SAMN02845003,rice field frog,2
+SAMN02937512,ricotta,2
+SAMN07508810,Riverbarb Fish,2
+SAMN05363683,Roast Beef and Provalone Sandwich,2
+SAMN04146030,"roast beef, cheddar sandwich",2
+SAMN03285283,RTE deli meats - honey bbq chicken,2
+SAMN03285293,RTE deli meats - honey smoked turkey,2
+SAMN03285301,RTE deli meats - oven roasted chicken,2
+SAMN03285279,RTE deli meats - turkey mesquite,2
+SAMN03285291,RTE deli salads containing meat - chicken salad,2
+SAMN02846687,RTE SNACK FOOD - ALL IN ON W/CORNFLAKES & POTATO,2
+SAMN04599933,salami (lardo),2
+SAMN03295478,"Salmon pyloric ceca, Salmo salar",2
+SAMN02709255,salmon smoked sliced,2
+SAMN02923548,salmon spread,2
+SAMN02709178,salmon trimmings,2
+SAMN05521572,salmon wrap,2
+SAMN05616488,Sambar Mix,2
+SAMN02919076,SAVORY WHOLE,2
+SAMN02849789,Sea lion (rectal swab),2
+SAMN03702240,Seared Tuna,2
+SAMN02921587,Seasoned Squid,2
+SAMN02646153,sediment pond MD1,2
+SAMN03285269,Semi Soft Cheese,2
+SAMN06894601,SESAME PASTE TAHINI,2
+SAMN02709306,"sesame seeds, white",2
+SAMN06645888,Sheep/goat middle pasture,2
+SAMN04146123,Shrimp Mac Salad,2
+SAMN02844748,"Shrimp, shellon, frz",2
+SAMN06339274,Sifter tailings,2
+SAMN02845258,silago frozen fish,2
+SAMN05521609,smoked ham lahvash,2
+SAMN02921574,Smoked herring fillet in oil,2
+SAMN02352664,"smoked salmon - frozen fillets, cold smoked",2
+SAMN02709242,"smoked salmon, vacuum packed",2
+SAMN03959413,Snack Peanut Bhujia,2
+SAMN02849855,Snake (feces),2
+SAMN02345115,"snapper fillets, frz",2
+SAMN06645698,Soil Sample - Chicken House 2,2
+SAMN02698179,SPICES(CHATNEY POWDER),2
+SAMN03253027,Spicy Red Chili Powder,2
+SAMN03577086,spleen,2
+SAMN07327744,Spoiled cod fillet,2
+SAMN02923434,spreadable cheese,2
+SAMN02698340,"Squid Slices, dried",2
+SAMN02419058,Sternotherus Odoratus in an irrigation pond,2
+SAMN07201849,Strawberries,2
+SAMN02344752,string cheese,2
+SAMN02709417,sub sandwich with turkey & cheese,2
+SAMN02921618,sub sandwiches,2
+SAMN03813730,Sunflower Seeds,2
+SAMN03285237,Surimi seafood salad,2
+SAMN05366691,"Sus domesticus,Porcine intestine",2
+SAMN03941162,Swine (homemade salami),2
+SAMN03577063,Swine meat,2
+SAMN05179402,Taters,2
+SAMN02678872,Threadfin,2
+SAMN02345336,tilapia fillet,2
+SAMN07204965,Tofu,2
+SAMN03463900,tomato leaves,2
+SAMN07418997,"Tuna (Albacore, Yellowfin, Bluefin, Skipjack, Etc.); Vacuum",2
+SAMN02846090,"Tuna, CO treated",2
+SAMN06346041,Turkey Cloacal,2
+SAMN02989072,Turkey Jerky,2
+SAMN03702148,Turkey Mix Feed,2
+SAMN05900824,"turkey, cheese sandwich",2
+SAMN02344841,turmeric,2
+SAMN02400175,Uncured brat links,2
+SAMN02921641,Vegetable Plate,2
+SAMN02345427,vine-ripe red tomatoes,2
+SAMN01942261,whisker fish,2
+SAMN02922096,White Cheese,2
+SAMN02345110,"white fish, frz",2
+SAMN02922704,White Hard Cheese,2
+SAMN02344778,white meat spice rub,2
+SAMN02678554,WHITE PEPPER POWDER,2
+SAMN02345493,whole white pepper,2
+SAMN03736709,whole whitefish,2
+SAMN07965125,Yellow Squash,2
+SAMN02845584,Yogurt Rawhide Rollups,2
+SAMN02846727,"Young Coconut Meat, frz",2
+SAMN03576804,Abattoir Floor swabs,1
+SAMN01813922,abdominal abcess,1
+SAMN02383883,Abdominal Fluid,1
+SAMN03983416,Abomasal Contents,1
+SAMN05781531,ABOMASUM  (bos taurus),1
+SAMN07682321,"aborted bovine fetus- liver, lung and abomasal tissues (Bos",1
+SAMN07682329,"aborted twin lambs- pooled lung, liver and abomasal tissues (Ovis",1
+SAMN04993179,"Accipitridae, eagle-Heart",1
+SAMN04992323,"Accipitridae, eagle-Pericardial Sac",1
+SAMN03218229,Achiote Molido (Ground Annato),1
+SAMN02698383,Ahi Tuna Steaks,1
+SAMN02345266,"albacore ground, frz",1
+SAMN06330630,Alligator Omentum (Alligator mississippiensis),1
+SAMN02844865,ALLSPICE (PIMENTO),1
+SAMN02345455,almond butter,1
+SAMN05172402,"almond kernel (raw, variety carmel)",1
+SAMN02345140,aloe and prickly pear tea,1
+SAMN02934608,Aloe Vera Leaf powder,1
+SAMN02849958,Alpaca (swab),1
+SAMN02922632,altantic salmon fillet,1
+SAMN06113179,Anaheim peppers,1
+SAMN06175168,Anchovies in oil,1
+SAMN02483569,"Anchovy fish, frz",1
+SAMN05432108,Anchovy Snack,1
+SAMN02918999,"Animal Feed, Bison Pellets",1
+SAMN02918981,"Animal Feed, Broiler Feed",1
+SAMN02918726,"Animal Feed, Broiler Withdrawl Feed",1
+SAMN02918600,"Animal Feed, Bulk Animal Protein",1
+SAMN02918763,"Animal Feed, Bulk Milo",1
+SAMN02919059,"Animal Feed, Cat Food",1
+SAMN02918884,"Animal Feed, Compressed Pellets",1
+SAMN02918995,"Animal Feed, Cottonseed Hulls",1
+SAMN02918569,"Animal Feed, Dried Senna Pod",1
+SAMN02919045,"Animal Feed, Dry Cat Food",1
+SAMN02918641,"Animal Feed, Frozen Small Rat",1
+SAMN02918525,"Animal Feed, Hen Feed",1
+SAMN02918980,"Animal Feed, Laying Mash",1
+SAMN02918540,"Animal Feed, Ovine Meal",1
+SAMN02919022,"Animal Feed, Soybean Hull",1
+SAMN02918575,"Animal Feed, Whole Rolled Corn",1
+SAMN03216755,Animal-Cattle-Steer,1
+SAMN06645610,Antelope Feces,1
+SAMN06100270,"Anthomyiidae spp.,alimentary canal",1
+SAMN03277622,"Ants, Flies, Debris found in Cheese Plant",1
+SAMN06921848,Apple Cores Rinse,1
+SAMN05757720,Apple Snails,1
+SAMN04247090,Aquarium swab,1
+SAMN02314194,Aquatic Frog,1
+SAMN03277747,Arabia Oryx,1
+SAMN02844740,ARNICA FLOWER TEA WHOLE,1
+SAMN02345155,asian black tiger shrimp,1
+SAMN05908947,Asparagus,1
+SAMN02642570,assorted fish in oil,1
+SAMN02923661,assorted sandwiches (in-line),1
+SAMN02849863,Avian (chik fluff),1
+SAMN02952741,Avian (crop swab),1
+SAMN02849998,Avian (environmental-incubator),1
+SAMN01920791,avian (intestine),1
+SAMN02952704,Avian (lung),1
+SAMN02902658,"Avian (necropsy-abscess,liver,lung)",1
+SAMN02952721,Avian (necropsy-intestine),1
+SAMN02952705,Avian (necropsy-liver-yolksac),1
+SAMN02782423,Avian (oral),1
+SAMN03002019,Avian (swab-cloacal),1
+SAMN02378103,avian feces,1
+SAMN02378029,avian fluid,1
+SAMN02646802,Avian Heart,1
+SAMN02699453,Avian Kidney,1
+SAMN06034066,Avian Tissue Composite,1
+SAMN05452904,"avian, Anserini-Cecum",1
+SAMN04279336,"avian, chicken_Cecum",1
+SAMN04279448,"avian, chicken_Pericardial Sac",1
+SAMN04992372,"avian, duck-Feces",1
+SAMN02721433,"Avian, Emu necropsy",1
+SAMN05440427,"avian, Gallus gallus domesticus-Bone Marrow",1
+SAMN04992132,"avian, kea-Intestine",1
+SAMN04992545,"avian, macaw-Cloacae",1
+SAMN05440426,"avian, Meleagris-Airsac",1
+SAMN04992320,"avian, Meleagris-Cecum",1
+SAMN05604786,"avian, Meleagris-Intestine-Small",1
+SAMN04992547,"avian, Meleagris-Joint Cavity",1
+SAMN04992531,"avian, Meleagris-Lung",1
+SAMN04992373,"avian, Meleagris-Pericardial Sac",1
+SAMN04992553,"avian, Meleagris-Sinus",1
+SAMN05468070,"avian, Meleagris-Spleen",1
+SAMN04279332,"avian, parakeet_Intestine",1
+SAMN04993127,"avian, pigeon-Feces",1
+SAMN04992511,"avian, psittacine-Intestine",1
+SAMN05464553,"avian, psittacine-Intestine-Small",1
+SAMN04992542,"avian, quail-Cecum",1
+SAMN04992313,"avian, quail-Intestine-Small",1
+SAMN04992377,"avian, sea gull-Feces",1
+SAMN04992129,"avian, Struthio camelus, orstrich-Intestine",1
+SAMN04992503,"avian, Struthio camelus, orstrich-Intestine-Small",1
+SAMN04279334,"avian, turkey_Feces",1
+SAMN04279340,"avian, turkey_Liver",1
+SAMN04279342,"avian, turkey_Lung",1
+SAMN04279529,"avian, turkey_Sinus",1
+SAMN02943414,Avocado (Fresh) - pulp,1
+SAMN02943413,Avocado (Fresh) - rinsate,1
+SAMN03736779,avocado salad,1
+SAMN02922361,avocado scooped for ice cream,1
+SAMN02844927,Aztec Cheddar Cheese,1
+SAMN02698168,"BABY OCTOPUS, frz",1
+SAMN02843463,bacon gouda cheese,1
+SAMN02419865,"bagged salad, rte",1
+SAMN07560055,Bagged Spinach,1
+SAMN02678717,Baked Snack Food,1
+SAMN03763966,bakery environment -  top of stainless steel table,1
+SAMN03763944,bakery environment -  white table top containing glaze machine,1
+SAMN03763970,bakery environment - bottom metal shelf of se mini pastry table,1
+SAMN03763978,bakery environment - bottom metal shelf on table used for,1
+SAMN03763923,bakery environment - bottom of SW drawer of ganache table,1
+SAMN03763927,bakery environment - bottom shelf on table holding chocolate,1
+SAMN03763945,bakery environment - concentrated whipped topping,1
+SAMN03763964,bakery environment - eastern metal section next to conveyor,1
+SAMN03763932,bakery environment - fan 2 middle bottom,1
+SAMN03763916,bakery environment - freezer,1
+SAMN03763926,bakery environment - handle on north drawer of ne mini pastry,1
+SAMN03763919,bakery environment - handle on small table top mixer on right side,1
+SAMN03763929,bakery environment - left handle on left table top mixer,1
+SAMN03763934,bakery environment - light switch north wall,1
+SAMN03763972,bakery environment - mixer 3; under rotator,1
+SAMN03763930,bakery environment - mixing bowl outside,1
+SAMN03763977,bakery environment - north oven handle,1
+SAMN03763924,bakery environment - northside drawer on birthday cake table,1
+SAMN03763943,bakery environment - on decorating table top around the,1
+SAMN03763999,bakery environment - packaging room,1
+SAMN03763955,bakery environment - production cooler,1
+SAMN03763928,bakery environment - rear gasket opening to the chocolate,1
+SAMN03763925,bakery environment - right handle for mixing bowl on large mixer,1
+SAMN03763965,bakery environment - se drawer of table used to assemble,1
+SAMN03763969,bakery environment - south drawer on NW mini pastry table,1
+SAMN03763983,bakery environment - storage area,1
+SAMN03763967,bakery environment - SW drawer of table,1
+SAMN03763973,bakery environment - table 1 powder sugar top of container,1
+SAMN03763974,bakery environment - table 1 sugar top of container,1
+SAMN03763995,bakery environment - table 2 middle,1
+SAMN03763976,bakery environment - table 3 southeast corner,1
+SAMN03763975,bakery environment - table 4 southwest top corner,1
+SAMN03763931,bakery environment - table 6 middle east side,1
+SAMN03763968,bakery environment - table top 12 x 12 section on NW mini pastry,1
+SAMN03763920,bakery environment - table top of table holding small mixers,1
+SAMN03763922,bakery environment - top of metal table used to frost wedding cakes,1
+SAMN03763962,bakery environment - underside of mixing head on left table top,1
+SAMN03763963,bakery environment - underside of mixing head on right side table,1
+SAMN03763971,bakery environment - wheels of garbage can in pack room,1
+SAMN03763921,bakery environment - white conveyor belt on cake slicer,1
+SAMN02847743,BANANA LEAVES  (DAHON NG SAGING),1
+SAMN02345204,"bangladeshi fish, frz",1
+SAMN02646966,"Banister, Railing",1
+SAMN07256015,Barbecue Seasoning,1
+SAMN02345195,"barramundi fillet, frz",1
+SAMN02844527,Basil - whole,1
+SAMN01939058,basil ( albahaca ),1
+SAMN03654437,BASIL SEED,1
+SAMN02919089,"BASIL, Fresh",1
+SAMN02569966,"basil, loose",1
+SAMN03354331,bbq beans w/beef,1
+SAMN02923330,BBQ sandwich,1
+SAMN02887162,Bedding,1
+SAMN05213461,Beef and Pork Sausage,1
+SAMN04567717,beef bologna,1
+SAMN02781127,Beef Burger Bites,1
+SAMN07461462,Beef cutlet,1
+SAMN06277379,Beef Feed,1
+SAMN02849534,Beef Frankfurters,1
+SAMN02989102,Beef Liver,1
+SAMN02843742,beef meat & bone meal,1
+SAMN03418504,Beef Suet,1
+SAMN03277661,Beef/Pork Weiners,1
+SAMN05829270,BeefCarcTrim,1
+SAMN02344744,bell pepper,1
+SAMN07206385,Bhel Spicy Snack Mix,1
+SAMN02844539,"BHELPURI,PANIPURE",1
+SAMN07709900,biological tissue and/or fluid -Sus scrofa domesticus,1
+SAMN03083825,bird eye chili powder,1
+SAMN03024018,Bird feces,1
+SAMN01939070,bird feces (goose),1
+SAMN02595831,Bird Pericardium,1
+SAMN02595841,Bird Stool,1
+SAMN04913877,bison,1
+SAMN02847724,Black Fish,1
+SAMN03736746,black forest ham,1
+SAMN02843955,black pepper corns,1
+SAMN04530607,Black Pepper Grain,1
+SAMN02345340,black pepper ground,1
+SAMN02345092,black pepper powder,1
+SAMN02678636,"Black Pepper, Crushed",1
+SAMN02844645,"black pepper, in pepper grinder",1
+SAMN02698266,BLACK POMFRET,1
+SAMN02843573,black pomfret fish,1
+SAMN02678488,Black Tiger Shrimp,1
+SAMN02844660,"Black tiger shrimp, frozen",1
+SAMN02922386,blackberries,1
+SAMN03782427,Blackberry jam,1
+SAMN02843678,blackpepper,1
+SAMN07327747,Bleached coral,1
+SAMN02344823,blend of spices,1
+SAMN03277633,blue-veined & mold-ripened cheese,1
+SAMN02419870,"blue-veined, mold-ripened cheese",1
+SAMN01816181,boiled baby clams,1
+SAMN02850714,Boiled Ham,1
+SAMN06213768,Boneless Chicken Meat,1
+SAMN03277692,Boneless Ham,1
+SAMN02352727,boneless ostrich,1
+SAMN06213778,Boneless Pork Picnic,1
+SAMN03295442,Boneless skinless chicken breast (w/ rib) - frozen,1
+SAMN02699423,"Boneless, Skinless Chicken Breast",1
+SAMN07210936,Bos Taurus Intestine & lung,1
+SAMN07792071,Bos taurus- Placenta,1
+SAMN05366685,"Bos taurus,Bovine fecal swab",1
+SAMN02442735,Bottom of sliding door in pasta room to blast,1
+SAMN02849867,Bovine (blood),1
+SAMN04993497,bovine (Bos taurus),1
+SAMN07420477,Bovine (Bovine),1
+SAMN02849728,Bovine (brain),1
+SAMN02952774,Bovine (calf feed),1
+SAMN02742061,Bovine (colostrum),1
+SAMN02902715,Bovine (feed-corn silage),1
+SAMN02742070,Bovine (feed-grain pellets),1
+SAMN02849972,Bovine (hide swab),1
+SAMN02265303,Bovine (hide),1
+SAMN02849793,Bovine (liver),1
+SAMN01920877,bovine (lymph node),1
+SAMN02782380,Bovine (necropsy-ileum-spleen),1
+SAMN02782341,"Bovine (necropsy-intestine lung,lymph node spleen)",1
+SAMN02782340,Bovine (necropsy-intestine-liver),1
+SAMN02742074,"Bovine (necropsy-intestine,liver,lung)",1
+SAMN02902659,"Bovine (necropsy-intestine,liver)",1
+SAMN02902652,"Bovine (necropsy-intestine,lung,spleen)",1
+SAMN02782338,Bovine (necropsy-liver-lung),1
+SAMN02742108,"Bovine (necropsy-lung,medistinal,lypmth node)",1
+SAMN02782386,Bovine (necropsy-tissue pool),1
+SAMN02849952,Bovine (rectal),1
+SAMN02782391,Bovine (swab culturette swab),1
+SAMN04240664,bovine abomasum,1
+SAMN07586064,bovine biological liquid or/and tissue,1
+SAMN02699777,Bovine Fluid,1
+SAMN04993577,Bovine fluid (Bos taurus),1
+SAMN06255963,Bovine Isolate,1
+SAMN04993526,Bovine Lung Swab (Bos taurus),1
+SAMN04418006,bovine milk,1
+SAMN04240547,bovine small intestine,1
+SAMN03218168,Bovine spleen,1
+SAMN03277682,"Bovine, 14 day old female, liver sample",1
+SAMN03277681,"Bovine, 5 year old female, brain sample",1
+SAMN03277678,"Bovine, 8 day old calf, liver sample",1
+SAMN02721409,"Bovine, bedding",1
+SAMN04279544,"bovine, cow_Brain",1
+SAMN04279562,"bovine, cow_Colon",1
+SAMN04279540,"bovine, cow_Gall Bladder",1
+SAMN04279541,"bovine, cow_Intestine-Large",1
+SAMN04279482,"bovine, cow_Intestine-Small",1
+SAMN04279383,"bovine, cow_Jejunum",1
+SAMN04279346,"bovine, cow_Joint Cavity",1
+SAMN04279547,"bovine, cow_Kidney",1
+SAMN04279413,"bovine, cow_Liver",1
+SAMN04279368,"bovine, cow_Lymph Node",1
+SAMN04279480,"bovine, cow_Other",1
+SAMN04279337,"bovine, cow_Rectum",1
+SAMN05604782,"bovine, cow-Brain",1
+SAMN04993008,"bovine, cow-Cerebrospinal Fluid",1
+SAMN04992232,"bovine, cow-Colon",1
+SAMN04993085,"bovine, cow-Intestine-Large",1
+SAMN04993011,"bovine, cow-Jejunum",1
+SAMN04992298,"bovine, cow-Kidney",1
+SAMN04993182,"bovine, cow-Lymph Node",1
+SAMN02721464,"Bovine, environmental",1
+SAMN02721440,"Bovine, spleen",1
+SAMN04388342,Brain Swab,1
+SAMN05853906,Brazil Nut,1
+SAMN06669715,Broccoli Salad,1
+SAMN02850684,Broccoli Sprouts,1
+SAMN02586125,"Broccoli Sprouts, Organic",1
+SAMN01902397,broiled chicken liver,1
+SAMN04421184,Brush inside of dryer,1
+SAMN02345182,buckwheat with mushrooms,1
+SAMN06921808,Buffalo Marrow Bone,1
+SAMN01041103,bulk bone meal,1
+SAMN02843980,bulk feed,1
+SAMN04490950,Bulk Flour,1
+SAMN02843460,bulk meat& bone meal,1
+SAMN01902260,bulk sausage-soppertta,1
+SAMN02846409,"Butter Catfish (Pabda), frz",1
+SAMN02934613,CACHUCHA PEPPERS,1
+SAMN02222923,"calabrese salami, combo pack",1
+SAMN04993600,Calf liver (Bos taurus),1
+SAMN04432835,Calf Lymph Node,1
+SAMN04432836,Calf small intestine,1
+SAMN04993602,Calf swab (Bos taurus),1
+SAMN03002021,Camelid (multiple tissues),1
+SAMN04992237,"camelid, llama-Kidney",1
+SAMN02344976,cancerina root bark,1
+SAMN02902775,Canine (bal),1
+SAMN02782339,Canine (eye),1
+SAMN07709914,Canine Ear-Canis lupus familiaris,1
+SAMN02378120,canine feces,1
+SAMN07965081,Canine Small Intestine (Canis lupus familiaris),1
+SAMN07965069,Canine Small Intistine (Canis lupus familiaris),1
+SAMN03277697,"Canine, 1 year old male, tonsil sample",1
+SAMN07709805,"canine, urine swab",1
+SAMN07410524,Canis lupus familiaris - ear,1
+SAMN07747815,Canis lupus familiaris - wound,1
+SAMN07351357,Canis lupus familiaris Brain,1
+SAMN07351355,Canis lupus familiaris skin swab,1
+SAMN07776827,canis lupus familiaris urine,1
+SAMN07709803,Canis lupus familiaris Wound,1
+SAMN07351354,Canis lupus familiaris wound swab,1
+SAMN05366692,"Canis lupus familiaris,Canine feces",1
+SAMN07410534,Canis lupus- Ear,1
+SAMN02843462,canola/pellets,1
+SAMN02844371,"Cantaloupes, Whole Fresh",1
+SAMN06045558,cantelope,1
+SAMN04992336,"Capra , goat, Siberian Ibex-Feces",1
+SAMN05224061,Capra hircus Feces,1
+SAMN02952693,Caprine (necropsy-gall bladder),1
+SAMN02902707,Caprine (necropsy-lung),1
+SAMN04993032,"caprine,  Capra , goat-Blood",1
+SAMN05452900,"caprine,  Capra , goat-Feces",1
+SAMN05604781,"caprine,  Capra , goat-Intestine-Large",1
+SAMN04992131,"caprine,  Capra , goat-Liver",1
+SAMN02843563,caraway,1
+SAMN02843817,caraway seed,1
+SAMN02844169,Carp,1
+SAMN06477610,Carrots,1
+SAMN03983451,Cashew,1
+SAMN02345147,cashew (kaju) mix,1
+SAMN05384880,Cashew Chicken Salad,1
+SAMN02843746,cashew nut meal,1
+SAMN02844937,Cashew/Almond/Pistachio blend,1
+SAMN02345013,cashews,1
+SAMN02345201,"cashews, shelled",1
+SAMN02918471,"Cat Food, Raw Chicken Cat Food",1
+SAMN02918472,"Cat Food, Raw Duck Cat Food",1
+SAMN02918617,"Cat Food, Raw Fzn Grd Chicken",1
+SAMN02918473,"Cat Food, Raw Tuna Cat Food",1
+SAMN02843581,catfish meal,1
+SAMN02846212,"Catfish, yellow",1
+SAMN07469556,Cattle Fecal,1
+SAMN04096807,Celery Microgreens,1
+SAMN04992209,"Cephalophus , Bongo-Rectum",1
+SAMN04992338,"Cephalophus , Bontebok-Feces",1
+SAMN05464520,"Cephalophus , duiker-Abdominal Cavity",1
+SAMN04992182,"Cephalophus , suni-Rectum",1
+SAMN05452902,"Cephalophus, duiker-Intestine",1
+SAMN02844284,Cerase Tea,1
+SAMN06333451,Cervid Intestine (Cervidae),1
+SAMN04992185,"Cervidae, Cervidae, muntjac-Rectum",1
+SAMN04992210,"Cervus nippon mandarinus, Cervidae-Rectum",1
+SAMN04510505,Chalpata Whole Fish,1
+SAMN02849820,Chameleon (feces),1
+SAMN04958285,Chamois Animal,1
+SAMN02678430,CHAMOMILE POWDER,1
+SAMN02844082,Chapila Fish,1
+SAMN02923267,CHEESE FROM SHEEP MILK,1
+SAMN02923074,Cheese Souffle,1
+SAMN05179391,Cheese Spread,1
+SAMN07571681,cheese-queso fresco,1
+SAMN02846017,"Cheese, Mexican style",1
+SAMN02419065,Chelydra Serpentina in an irrigation pond,1
+SAMN06477698,Cherry Tomato,1
+SAMN04993500,chicken (Gallus gallus domesticus),1
+SAMN04443750,Chicken bites wrapped in bacon,1
+SAMN01902418,chicken breasts,1
+SAMN02646903,Chicken Broccoli,1
+SAMN02887158,Chicken Cage,1
+SAMN01041123,chicken feed-developer pullet,1
+SAMN01041092,chicken liver,1
+SAMN04942536,CHICKEN MASALA,1
+SAMN03083833,chicken masala seasoning,1
+SAMN02843741,chicken meal,1
+SAMN03736722,chicken pasta salad,1
+SAMN03736697,chicken salad with fruit and nuts,1
+SAMN03277796,chicken sausage wild mushroom and garlic,1
+SAMN03277798,Chicken Tacos,1
+SAMN06669738,Chicken tissue pool (Gallus gallus domesticus),1
+SAMN07146528,Chicken viscera,1
+SAMN02729954,Chicken Wonton,1
+SAMN03277780,"chicken, pork, beef franks",1
+SAMN03218227,Chile Molido Puro Med Hot (ground red pepper),1
+SAMN02847714,Chili & Lime Flavored Corn Snacks,1
+SAMN02345568,chili pepper,1
+SAMN02844855,"CHILLI PEPPERS, SMALL",1
+SAMN06330436,Chilling Room floor/wall,1
+SAMN06330434,Chilling Room floors,1
+SAMN05462819,CHILLY POWDER SUPER HOT,1
+SAMN03277663,Chinese Sausage,1
+SAMN01816142,chitin enrichment; seawater,1
+SAMN01813433,chocolate balls,1
+SAMN04452729,Chocolate cheesecake,1
+SAMN02352698,chocolate coated marshmallow,1
+SAMN02767965,chocolate pie,1
+SAMN02845276,cicada egg,1
+SAMN02844662,CLEANED CLIMBING PERCH,1
+SAMN01816143,coconut milk,1
+SAMN02344745,"coconut strips, dehydrated",1
+SAMN02345262,"coconut, shredded",1
+SAMN07823469,Codfish Salad,1
+SAMN02979279,cold room floor under cheese rack,1
+SAMN05361999,Cold smoked Atlantic salmon,1
+SAMN03418494,collard greens,1
+SAMN05781472,Colon  (Gallus gallus domesticus),1
+SAMN06330657,Colon (Sus scrofa domesticus),1
+SAMN04386839,Compounded asafoetida powder,1
+SAMN03277794,COOKED BREAKFAST SAUSAGE,1
+SAMN01902321,cooked chicken,1
+SAMN03277653,cooked chicken breast,1
+SAMN02597321,cooked chicken thigh,1
+SAMN03277657,cooked corn beef,1
+SAMN02922231,cooked crab legs,1
+SAMN03354363,cooked cured beef loaf,1
+SAMN03354330,cooked ham (10/25/01),1
+SAMN02923056,"COOKED LANGOSTINOS, YELLOW, FRZ",1
+SAMN02922492,cooked/peeled shrimp,1
+SAMN07258284,Cookie Dough,1
+SAMN02843740,coriander seed,1
+SAMN02844611,Corn Chips Snacks,1
+SAMN01933120,corn snake,1
+SAMN01816199,"corn, ground",1
+SAMN02846476,Corriander Cumin Powder,1
+SAMN02261184,cotton seed hulls,1
+SAMN02843963,cottonseed meal,1
+SAMN02595845,Cow Other,1
+SAMN02595843,Cow Tissue Composite,1
+SAMN03838535,Crab (Frozen),1
+SAMN02844755,"Crab w claws, frz, cut",1
+SAMN00860589,"crab with claws, frozen",1
+SAMN02844787,"Crab, cut",1
+SAMN00996621,"crab, frozen small",1
+SAMN02678793,"Crab, in shell",1
+SAMN02698210,"Crab, pasturized",1
+SAMN04421182,Crack in floor at Junction,1
+SAMN02352666,"craw fish (with cajun flavor) cooked, frz, whole",1
+SAMN04487307,crawfish,1
+SAMN02678794,Cream of Wheat,1
+SAMN02345228,crocodile meat,1
+SAMN02922264,Crunchy Sprout Blend,1
+SAMN01942252,crushed chilis,1
+SAMN02844416,Crushed Chipotle Pepper,1
+SAMN02844386,Cuachalalate Tea,1
+SAMN04146070,cuban wrap,1
+SAMN03580921,cured hides,1
+SAMN01939120,Curly Leaf Spinach,1
+SAMN02483553,CURRY MASALA SPICE,1
+SAMN02844615,CURRY POWDER WITH SALT,1
+SAMN02922707,"Cuttlefish, seasoned, frozen",1
+SAMN03736712,deli meat ham,1
+SAMN02918577,"Dog Food, Ingredient",1
+SAMN02918885,"Dog Food, Puppy Brand",1
+SAMN06189262,Dog isolate (from submitter),1
+SAMN06333689,Dolphin Lung (Delphinidae),1
+SAMN02905097,door assembly,1
+SAMN06434926,Dried Beef Lung,1
+SAMN02844164,Dried Belt Fish,1
+SAMN04943314,dried calf spare ribs,1
+SAMN02843466,dried catfish,1
+SAMN02345081,dried chili,1
+SAMN02843494,dried clams,1
+SAMN02843456,dried fish (charral),1
+SAMN02847164,DRIED INDO FISH,1
+SAMN05044509,dried lemon grass,1
+SAMN02919091,DRIED LOTUS SEED,1
+SAMN02844620,Dried Mint,1
+SAMN02843712,dried oregano,1
+SAMN02843869,dried oyster,1
+SAMN02843857,dried papaya,1
+SAMN02843576,dried poultry blood,1
+SAMN02678749,DRIED SQUID (SLICED),1
+SAMN02843909,dried yeast,1
+SAMN02844588,DRY BLACK MULBERRY,1
+SAMN02646964,Dry Cereal,1
+SAMN01816346,Dry Milk Environmental,1
+SAMN02378167,ducks feces,1
+SAMN02345080,dwarf prawns,1
+SAMN02923496,Egg Cheese & Veg Taco,1
+SAMN01041120,egg wash water,1
+SAMN02850727,"Egg,Sausage,Cheese Burrito",1
+SAMN02767999,"eggs, dairy, oil, sugar",1
+SAMN01041119,"eggs, fresh shelled",1
+SAMN04279464,elephant_Urine,1
+SAMN02902683,Elk (necropsy),1
+SAMN04296386,Emu; necropsy,1
+SAMN04417905,environment (cutting board - poultry),1
+SAMN04417906,environment (cutting board -bovine),1
+SAMN04417904,environment (cutting board -poultry),1
+SAMN03269323,Environmental Floor Swab of Cattle Facility,1
+SAMN02905662,Environmental swab from  floor/wall line molding,1
+SAMN02850668,Environmental swab of pallet in cooler,1
+SAMN03565667,environmental swabs from soybean sprout production area,1
+SAMN03083789,Environmental swabs taken from whey drying equipment.,1
+SAMN02422955,Environmental-Inside of floor drain by cabbage flume,1
+SAMN02952731,Equine (abscess),1
+SAMN07709884,Equine Colon  -Equus caballus,1
+SAMN06669739,Equine feces (Equus caballus),1
+SAMN07709886,EQUINE FECES-Equus caballus,1
+SAMN06067873,Equine Kidney,1
+SAMN03277684,"Equine, 2 year old female, liver sample",1
+SAMN03277710,"Equine, 4 week old male, liver sample",1
+SAMN04993185,"equine, E. f. caballus-Heart",1
+SAMN04993158,"equine, E. f. caballus-Joint Cavity",1
+SAMN04279485,"equine, horse_Bladder",1
+SAMN04279422,"equine, horse_Jejunum",1
+SAMN02678890,ESCOLAR STEAK,1
+SAMN02844701,Falafel with pepper,1
+SAMN04958300,fallow deer Animal,1
+SAMN02678885,FARM RASIED STRIPPED BASS,1
+SAMN02843854,featherback fillets,1
+SAMN02345249,"featherback fish (paste), frz",1
+SAMN05781502,Fecal Swab  (bos taurus),1
+SAMN06048943,feces (Dermatemys mawii),1
+SAMN06049447,feces (Didelphis virginiana),1
+SAMN06049446,feces (Tamandua mexicana),1
+SAMN05452882,"Feces-Antelope, Barasingha",1
+SAMN05440316,Feces-Turkey,1
+SAMN05752003,"Feces, Bovine",1
+SAMN02902799,feed - imported,1
+SAMN02952786,feed fishmeal,1
+SAMN02849892,Feline (tissue),1
+SAMN02742088,Feline-cheetah(feces),1
+SAMN02843899,fennel,1
+SAMN02403407,Feta Cheese,1
+SAMN02844494,"file fish - frozen, seasoned",1
+SAMN02844166,Fish (Shad),1
+SAMN04417975,fish (smoked salmon),1
+SAMN02922295,fish cakes,1
+SAMN02843732,fish dumpling,1
+SAMN02844223,Fish Eggs,1
+SAMN01813413,fish food,1
+SAMN02843728,fish meal (feed use only),1
+SAMN02843758,fish snack - seasoning yellow strip,1
+SAMN06446244,fish-fillet atlantic in oil,1
+SAMN04329654,Fly-surface,1
+SAMN02843832,flying fish,1
+SAMN04487310,Fresh albacore tuna aka tombo,1
+SAMN05859965,Fresh Asparagus,1
+SAMN02698370,FRESH BABY CUCUMBERS,1
+SAMN02344851,fresh cantaloupe melons,1
+SAMN01902386,fresh cherry tomatoes,1
+SAMN03218572,Fresh Chopped Clams,1
+SAMN06672001,Fresh chopped liver,1
+SAMN02844020,Fresh Coriander (Cilantro),1
+SAMN02844071,Fresh Crab Meat,1
+SAMN02698407,FRESH CULANTRO,1
+SAMN02344848,fresh false coriander,1
+SAMN06602496,Fresh Feces,1
+SAMN02844016,Fresh Frozen Anchovy,1
+SAMN02678739,Fresh Frozen Snails,1
+SAMN02843807,Fresh Green Onions,1
+SAMN02922216,fresh guacamole,1
+SAMN04992708,Fresh Habanero Peppers,1
+SAMN02678822,FRESH HUSK TOMATOES (tomatillo),1
+SAMN05756434,Fresh Jalapenos,1
+SAMN04858540,Fresh Long Chili Peppers,1
+SAMN02678629,FRESH PARSLEY,1
+SAMN02844183,Fresh Pineapple,1
+SAMN02687579,Fresh Round Cheese,1
+SAMN02566900,Fresh Spinach,1
+SAMN01902384,fresh sprouts,1
+SAMN02844157,Fresh Tuna,1
+SAMN02182937,Fried rice,1
+SAMN03354364,fries & chicken nuggets,1
+SAMN02844549,Froglegs - frozen,1
+SAMN05291754,Frozen 100% Feather Back Fish Meat,1
+SAMN02844118,Frozen Apple Snail,1
+SAMN02843502,frozen baby gold fish,1
+SAMN02843479,Frozen baby milkfish,1
+SAMN02843515,frozen baby octopus,1
+SAMN02843725,frozen baby shrimp,1
+SAMN02843798,frozen black pomfrets,1
+SAMN05859972,"Frozen Black Tiger Shrimp, Headless",1
+SAMN02843593,frozen boiled clam,1
+SAMN02922360,frozen capelin roe,1
+SAMN05462811,FROZEN CEDAR PLANKED ATLANTIC SALMON 12X10OZ,1
+SAMN04196542,frozen cherries,1
+SAMN02678852,FROZEN CLEANED CRAB,1
+SAMN02846062,FROZEN COOKED CLAM,1
+SAMN05591110,Frozen Cooked Crayfish,1
+SAMN02922200,frozen crawfish,1
+SAMN02843594,frozen cuttle fish,1
+SAMN02843996,Frozen Dwarf Walking Fish,1
+SAMN02843762,frozen featherback fish meat,1
+SAMN02921887,frozen fish cakes,1
+SAMN02352737,frozen fresh water hlso shrimp,1
+SAMN02698068,FROZEN FROG LEGS,1
+SAMN02843412,Frozen Fuzzie Feeder Mice,1
+SAMN02678898,FROZEN GOBY FISH,1
+SAMN02677686,Frozen Green Chile NM Hot Diced,1
+SAMN02844819,FROZEN GROUPER FILLET,1
+SAMN02843730,frozen guinea pigs,1
+SAMN02344811,frozen gutted and scaled tilapia,1
+SAMN02698293,Frozen HILSHA,1
+SAMN04893595,Frozen Hot Chili,1
+SAMN02919106,FROZEN ILLEX SQUID TUBES,1
+SAMN02847711,FROZEN IQF SEAFOOD MIX,1
+SAMN02345230,frozen ladyfish,1
+SAMN03495911,FROZEN MACKEREL FISH,1
+SAMN06669427,Frozen Mahi Mahi Portions,1
+SAMN07552030,Frozen Marlin Cubes,1
+SAMN02843761,frozen mullet fish,1
+SAMN02843498,frozen mussel clam,1
+SAMN06173521,FROZEN P & D SHRIMP,1
+SAMN02843747,FROZEN P&D TAIL-ON BLACK TIGER SHRIMP,1
+SAMN02698316,FROZEN PANDAN LEAF,1
+SAMN02844577,FROZEN PDN SHRIMP,1
+SAMN07713952,frozen peas,1
+SAMN05591109,Frozen Precooked Crabmeat,1
+SAMN07256014,FROZEN QUAILS JUMBO,1
+SAMN02844511,FROZEN RABBITS,1
+SAMN04166566,Frozen Raw Dog Food,1
+SAMN02843454,frozen raw scallop,1
+SAMN02843754,frozen raw tuna steak,1
+SAMN02345512,frozen rohu fish fillet,1
+SAMN02844136,Frozen Sharptooth Fish,1
+SAMN02843760,frozen sillago fish,1
+SAMN07554581,Frozen Silverbarb Fish,1
+SAMN06434368,FROZEN SMOKED SARDINELLA FISH POWDER,1
+SAMN02843546,frozen snake head chunk,1
+SAMN02844884,FROZEN SNAPPER FILLET,1
+SAMN02843450,frozen soft crab,1
+SAMN02844502,FROZEN SPINNY GOBY,1
+SAMN02919090,FROZEN SQUID CLEANED,1
+SAMN02843542,Frozen stripe bass,1
+SAMN02846932,FROZEN SWAI FILLETS,1
+SAMN02843491,frozen swimming crab,1
+SAMN04221376,FROZEN TILAPIA WHOLE,1
+SAMN02698174,FROZEN TILAPIA WHOLE ROUND,1
+SAMN02678894,FROZEN TILAPIA WHOLE ROUND FARM RAISED,1
+SAMN02843809,frozen tuna fillets,1
+SAMN07206389,FROZEN TUNA FISH STEAKS,1
+SAMN07185540,Frozen Turkey & Produce Raw Dog Food,1
+SAMN04122403,Frozen Uncooked Crab Cakes,1
+SAMN02843752,frozen vaccum packed spicy ground tuna,1
+SAMN05256162,frozen whitefish taposhi,1
+SAMN03813734,FROZEN WHOLE BASS,1
+SAMN02844027,frozen whole hassar,1
+SAMN02846983,FROZEN WILD CAUGHT CO YELLOW TUNA,1
+SAMN02678904,FROZEN WILD CAUGHT WHOLE ROUND BIG EYE SCAD,1
+SAMN02344787,frozen yellow  walking,1
+SAMN02678855,FROZEN YELLOWFIN (GROUND MEAT),1
+SAMN02769737,fruit cake,1
+SAMN02921822,Frz Avocado Pulp,1
+SAMN02844335,Frz Baby Eel,1
+SAMN02844336,Frz Baby Mud Fish,1
+SAMN02844676,Frz Barramundi Fillet,1
+SAMN02844445,Frz Catfish,1
+SAMN02678828,FRZ CLEANED & GUTTED OCTOPUS,1
+SAMN02844795,Frz Climbing Perch,1
+SAMN02922172,Frz Cold Smoked Salmon Fillet,1
+SAMN02922738,Frz Cooked Lobster,1
+SAMN02345002,frz cooked peeled shrimp,1
+SAMN02678450,Frz Cooked Vannamei,1
+SAMN02921591,Frz Crab,1
+SAMN02843786,frz crawfish tail meat,1
+SAMN02844343,Frz Cut Crab,1
+SAMN02344749,frz cut crab sections,1
+SAMN02844277,Frz Dace Fish,1
+SAMN02698103,Frz Devil Fish,1
+SAMN02345050,frz farm raised tilapia,1
+SAMN02844365,Frz Feather Back Meat,1
+SAMN02844624,Frz Featherback Fish,1
+SAMN02844280,Frz Fish,1
+SAMN02844619,Frz Fully Cooked Clams,1
+SAMN02844320,Frz Golden Threadfin,1
+SAMN02921805,Frz Lobster Salad Meat,1
+SAMN02844322,Frz Makarel Fish,1
+SAMN02844208,Frz milkfish,1
+SAMN02844376,Frz Mud Fish,1
+SAMN02698334,"Frz Octopus, whole, cleaned",1
+SAMN02844409,Frz Rabbit,1
+SAMN02847410,Frz Rabbit Leg Quarters,1
+SAMN02847231,Frz Raw Octopus,1
+SAMN02843787,frz raw peeled shrimp,1
+SAMN02844414,Frz Raw Squid Tubes & Tentacles,1
+SAMN02844695,Frz Raw Tiger Shrimp,1
+SAMN03325181,FRZ RAW WHOLE OCTOPUS CLEANED,1
+SAMN02844364,Frz Red Tail Fish,1
+SAMN02844863,FRZ RIVER TINFOIL BARB,1
+SAMN02844417,Frz Roasted Eel,1
+SAMN02844301,Frz Salmon Fillets,1
+SAMN02843683,frz seafood mix,1
+SAMN02844422,Frz Silverbard Fish w/ Lemongrass,1
+SAMN02843868,frz slice swai fish,1
+SAMN02923028,Frz Smoked Salmon,1
+SAMN02844159,Frz Soft Shell Crabs,1
+SAMN02843708,frz softshell crab,1
+SAMN02698116,Frz Tiny Shrimp,1
+SAMN02844836,"Frz Tuna, Saku block",1
+SAMN02844424,Frz Whole Crab,1
+SAMN02345093,frz whole milkfish,1
+SAMN02678915,Frz whole moon fish,1
+SAMN02345112,frz whole shari puti fish,1
+SAMN02843686,frz whole tiger fish,1
+SAMN02344757,frz whole trumpet emperor fish,1
+SAMN02844167,Frz Yellow Catfish,1
+SAMN02844315,Frz Yellow Ear Walking Fish,1
+SAMN02846556,Frz Yellow Tail,1
+SAMN02698078,Frz YELLOW WALKING FISH,1
+SAMN02843584,frz. doby fish,1
+SAMN02844311,Frz. Fish,1
+SAMN02843621,frz. frog legs,1
+SAMN02698395,Frz. Grouper Fillet,1
+SAMN02345161,frz. mahi mahi fillets,1
+SAMN02678489,Frz. Tilapia,1
+SAMN02843641,frz. walking fish,1
+SAMN05468025,Gallus gallus domesticus Heart,1
+SAMN05468026,Gallus gallus domesticus Liver,1
+SAMN03654434,GARAM MASALA POWDER,1
+SAMN04992204,"Gazella, Mhorr-Intestine",1
+SAMN04992220,"Gazella, Mhorr-Rectum",1
+SAMN04305471,Ginger Root,1
+SAMN02182967,gizzards,1
+SAMN05414614,goat milk cheese,1
+SAMN02678909,GOLD BAND FUSILIER,1
+SAMN02344836,"gold band fusilier, frz, whole",1
+SAMN03018564,GOLDEN THREAD FISH,1
+SAMN02922364,Gorgonzola Cheese,1
+SAMN02844143,Gourami Fish,1
+SAMN02843781,Grains of paradise (pepper),1
+SAMN02844785,"Granola Bar, chocolate chip",1
+SAMN07342837,Green Cabbage,1
+SAMN02677687,Green Chili NM Hot,1
+SAMN02850676,Green Chilli peppers frozen,1
+SAMN02678448,GREEN HOUSE TOMATOES,1
+SAMN02569909,Green Pepper Julienne,1
+SAMN07843529,ground beef chuck,1
+SAMN02597307,ground beef hamburger,1
+SAMN03580930,ground beef patty,1
+SAMN02566899,Ground Beef-Frozen,1
+SAMN02844459,Ground Cinnamon,1
+SAMN02844796,Ground Laurel Leaves,1
+SAMN02597312,ground round,1
+SAMN02844132,Ground Sesame Seeds,1
+SAMN02597326,ground venison,1
+SAMN02846993,"GUAJILLO PEPPERS, GROUND",1
+SAMN02345331,habanero peppers,1
+SAMN02845615,Halawa Sugar Free,1
+SAMN02678634,Haleem Mix,1
+SAMN05781372,"Halibut, Re-packaged in the restaurant",1
+SAMN02843451,halva,1
+SAMN02345251,halva cocoa,1
+SAMN02800592,HALVA WITH PISTACHIO,1
+SAMN02850719,Ham & Green Onion Cheese Salad,1
+SAMN03431325,Ham & Turkey Hoagie,1
+SAMN03736706,ham sausage with veal,1
+SAMN03736708,ham spread,1
+SAMN04146122,HamCheese Sandwich,1
+SAMN01816179,hard cheese,1
+SAMN05179401,Hash Brown Potatoes,1
+SAMN05179390,Hash Browns,1
+SAMN06564413,Headless Shrimp,1
+SAMN06564425,Heart of Romaine,1
+SAMN03652136,Hedgehog,1
+SAMN02923050,Herring fillet Holland style,1
+SAMN04525302,Herring in Shuba,1
+SAMN06434369,HILSA (W) FROZEN FISH,1
+SAMN00989085,hilsa fish,1
+SAMN05384843,honey glazed turkey breast,1
+SAMN02595877,Horse Stool,1
+SAMN02922490,hot smoked trout,1
+SAMN04329617,human-tracheal-aspirate,1
+SAMN02922217,imitation crab meat and spinach stuffing,1
+SAMN07716740,imitation crab salad,1
+SAMN01939039,imitation crabmeat,1
+SAMN01823700,Imported Frog Legs,1
+SAMN02844404,Indian Celery Seed,1
+SAMN07206386,Indian snack mix,1
+SAMN02843691,instant noodle,1
+SAMN02844388,Instant Tea,1
+SAMN06113930,intestine (Gallus gallus domesticus),1
+SAMN06330638,Intestine (Meleagris gallopavo),1
+SAMN04993525,Intestine (Neovison vison),1
+SAMN06648137,intestine (Ovis aries),1
+SAMN06330632,Intestine (Sus scrofa domesticus),1
+SAMN01813485,intestine of japanese flounder larvae in marine hatchery,1
+SAMN05440409,Intestine-Bovine,1
+SAMN05452831,Intestine-Buffalo,1
+SAMN05464530,Intestine-Canine,1
+SAMN06555278,"Intestine-Gazelle, Addra",1
+SAMN07327709,"Intestine, Oncorhynchus kisutch",1
+SAMN06293640,Isolate - Environment (Knife 1),1
+SAMN06293641,Isolate - Environment (Slicer Buttons),1
+SAMN04273147,Italian Pine Nuts,1
+SAMN04487253,Italian Sausahe Hoagie,1
+SAMN02350515,jackfruit powder (bot gac),1
+SAMN02403409,Jalapeno Cheese Spread,1
+SAMN07228519,Jalapeno Powder,1
+SAMN02378188,moose feces,1
+SAMN02344828,moringa oleifera powder,1
+SAMN04146113,Mortadella,1
+SAMN02844822,Mrigel  (fish),1
+SAMN04054412,Mud Carp,1
+SAMN02843459,mullen leaves,1
+SAMN03577274,Murine cottage cheese,1
+SAMN02843935,mussel clam meat,1
+SAMN02843739,mussel meat,1
+SAMN02844677,Mutta Masala,1
+SAMN06648093,nasal swab (Sus scrofa domesticus),1
+SAMN02678792,Nimbu Masala,1
+SAMN02844706,nonfat dried milk - raw ingredient,1
+SAMN01942238,nonfat dry milk,1
+SAMN02921697,NORWEGIAN SMOKED SALMON,1
+SAMN07488096,Oatmeal spice seasoning,1
+SAMN07823470,Octopus Salad,1
+SAMN02345148,"octopus, raw",1
+SAMN05468014,Odocoileus virginianus Intestine,1
+SAMN04992272,Odocoileus virginianus-Bone Marrow,1
+SAMN04992552,Odocoileus virginianus-Colon,1
+SAMN04992306,Odocoileus virginianus-Feces,1
+SAMN04992291,Odocoileus virginianus-Intestine,1
+SAMN04992551,Odocoileus virginianus-Intestine-Small,1
+SAMN04992269,Odocoileus virginianus-Jejunum,1
+SAMN04992500,Odocoileus virginianus-Kidney,1
+SAMN04992366,Odocoileus virginianus-Rectum,1
+SAMN04992290,Odocoileus virginianus-Spleen,1
+SAMN05464515,Odocoileus virginianus-Stomach,1
+SAMN02922404,Onion Cream Cheese,1
+SAMN03421081,Open Fruit Peach,1
+SAMN03274041,organic cilantro,1
+SAMN02698221,Organic Coconut Strips,1
+SAMN04156854,Organic Coriander Powder,1
+SAMN02943415,Organic Cucumber,1
+SAMN02850675,organic curly parsley,1
+SAMN02844246,Organic Dill Weed,1
+SAMN02345244,organic dried mulberries,1
+SAMN03176917,Organic Ginger Root,1
+SAMN04956485,Organic Kelp Meal,1
+SAMN02253013,organic legume mix,1
+SAMN05615450,Organic Miller Hulled,1
+SAMN01920928,organic red chard,1
+SAMN05414613,ossau iraty cheese,1
+SAMN04487283,oven roasted turkey,1
+SAMN03577119,Ovine  liver,1
+SAMN02902702,Ovine (necropsy-spleen),1
+SAMN02849903,Ovine (swab),1
+SAMN06255953,Ovine pooled tissue,1
+SAMN03277714,"Ovine, adult female, liver sample",1
+SAMN04279362,"ovine, bighorn sheep_Spleen",1
+SAMN04992217,"ovine, oulfon sheep-Rectum",1
+SAMN04279361,"ovine, sheep_Spleen",1
+SAMN04993014,"ovine, sheep-Cerebrospinal Fluid",1
+SAMN04993183,"ovine, sheep-Heart",1
+SAMN02699431,Owl Feces,1
+SAMN02844843,Pabda (Fish),1
+SAMN02844190,pabda (sheat fish),1
+SAMN02678438,PANEER BUTTER MASALA SPICE MIX,1
+SAMN01933082,parakeet,1
+SAMN03018567,"parmesan cheese, Shelf stable grated",1
+SAMN02800589,Parsely Powder Organic,1
+SAMN02678647,PASILLA PEPPERS,1
+SAMN02344935,pasteurized cheese,1
+SAMN04544915,pastrami salmon,1
+SAMN03275234,Pea Powder,1
+SAMN07722693,Pear flower,1
+SAMN06457949,Peas,1
+SAMN05914604,Pecan,1
+SAMN02678425,PECAN HALVES,1
+SAMN02344873,pecan pieces,1
+SAMN02844603,"Pecan, shelled",1
+SAMN06074098,Pecked Eggs,1
+SAMN02222927,"pepper salami, combo pack",1
+SAMN02698426,"Pepper, dried",1
+SAMN02844584,"PEPPER,BLACK, WHOLE",1
+SAMN02709266,"peppers, fresh long green",1
+SAMN04388316,Pericardium,1
+SAMN02335214,Peritoneal Fluid,1
+SAMN02345533,persian cucumbers,1
+SAMN01902396,pesto,1
+SAMN02918778,"Pet Food, Bully Spring 12""""",1
+SAMN02918850,"Pet Food, Frozen Hopper Mice",1
+SAMN02918849,"Pet Food, Frozen Mice",1
+SAMN01816363,pet treat,1
+SAMN02918784,"Pet Treat, Beef Chew",1
+SAMN02918562,"Pet Treat, Chicken Filled",1
+SAMN02918796,"Pet Treat, Jr. Bully Steer",1
+SAMN02918765,"Pet Treat, PB & Apple Stuffed",1
+SAMN02918561,"Pet Treat, Pet Chew",1
+SAMN03743833,petrel Stool,1
+SAMN06113923,Phasianus colchicus,1
+SAMN05507164,Pig Ear Pieces,1
+SAMN04993597,Pig pooled feces (Sus scrofa domesticus),1
+SAMN02595846,Pig Rectal Swab,1
+SAMN03959611,Pig roast,1
+SAMN06034621,Pig Skin Twists,1
+SAMN06645764,Pig soil,1
+SAMN01902335,pine siskin,1
+SAMN02345219,piper sanctum - hoja santa herbal tea leaves,1
+SAMN02345117,piquin pepper,1
+SAMN05781530,Placenta  (Canis lupus familiaris),1
+SAMN02922379,"Pollack Roe, seasoned",1
+SAMN06648138,Poole tissue (Sus scrofa domesticus),1
+SAMN06648134,pooled tissue (Bos taurus),1
+SAMN02345243,poppy seeds,1
+SAMN02952692,Porcine (necropsy-lung-spleen),1
+SAMN07709876,Porcine Colon-Sus scrofa domesticus,1
+SAMN04943076,Porcine Fecal swab,1
+SAMN03734283,Porcine pool tis,1
+SAMN02699492,porcine rectal swab,1
+SAMN04992305,"porcine, pig-Bladder",1
+SAMN05604784,"porcine, pig-Intestine-Large",1
+SAMN04992249,"porcine, pig-Liver",1
+SAMN04993099,"porcine, pig-Stomach",1
+SAMN02990220,Pork Barbeque,1
+SAMN02843575,pork blood meal,1
+SAMN03277789,PORK BLOOD SAUSAGE,1
+SAMN02849542,PORK LIVER PATE,1
+SAMN05721577,Pork Protein,1
+SAMN03277795,pork spread,1
+SAMN03734385,Poultry cloacal swab,1
+SAMN00862207,poultry feather meal,1
+SAMN02261182,"poultry feathermeal, hydrolized",1
+SAMN02678818,POWDERED DRINK CANARY SEED WITH SOY,1
+SAMN02345240,prebiotic,1
+SAMN04993009,primate-Feces,1
+SAMN03285114,Product-RTE-cooked-Smoked Polish Sausage,1
+SAMN03216757,Product-Swab-Pork,1
+SAMN03218574,Prosciutto,1
+SAMN02844145,Protein Meal,1
+SAMN06333684,Psittacine Lung (Avian),1
+SAMN04992546,"psittacine, kea-Cloacae",1
+SAMN04992554,"psittacine, parrot-Bursa",1
+SAMN07747816,Psittacus erithacus,1
+SAMN04487258,pub sandwich,1
+SAMN02698425,Pud Shrimp,1
+SAMN01920933,python (oral),1
+SAMN06333473,Python Abdominalswab (Pythonidae),1
+SAMN02645755,Python stool,1
+SAMN07682582,python water,1
+SAMN03354347,quesadilla with beef (5/31/01),1
+SAMN02921683,Queso Fresco Cheese,1
+SAMN05384845,queso seco cheese,1
+SAMN02844881,"RABBIT, WHOLE, SKINLESS, BONE IN",1
+SAMN04296390,Rabbit; necropsy,1
+SAMN03083832,rapeseed meal (canola meal),1
+SAMN06645614,Ratite Cloacalswab (Ratite),1
+SAMN01041155,rattlesnake cake,1
+SAMN05710965,rattlesnake unspecified blood,1
+SAMN02843439,raw almond,1
+SAMN05560723,Raw Beef materials,1
+SAMN03431328,Raw beef trimmings,1
+SAMN07525953,Raw Boston,1
+SAMN07843516,Raw bovine milk,1
+SAMN03736711,raw buttermilk,1
+SAMN02483549,raw cashew pieces,1
+SAMN06628138,Raw cat food,1
+SAMN06624288,Raw Cat Food - Tuna,1
+SAMN04565626,Raw chicken livers,1
+SAMN07713986,Raw Chicken Meat,1
+SAMN06073788,Raw Chicken Sausage,1
+SAMN06074070,Raw Fish,1
+SAMN03941120,Raw kafta,1
+SAMN06033940,Raw Kale-red,1
+SAMN02222898,raw meat for pet food,1
+SAMN04001964,Raw meat/Chicken,1
+SAMN07571684,raw milk cheese-Monterey Jack,1
+SAMN06033997,Raw Peanuts,1
+SAMN06073965,Raw Pork Loin,1
+SAMN07554590,Raw Red Chard,1
+SAMN07767847,Raw Romaine Lettuce,1
+SAMN06033911,Raw Shonghai Bott choy,1
+SAMN02843547,rawhide dog chew,1
+SAMN02843756,rawhide mini bones,1
+SAMN02843998,rawhide scrap,1
+SAMN02400191,Rectal swab,1
+SAMN02846055,"RED CHILI, DRIED",1
+SAMN04913586,Red Chilli,1
+SAMN02844538,Red Chipotle Chili powder,1
+SAMN02844213,Red Claw Lobster,1
+SAMN02844697,RED OAK LEAF LETTUCE,1
+SAMN04148335,Red Pepper Feta Cheese spread,1
+SAMN06669432,Red Salsa,1
+SAMN01902302,redpoll,1
+SAMN03736751,RedRoyal potato salad,1
+SAMN01920935,reptile (cloaca),1
+SAMN06333447,Reptile Eggsac (Reptilia),1
+SAMN02595816,Reptile Stool,1
+SAMN04530847,rice,1
+SAMN02844225,Rice Bran,1
+SAMN02845798,Rice Flour,1
+SAMN02922737,Ricotta Piatta Cheese,1
+SAMN03387077,"Right side of calf barn,fecal",1
+SAMN04487260,roast beef and swiss sandwich,1
+SAMN04487219,roast beef on wheat sandwich,1
+SAMN02846199,Roasted & Salted Garlic/Onion Pistachios,1
+SAMN02843764,roasted cuttlefish,1
+SAMN02843818,roasted peanut,1
+SAMN02678487,ROASTED PUMPKIN SEEDS,1
+SAMN03275259,Roasted Salted Pistachios,1
+SAMN00862341,"rock lobster tails, frozen",1
+SAMN02902713,Rodent,1
+SAMN02952730,Rodent (colon),1
+SAMN05362793,Rohu (Frozen Fish),1
+SAMN03102356,Root Ball (Soil),1
+SAMN05440318,Roquefort,1
+SAMN02844514,Roquefort cheese,1
+SAMN05440321,Roquefort Paillon Cheese,1
+SAMN02709126,Rotisserie chicken,1
+SAMN02615876,rt knee joint fluid,1
+SAMN03285290,RTE dried/fermented sausage - labanon balogna,1
+SAMN03023704,RTE Product - Andouie sausage,1
+SAMN03023701,RTE Product - Jumbo Hot Dogs,1
+SAMN03072626,RTE Product - Kungpao Chicken,1
+SAMN03285106,RTE Product-chicken caesar wrap,1
+SAMN03285116,RTE Product-Diced Cooked Ham,1
+SAMN03285102,RTE Product-Ham - Sliced,1
+SAMN03218386,RTE Product: Scramble Bowl w/ sausage links,1
+SAMN03354370,RTE Product:Fully Cooked Chicken Breast,1
+SAMN03435353,RTE Product:Ham With Garlic,1
+SAMN04600055,RTE salad,1
+SAMN02844703,sakthi mutton masala,1
+SAMN06446249,salad-potato,1
+SAMN07571693,salad-tuna,1
+SAMN02921679,Salmon Fillet,1
+SAMN02921364,"Salmon, Frz, Smoked",1
+SAMN02352659,"salmon, graved, norwegian",1
+SAMN02847697,"Salted Fish, smoked",1
+SAMN02698216,SALTED YELLOW CROAKER,1
+SAMN02923118,"sandwich of of ham salami, cheese, lettuce, and tomatos in a",1
+SAMN02923325,"Sauce, Enchilada",1
+SAMN02844212,Saw palmetto seed powder,1
+SAMN02847013,"SCARLET SNAPPER FILLETS, RAW, SKIN ON, BONELESS",1
+SAMN02921656,scrap swiss and cheddar cheese,1
+SAMN06333455,Screechowl Liver (Megascops asio),1
+SAMN02844195,Sea Crab,1
+SAMN02844574,"Sea Scallops, Japanese",1
+SAMN02345154,"seabass fish, frz",1
+SAMN02843926,seafood mix,1
+SAMN03218570,Seam of Deli Case,1
+SAMN03354326,seasoned chicken/beef (10/12/01),1
+SAMN01902439,sediment (pond),1
+SAMN02646180,sediment pond BB,1
+SAMN02646136,sediment pond CC1,1
+SAMN01939035,"serrano pepper, fresh",1
+SAMN02844486,SESAME SEEDS IN HUSK,1
+SAMN02844799,"Sesame seeds, indian hulled",1
+SAMN02678791,Sesame seeds/Tahini Paste,1
+SAMN03168681,sheep (brain),1
+SAMN07682323,Sheep brain stem  (Ovis aries),1
+SAMN02843792,shell on frozen shrimp,1
+SAMN02352723,shilago headles fish,1
+SAMN02846408,Shoil (freshwater Shark),1
+SAMN02923439,shredded mozzarella cheese,1
+SAMN02678514,Shrimp Primavera,1
+SAMN02847718,Shrimp Raw,1
+SAMN01823701,"shrimp, frozen raw",1
+SAMN00860584,"shrimp, frozen raw peeled",1
+SAMN01942298,"shrimp, frozen undeveined",1
+SAMN02844845,"Shrimp, raw, frz",1
+SAMN01942287,"shrimp, shell-on",1
+SAMN02846177,"Silverfish, glazed",1
+SAMN06333930,skin (Ovis aries),1
+SAMN07327719,"Skin, marine fish",1
+SAMN02628651,Skinless Boneless Chicken Breast with rib meat,1
+SAMN02628663,Skinless Bonless Chicken Thin Sliced Breast,1
+SAMN02990221,Skinless Hot Dogs,1
+SAMN02923210,SLICED COLD SMOKED SALMON FILLET,1
+SAMN03277802,SLICED COOKED HAM AND PORK SHOULDER,1
+SAMN03997250,sliced dry salami,1
+SAMN05430134,sliced smoked lox,1
+SAMN06110502,Slim Carrots,1
+SAMN02843500,slit cut cuttlefish,1
+SAMN04558491,Small Chilli,1
+SAMN02419081,Small fish in an irrigation pond,1
+SAMN03203176,Smoke house drain,1
+SAMN04487256,smoked boneless ham,1
+SAMN03813735,SMOKED HALIBUT,1
+SAMN03354348,smoked pork loin,1
+SAMN02845770,smoked round scad,1
+SAMN02352660,smoked salmon - cream cheese base,1
+SAMN05232963,SMOKED SALMON RED SOCKEYE,1
+SAMN03736737,smoked salmon round,1
+SAMN03277787,SMOKED SAUSAGE WITH ITALIAN STYLE SEASONING,1
+SAMN03736738,smoked sockeye salmon,1
+SAMN04487222,smoked trout,1
+SAMN01933148,snake,1
+SAMN01920944,snake (cloaca),1
+SAMN02846807,"SNAKE HEAD FISH FILLET 800 G, frz",1
+SAMN02595865,SNAKE Stool,1
+SAMN02844543,Snapper cut fillets,1
+SAMN02844856,"SNOW CRAB CLUSTERS, FRZN",1
+SAMN02844629,"Snow Crab, froz",1
+SAMN06333453,Snowleopard Lung (Panthera uncia),1
+SAMN06645776,Soil Sample - Chicken House 1,1
+SAMN07469532,Sow fecal,1
+SAMN02846777,soy crisp,1
+SAMN02845835,Soy Lecithin Fluid,1
+SAMN02844541,Soybean protein,1
+SAMN02642569,spanish style cheese,1
+SAMN02844142,Spices and Seasonings,1
+SAMN07719441,spices seasoning- oatmeal spice seasoning,1
+SAMN05914726,Spicy Punjabi Mix,1
+SAMN02796310,Spicy sprouts,1
+SAMN05180023,"Spinach, organic",1
+SAMN02345579,spinachs flakes,1
+SAMN05464528,Spleen-Bovine,1
+SAMN02843487,spotted house gecko,1
+SAMN02887159,Spring Water,1
+SAMN02265261,Sprout Irrigation Water,1
+SAMN05774052,SQUID W/TUBES AND TENTACLES,1
+SAMN06074071,Strawberry Pie,1
+SAMN02678839,"STRIPED BASS WHOLE, frz",1
+SAMN02844932,"STRIPED BASS, frz",1
+SAMN04992504,"Struthio camelus, orstrich-Intestine-Small",1
+SAMN05384840,stuffed salmon,1
+SAMN07767523,submarine sandwich,1
+SAMN02845650,Sugar Free Plain halva,1
+SAMN02847698,SUGAR PLUM GRAPE TOMATOES 1PT,1
+SAMN02344793,sunflower kernels,1
+SAMN03168685,surface (in contact with food; food category unknown),1
+SAMN07327753,Surface seawater,1
+SAMN03838542,Surface wipe; bathroom sink,1
+SAMN03838541,Surface wipe; bathroom toilet,1
+SAMN04296490,Suwannee River; water,1
+SAMN04417961,swab (dairy plant),1
+SAMN02921490,swab of floor drain,1
+SAMN05733250,Swab of irrigation filter unit,1
+SAMN02345339,sweet bell peppers,1
+SAMN02345412,sweet peppers,1
+SAMN03577055,Swine minced meat,1
+SAMN02429377,Synovial fluid,1
+SAMN03103578,Synovial fluid/Joint Fluid,1
+SAMN06434366,TAHIN (Sesame Paste),1
+SAMN06817876,Tahini Paste,1
+SAMN02767978,tempeh culture open bag,1
+SAMN02767979,tempeh culture unopen bag,1
+SAMN03732552,Thai Dried Chili,1
+SAMN02844743,"Thai Hot Peppers, fresh",1
+SAMN02345221,thai peppers,1
+SAMN02678838,THREADFIN BREAM,1
+SAMN02844791,"Tilapia fillet, frz",1
+SAMN07515200,Tilapia fish,1
+SAMN02844571,"Tilapia, frozen, gutted, scaled",1
+SAMN02345224,"tilapia, gutted and hot smoked",1
+SAMN02678889,"TILAPIA, whole, frz",1
+SAMN04943267,Tindori Cucumbers,1
+SAMN02844719,"Tinfoil Barb, frz",1
+SAMN02699659,Tokay Gecko Feces,1
+SAMN01939071,tomato field environment,1
+SAMN05414478,Tomatoe,1
+SAMN02844567,"Tomatoes, Green Raw",1
+SAMN02849780,Tortoise (swab),1
+SAMN02721448,"Tortoise, necropsy",1
+SAMN04122808,trachael aspirate,1
+SAMN06330636,Tracheal swab (Meleagris gallopavo),1
+SAMN03018551,trigger fish fillets,1
+SAMN02344791,tumeric (haldi) powder,1
+SAMN02844152,Tuna cubes,1
+SAMN02844848,Tuna Loins,1
+SAMN02698305,"Tuna Steak, frz",1
+SAMN01816351,tuna steaks; frozen yellowfin,1
+SAMN01816353,"tuna, frozen ground",1
+SAMN02922105,Turkey and Cheese Sandwich,1
+SAMN02709415,Turkey Ham and Cheese on Potato Bun,1
+SAMN05900835,turkey italian wrap,1
+SAMN01088005,turkey liver,1
+SAMN04146090,turkey salad,1
+SAMN04544911,turkey salad sandwich with almonds,1
+SAMN02368109,Turkey Swab,1
+SAMN02699782,Turkey Trachea,1
+SAMN03277779,"turkey, pork, beef hot dogs",1
+SAMN05900798,"turkey, provolone sandwich",1
+SAMN02846973,TURMARIC POWDER,1
+SAMN01920955,turtle (feces),1
+SAMN02403400,Turtle's tank water,1
+SAMN02845992,ULCERITEC CAPSULES,1
+SAMN02923579,Unopened Chef Salad,1
+SAMN02844979,unpast. gouda cheese,1
+SAMN06213822,Unseasoned Raw Poultry,1
+SAMN02345021,untreated cashews,1
+SAMN02582686,USDA DeliMeat turkey,1
+SAMN05440407,Uterus-Bovine,1
+SAMN06856349,Vacuum Cleaner,1
+SAMN03782428,"vacuum packed, smoked Whitefish chubs",1
+SAMN03782429,"vacuum packed, whole, smoked whitefish chubs",1
+SAMN02419878,vaucherin cheese,1
+SAMN02846293,Veg manchurian,1
+SAMN02769735,vol au vent shrimp,1
+SAMN03497614,Walnut Halves & Pieces,1
+SAMN03285124,Walnuts Pieces,1
+SAMN01939127,Washed Spinach,1
+SAMN02182924,Washroom,1
+SAMN02846759,WHITE PEPPER GROUND,1
+SAMN05901935,White Pomfret,1
+SAMN05256161,white sesame,1
+SAMN02344827,"white shrimp, dried",1
+SAMN02923335,White Soft Cheese,1
+SAMN01902271,white tail deer,1
+SAMN02922886,whole cooked dungenees crab,1
+SAMN02350505,whole green jalapenos,1
+SAMN02843896,whole round milkfish,1
+SAMN06645567,WildChicken Feces,1
+SAMN06333671,WildChicken Liver (Avian),1
+SAMN02595866,Wolverine Composite,1
+SAMN03277654,Yakitori cooked skewered seasoned chicken,1
+SAMN02843914,yellow cheese,1
+SAMN02843952,yellow clams,1
+SAMN02846898,Yellowfin Tuna,1
+SAMN02846882,"Yellowfin Tuna A1 Nakaochi Scrape, frz",1
+SAMN02345220,yellowfin tuna steak,1
+SAMN02483548,"YELLOWTAIL EMPEROR FISH -GUTTED, CLEANED, FROZEN",1
+SAMN02368066,Young Chicken carcass rinse,1

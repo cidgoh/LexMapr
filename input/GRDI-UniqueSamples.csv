@@ -1,0 +1,49 @@
+ID,Term
+SPECIMEN1,Stool
+SPECIMEN2,Abscess
+SPECIMEN3,Unknown
+SPECIMEN4,Urine
+SPECIMEN5,Blood
+SPECIMEN6,Appendix
+SPECIMEN7,Cerebral Spinal Fluid
+SPECIMEN8,Almonds
+SPECIMEN9,Rectal Swab
+SPECIMEN10,Not Applicable
+SPECIMEN11,Chicken
+SPECIMEN12,Wound
+SPECIMEN13,Swab
+SPECIMEN14,Other
+SPECIMEN15,Aspirate
+SPECIMEN16,Fluid
+SPECIMEN17,Genital
+SPECIMEN18,Sputum
+SPECIMEN19,Body Fluid/Excretion
+SPECIMEN20,Aliquote / Portion
+SPECIMEN21,Environment (Animal)
+SPECIMEN22,Organ
+SPECIMEN23,Egg
+SPECIMEN24,Tissue
+SPECIMEN25,Unit (pre-packaged)
+SPECIMEN26,Carcass
+SPECIMEN27,Organ/Tissue
+SPECIMEN28,Unspecified
+SPECIMEN29,Fetus/Embryo
+SUBJECT1,Breast Skinless
+SUBJECT2,Nuggets
+SUBJECT3,Drumstick
+SUBJECT4,Upper Thigh
+SUBJECT5,Breast
+SUBJECT6,Thigh
+SUBJECT7,Upper Thigh with Skin
+SUBJECT8,Wing
+SUBJECT9,Thigh with Skin
+SUBJECT10,Ground
+SUBJECT11,Breast Skinless Boneless
+SUBJECT12,Other
+SUBJECT13,Drumstick with Skin
+SUBJECT14,Leg with Skin-Drumstick and Thigh
+SUBJECT15,Mild italian style burger
+SUBJECT16,Ground (Extra-Lean)
+SUBJECT17,upper thight
+SUBJECT18,wings
+SUBJECT19,Drumstick Skinless

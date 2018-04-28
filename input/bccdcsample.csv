@@ -1,0 +1,333 @@
+SampleId,Sample names,,,,,,Sample names
+bccdc1,Curry Sauce,,,,,,Curry Sauce
+bccdc2,Garlic Aioli,,,,,,Garlic Aioli
+bccdc3,Caesar Salad Dressing,,,Extra-->,,,Caesar Salad Dressing
+bccdc4,Lentil Dhal,,,,,,Lentil Dhal
+bccdc5,Chow Mein,,,,,,Chow Mein
+bccdc6,Boneless/Skinless Breast,,,,,,Boneless/Skinless Breast
+bccdc7,Chicken Breast (description not given on req),,,,,,Chicken Breast (description not given on req)
+bccdc8,Bone in Chicken Breast,,,,,,Boneless/Skinless Breast
+bccdc9,Large Brown Eggs,,,,,,Bone in Chicken Breast
+bccdc10,Previously Frozen Chicken Breasts,,,,,,Large Brown Eggs
+bccdc11,White Eggs,,,,,,Previously Frozen Chicken Breasts
+bccdc12,Free Run Chicken Breasts,,,,,,White Eggs
+bccdc13,Croissant Bread Pudding,,,,,,Free Run Chicken Breasts
+bccdc14,Chicken Breast,,,,,,Croissant Bread Pudding
+bccdc15,Chicken Leg,,,,,,Chicken Breast
+bccdc16,Chicken Meat,,,,,,Chicken Leg
+bccdc17,Turkey Produce,,,,,,Chicken Breast
+bccdc18,BBQ Pork Bun,,,,,,Chicken Breast
+bccdc19,Chicken Bun,,,,,,Chicken Meat
+bccdc20,Satay,,,,,,Turkey Produce
+bccdc21,Kimchi,,,,,,BBQ Pork Bun
+bccdc22,Boneless Skinless Chicken Breast,,,,,,Chicken Bun
+bccdc23,Chicken Thigh,,,,,,Satay
+bccdc24,Organic Chicken Thighs,,,,,,Kimchi
+bccdc25,Barbeque Pork Bun,,,,,,Boneless Skinless Chicken Breast
+bccdc26,Sweet Pork Bun,,,,,,Chicken Thigh
+bccdc27,Mozzarella style shreds,,,,,,Organic Chicken Thighs
+bccdc28,Cheddar style shreds,,,,,,Chicken Breast
+bccdc29,Breaded Raw Chicken,,,,,,Barbeque Pork Bun
+bccdc30,Boneless Raw Chicken,,,,,,Sweet Pork Bun
+bccdc31,Boneless Raw Chicken with Herbs,,,,,,Mozzarella style shreds
+bccdc32,Raw Chicken Leg with Skin,,,,,,Cheddar style shreds
+bccdc33,Chicken Fried Rice,,,,,,Breaded Raw Chicken
+bccdc34,Chicken Thighs Bone In,,,,,,Boneless Raw Chicken
+bccdc35,Chicken Breast Bone Out,,,,,,Boneless Raw Chicken with Herbs
+bccdc36,Chicken Breast Parts with Skin,,,,,,Boneless Raw Chicken
+bccdc37,Gravy,,,,,,Raw Chicken Leg with Skin
+bccdc38,Sushi Rice,,,,,,Boneless Raw Chicken
+bccdc39,Potatoes,,,,,,Chicken Fried Rice
+bccdc40,Chilli,,,,,,Chicken Thighs Bone In
+bccdc41,Cooked Rice,,,,,,Chicken Thighs Bone In
+bccdc42,Fried Rice,,,,,,Chicken Breast Bone Out
+bccdc43,Chow Mein Noodles,,,,,,Chicken Breast Parts with Skin
+bccdc44,Sweet and Sour Sauce,,,,,,Chicken Breast
+bccdc45,Noodles (Chow Mein) Boiled,,,,,,Gravy
+bccdc46,Noodles (Chow Mein) Fried,,,,,,Sushi Rice
+bccdc47,Chow Mein (Uncooked),,,,,,Sushi Rice
+bccdc48,Pickled Smokies,,,,,,Potatoes
+bccdc49,Pickled Eggs,,,,,,Chilli
+bccdc50,Pork Stew,,,,,,Gravy
+bccdc51,Chick Peas Curry,,,,,,Cooked Rice
+bccdc52,Beef Stew,,,,,,Fried Rice
+bccdc53,Beef Congee,,,,,,Chow Mein Noodles
+bccdc54,Grilled Chicken,,,,,,Sweet and Sour Sauce
+bccdc55,Pork Belly with White Horse Radish,,,,,,Noodles (Chow Mein) Boiled
+bccdc56,Boneless Skinless Chicken Thighs,,,,,,Noodles (Chow Mein) Fried
+bccdc57,Chicken Thighs with Skin,,,,,,Chow Mein (Uncooked)
+bccdc58,Raw Chicken Breast,,,,,,Chicken Meat
+bccdc59,Raw Chicken Breast with Skin,,,,,,Pickled Smokies
+bccdc60,Crab Salad Mix Filling,,,,,,Pickled Eggs
+bccdc61,Beet Juice,,,,,,Pork Stew
+bccdc62,Carrot Juice,,,,,,Chick Peas Curry
+bccdc63,Sushi Sauce,,,,,,Beef Stew
+bccdc64,Sunomono Sauce,,,,,,Beef Congee
+bccdc65,Goma-ae Sauce,,,,,,Grilled Chicken
+bccdc66,Chicken Breasts,,,,,,Pork Belly with White Horse Radish
+bccdc67,Chicken Salad,,,,,,Sushi Rice
+bccdc68,Butter Chicken,,,,,,Sushi Rice
+bccdc69,Chill Out - Carrot Juice,,,,,,Sushi Rice
+bccdc70,Tenacity - Beet Juice,,,,,,Sushi Rice
+bccdc71,Chocolate Cake,,,,,,Boneless Skinless Chicken Thighs
+bccdc72,Pasta,,,,,,Chicken Thighs with Skin
+bccdc73,Cooked Chicken,,,,,,Boneless Skinless Chicken Breast
+bccdc74,Egg Sandwich,,,,,,Raw Chicken Breast
+bccdc75,Cooked Potatoes,,,,,,Raw Chicken Breast with Skin
+bccdc76,Chicken Gravy,,,,,,Crab Salad Mix Filling
+bccdc77,Sushi Product (California Roll with Artificial Crab),,,,,,Beet Juice
+bccdc78,Pea and Ham Soup,,,,,,Carrot Juice
+bccdc79,Chutney,,,,,,Sushi Sauce
+bccdc80,"Chicken Fryers Whole A, Breast (Side)",,,,,,Sunomono Sauce
+bccdc81,Brown Sugar Beef Jerky,,,,,,Goma-ae Sauce
+bccdc82,Beef Jerky Original,,,,,,Chicken Breasts
+bccdc83,Spiced Salt from India,,,,,,Chicken Breast
+bccdc84,Thai Chicken,,,,,,Chicken Salad
+bccdc85,Chicken/Bacon Pastry,,,,,,Butter Chicken
+bccdc86,Lamb Sausage Roll,,,,,,Chill Out - Carrot Juice
+bccdc87,Prawn Sushi Roll,,,,,,Tenacity - Beet Juice
+bccdc88,White Sushi Rice,,,,,,Chocolate Cake
+bccdc89,Brown Sushi Rice,,,,,,Pasta
+bccdc90,Boneless Skinless Thighs 4 pack,,,,,,Cooked Chicken
+bccdc91,Chicken Wing Marinated with Tip Removed,,,,,,Cooked Chicken
+bccdc92,Beef Jerky (Made in house),,,,,,Egg Sandwich
+bccdc93,Sausage & Egger,,,,,,Cooked Potatoes
+bccdc94,Drumstick,,,,,,Butter Chicken
+bccdc95,Chicken Back Leg Attached,,,,,,Chicken Gravy
+bccdc96,Cream of Wheat,,,,,,Sushi Product (California Roll with Artificial Crab)
+bccdc97,Round Egg Patty,,,,,,Pea and Ham Soup
+bccdc98,Burger Sauce,,,,,,Fried Rice
+bccdc99,Chicken Breast Boneless,,,,,,Chutney
+bccdc100,Million Dollar Relish,,,,,,"Chicken Fryers Whole A, Breast (Side)"
+bccdc101,Thousand Island Relish,,,,,,Brown Sugar Beef Jerky
+bccdc102,Bean Sprouts,,,,,,Beef Jerky Original
+bccdc103,Gravy Cracklings,,,,,,Sushi Rice
+bccdc104,Crab Apple Jelly,,,,,,Sushi Rice
+bccdc105,Salsa,,,,,,Spiced Salt from India
+bccdc106,Pickled Carrots,,,,,,Thai Chicken
+bccdc107,Cooked Quinoa,,,,,,Chicken/Bacon Pastry
+bccdc108,Chicken Wings,,,,,,Lamb Sausage Roll
+bccdc109,Chickpeas - Soaked & Boiled,,,,,,Prawn Sushi Roll
+bccdc110,Chickpea Masala,,,,,,White Sushi Rice
+bccdc111,Refried Beans,,,,,,Brown Sushi Rice
+bccdc112,Chick Pea Soup,,,,,,Boneless Skinless Thighs 4 pack
+bccdc113,Tomato Bisque,,,,,,Sushi Rice
+bccdc114,Chicken,,,,,,Chicken Wing Marinated with Tip Removed
+bccdc115,Onion Sauce,,,,,,Boneless Skinless Chicken Thighs
+bccdc116,Coconut Chicken,,,,,,Boneless Skinless Chicken Breast
+bccdc117,Ground Beef Burrito,,,,,,Beef Jerky (Made in house)
+bccdc118,Tiramisu,,,,,,Sausage & Egger
+bccdc119,Curry Chicken,,,,,,Drumstick
+bccdc120,Spicy Tofu,,,,,,Chicken Back Leg Attached
+bccdc121,RTE Chow Mein & Chicken,,,,,,Cream of Wheat
+bccdc122,Chicken Winglets & Wing Drumettes,,,,,,Round Egg Patty
+bccdc123,not given,,,,,,Burger Sauce
+bccdc124,Chopped Coconut,,,,,,Chicken Breast Boneless
+bccdc125,Dried Spices,,,,,,Chicken Breast Boneless
+bccdc126,Eggs,,,,,,Chicken Breast Boneless
+bccdc127,Chick Peas with Coconut,,,,,,Million Dollar Relish
+bccdc128,Greek Orzo Pasta Salad,,,,,,Thousand Island Relish
+bccdc129,Raw Chicken Leg,,,,,,Bean Sprouts
+bccdc130,Pickles,,,,,,Bean Sprouts
+bccdc131,Garlic Scape,,,,,,Bean Sprouts
+bccdc132,Peppers,,,,,,Gravy Cracklings
+bccdc133,Tapioca Pearls,,,,,,Bean Sprouts
+bccdc134,Raw Boneless Skinless Chicken Breast,,,,,,Bean Sprouts
+bccdc135,Raw Chicken Thigh with Skin and Bone,,,,,,Bean Sprouts
+bccdc136,Raw Whole Chicken,,,,,,Bean Sprouts
+bccdc137,Pepperoni,,,,,,Bean Sprouts
+bccdc138,Farmeronie,,,,,,Bean Sprouts
+bccdc139,Beef Jerky,,,,,,Crab Apple Jelly
+bccdc140,Bacon Chutney,,,,,,Salsa
+bccdc141,Sushi Rice for Shrimp Stack,,,,,,Pickled Carrots
+bccdc142,Sliced Cooked Beef,,,,,,Cooked Quinoa
+bccdc143,Ginger Chicken,,,,,,Chicken Wings
+bccdc144,BBQ Salmon,,,,,,Chickpeas - Soaked & Boiled
+bccdc145,BBY Bento,,,,,,Chickpea Masala
+bccdc146,Deep Fried Prawn Heads,,,,,,Refried Beans
+bccdc147,Roll Combo,,,,,,Chick Pea Soup
+bccdc148,Beef Kimbab,,,,,,Tomato Bisque
+bccdc149,Sashimi Salmon,,,,,,Chicken
+bccdc150,Tako Yaki,,,,,,Onion Sauce
+bccdc151,Pork & Vegetable Spring Roll,,,,,,Coconut Chicken
+bccdc152,BBQ Pork,,,,,,Ground Beef Burrito
+bccdc153,Roast Lamb,,,,,,Tiramisu
+bccdc154,Master Stock,,,,,,Curry Chicken
+bccdc155,Chicken Drumsticks,,,,,,Spicy Tofu
+bccdc156,Raw Chicken,,,,,,RTE Chow Mein & Chicken
+bccdc157,Chicken Thigh and Leg,,,,,,Chicken Winglets & Wing Drumettes
+bccdc158,Beef tartar,,,,,,not given
+bccdc159,Coconut water,,,,,,Chicken Breast
+bccdc160,Cold Noodles,,,,,,Chopped Coconut
+bccdc161,Beef bone short rib swab,,,,,,Dried Spices
+bccdc162,Raw Chicken Thighs,,,,,,Eggs
+bccdc163,Raw Chicken Drumsticks,,,,,,Chick Peas with Coconut
+bccdc164,"Raw Chicken Leg, Back Attached",,,,,,Greek Orzo Pasta Salad
+bccdc165,Mild Peri Sauce,,,,,,Raw Chicken Leg
+bccdc166,Supa Peri Sauce,,,,,,Raw Chicken Breast
+bccdc167,Chicken Thighs,,,,,,Pickles
+bccdc168,White Free Range Eggs,,,,,,Garlic Scape
+bccdc169,Chicken Gizzards,,,,,,Peppers
+bccdc170,Chicken Heart,,,,,,Tapioca Pearls
+bccdc171,Duck Legs - Pre-Cooked,,,,,,Raw Boneless Skinless Chicken Breast
+bccdc172,Cashew Cheese Spread,,,,,,Raw Boneless Skinless Chicken Breast
+bccdc173,Sprouted Quinoa Rejunac,,,,,,Raw Chicken Thigh with Skin and Bone
+bccdc174,Fermented Cashew Cheese,,,,,,Raw Boneless Skinless Chicken Breast
+bccdc175,Fermented Kimchi,,,,,,Raw Whole Chicken
+bccdc176,Cured Egg Yolk,,,,,,Pepperoni
+bccdc177,Eggs - Raw,,,,,,Farmeronie
+bccdc178,Sauerkraut,,,,,,Beef Jerky
+bccdc179,Quinoa,,,,,,Bacon Chutney
+bccdc180,White Chicken Meat,,,,,,Sushi Rice for Shrimp Stack
+bccdc181,Dark Chicken Meat,,,,,,Sliced Cooked Beef
+bccdc182,Baby Bok Choy with Deep Fried Fish,,,,,,Ginger Chicken
+bccdc183,Clam Chowder,,,,,,Sushi Rice
+bccdc184,Mixed Vegetable Soup,,,,,,BBQ Salmon
+bccdc185,Pork Shrimp Leeks Dumpling,,,,,,BBY Bento
+bccdc186,Garlic Flavoured Seaweed,,,,,,Deep Fried Prawn Heads
+bccdc187,Quail Eggs with Peppers,,,,,,Fried Rice
+bccdc188,Eggplant (+ Mixed Veg),,,,,,Roll Combo
+bccdc189,Seedy Bread,,,,,,Beef Kimbab
+bccdc190,Sprouted Lentils,,,,,,Sashimi Salmon
+bccdc191,Chicken Parts with Bone,,,,,,Tako Yaki
+bccdc192,Duck Parts,,,,,,Pork & Vegetable Spring Roll
+bccdc193,Raw Chicken Thigh,,,,,,BBQ Pork
+bccdc194,Egg Large White - Dark Yolk Loose,,,,,,Roast Lamb
+bccdc195,Wings,,,,,,Roast Lamb
+bccdc196,Tenders,,,,,,Master Stock
+bccdc197,Breasts,,,,,,Chicken Breast
+bccdc198,"Boneless, Skinless Chicken Breast",,,,,,Chicken Drumsticks
+bccdc199,Raw Poultry - Parts not provided on req,,,,,,Raw Chicken
+bccdc200,Iced Coffee (Americano),,,,,,Chicken Thigh and Leg
+bccdc201,Iced Coffee,,,,,,BBQ Pork
+bccdc202,Basmati Cooked Rice,,,,,,Chicken Leg
+bccdc203,Yogurt,,,,,,Beef tartar
+bccdc204,Ice for Iced Coffee,,,,,,Raw Chicken Breast
+bccdc205,Ice Cubes,,,,,,Raw Chicken Breast
+bccdc206,Farm Fed Chicken Breasts,,,,,,Coconut water
+bccdc207,Chicken Drumstick,,,,,,Cold Noodles
+bccdc208,Boneless Chicken Breast,,,,,,Beef bone short rib swab
+bccdc209,Ice from Facility's Machine,,,,,,Raw Chicken Thighs
+bccdc210,Rootbeer Slushie,,,,,,Raw Chicken Breast
+bccdc211,Cold Brew Coffee,,,,,,Raw Chicken Drumsticks
+bccdc212,Curried Chick Salad,,,,,,Raw Chicken Drumsticks
+bccdc213,Hummus,,,,,,"Raw Chicken Leg, Back Attached"
+bccdc214,Turkey a la King,,,,,,Mild Peri Sauce
+bccdc215,Seafood Medley,,,,,,Supa Peri Sauce
+bccdc216,Basmati Rice,,,,,,Chicken Thighs
+bccdc217,Tomato Juice,,,,,,Chicken Breast
+bccdc218,Bumbleberry Jam,,,,,,White Free Range Eggs
+bccdc219,Himrod Grape,,,,,,Chicken Gizzards
+bccdc220,Snow Peas,,,,,,Chicken Heart
+bccdc221,Peas Dry,,,,,,Duck Legs - Pre-Cooked
+bccdc222,Yellow Wax Beans,,,,,,Cashew Cheese Spread
+bccdc223,Hot Yellow Pepper,,,,,,Sprouted Quinoa Rejunac
+bccdc224,Green Pepper,,,,,,Fermented Cashew Cheese
+bccdc225,Apple Fence Line,,,,,,Fermented Kimchi
+bccdc226,Parsely,,,,,,Cured Egg Yolk
+bccdc227,Beet Greens,,,,,,Eggs - Raw
+bccdc228,Apple Fence Line Uphill,,,,,,Sauerkraut
+bccdc229,Roma Tomatoes,,,,,,Quinoa
+bccdc230,Beef Steak Tomatoes,,,,,,Sushi Rice
+bccdc231,Oregano,,,,,,Kimchi
+bccdc232,Hops,,,,,,White Chicken Meat
+bccdc233,Butter Chicken - Less Spice,,,,,,Dark Chicken Meat
+bccdc234,Rice,,,,,,Baby Bok Choy with Deep Fried Fish
+bccdc235,Ice (From Ice well),,,,,,Butter Chicken
+bccdc236,Ice (From ice machine),,,,,,Clam Chowder
+bccdc237,Lemon Ginger Kombucha,,,,,,Mixed Vegetable Soup
+bccdc238,Black and Blue kombucha,,,,,,Pork Shrimp Leeks Dumpling
+bccdc239,Foundation Kombucha,,,,,,Garlic Flavoured Seaweed
+bccdc240,Fresh Juice,,,,,,Quail Eggs with Peppers
+bccdc241,Ice - collected from ice well at from counter,,,,,,Eggplant (+ Mixed Veg)
+bccdc242,Taco stuffer,,,,,,Raw Chicken Leg
+bccdc243,The smokin' burger,,,,,,Raw Chicken Leg
+bccdc244,The very good burger,,,,,,Seedy Bread
+bccdc245,British Bangers,,,,,,Sprouted Lentils
+bccdc246,Roast Beast,,,,,,Chicken Parts with Bone
+bccdc247,Butter Chicken Sauce,,,,,,Duck Parts
+bccdc248,Chinese Rice Pot with Meat and Vegetables,,,,,,Raw Chicken Breast
+bccdc249,lettuces,,,,,,Raw Chicken Breast
+bccdc250,Rhubarb Orange Preserve,,,,,,Raw Chicken Breast
+bccdc251,Tuscon Havarti Croissant,,,,,,Raw Chicken Breast
+bccdc252,Curry Vegetable Roll,,,,,,Raw Chicken Thigh
+bccdc253,Bumble Berry Jam,,,,,,Egg Large White - Dark Yolk Loose
+bccdc254,Italian Pizza,,,,,,Chicken Thighs
+bccdc255,Egg Salad Mixture,,,,,,Wings
+bccdc256,Chicken Breast/Wing,,,,,,Tenders
+,,,,,,,Breasts
+,,,,,,,Chicken Breast
+,,,,,,,"Boneless, Skinless Chicken Breast"
+,,,,,,,Raw Poultry - Parts not provided on req
+,,,,,,,Iced Coffee (Americano)
+,,,,,,,Iced Coffee
+,,,,,,,Basmati Cooked Rice
+,,,,,,,Butter Chicken
+,,,,,,,Yogurt
+,,,,,,,Ice for Iced Coffee
+,,,,,,,Ice for Iced Coffee
+,,,,,,,Ice Cubes
+,,,,,,,Farm Fed Chicken Breasts
+,,,,,,,Chicken Drumstick
+,,,,,,,Boneless Skinless Chicken Breast
+,,,,,,,Boneless Chicken Breast
+,,,,,,,Iced Coffee
+,,,,,,,Ice from Facility's Machine
+,,,,,,,Rootbeer Slushie
+,,,,,,,Cold Brew Coffee
+,,,,,,,Ice for Iced Coffee
+,,,,,,,Beef Jerky
+,,,,,,,Curried Chick Salad
+,,,,,,,Hummus
+,,,,,,,Turkey a la King
+,,,,,,,Seafood Medley
+,,,,,,,Raw Chicken Thighs
+,,,,,,,Raw Chicken Breast
+,,,,,,,Yogurt
+,,,,,,,Basmati Rice
+,,,,,,,Tomato Juice
+,,,,,,,Bumbleberry Jam
+,,,,,,,Himrod Grape
+,,,,,,,Snow Peas
+,,,,,,,Peas Dry
+,,,,,,,Yellow Wax Beans
+,,,,,,,Hot Yellow Pepper
+,,,,,,,Hot Yellow Pepper
+,,,,,,,Green Pepper
+,,,,,,,Apple Fence Line
+,,,,,,,Parsely
+,,,,,,,Beet Greens
+,,,,,,,Apple Fence Line Uphill
+,,,,,,,Roma Tomatoes
+,,,,,,,Beef Steak Tomatoes
+,,,,,,,Oregano
+,,,,,,,Hops
+,,,,,,,Butter Chicken
+,,,,,,,Butter Chicken - Less Spice
+,,,,,,,Rice
+,,,,,,,Ice (From Ice well)
+,,,,,,,Ice (From ice machine)
+,,,,,,,Lemon Ginger Kombucha
+,,,,,,,Black and Blue kombucha
+,,,,,,,Foundation Kombucha
+,,,,,,,Fresh Juice
+,,,,,,,Fresh Juice
+,,,,,,,Ice - collected from ice well at from counter
+,,,,,,,Taco stuffer
+,,,,,,,The smokin' burger
+,,,,,,,The very good burger
+,,,,,,,British Bangers
+,,,,,,,Pepperoni
+,,,,,,,Roast Beast
+,,,,,,,Butter Chicken Sauce
+,,,,,,,Chicken Breast
+,,,,,,,Chicken Breast Boneless
+,,,,,,,Chinese Rice Pot with Meat and Vegetables
+,,,,,,,lettuces
+,,,,,,,Rhubarb Orange Preserve
+,,,,,,,Tuscon Havarti Croissant
+,,,,,,,Curry Vegetable Roll
+,,,,,,,Bumble Berry Jam
+,,,,,,,Italian Pizza
+,,,,,,,Egg Salad Mixture
+,,,,,,,Chicken Breast/Wing
