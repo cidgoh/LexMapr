@@ -19,19 +19,19 @@ import logging
 parser = argparse.ArgumentParser()
 parser.add_argument('input_file',
                     help='Input csv file')
-parser.add_argument('output_file', nargs='?',
+parser.add_argument('-o', '--output', nargs='?',
                     help='Output file')
 parser.add_argument('log_file', nargs='?', default=sys.stderr,
                     help='Log file')
 parser.add_argument('--format', default='full',
-                    help='Log file')
+                    help='Output format')
 args = parser.parse_args()
 
 logging.basicConfig(stream=args.log_file,
                     level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-fw = open(args.output_file, 'w') if args.output_file else sys.stdout     # Main output file
+fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
 
 # Output file Column Headings
 OUTPUT_FIELDS = [
