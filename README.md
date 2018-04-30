@@ -1,5 +1,5 @@
 # LexMapr
-A lexical analysis pipeline for short 
+A lexical analysis pipeline for short metadata phrases
 
 The main script file for processing is `lexmapr/lexmapr.py`
 
