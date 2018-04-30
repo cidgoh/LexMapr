@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # =====Imports from different packages used====LATEST LexMapr PIPELINE
 import csv  # For reading and dealing with comma separated files
 import nltk
@@ -9,18 +11,50 @@ import wikipedia
 import itertools
 from itertools import combinations
 from dateutil.parser import parse
+import argparse
+import sys
+from pkg_resources import resource_filename, resource_listdir
+import logging
 
-# Declaration of the output files
-fw = open('Output-OutputFileName.tsv', 'w')  # Main output file
-fw2 = open('Output-OutputFileName1-SeparateColumns.tsv', 'w')  # Supplementary output files
+parser = argparse.ArgumentParser()
+parser.add_argument('input_file',
+                    help='Input csv file')
+parser.add_argument('output_file', nargs='?',
+                    help='Output file')
+parser.add_argument('log_file', nargs='?', default=sys.stderr,
+                    help='Log file')
+parser.add_argument('--format', default='full',
+                    help='Log file')
+args = parser.parse_args()
+
+logging.basicConfig(stream=args.log_file,
+                    level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+fw = open(args.output_file, 'w') if args.output_file else sys.stdout     # Main output file
 
 # Output file Column Headings
-fw.write(
-    "Sample_Id" + "\t" + "Sample_Desc" + "\t" + "Cleaned_Sample" + "\t" + "Phrase_POS_Tagged" + "\t" + "Probable_Candidate_Terms" + "\t" + "Matched_Term" + "\t" + "All_matched_Terms_with_Resource_IDs" + "\t" + "Retained_Terms_with_Resource_IDs" + "\t" + "Number of Components(In case of Component Match)" + "\t" + "Match_Status(Macro Level)" + "\t" + "Match_Status(Micro Level)" + "\t" + "Remaining_Tokens" + "\t" + "Different Components(In case of Component Match)")
+OUTPUT_FIELDS = [
+    "sample_id",
+    "sample_desc",
+    "cleaned_sample"
+]
 
-fw2.write(
-    "Sample_Id" + "\t" + "Sample_Desc" + "\t" + "Cleaned_Sample")
+if args.format == 'full':
+    OUTPUT_FIELDS += [
+        "phrase_pos_tagged",
+        "probable_candidate_terms",
+        "matched_term",
+        "all_matched_terms_with_resource_ids",
+        "retained_terms_with_resource_ids",
+        "number_of_components_for_component_match",
+        "match_status_macro_level",
+        "match_status_micro_level",
+        "remaining_tokens",
+        "different_components_for_component_match"
+    ]
 
+fw.write('\t'.join(OUTPUT_FIELDS))
 
 
 # DIFFERENT METHODS USED (Will be organized in Modular arrangement later on)
@@ -137,7 +171,7 @@ def punctuationTreatment(inputstring, punctuationList):
 
 # 11-Get all synonyms from resource in CSV file format and put in a dictionary to be used further
 synonymsDict = {}
-with open('SynLex.csv') as csvfile:
+with open(resource_filename('resources', 'SynLex.csv')) as csvfile:
     ctr = 0
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
@@ -151,7 +185,7 @@ with open('SynLex.csv') as csvfile:
 # 12-Get all abbreviation/acronyms from resource in CSV file format and put in a dictionary to be used further
 abbreviationDict = {}
 abbreviationLowerDict = {}
-with open('AbbLex.csv') as csvfile:
+with open(resource_filename('resources', 'AbbLex.csv')) as csvfile:
     ctr = 0
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
@@ -166,7 +200,7 @@ with open('AbbLex.csv') as csvfile:
 # 13-Get all Non English Language words mappings from resource in CSV file format and put in a dictionary to be used further
 nonEnglishWordsDict = {}
 nonEnglishWordsLowerDict = {}
-with open('NefLex.csv') as csvfile:        # NefLex.csv=nonEnglish Food Names Terms.csv
+with open(resource_filename('resources', 'NefLex.csv')) as csvfile: # NefLex.csv=nonEnglish Food Names Terms.csv
     ctr = 0
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
@@ -181,7 +215,7 @@ with open('NefLex.csv') as csvfile:        # NefLex.csv=nonEnglish Food Names Te
 # 14-Get all spelling mistake examples from resource in CSV file format and put in a dictionary to be used further
 spellingDict = {}
 spellingLowerDict = {}
-with open('ScorLex.csv') as csvfile:      # ScorLex.csv   = spellings correction lexicon
+with open(resource_filename('resources', 'ScorLex.csv')) as csvfile: # ScorLex.csv   = spellings correction lexicon
     ctr = 0
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
@@ -195,7 +229,7 @@ with open('ScorLex.csv') as csvfile:      # ScorLex.csv   = spellings correction
 
 # 15-Get candidate processes from resource in a CSV file format and put in a dictionary to be used further
 processDict = {}
-with open('candidateProcesses.csv') as csvfile:
+with open(resource_filename('resources', 'candidateProcesses.csv')) as csvfile:
     ctr = 0
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
@@ -209,7 +243,7 @@ with open('candidateProcesses.csv') as csvfile:
 # 16-Get all semantic tags (e.g.qualities) from resource in a CSV file format and put in a dictionary to be used further
 qualityDict = {}
 qualityLowerDict = {}
-with open('SemLex.csv') as csvfile:              # SEmLex.csv  is a lexicon for semantic tags for qualities, Structure, Furniture, Equipment, Container etc.
+with open(resource_filename('resources', 'SemLex.csv')) as csvfile:              # SEmLex.csv  is a lexicon for semantic tags for qualities, Structure, Furniture, Equipment, Container etc.
     ctr = 0
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
@@ -223,7 +257,7 @@ with open('SemLex.csv') as csvfile:              # SEmLex.csv  is a lexicon for 
 
 # 17-Get all collocations (Wikipedia) from resource in a CSV file format and put in a dictionary to be used further
 collocationDict = {}
-with open('wikipediaCollocations.csv') as csvfile:
+with open(resource_filename('resources', 'wikipediaCollocations.csv')) as csvfile:
     ctr = 0
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
@@ -236,7 +270,7 @@ with open('wikipediaCollocations.csv') as csvfile:
 
 # 18-Method to get all inflection exception words from resource in CSV file format -Needed to supercede the general inflection treatment
 inflectionExceptionList = []
-with open('inflection-exceptions.csv') as csvfile:
+with open(resource_filename('resources', 'inflection-exceptions.csv')) as csvfile:
     ctr2 = 0
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
@@ -249,7 +283,7 @@ with open('inflection-exceptions.csv') as csvfile:
 # 19-Method to Get all stop words from resource in CSV file format -A very constrained lists of stop words is
 # used as other stop words are assumed to have some useful semantic meaning
 stopWordsList = []
-with open('mining-stopwords.csv') as csvfile:
+with open(resource_filename('resources', 'mining-stopwords.csv')) as csvfile:
     ctr2 = 0
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
@@ -264,12 +298,8 @@ with open('mining-stopwords.csv') as csvfile:
 samplesDict = {}
 samplesList = []
 samplesSet = []
-#with open('enteroForFreq.csv') as csvfile:
-with open('genomeTrackerMaster.csv') as csvfile:
-#with open('GRDI-UniqueSamples.csv') as csvfile:
-#with open('bccdcsample.csv') as csvfile:
-#with open('ZheminSamples.csv') as csvfile:
 
+with open(args.input_file) as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
     ctr = 0
     for row in readCSV:
@@ -280,15 +310,13 @@ with open('genomeTrackerMaster.csv') as csvfile:
             # termFreq=row[2]
             samplesDict[samid.strip()] = samp.strip()
         ctr += 1
-enterobaseSamplesSet = set(samplesList)
-
 
 
 # 21- To get all terms from resources- right now in a CSV file extracted from ontologies using another external script
 resourceTermsDict = {}
 resourceRevisedTermsDict = {}
 resourceTermsIDBasedDict = {}
-with open('CombinedResourceTerms.csv') as csvfile:  # 'ResourceTerms-copy1.csv'   #ResourceTerms-withoutnew.csv
+with open(resource_filename('resources', 'CombinedResourceTerms.csv')) as csvfile:  # 'ResourceTerms-copy1.csv'   #ResourceTerms-withoutnew.csv
     readCSV = csv.reader(csvfile, delimiter=',')
     ctr = 0
     for row in readCSV:
@@ -305,7 +333,7 @@ with open('CombinedResourceTerms.csv') as csvfile:  # 'ResourceTerms-copy1.csv' 
 # 22-Method to get the final retained set of matched terms
 def retainedPhrase(termList):
     returnedSetFinal = []
-    print(termList)
+    logging.debug(termList)
     termDict = {}
     termDictAdd = {}
     wordList = []
@@ -375,7 +403,7 @@ for k, v in resourceRevisedTermsDict.items():
                 print("NCBITaxonNCBITaxonNCBITaxon=== ")
 
             setPerm = allPermutations(resource)
-            print("sssssssssssssss=== " + str(setPerm))
+            logging.debug("sssssssssssssss=== " + str(setPerm))
             for perm in setPerm:
                 permString = ' '.join(perm)
                 resourcePermutationTermsDict[permString.strip()] = resourceid.strip()
@@ -444,7 +472,6 @@ for k, v in samplesDict.items():
     remSet = []
     #Writing in the output file with sampleid and sample to start with
     fw.write("\n" + sampleid + "	" + sample)
-    fw2.write("\n" + sampleid + "	" + sample)
 
     sample = punctuationTreatment(sample, punctuationsList)  # Sample gets simple punctuation treatment
     sample = re.sub(' +', ' ', sample)  # Extra innner spaces are removed
@@ -535,8 +562,10 @@ for k, v in samplesDict.items():
     # Here we are making the tokens of cleaned sample phrase
     newSampleTokens = word_tokenize(newPhrase.lower())
     tokens_pos = pos_tag(newSampleTokens)
-    fw.write("	" + newPhrase + "\t" + str(tokens_pos))
-    fw2.write("	" + newPhrase )
+    if args.format == "full":
+        fw.write("	" + newPhrase + "\t" + str(tokens_pos))
+    else:
+        fw.write("	" + newPhrase )
 
     # This part works for getting the Candidate phrase based on POS tagging and application of the relevant rule  [Not a major contributor -not used now except for printing]
     qualityList = []
@@ -554,13 +583,15 @@ for k, v in samplesDict.items():
             else:
                 prevPhraseStr = prevPhraseStr + " " + phraseStr
             prevTag = currentTag
-    fw.write("	" + str(prevPhraseStr))
+    if args.format == 'full':
+        fw.write("	" + str(prevPhraseStr))
 
     #---------------------------STARTS APPLICATION OF RULES-----------------------------------------------
     # Rule1: Annotate all the empty samples
     if not sample:
         status = "Empty Sample"
-        fw.write("	--" + "	--" + "\t" + "\t" + "\t" + status)
+        if args.format == 'full':
+            fw.write("	--" + "	--" + "\t" + "\t" + "\t" + status)
         trigger = True
 
     # Rule2: Annotate all the Full Term Matches of Terms without any treatment
@@ -572,9 +603,10 @@ for k, v in samplesDict.items():
         statusAddendumSet.append("A Direct Match")
         statusAddendumSetFinal = set(statusAddendumSet)
         retSet.append(sample + ":" + resourceId)
-        fw.write("	" + sample + "	" + "[" + (sample + ":" + resourceId) + "]" + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
-        fw2.write(
-            "	" + sample + "	" + "[" + (sample + ":" + resourceId) + "]" )
+        if args.format == 'full':
+            fw.write("	" + sample + "	" + "[" + (sample + ":" + resourceId) + "]" + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+        else:
+            fw.write("	" + sample + "	" + "[" + (sample + ":" + resourceId) + "]" )
         # To Count the Covered Tokens(words)
         thisSampleTokens = word_tokenize(sample.lower())
         for thisSampleIndvToken in thisSampleTokens:
@@ -593,8 +625,10 @@ for k, v in samplesDict.items():
         statusAddendumSet.append("Change of Case in Input Data")
         statusAddendumSetFinal = set(statusAddendumSet)
         retSet.append(sample.lower() + ":" + resourceId)
-        fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
-        fw2.write("	" + sample.lower() + "	" + str(retSet))
+        if args.format == "full":
+            fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+        else:
+            fw.write("	" + sample.lower() + "	" + str(retSet))
         # To Count the Covered Tokens(words)
         thisSampleTokens = word_tokenize(sample.lower())
         for thisSampleIndvToken in thisSampleTokens:
@@ -610,8 +644,10 @@ for k, v in samplesDict.items():
         statusAddendumSet.append("Change of Case in Resource Data")
         statusAddendumSetFinal = set(statusAddendumSet)
         retSet.append(sample.lower() + ":" + resourceId)
-        fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
-        fw2.write("	" + sample.lower() + "	" + str(retSet))
+        if args.format == 'full':
+            fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+        else:
+            fw.write("	" + sample.lower() + "	" + str(retSet))
         # To Count the Covered Tokens(words)
         thisSampleTokens = word_tokenize(sample.lower())
         for thisSampleIndvToken in thisSampleTokens:
@@ -628,9 +664,10 @@ for k, v in samplesDict.items():
         statusAddendumSet.append("Permutation of Tokens in Resource Term")
         statusAddendumSetFinal = set(statusAddendumSet)
         retSet.append(resourceOriginalTerm + ":" + resourceId)
-        fw.write(
-            "	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
-        fw2.write("	" + sample.lower() + "	" + str(retSet))
+        if args.format == 'full':
+            fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+        else:
+            fw.write("	" + sample.lower() + "	" + str(retSet))
         # To Count the Covered Tokens(words)
         thisSampleTokens = word_tokenize(sample.lower())
         for thisSampleIndvToken in thisSampleTokens:
@@ -648,9 +685,10 @@ for k, v in samplesDict.items():
         statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
         statusAddendumSetFinal = set(statusAddendumSet)
         retSet.append(resourceOriginalTerm + ":" + resourceId)
-        fw.write(
-            "	" + sample.lower() + "	" +  str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
-        fw2.write("	" + sample.lower() + "	" + str(retSet))
+        if args.format == 'full':
+            fw.write("	" + sample.lower() + "	" +  str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+        else:
+            fw.write("	" + sample.lower() + "	" + str(retSet))
         # To Count the Covered Tokens(words)
         thisSampleTokens = word_tokenize(sample.lower())
         for thisSampleIndvToken in thisSampleTokens:
@@ -670,8 +708,10 @@ for k, v in samplesDict.items():
             statusAddendumSet.append("[Change of Case of Resource and Suffix Addition- "+suffixString+" to the Input]")
             statusAddendumSetFinal = set(statusAddendumSet)
             retSet.append(sampleRevisedWithSuffix + ":" + resourceId)
-            fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet)+ "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
-            fw2.write("	" + sample.lower() + "	" + str(retSet))
+            if args.format == 'full':
+                fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet)+ "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+            else:
+                fw.write("	" + sample.lower() + "	" + str(retSet))
             trigger = True
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
@@ -683,10 +723,10 @@ for k, v in samplesDict.items():
 
     # Rule4: This will open now the cleaned sample to the test of Full Term Matching
     if (not trigger):
-        print("We will go further with other rules now on cleaned sample")
+        logging.debug("We will go further with other rules now on cleaned sample")
         sampleTokens = word_tokenize(sample.lower())
-        print("==============" + sample.lower())
-        print("--------------" + newPhrase.lower())
+        logging.debug("==============" + sample.lower())
+        logging.debug("--------------" + newPhrase.lower())
 
         if ((newPhrase.lower() in resourceTermsDict.keys() ) and not trigger):
             if (newPhrase.lower() in resourceTermsDict.keys()):
@@ -696,9 +736,10 @@ for k, v in samplesDict.items():
             statusAddendumSet.append("A Direct Match with Cleaned Sample")
             statusAddendumSetFinal = set(statusAddendumSet)
             retSet.append(newPhrase.lower() + ":" + resourceId)
-            fw.write("	" + newPhrase.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(
-                statusAddendumSetFinal))
-            fw2.write("	" + newPhrase.lower() + "	" + str(retSet))
+            if args.format == 'full':
+                fw.write("	" + newPhrase.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+            else:
+                fw.write("	" + newPhrase.lower() + "	" + str(retSet))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -715,9 +756,10 @@ for k, v in samplesDict.items():
             statusAddendumSet.append("Change of Case of Resource Terms")
             statusAddendumSetFinal = set(statusAddendumSet)
             retSet.append(newPhrase.lower() + ":" + resourceId)
-            fw.write("	" + newPhrase.lower() + "	" +str(retSet) + "\t" + str(retSet)+ "\t" + "\t" + status + "\t" + str(
-                statusAddendumSetFinal))
-            fw2.write("	" + newPhrase.lower() + "	" + str(retSet))
+            if args.format == 'full':
+                fw.write("	" + newPhrase.lower() + "	" +str(retSet) + "\t" + str(retSet)+ "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+            else:
+                fw.write("	" + newPhrase.lower() + "	" + str(retSet))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -733,9 +775,10 @@ for k, v in samplesDict.items():
             statusAddendumSetFinal = set(statusAddendumSet)
             resourceOriginalTerm = resourceTermsIDBasedDict[resourceId]
             retSet.append(resourceOriginalTerm + ":" + resourceId)
-            fw.write("	" + newPhrase.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(
-                statusAddendumSetFinal))
-            fw2.write("	" + newPhrase.lower() + "	" + str(retSet))
+            if args.format == 'full':
+                fw.write("	" + newPhrase.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+            else:
+                fw.write("	" + newPhrase.lower() + "	" + str(retSet))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -751,9 +794,10 @@ for k, v in samplesDict.items():
             statusAddendumSetFinal = set(statusAddendumSet)
             resourceOriginalTerm = resourceTermsIDBasedDict[resourceId]
             retSet.append(resourceOriginalTerm + ":" + resourceId)
-            fw.write("	" + newPhrase.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(
-                statusAddendumSetFinal))
-            fw2.write("	" + newPhrase.lower() + "	" + str(retSet))
+            if args.format == 'full':
+                fw.write("	" + newPhrase.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+            else:
+                fw.write("	" + newPhrase.lower() + "	" + str(retSet))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -772,9 +816,10 @@ for k, v in samplesDict.items():
                     "[CleanedSample-Change of Case of Resource and Suffix Addition- " + suffixString + " to the Input]")
                 statusAddendumSetFinal = set(statusAddendumSet)
                 retSet.append(sampleRevisedWithSuffix + ":" + resourceId)
-                fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(
-                    statusAddendumSetFinal))
-                fw2.write("	" + sample.lower() + "	" + str(retSet))
+                if args.format == 'full':
+                    fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str( statusAddendumSetFinal))
+                else:
+                    fw.write("	" + sample.lower() + "	" + str(retSet))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -786,10 +831,10 @@ for k, v in samplesDict.items():
 
     # Rule5: Full Term Match if possible from multi-word collocations -e.g. from Wikipedia
     if (not trigger):
-        print("We will go further with other rules")
+        logging.debug("We will go further with other rules")
         sampleTokens = word_tokenize(sample.lower())
-        print("==============" + sample.lower())
-        print("--------------" + newPhrase.lower())
+        logging.debug("==============" + sample.lower())
+        logging.debug("--------------" + newPhrase.lower())
         if (newPhrase.lower() in collocationDict.keys()):
             resourceId = collocationDict[newPhrase.lower()]
             status = "Full Term Match"
@@ -797,9 +842,10 @@ for k, v in samplesDict.items():
             statusAddendumSet.append("New Candidadte Terms -validated with Wikipedia Based Collocation Resource")
             statusAddendumSetFinal = set(statusAddendumSet)
             retSet.append(newPhrase.lower() + ":" + resourceId)
-            fw.write("	" + newPhrase.lower() + "	" +str(retSet) + "\t" + str(retSet)  + "\t" + "\t" + status + "\t" + str(
-                statusAddendumSetFinal))
-            fw2.write("	" + newPhrase.lower() + "	" + str(retSet))
+            if args.format == 'full':
+                fw.write("	" + newPhrase.lower() + "	" +str(retSet) + "\t" + str(retSet)  + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
+            else:
+                fw.write("	" + newPhrase.lower() + "	" + str(retSet))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -809,7 +855,7 @@ for k, v in samplesDict.items():
 
     # Component Matches Section
     if (not trigger):
-        print("We will go further with other rules now targetting components of input data")
+        logging.debug("We will go further with other rules now targetting components of input data")
         # Some Declarations for component match cases
         partialMatchedList = []
         partialMatchedResourceList = []
@@ -1262,38 +1308,34 @@ for k, v in samplesDict.items():
         # If size of set is more than one member, looks for the retained matched terms by defined criteria
         if (len(partialMatchedResourceListSet) > 0):
             retainedSet = retainedPhrase(str(partialMatchedResourceListSet))
-            print("retainedSet " + str(retainedSet))
+            logging.debug("retainedSet " + str(retainedSet))
             # HERE SHOULD HAVE ANOTHER RETAING SET
 
         statusAddendumSetFinal = set(statusAddendumSet)
 
         # In case it is for componet matching and we have at least one component matched
         if (len(partialMatchedSet) > 0):
-            fw.write("	" + str(partialMatchedSet) + "	" + str(
-                partialMatchedResourceListSet) + "\t" + str(retainedSet) + "\t" + str(
-                len(retainedSet)) + "\t" + status + "\t" + str(statusAddendumSetFinal) + "	" + str(
-                remSetDiff))
-            compctr = 0
-            fw.write("\t")
+            if args.format == 'full':
+                fw.write("	" + str(partialMatchedSet) + "	" + str(partialMatchedResourceListSet) + "\t" + str(retainedSet) + "\t" + str(len(retainedSet)) + "\t" + status + "\t" + str(statusAddendumSetFinal) + "	" + str(remSetDiff))
+                compctr = 0
+                fw.write("\t")
+            
+            if args.format != 'full':
+                for memb in retainedSet:   # This for indv column print
+                    fw.write("\t" + str(memb))
 
-            for memb in retainedSet:   # This for indv column print
-                fw2.write("\t" + str(memb))
-
-            for comp in retainedSet:
-                compctr += 1
-                if (compctr == 1):
-                    fw.write("Component" + str(compctr) + "-> " + str(comp))
-                else:
-                    fw.write(", Component" + str(compctr) + "-> " + str(comp))
+            if args.format == 'full':
+                for comp in retainedSet:
+                    compctr += 1
+                    if (compctr == 1):
+                        fw.write("Component" + str(compctr) + "-> " + str(comp))
+                    else:
+                        fw.write(", Component" + str(compctr) + "-> " + str(comp))
             trigger = True
         else:        # In case of no matching case
-            fw.write("	" + str(partialMatchedSet) + "	" + str(
-                partialMatchedResourceList) + "	\t" + "\t" + "Sorry No Match" + "\t" + str(
-                remSet))
+            if args.format == 'full':
+                fw.write("	" + str(partialMatchedSet) + "	" + str(partialMatchedResourceList) + "	\t" + "\t" + "Sorry No Match" + "\t" + str(remSet))
 
 #Output files closed
-fw.close()
-fw2.close()
-
-# ======================================EXTRA - NOT USED Stuff=====================================================
-
+if fw is not sys.stdout:
+    fw.close()
