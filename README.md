@@ -47,13 +47,13 @@ optional arguments:
 
 | Filename                      | Description                                                                                          |
 |-------------------------------|------------------------------------------------------------------------------------------------------|
-| `CombinedResourceTerms.csv`	| All the ontology terms with their ids extracted and combined in a single file                        |
+| `CombinedResourceTerms.csv`   | All the ontology terms with their ids extracted and combined in a single file                        |
 | `SynLex.csv`                  | Synonym Lexicon                                                                                      |
 | `AbbLex.csv`                  | Abbreviation/Acronym Lexicon                                                                         |
 | `NefLex.csv`                  | Non English FoodNames Lexicon                                                                        |
 | `ScorLex.csv`                 | Spellings correction Lexicon                                                                         |
 | `SemLex.csv`                  | Semantic Tagging Lexicon                                                                             |
 | `inflection-exceptions.csv`   | Exception list for avoiding false positives during inflection treatment                              |
-| `candidateProcesses.csv`		| Additional processes which are candidates for inclusion                                              |
-| `wikipediaCollocations.csv`	| Additional compound terms (collocations) detected out of datasets which are candidates for inclusion |
+| `candidateProcesses.csv`      | Additional processes which are candidates for inclusion                                              |
+| `wikipediaCollocations.csv`   | Additional compound terms (collocations) detected out of datasets which are candidates for inclusion |
 | `mining-stopwords.csv`        | Stop Words list for treatment refined for domian under consideration                                 |
