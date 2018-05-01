@@ -3,19 +3,12 @@ A Lexicon and Rule-Based Tool for Translating Short Biomedical Specimen Descript
 
 The main script file for processing is `lexmapr/lexmapr.py`
 
-## Packages Imported
-```python
-import csv
-import nltk
-import re
-import inflection
-from nltk.tokenize import sent_tokenize, word_tokenize
-from nltk import pos_tag, ne_chunk
-import wikipedia
-import itertools
-from itertools import combinations
-from dateutil.parser import parse
-```
+## Dependencies
+
+- [nltk](https://pypi.org/project/nltk/)
+- [inflection](https://pypi.org/project/inflection/)
+- [wikipedia](https://pypi.org/project/wikipedia/)
+- [python-dateutil](https://pypi.org/project/python-dateutil/)
 
 ## Usage
 
