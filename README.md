@@ -1,5 +1,5 @@
 # LexMapr
-A lexical analysis pipeline for short metadata phrases
+A Lexicon and Rule-Based Tool for Translating Short Biomedical Specimen Descriptions into Semantic Web Ontology Terms
 
 The main script file for processing is `lexmapr/lexmapr.py`
 
