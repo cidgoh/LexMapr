@@ -3229,7 +3229,7 @@ ENVO_01000746,area of perennial ice or snow
 ENVO_01000747,regolith
 ENVO_01000748,continental crust
 ENVO_01000749,oceanic crust
-ENVO_01000750,MohoroviÄ?iÄ‡ discontinuity
+ENVO_01000750,MohoroviÃ„?iÃ„Â‡ discontinuity
 ENVO_01000751,bedrock
 ENVO_01000752,area of barren land
 ENVO_01000753,obsolete air temperature
@@ -14889,7 +14889,7 @@ UBERON_0012291,lateral malleolus of fibula
 UBERON_0012292,embryonic cloacal fold
 UBERON_0012293,anal fold
 UBERON_0012294,navicular fossa of spongiose part of urethra
-UBERON_0012295,Guérin's valve
+UBERON_0012295,GuÃ©rin's valve
 UBERON_0012296,urethral crest
 UBERON_0012297,male urethral crest
 UBERON_0012298,female urethral crest
@@ -35853,7 +35853,7 @@ FOODON_03411983,"fish, beryciform as food source"
 FOODON_03412256,blood snapper as food source
 FOODON_03411019,lingonberry (cowberry) plant as food source
 FOODON_03414002,congo dentex as food source
-FOODON_03414457,cupuaçu plant as food source
+FOODON_03414457,cupuaÃ§u plant as food source
 FOODON_03414217,tangerine plant as food source
 FOODON_03412660,bigeye scad as food source
 FOODON_03412887,scamp as food source
@@ -36088,7 +36088,7 @@ FOODON_03411784,fantail mullet as food source
 FOODON_03412008,chinese red date plant as food source
 FOODON_03412681,blackfoot abalone as food source
 FOODON_03510207,contains {name of the nutrient or other substance} nutrition claim
-FOODON_03414054,lake neuchâtel whitefish as food source
+FOODON_03414054,lake neuchÃ¢tel whitefish as food source
 FOODON_03414516,buttercup squash plant as food source
 FOODON_03414004,large-eyed dentex as food source
 FOODON_03413896,senegalese hake as food source
@@ -38777,7 +38777,7 @@ GENEPIO_0001538,exposed person role
 GENEPIO_0002110,MIC diffusion measurement
 GENEPIO_0001714,Apal
 uo#is_unit_of,is unit of
-GENEPIO_0002065,Deutsches Institut für Normung@de
+GENEPIO_0002065,Deutsches Institut fÃ¼r Normung@de
 GENEPIO_0001698,serotype 4b
 GENEPIO_0000036,the Global Microbial Identifier Minimum Data for Matching (MDM) Standard
 GENEPIO_0001779,PFGE Xbal pattern
@@ -39158,7 +39158,7 @@ GENEPIO_0001712,Smal
 GENEPIO_0001269,animal exposure event - location
 GENEPIO_0002125,hand scoop
 2182ff1f:1624a8063db:-7937,Sample Provider Principal Investigator (PI) Name
-GENEPIO_0002068,Société Française de Microbiologie (SFM)@fr
+GENEPIO_0002068,SociÃ©tÃ© FranÃ§aise de Microbiologie (SFM)@fr
 GENEPIO_0000076,read length
 2182ff1f:1624a8063db:-793c,Sample Scope
 GENEPIO_0002044,MIC dilution measurement
@@ -39292,7 +39292,7 @@ GENEPIO_0002015,isolate preperation facility
 GENEPIO_0001168,well water - treated
 2182ff1f:1624a8063db:-7e65,MIC Sign
 GENEPIO_0001999,draft tuberculosis - dataset features and provenance
-GENEPIO_0002058,Biomérieux
+GENEPIO_0002058,BiomÃ©rieux
 GENEPIO_0001109,random survey project
 GENEPIO_0001497,test history item
 RO_0002091,starts during
@@ -42060,7 +42060,7 @@ Additional_FOODON_CandidateTerm_108,chip
 Additional_FOODON_CandidateTerm_109,chipolte
 Additional_FOODON_CandidateTerm_110,chipotle
 Additional_FOODON_CandidateTerm_111,chlli chicken
-Additional_FOODON_CandidateTerm_112,chola barb
+Additional_FOODON_CandidateTerm_112,cholaÂ barb
 Additional_FOODON_CandidateTerm_113,cicada egg
 Additional_FOODON_CandidateTerm_114,clarias
 Additional_FOODON_CandidateTerm_115,coconut chicken
@@ -42142,7 +42142,7 @@ Additional_FOODON_CandidateTerm_190,hassar
 Additional_FOODON_CandidateTerm_191,hazelnut
 Additional_FOODON_CandidateTerm_192,heifer
 Additional_FOODON_CandidateTerm_193,heirloom tomato
-Additional_FOODON_CandidateTerm_194,Herb of Provence
+Additional_FOODON_CandidateTerm_194,HerbÂ ofÂ Provence
 Additional_FOODON_CandidateTerm_195,hierbabuena
 Additional_FOODON_CandidateTerm_196,himrod grape
 Additional_FOODON_CandidateTerm_197,hokamix
@@ -42238,7 +42238,7 @@ Additional_FOODON_CandidateTerm_286,protien
 Additional_FOODON_CandidateTerm_287,pseudotropheus
 Additional_FOODON_CandidateTerm_288,psyllium husk
 Additional_FOODON_CandidateTerm_289,puntius bocourti
-Additional_FOODON_CandidateTerm_290,puntius chola
+Additional_FOODON_CandidateTerm_290,puntiusÂ chola
 Additional_FOODON_CandidateTerm_291,puree
 Additional_FOODON_CandidateTerm_292,quesillo
 Additional_FOODON_CandidateTerm_293,queso cincho

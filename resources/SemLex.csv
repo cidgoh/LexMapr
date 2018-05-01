@@ -676,7 +676,7 @@ bubble pack,[Container-Or-Receptacle-Or-Enclosure],
 bumbag,[Container-Or-Receptacle-Or-Enclosure],
 bur,[Container-Or-Receptacle-Or-Enclosure],
 caecum,[Container-Or-Receptacle-Or-Enclosure],
-cafetière,[Container-Or-Receptacle-Or-Enclosure],
+cafetiÃ¨re,[Container-Or-Receptacle-Or-Enclosure],
 cage,[Container-Or-Receptacle-Or-Enclosure],
 caldron,[Container-Or-Receptacle-Or-Enclosure],
 carboy,[Container-Or-Receptacle-Or-Enclosure],
@@ -990,7 +990,7 @@ block and tackle,[Equipment-OR-Device-OR-ManmadeObject],
 blowlamp,[Equipment-OR-Device-OR-ManmadeObject],
 blowtorch,[Equipment-OR-Device-OR-ManmadeObject],
 bobbin,[Equipment-OR-Device-OR-ManmadeObject],
-bodhrán,[Equipment-OR-Device-OR-ManmadeObject],
+bodhrÃ¡n,[Equipment-OR-Device-OR-ManmadeObject],
 bolometer,[Equipment-OR-Device-OR-ManmadeObject],
 bombsight,[Equipment-OR-Device-OR-ManmadeObject],
 bongo,[Equipment-OR-Device-OR-ManmadeObject],
@@ -1913,7 +1913,7 @@ Bruneian,EthnicQuality,
 Bulgarian,EthnicQuality,
 burg,EthnicQuality,
 burgh,EthnicQuality,
-Burkinab�s,EthnicQuality,
+Burkinabés,EthnicQuality,
 Burmese,EthnicQuality,
 Burundian,EthnicQuality,
 california,EthnicQuality,
@@ -2082,7 +2082,7 @@ Midlands,EthnicQuality,EthnicQuality
 midtown,EthnicQuality,EthnicQuality
 Midwest,EthnicQuality,EthnicQuality
 Moldovan,EthnicQuality,EthnicQuality
-Mon�gasque,EthnicQuality,EthnicQuality
+Monégasque,EthnicQuality,EthnicQuality
 Mongolian,EthnicQuality,EthnicQuality
 Montenegrins,EthnicQuality,EthnicQuality
 Moroccan,EthnicQuality,EthnicQuality
@@ -2135,7 +2135,7 @@ Qatari,EthnicQuality,EthnicQuality
 Quebecers,EthnicQuality,EthnicQuality
 red light district,EthnicQuality,EthnicQuality
 republic,EthnicQuality,EthnicQuality
-R�unionnais,EthnicQuality,EthnicQuality
+Réunionnais,EthnicQuality,EthnicQuality
 Rocky Mountain States,EthnicQuality,EthnicQuality
 Romanian,EthnicQuality,EthnicQuality
 Russian,EthnicQuality,EthnicQuality
@@ -2147,7 +2147,7 @@ Salvadoran,EthnicQuality,EthnicQuality
 Sammarinese,EthnicQuality,EthnicQuality
 Samoan,EthnicQuality,EthnicQuality
 Santa Fe ,EthnicQuality,EthnicQuality
-S�o Tom� and Pr�ncipe,EthnicQuality,EthnicQuality
+São Tomé and Príncipe,EthnicQuality,EthnicQuality
 Saudis,EthnicQuality,EthnicQuality
 Scots,EthnicQuality,EthnicQuality
 seaboard,EthnicQuality,EthnicQuality
@@ -2340,7 +2340,7 @@ Alcatraz,[GeographicArea-OR-Related],
 anticline,[GeographicArea-OR-Related],
 anticyclone,[GeographicArea-OR-Related],
 aquifer,[GeographicArea-OR-Related],
-arête,[GeographicArea-OR-Related],
+arÃªte,[GeographicArea-OR-Related],
 archipelago,[GeographicArea-OR-Related],
 arroyo,[GeographicArea-OR-Related],
 Asia Minor,[GeographicArea-OR-Related],
@@ -3316,7 +3316,7 @@ encampment,[Structure-OR-Area],
 end zone,[Structure-OR-Area],
 enterprise zone,[Structure-OR-Area],
 entrance hall,[Structure-OR-Area],
-entrepôt,[Structure-OR-Area],
+entrepÃ´t,[Structure-OR-Area],
 environs,[Structure-OR-Area],
 exclusion zone,[Structure-OR-Area],
 expressway,[Structure-OR-Area],
@@ -3479,7 +3479,7 @@ main line,[Structure-OR-Area],
 maisonette,[Structure-OR-Area],
 mall,[Structure-OR-Area],
 malthouse,[Structure-OR-Area],
-manège,[Structure-OR-Area],
+manÃ¨ge,[Structure-OR-Area],
 mandir,[Structure-OR-Area],
 manse,[Structure-OR-Area],
 marina,[Structure-OR-Area],
@@ -3582,7 +3582,7 @@ pergola,[Structure-OR-Area],
 petrol station,[Structure-OR-Area],
 petting zoo,[Structure-OR-Area],
 piazza,[Structure-OR-Area],
-pied à terre,[Structure-OR-Area],
+pied Ã  terre,[Structure-OR-Area],
 pillbox,[Structure-OR-Area],
 piste,[Structure-OR-Area],
 pizzeria,[Structure-OR-Area],
