@@ -23,7 +23,7 @@ parser.add_argument('-o', '--output', nargs='?',
                     help='Output file')
 parser.add_argument('log_file', nargs='?', default=sys.stderr,
                     help='Log file')
-parser.add_argument('--format', default='full',
+parser.add_argument('-f', '--format', default='full',
                     help='Output format')
 args = parser.parse_args()
 
