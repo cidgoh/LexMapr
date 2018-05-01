@@ -31,6 +31,16 @@ logging.basicConfig(stream=args.log_file,
                     level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt', download_dir=os.environ['VIRTUAL_ENV'] + '/nltk_data')
+
+try:
+    nltk.data.find('taggers/averaged_perceptron_tagger')
+except LookupError:
+    nltk.download('averaged_perceptron_tagger', download_dir=os.environ['VIRTUAL_ENV'] + '/nltk_data')
+
 fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
 
 # Output file Column Headings
