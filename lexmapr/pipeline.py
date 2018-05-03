@@ -16,16 +16,6 @@ import sys
 from pkg_resources import resource_filename, resource_listdir
 import logging
 
-parser = argparse.ArgumentParser()
-parser.add_argument('input_file',
-                    help='Input csv file')
-parser.add_argument('-o', '--output', nargs='?',
-                    help='Output file')
-parser.add_argument('log_file', nargs='?', default=sys.stderr,
-                    help='Log file')
-parser.add_argument('-f', '--format', default='full',
-                    help='Output format')
-args = parser.parse_args()
 
 logging.basicConfig(stream=args.log_file,
                     level=logging.INFO,
@@ -468,7 +458,8 @@ remainingAllTokensSet = []
 remainingTokenSet = []
 prioritizedRetainedSet=[]
 
-# Iterate over samples for matching to ontology terms
+def run(args):
+    # Iterate over samples for matching to ontology terms
 for k, v in samplesDict.items():
     sampleid = k
     sample = v
@@ -543,13 +534,13 @@ for k, v in samplesDict.items():
         if (not newPhrase and lemma.lower() not in stopWordsList):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
             newPhrase = lemma.lower()
         elif (
-            lemma.lower() not in stopWordsList):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
+                lemma.lower() not in stopWordsList):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
             newPhrase = newPhrase + " " + lemma.lower()
 
         newPhrase = re.sub(' +', ' ', newPhrase)  # Extra innner spaces removed from cleaned sample
 
         if (
-            newPhrase in abbreviationDict.keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
+                newPhrase in abbreviationDict.keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
             newPhrase = abbreviationDict[newPhrase]
             statusAddendum = statusAddendum + "Cleaned Sample and Abbreviation-Acronym Treatment"
             statusAddendumSet.append("Cleaned Sample and Abbreviation-Acronym Treatment")
@@ -559,7 +550,7 @@ for k, v in samplesDict.items():
             statusAddendumSet.append("Cleaned Sample and Abbreviation-Acronym Treatment")
 
         if (
-            newPhrase in nonEnglishWordsDict.keys()):  # non English words taken care of
+                newPhrase in nonEnglishWordsDict.keys()):  # non English words taken care of
             newPhrase = nonEnglishWordsDict[newPhrase]
             # statusAddendum = statusAddendum + "Non English Language Words Treatment"
             statusAddendum = statusAddendum + "Cleaned Sample and Non English Language Words Treatment"
@@ -592,7 +583,7 @@ for k, v in samplesDict.items():
                 prevPhraseStr = phraseStr
             else:
                 prevPhraseStr = prevPhraseStr + " " + phraseStr
-            prevTag = currentTag
+                prevTag = currentTag
     if args.format == 'full':
         fw.write("	" + str(prevPhraseStr))
 
@@ -602,27 +593,27 @@ for k, v in samplesDict.items():
         status = "Empty Sample"
         if args.format == 'full':
             fw.write("	--" + "	--" + "\t" + "\t" + "\t" + status)
-        trigger = True
+            trigger = True
 
     # Rule2: Annotate all the Full Term Matches of Terms without any treatment
     if ((sample in resourceTermsDict.keys() ) and not trigger):
         if(sample in resourceTermsDict.keys()):
             resourceId = resourceTermsDict[sample]  # Gets the id of the resource for matched term
-        status = "Full Term Match"
-        statusAddendum = "[A DirectMatch]"
-        statusAddendumSet.append("A Direct Match")
-        statusAddendumSetFinal = set(statusAddendumSet)
-        retSet.append(sample + ":" + resourceId)
+            status = "Full Term Match"
+            statusAddendum = "[A DirectMatch]"
+            statusAddendumSet.append("A Direct Match")
+            statusAddendumSetFinal = set(statusAddendumSet)
+            retSet.append(sample + ":" + resourceId)
         if args.format == 'full':
             fw.write("	" + sample + "	" + "[" + (sample + ":" + resourceId) + "]" + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
         else:
             fw.write("	" + sample + "	" + "[" + (sample + ":" + resourceId) + "]" )
-        # To Count the Covered Tokens(words)
+            # To Count the Covered Tokens(words)
         thisSampleTokens = word_tokenize(sample.lower())
         for thisSampleIndvToken in thisSampleTokens:
             coveredAllTokensSet.append(thisSampleIndvToken)
             remSet.remove(thisSampleIndvToken)
-        trigger = True
+            trigger = True
 
 
     # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
@@ -630,40 +621,40 @@ for k, v in samplesDict.items():
     if ((sample.lower() in resourceTermsDict.keys()) and not trigger):
         if(sample.lower() in resourceTermsDict.keys()):
             resourceId = resourceTermsDict[sample.lower()]  # Gets the id of the resource for matched term
-        status = "Full Term Match"
-        statusAddendum = "[Change of Case in Input Data]"
-        statusAddendumSet.append("Change of Case in Input Data")
-        statusAddendumSetFinal = set(statusAddendumSet)
-        retSet.append(sample.lower() + ":" + resourceId)
+            status = "Full Term Match"
+            statusAddendum = "[Change of Case in Input Data]"
+            statusAddendumSet.append("Change of Case in Input Data")
+            statusAddendumSetFinal = set(statusAddendumSet)
+            retSet.append(sample.lower() + ":" + resourceId)
         if args.format == "full":
             fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
         else:
             fw.write("	" + sample.lower() + "	" + str(retSet))
-        # To Count the Covered Tokens(words)
+            # To Count the Covered Tokens(words)
         thisSampleTokens = word_tokenize(sample.lower())
         for thisSampleIndvToken in thisSampleTokens:
             coveredAllTokensSet.append(thisSampleIndvToken)
             remSet.remove(thisSampleIndvToken)
-        trigger = True  # resourcePermutationTermsDict
+            trigger = True  # resourcePermutationTermsDict
 
     elif ((sample.lower() in resourceRevisedTermsDict.keys() ) and not trigger):
         if (sample.lower() in resourceRevisedTermsDict.keys()):
             resourceId = resourceRevisedTermsDict[sample.lower()]  # Gets the id of the resource for matched term
-        status = "Full Term Match"
-        statusAddendum = "[Change of Case in Input or Resource Data]"
-        statusAddendumSet.append("Change of Case in Resource Data")
-        statusAddendumSetFinal = set(statusAddendumSet)
-        retSet.append(sample.lower() + ":" + resourceId)
+            status = "Full Term Match"
+            statusAddendum = "[Change of Case in Input or Resource Data]"
+            statusAddendumSet.append("Change of Case in Resource Data")
+            statusAddendumSetFinal = set(statusAddendumSet)
+            retSet.append(sample.lower() + ":" + resourceId)
         if args.format == 'full':
             fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
         else:
             fw.write("	" + sample.lower() + "	" + str(retSet))
-        # To Count the Covered Tokens(words)
+            # To Count the Covered Tokens(words)
         thisSampleTokens = word_tokenize(sample.lower())
         for thisSampleIndvToken in thisSampleTokens:
             coveredAllTokensSet.append(thisSampleIndvToken)
             remSet.remove(thisSampleIndvToken)
-        trigger = True
+            trigger = True
 
     elif (sample.lower() in resourcePermutationTermsDict.keys() and not trigger):
         resourceId = resourcePermutationTermsDict[sample.lower()]
@@ -678,12 +669,12 @@ for k, v in samplesDict.items():
             fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
         else:
             fw.write("	" + sample.lower() + "	" + str(retSet))
-        # To Count the Covered Tokens(words)
+            # To Count the Covered Tokens(words)
         thisSampleTokens = word_tokenize(sample.lower())
         for thisSampleIndvToken in thisSampleTokens:
             coveredAllTokensSet.append(thisSampleIndvToken)
             remSet.remove(thisSampleIndvToken)
-        trigger = True
+            trigger = True
 
 
     elif (sample.lower() in resourceBracketedPermutationTermsDict.keys() and not trigger):
@@ -699,12 +690,12 @@ for k, v in samplesDict.items():
             fw.write("	" + sample.lower() + "	" +  str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
         else:
             fw.write("	" + sample.lower() + "	" + str(retSet))
-        # To Count the Covered Tokens(words)
+            # To Count the Covered Tokens(words)
         thisSampleTokens = word_tokenize(sample.lower())
         for thisSampleIndvToken in thisSampleTokens:
             coveredAllTokensSet.append(thisSampleIndvToken)
             remSet.remove(thisSampleIndvToken)
-        trigger = True
+            trigger = True
 
     # Here we check all the suffices that can be applied to input term to make it comparable with resource terms
     suffixList=["(plant) as food source","plant as food source","as food source","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product",  "(food product)","food product","product"]
@@ -722,8 +713,8 @@ for k, v in samplesDict.items():
                 fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet)+ "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
             else:
                 fw.write("	" + sample.lower() + "	" + str(retSet))
-            trigger = True
-            # To Count the Covered Tokens(words)
+                trigger = True
+                # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
                 coveredAllTokensSet.append(thisSampleIndvToken)
@@ -741,41 +732,41 @@ for k, v in samplesDict.items():
         if ((newPhrase.lower() in resourceTermsDict.keys() ) and not trigger):
             if (newPhrase.lower() in resourceTermsDict.keys()):
                 resourceId = resourceTermsDict[newPhrase.lower()]  # Gets the id of the resource for matched term
-            status = "Full Term Match"  # -Inflection, Synonym, Spelling Correction, Foreign Language Treatment "
-            statusAddendum = statusAddendum + "[A Direct Match with Cleaned Sample]"
-            statusAddendumSet.append("A Direct Match with Cleaned Sample")
-            statusAddendumSetFinal = set(statusAddendumSet)
-            retSet.append(newPhrase.lower() + ":" + resourceId)
+                status = "Full Term Match"  # -Inflection, Synonym, Spelling Correction, Foreign Language Treatment "
+                statusAddendum = statusAddendum + "[A Direct Match with Cleaned Sample]"
+                statusAddendumSet.append("A Direct Match with Cleaned Sample")
+                statusAddendumSetFinal = set(statusAddendumSet)
+                retSet.append(newPhrase.lower() + ":" + resourceId)
             if args.format == 'full':
                 fw.write("	" + newPhrase.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
             else:
                 fw.write("	" + newPhrase.lower() + "	" + str(retSet))
-            # To Count the Covered Tokens(words)
+                # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
                 coveredAllTokensSet.append(thisSampleIndvToken)
                 remSet.remove(thisSampleIndvToken)
-            trigger = True
+                trigger = True
 
 
         elif ((newPhrase.lower() in resourceRevisedTermsDict.keys() ) and not trigger):
             if (newPhrase.lower() in resourceRevisedTermsDict.keys()):
                 resourceId = resourceRevisedTermsDict[newPhrase.lower()]  # Gets the id of the resource for matched term
-            status = "Full Term Match"
-            statusAddendum = statusAddendum + "[Change of Case of Resource Terms]"
-            statusAddendumSet.append("Change of Case of Resource Terms")
-            statusAddendumSetFinal = set(statusAddendumSet)
-            retSet.append(newPhrase.lower() + ":" + resourceId)
+                status = "Full Term Match"
+                statusAddendum = statusAddendum + "[Change of Case of Resource Terms]"
+                statusAddendumSet.append("Change of Case of Resource Terms")
+                statusAddendumSetFinal = set(statusAddendumSet)
+                retSet.append(newPhrase.lower() + ":" + resourceId)
             if args.format == 'full':
                 fw.write("	" + newPhrase.lower() + "	" +str(retSet) + "\t" + str(retSet)+ "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
             else:
                 fw.write("	" + newPhrase.lower() + "	" + str(retSet))
-            # To Count the Covered Tokens(words)
+                # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
                 coveredAllTokensSet.append(thisSampleIndvToken)
                 remSet.remove(thisSampleIndvToken)
-            trigger = True  #HEEE
+                trigger = True  #HEEE
 
         elif (newPhrase.lower() in resourcePermutationTermsDict.keys() and not trigger):
             resourceId = resourcePermutationTermsDict[newPhrase.lower()]
@@ -789,12 +780,12 @@ for k, v in samplesDict.items():
                 fw.write("	" + newPhrase.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
             else:
                 fw.write("	" + newPhrase.lower() + "	" + str(retSet))
-            # To Count the Covered Tokens(words)
+                # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
                 coveredAllTokensSet.append(thisSampleIndvToken)
                 remSet.remove(thisSampleIndvToken)
-            trigger = True
+                trigger = True
 
         elif (newPhrase.lower() in resourceBracketedPermutationTermsDict.keys() and not trigger):
             resourceId = resourceBracketedPermutationTermsDict[newPhrase.lower()]
@@ -808,12 +799,12 @@ for k, v in samplesDict.items():
                 fw.write("	" + newPhrase.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
             else:
                 fw.write("	" + newPhrase.lower() + "	" + str(retSet))
-            # To Count the Covered Tokens(words)
+                # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
                 coveredAllTokensSet.append(thisSampleIndvToken)
                 remSet.remove(thisSampleIndvToken)
-            trigger = True
+                trigger = True
 
         for suff in range(len(suffixList)):
             suffixString = suffixList[suff]
@@ -830,12 +821,12 @@ for k, v in samplesDict.items():
                     fw.write("	" + sample.lower() + "	" + str(retSet) + "\t" + str(retSet) + "\t" + "\t" + status + "\t" + str( statusAddendumSetFinal))
                 else:
                     fw.write("	" + sample.lower() + "	" + str(retSet))
-                # To Count the Covered Tokens(words)
+                    # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
                     coveredAllTokensSet.append(thisSampleIndvToken)
                     remSet.remove(thisSampleIndvToken)
-                trigger = True
+                    trigger = True
 
 
 
@@ -856,12 +847,12 @@ for k, v in samplesDict.items():
                 fw.write("	" + newPhrase.lower() + "	" +str(retSet) + "\t" + str(retSet)  + "\t" + "\t" + status + "\t" + str(statusAddendumSetFinal))
             else:
                 fw.write("	" + newPhrase.lower() + "	" + str(retSet))
-            # To Count the Covered Tokens(words)
+                # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
                 coveredAllTokensSet.append(thisSampleIndvToken)
                 remSet.remove(thisSampleIndvToken)
-            trigger = True
+                trigger = True
 
     # Component Matches Section
     if (not trigger):
@@ -906,15 +897,15 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    localTrigger = True
-                    # statusAddendum="Match with 5-Gram Chunk"+statusAddendum
+                            localTrigger = True
+                            # statusAddendum="Match with 5-Gram Chunk"+statusAddendum
                 elif ((grm in resourceRevisedTermsDict.keys() )and not localTrigger):
                     partialMatchedList.append(grm)
                     for eachTkn in grmTokens:
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                        # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
+                            # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
                     localTrigger = True
                 elif (grm in resourceBracketedPermutationTermsDict.keys() and not localTrigger):
                     resourceId = resourceBracketedPermutationTermsDict[grm]
@@ -923,14 +914,14 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
-                    statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
-                    localTrigger = True
+                            statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
+                            statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
+                            localTrigger = True
                 for suff in range(len(suffixList)):
                     suffixString = suffixList[suff]
                     sampleRevisedWithSuffix = addSuffix(grm, suffixString)
                     if (
-                                    sampleRevisedWithSuffix in resourceRevisedTermsDict.keys() and not localTrigger):  # Not trigger true is used here -reason
+                            sampleRevisedWithSuffix in resourceRevisedTermsDict.keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
@@ -939,7 +930,7 @@ for k, v in samplesDict.items():
                             coveredAllTokensSet.append(eachTkn)
                             if eachTkn in remSet:
                                 remSet.remove(eachTkn)
-                        localTrigger = True
+                                localTrigger = True
 
 
         # This is the case of making 4-gram chunks and subsequent processing for cleaned samples
@@ -974,15 +965,15 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    localTrigger = True
-                    # statusAddendum="Match with 5-Gram Chunk"+statusAddendum
+                            localTrigger = True
+                            # statusAddendum="Match with 5-Gram Chunk"+statusAddendum
                 elif ((  grm in resourceRevisedTermsDict.keys() ) and not localTrigger):
                     partialMatchedList.append(grm)
                     for eachTkn in grmTokens:
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    localTrigger = True
+                            localTrigger = True
                 elif (grm in resourceBracketedPermutationTermsDict.keys() and not localTrigger):
                     resourceId = resourceBracketedPermutationTermsDict[grm]
                     partialMatchedList.append(grm)
@@ -990,14 +981,14 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
-                    statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
-                    localTrigger = True
+                            statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
+                            statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
+                            localTrigger = True
                 for suff in range(len(suffixList)):
                     suffixString = suffixList[suff]
                     sampleRevisedWithSuffix = addSuffix(grm, suffixString)
                     if (
-                                    sampleRevisedWithSuffix in resourceRevisedTermsDict.keys() and not localTrigger):  # Not trigger true is used here -reason
+                            sampleRevisedWithSuffix in resourceRevisedTermsDict.keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
@@ -1006,7 +997,7 @@ for k, v in samplesDict.items():
                             coveredAllTokensSet.append(eachTkn)
                             if eachTkn in remSet:
                                 remSet.remove(eachTkn)
-                        localTrigger = True
+                                localTrigger = True
 
 
         # This is the case of making 3-gram (trigram) chunks and subsequent processing for cleaned samples
@@ -1042,15 +1033,15 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    localTrigger = True
-                    # statusAddendum="Match with 5-Gram Chunk"+statusAddendum
+                            localTrigger = True
+                            # statusAddendum="Match with 5-Gram Chunk"+statusAddendum
                 elif ((grm in resourceRevisedTermsDict.keys() ) and not localTrigger):
                     partialMatchedList.append(grm)
                     for eachTkn in grmTokens:
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                        # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
+                            # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
                     localTrigger = True
                 elif (grm in resourceBracketedPermutationTermsDict.keys() and not localTrigger):
                     resourceId = resourceBracketedPermutationTermsDict[grm]
@@ -1059,14 +1050,14 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
-                    statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
-                    localTrigger = True
+                            statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
+                            statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
+                            localTrigger = True
                 for suff in range(len(suffixList)):
                     suffixString = suffixList[suff]
                     sampleRevisedWithSuffix = addSuffix(grm, suffixString)
                     if (
-                                    sampleRevisedWithSuffix in resourceRevisedTermsDict.keys() and not localTrigger):  # Not trigger true is used here -reason
+                            sampleRevisedWithSuffix in resourceRevisedTermsDict.keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
@@ -1075,7 +1066,7 @@ for k, v in samplesDict.items():
                             coveredAllTokensSet.append(eachTkn)
                             if eachTkn in remSet:
                                 remSet.remove(eachTkn)
-                        localTrigger = True
+                                localTrigger = True
 
                 # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
                 if (grm in qualityLowerDict.keys() and not localTrigger):
@@ -1088,7 +1079,7 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    localTrigger = True
+                            localTrigger = True
 
         # This is the case of making 2-gram (bigram) chunks and subsequent processing for cleaned samples
         if len(newChunkTokens)<7:
@@ -1122,14 +1113,14 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    localTrigger = True
+                            localTrigger = True
                 elif (( grm in resourceRevisedTermsDict.keys() ) and not localTrigger):
                     partialMatchedList.append(grm)
                     for eachTkn in grmTokens:
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                        # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
+                            # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
                     localTrigger = True
                 elif (grm in resourceBracketedPermutationTermsDict.keys() and not localTrigger):
                     resourceId = resourceBracketedPermutationTermsDict[grm]
@@ -1138,9 +1129,9 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
-                    statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
-                    localTrigger = True
+                            statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
+                            statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
+                            localTrigger = True
                 for suff in range(len(suffixList)):
                     suffixString = suffixList[suff]
                     sampleRevisedWithSuffix = addSuffix(grm, suffixString)
@@ -1154,7 +1145,7 @@ for k, v in samplesDict.items():
                             coveredAllTokensSet.append(eachTkn)
                             if eachTkn in remSet:
                                 remSet.remove(eachTkn)
-                        localTrigger = True
+                                localTrigger = True
 
                 # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
                 if (grm in qualityLowerDict.keys() and not localTrigger):
@@ -1167,7 +1158,7 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    localTrigger = True
+                            localTrigger = True
 
 
         # This is the case of making 1-gram (unigram) chunks and subsequent processing for cleaned samples
@@ -1200,15 +1191,15 @@ for k, v in samplesDict.items():
                     coveredAllTokensSet.append(eachTkn)
                     if eachTkn in remSet:
                         remSet.remove(eachTkn)
-                localTrigger = True
-                # statusAddendum="Match with 5-Gram Chunk"+statusAddendum
+                        localTrigger = True
+                        # statusAddendum="Match with 5-Gram Chunk"+statusAddendum
             elif ((grm in resourceRevisedTermsDict.keys() ) and not localTrigger):
                 partialMatchedList.append(grm)
                 for eachTkn in grmTokens:
                     coveredAllTokensSet.append(eachTkn)
                     if eachTkn in remSet:
                         remSet.remove(eachTkn)
-                    # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
+                        # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
                 localTrigger = True
 
             for suff in range(len(suffixList)):
@@ -1223,7 +1214,7 @@ for k, v in samplesDict.items():
                         coveredAllTokensSet.append(eachTkn)
                         if eachTkn in remSet:
                             remSet.remove(eachTkn)
-                    localTrigger=True
+                            localTrigger=True
 
             # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
             if (grm in qualityLowerDict.keys() and not localTrigger):
@@ -1329,7 +1320,7 @@ for k, v in samplesDict.items():
                 fw.write("	" + str(partialMatchedSet) + "	" + str(partialMatchedResourceListSet) + "\t" + str(retainedSet) + "\t" + str(len(retainedSet)) + "\t" + status + "\t" + str(statusAddendumSetFinal) + "	" + str(remSetDiff))
                 compctr = 0
                 fw.write("\t")
-            
+                
             if args.format != 'full':
                 for memb in retainedSet:   # This for indv column print
                     fw.write("\t" + str(memb))
@@ -1341,7 +1332,7 @@ for k, v in samplesDict.items():
                         fw.write("Component" + str(compctr) + "-> " + str(comp))
                     else:
                         fw.write(", Component" + str(compctr) + "-> " + str(comp))
-            trigger = True
+                        trigger = True
         else:        # In case of no matching case
             if args.format == 'full':
                 fw.write("	" + str(partialMatchedSet) + "	" + str(partialMatchedResourceList) + "	\t" + "\t" + "Sorry No Match" + "\t" + str(remSet))
