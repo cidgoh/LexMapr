@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
+import sys
+import os
 import argparse
 import logging
 
-from ..lexmapr.pipeline import run
+import lexmapr.pipeline
 
 logger = logging.getLogger("lexmapr")
 
-script_name = path.basename(path.realpath(sys.argv[0]))
+script_name = os.path.basename(os.path.realpath(sys.argv[0]))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -25,11 +27,9 @@ if __name__ == '__main__':
     
     if args.version:
         print(script_name + ' ' + __version__)
-    elif args.command is None:
-        parser.print_help()
     else:
         try:
-            run(args)
+            lexmapr.pipeline.run(args)
         except CommandParseException as e:
             logger.error(str(e))
             e.get_parser().print_help()
