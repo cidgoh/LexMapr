@@ -416,7 +416,7 @@ def run(args):
         ]
     
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
-    fw.write('\t'.join(OUTPUT_FIELDS) + '\n')
+    fw.write('\t'.join(OUTPUT_FIELDS))
     
     with open(args.input_file) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
