@@ -396,23 +396,23 @@ def run(args):
                     
     # Output file Column Headings
     OUTPUT_FIELDS = [
-        "sample_id",
-        "sample_desc",
-        "cleaned_sample"
+        "Sample_Id",
+        "Sample_Desc",
+        "Cleaned_Sample"
     ]
 
     if args.format == 'full':
         OUTPUT_FIELDS += [
-            "phrase_pos_tagged",
-            "probable_candidate_terms",
-            "matched_term",
-            "all_matched_terms_with_resource_ids",
-            "retained_terms_with_resource_ids",
-            "number_of_components_for_component_match",
-            "match_status_macro_level",
-            "match_status_micro_level",
-            "remaining_tokens",
-            "different_components_for_component_match"
+            "Phrase_POS_Tagged",
+            "Probable_Candidate_Terms",
+            "Matched_Term",
+            "All_matched_Terms_with_Resource_IDs",
+            "Retained_Terms_with_Resource_IDs",
+            "Number of Components(In case of Component Match)",
+            "Match_Status(Macro Level)",
+            "Match_Status(Micro Level)",
+            "Remaining_Tokens",
+            "Different Components(In case of Component Match)"
         ]
     
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
@@ -446,7 +446,7 @@ def run(args):
         # output fields:
         #   sample_id:   sampleid
         #   sample_desc: sample
-        fw.write('\n' + sampleid + '\t' + sample + '\t')
+        fw.write('\n' + sampleid + '\t' + sample)
 
         sample = punctuationTreatment(sample, punctuationsList)  # Sample gets simple punctuation treatment
         sample = re.sub(' +', ' ', sample)  # Extra innner spaces are removed
