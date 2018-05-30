@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import csv
 import nltk
 import re
@@ -16,16 +15,6 @@ from pkg_resources import resource_filename, resource_listdir
 import logging
 
 logger = logging.getLogger("pipeline")
-
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt', download_dir=os.environ['VIRTUAL_ENV'] + '/nltk_data')
-
-try:
-    nltk.data.find('taggers/averaged_perceptron_tagger')
-except LookupError:
-    nltk.download('averaged_perceptron_tagger', download_dir=os.environ['VIRTUAL_ENV'] + '/nltk_data')
 
 # DIFFERENT METHODS USED (Will be organized in Modular arrangement later on)
 
