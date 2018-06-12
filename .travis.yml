@@ -1,5 +1,6 @@
 language: python
 python:
+  - "2.7"
   - "3.6"
 os:
   - linux
@@ -19,7 +20,7 @@ install:
   - conda info -a
   - conda create -c bioconda -c conda-forge -q -y -n test-environment python=$TRAVIS_PYTHON_VERSION coveralls
   - source activate test-environment
-  - python setup.py install
+  - pip install -r requirements.txt
   - python -m nltk.downloader all
   
 script: coverage run --source=lexmapr setup.py test
