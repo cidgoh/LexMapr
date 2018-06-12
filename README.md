@@ -1,6 +1,11 @@
 # LexMapr
 A Lexicon and Rule-Based Tool for Translating Short Biomedical Specimen Descriptions into Semantic Web Ontology Terms
 
+## Build status
+
+[![Build Status](https://travis-ci.org/lexmapr/LexMapr.svg?branch=master)](https://travis-ci.org/lexmapr/LexMapr)
+[![Coverage Status](https://coveralls.io/repos/github/lexmapr/LexMapr/badge.svg?branch=master)](https://coveralls.io/github/lexmapr/LexMapr?branch=master)
+
 The main script file for processing is `lexmapr/lexmapr.py`
 
 ## Dependencies
