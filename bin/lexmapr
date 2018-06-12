@@ -28,8 +28,4 @@ if __name__ == '__main__':
     if args.version:
         print(script_name + ' ' + __version__)
     else:
-        try:
-            lexmapr.pipeline.run(args)
-        except CommandParseException as e:
-            logger.error(str(e))
-            e.get_parser().print_help()
+        lexmapr.pipeline.run(args)

@@ -1349,7 +1349,7 @@ def run(args):
             # In case it is for componet matching and we have at least one component matched
             if (len(partialMatchedSet) > 0):
                 if args.format == 'full':
-                    fw.write('\t' + str(partialMatchedSet) + '\t' + str(partialMatchedResourceListSet) + '\t' + str(retainedSet) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(statusAddendumSetFinal) + '\t' + str(remSetDiff))
+                    fw.write('\t' + str(partialMatchedSet) + '\t' + str(partialMatchedResourceListSet) + '\t' + str(retainedSet) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(statusAddendumSetFinal if statusAddendumSetFinal else '{}') + '\t' + str(remSetDiff if remSetDiff else '{}'))
                 compctr = 0
                 if args.format == 'full':
                     fw.write("\t")
