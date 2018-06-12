@@ -35,7 +35,7 @@ optional arguments:
 
 | Filename                   | Description                      |
 |----------------------------|----------------------------------|
-| `small_simple.csv          | A small simple test dataset      |
+| `small_simple.csv`          | A small simple test dataset      |
 | `enteroForFreq.csv`        | Dataset from EnteroBase          |
 | `genomeTrackerMaster.csv`  | Dataset from GenomeTrakr         |
 | `bccdcsample.csv`          | Dataset from BCCDC               |
