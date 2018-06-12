@@ -1,0 +1,4 @@
+nltk==3.2.5
+wikipedia==1.4.0
+inflection==0.3.1
+python-dateutil==2.7.3
