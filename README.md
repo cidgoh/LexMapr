@@ -6,7 +6,7 @@ A Lexicon and Rule-Based Tool for Translating Short Biomedical Specimen Descript
 [![Build Status](https://travis-ci.org/lexmapr/LexMapr.svg?branch=master)](https://travis-ci.org/lexmapr/LexMapr)
 [![Coverage Status](https://coveralls.io/repos/github/lexmapr/LexMapr/badge.svg?branch=master)](https://coveralls.io/github/lexmapr/LexMapr?branch=master)
 
-The main script file for processing is `lexmapr/lexmapr.py`
+The main script file for processing is `bin/lexmapr`
 
 ## Dependencies
 
@@ -18,7 +18,7 @@ The main script file for processing is `lexmapr/lexmapr.py`
 ## Usage
 
 ```
-usage: lexmapr.py [-h] [-o [OUTPUT]] [--format FORMAT] input_file [log_file]
+usage: lexmapr [-h] [-o [OUTPUT]] [--format FORMAT] input_file [log_file]
 
 positional arguments:
   input_file            Input csv file
@@ -31,17 +31,18 @@ optional arguments:
   --format FORMAT       Output format
 ```
 
-### Example input files
+### Example input files (in `lexmapr/tests/input`)
 
 | Filename                   | Description                      |
 |----------------------------|----------------------------------|
+| `small_simple.csv          | A small simple test dataset      |
 | `enteroForFreq.csv`        | Dataset from EnteroBase          |
-| `genomeTrackerMaster.csv`	 | Dataset from GenomeTrakr         |
+| `genomeTrackerMaster.csv`  | Dataset from GenomeTrakr         |
 | `bccdcsample.csv`          | Dataset from BCCDC               |
 | `zheminSamples.csv`        | Zhemin's samples from EnteroBase |
-| `GRDI-UniqueSamples.csv`	 | Dataset from GRDI                |
+| `GRDI-UniqueSamples.csv`   | Dataset from GRDI                |
 
-### Resources Files
+### Resources Files (in `lexmapr/resources`)
 
 | Filename                      | Description                                                                                          |
 |-------------------------------|------------------------------------------------------------------------------------------------------|
