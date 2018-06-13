@@ -429,7 +429,7 @@ def run(args):
         statusAddendum = ""
         statusAddendumSet = []
         statusAddendumSetFinal = []
-        statusAddendumSetFinal.clear()
+        del statusAddendumSetFinal [:]
         retSet = []
         remSet = []
         #Writing in the output file with sampleid and sample to start with
