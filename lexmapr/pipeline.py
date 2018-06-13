@@ -13,6 +13,7 @@ from dateutil.parser import parse
 import sys
 from pkg_resources import resource_filename, resource_listdir
 import logging
+import collections
 
 logger = logging.getLogger("pipeline")
 
@@ -195,7 +196,7 @@ def run(args):
     remainingAllTokensSet = []
     remainingTokenSet = []
     prioritizedRetainedSet=[]
-    samplesDict = {}
+    samplesDict = collections.OrderedDict()
     samplesList = []
     samplesSet = []
     resourceTermsDict = {}
@@ -580,8 +581,8 @@ def run(args):
                 #   'retained_terms_with_resource_ids':         str(retSet)
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(statusAddendumSetFinal)
-                fw.write('\t' + sample + '\t' + "[" + (sample + ":" + resourceId) + "]" + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
+                fw.write('\t' + sample + '\t' + "[" + (sample + ":" + resourceId) + "]" + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
             else:
                 # output fields:
                 #   'matched_term':                        sample
@@ -611,13 +612,13 @@ def run(args):
                 #   'retained_terms_with_resource_ids'          str(retSet)
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(statusAddendumSetFinal)
-                fw.write('\t' + sample.lower() + '\t' + str(retSet) + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
-                #   'all_matched_terms_with_resource_ids': str(retSet)
-                fw.write('\t' + sample.lower() + '\t' + str(retSet))
+                #   'all_matched_terms_with_resource_ids': str(list(retSet))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -636,17 +637,17 @@ def run(args):
             if args.format == 'full':
                 # output fields:
                 #   'matched_term':                             sample.lower()
-                #   'all_matched_terms_with_resource_ids':      str(retSet)
-                #   'retained_terms_with_resource_ids'          str(retSet)
+                #   'all_matched_terms_with_resource_ids':      str(list(retSet))
+                #   'retained_terms_with_resource_ids'          str(list(retSet))
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(statusAddendumSetFinal)
-                fw.write('\t' + sample.lower() + '\t' + str(retSet) + '\t' + str(retSet) + '\t' + '\t' + status + "\t" + str(statusAddendumSetFinal))
+                #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + "\t" + str(list(statusAddendumSetFinal)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
                 #   'all_matched_terms_with_resource_ids': str(retSet)
-                fw.write('\t' + sample.lower() + '\t' + str(retSet))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -666,17 +667,17 @@ def run(args):
             if args.format == 'full':
                 # output fields:
                 #   'matched_term':                             sample.lower()
-                #   'all_matched_terms_with_resource_ids':      str(retSet)
-                #   'retained_terms_with_resource_ids'          str(retSet)
+                #   'all_matched_terms_with_resource_ids':      str(list(retSet))
+                #   'retained_terms_with_resource_ids'          str(list(retSet))
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(statusAddendumSetFinal)
-                fw.write('\t' + sample.lower() + '\t' + str(retSet) + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
-                #   'all_matched_terms_with_resource_ids': str(retSet)
-                fw.write('\t' + sample.lower() + '\t' + str(retSet))
+                #   'all_matched_terms_with_resource_ids': str(list(retSet))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -697,17 +698,17 @@ def run(args):
             if args.format == 'full':
                 # output fields:
                 #   'matched_term':                             sample.lower()
-                #   'all_matched_terms_with_resource_ids':      str(retSet)
-                #   'retained_terms_with_resource_ids'          str(retSet)
+                #   'all_matched_terms_with_resource_ids':      str(list(retSet))
+                #   'retained_terms_with_resource_ids'          str(list(retSet))
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(statusAddendumSetFinal)
-                fw.write('\t' + sample.lower() + '\t' +  str(retSet) + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
+                fw.write('\t' + sample.lower() + '\t' +  str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
-                #   'all_matched_terms_with_resource_ids': str(retSet)
-                fw.write('\t' + sample.lower() + '\t' + str(retSet))
+                #   'all_matched_terms_with_resource_ids': str(list(retSet))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -730,17 +731,17 @@ def run(args):
                 if args.format == 'full':
                     # output fields:
                     #   'matched_term':                             sample.lower()
-                    #   'all_matched_terms_with_resource_ids':      str(retSet)
-                    #   'retained_terms_with_resource_ids'          str(retSet)
+                    #   'all_matched_terms_with_resource_ids':      str(list(retSet))
+                    #   'retained_terms_with_resource_ids'          str(list(retSet))
                     #   'number_of_components_for_component_match': 
                     #   'match_status_macro_level':                 status
-                    #   'match_status_micro_level':                 str(statusAddendumSetFinal)
-                    fw.write('\t' + sample.lower() + '\t' + str(retSet) + '\t' + str(retSet)+ '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                    #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
+                    fw.write('\t' + sample.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
                     # output fields:
                     #   'matched_term':                        sample.lower()
-                    #   'all_matched_terms_with_resource_ids': str(retSet)
-                    fw.write('\t' + sample.lower() + '\t' + str(retSet))
+                    #   'all_matched_terms_with_resource_ids': str(list(retSet))
+                    fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
                 trigger = True
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
@@ -767,17 +768,17 @@ def run(args):
                 if args.format == 'full':
                     # output fields:
                     #   '': newPhrase.lower()
-                    #   '': str(retSet)
-                    #   '': str(retDet)
+                    #   '': str(list(retSet))
+                    #   '': str(list(retDet))
                     #   '':
                     #   '': status
-                    #   '': str(statusAddendumSetFinal)
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(retSet) + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                    #   '': str(list(statusAddendumSetFinal))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
                     # output fields:
                     #   '': newPhrase.lower()
                     #   '': str(retSet)
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(retSet))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -795,9 +796,9 @@ def run(args):
                 statusAddendumSetFinal = set(statusAddendumSet)
                 retSet.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(retSet) + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(retSet))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -814,9 +815,9 @@ def run(args):
                 resourceOriginalTerm = resourceTermsIDBasedDict[resourceId]
                 retSet.append(resourceOriginalTerm + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(retSet) + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(retSet))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -833,9 +834,9 @@ def run(args):
                 resourceOriginalTerm = resourceTermsIDBasedDict[resourceId]
                 retSet.append(resourceOriginalTerm + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(retSet) + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(retSet))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -854,9 +855,9 @@ def run(args):
                     statusAddendumSetFinal = set(statusAddendumSet)
                     retSet.append(sampleRevisedWithSuffix + ":" + resourceId)
                     if args.format == 'full':
-                        fw.write('\t' + sample.lower() + '\t' + str(retSet) + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                        fw.write('\t' + sample.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                     else:
-                        fw.write('\t' + sample.lower() + '\t' + str(retSet))
+                        fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
                     # To Count the Covered Tokens(words)
                     thisSampleTokens = word_tokenize(sample.lower())
                     for thisSampleIndvToken in thisSampleTokens:
@@ -880,9 +881,9 @@ def run(args):
                 statusAddendumSetFinal = set(statusAddendumSet)
                 retSet.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' +str(retSet) + '\t' + str(retSet)  + '\t' + '\t' + status + '\t' + str(statusAddendumSetFinal))
+                    fw.write('\t' + newPhrase.lower() + '\t' +str(list(retSet)) + '\t' + str(list(retSet))  + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(retSet))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -1349,7 +1350,7 @@ def run(args):
             # In case it is for componet matching and we have at least one component matched
             if (len(partialMatchedSet) > 0):
                 if args.format == 'full':
-                    fw.write('\t' + str(partialMatchedSet) + '\t' + str(partialMatchedResourceListSet) + '\t' + str(retainedSet) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(statusAddendumSetFinal if statusAddendumSetFinal else '{}') + '\t' + str(remSetDiff if remSetDiff else '{}'))
+                    fw.write('\t' + str(list(partialMatchedSet)) + '\t' + str(list(partialMatchedResourceListSet)) + '\t' + str(list(retainedSet)) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(list(statusAddendumSetFinal)) + '\t' + str(list(remSetDiff)))
                 compctr = 0
                 if args.format == 'full':
                     fw.write("\t")
@@ -1368,7 +1369,7 @@ def run(args):
                     trigger = True
                 else:        # In case of no matching case
                     if args.format == 'full':
-                        fw.write('\t' + str(partialMatchedSet) + '\t' + str(partialMatchedResourceList) + '\t\t' + "\t" + "Sorry No Match" + "\t" + str(remSet))
+                        fw.write('\t' + str(list(partialMatchedSet)) + '\t' + str(list(partialMatchedResourceList)) + '\t\t' + "\t" + "Sorry No Match" + "\t" + str(list(remSet)))
 
     #Output files closed
     if fw is not sys.stdout:
