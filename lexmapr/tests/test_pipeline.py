@@ -2,6 +2,7 @@
 TODO:
     * Make consistent with PEP8 style guidelines
         * Add appropriate docstring documentation
+    * Abstract TestPipelineMethods into more classes
 """
 
 import sys
@@ -56,11 +57,11 @@ class TestPipelineMethods(unittest.TestCase):
     def test_ngrams_00(self):
         """Test ngrams with empty string and n=1."""
         self.assertEqual(pipeline.ngrams("", 1), [[""]],)
-        
+
     def test_ngrams_01(self):
         """Test ngrams with empty string and n=2."""
         self.assertEqual(pipeline.ngrams("", 1), [[""]],)
-        
+
     def test_ngrams_02(self):
         """Test ngrams with two-word string and n=1."""
         self.assertEqual(pipeline.ngrams("hello world!", 1),
@@ -100,25 +101,103 @@ class TestPipelineMethods(unittest.TestCase):
         """Test preProcess on a string with all three characters."""
         self.assertEqual(pipeline.preProcess("cow's. , "), "cow")
 
+    def test_preProcess_04(self):
+        """Test preProcess with all three characters in another order.
+
+        TODO: This test fails due to a problem with preProcess.
+            If'.' is to the right of ',', then it rstrip will not remove
+            ',' first. Ask Gurinder is this fits the intended
+            specification.
+        """
+        self.assertEqual(pipeline.preProcess("cow's, . "), "cow")
+
     def test_find_between_r_00(self):
         """Test find_between_r with first and last indices."""
-        self.assertEqual(pipeline.find_between_r("^string$", '^', '$'),
-            'string')
+        self.assertEqual(pipeline.find_between_r("^string$", "^", "$"),
+            "string")
 
     def test_find_between_r_01(self):
         """Test find_between_r with non-first and last indices."""
-        self.assertEqual(pipeline.find_between_r("^string$", 's', '$'),
-            'tring')
+        self.assertEqual(pipeline.find_between_r("^string$", "s", "$"),
+            "tring")
 
     def test_find_between_r_02(self):
         """Test find_between_r with first and non-last indices."""
-        self.assertEqual(pipeline.find_between_r("^string$", '^', 'g'),
-            'strin')
+        self.assertEqual(pipeline.find_between_r("^string$", "^", "g"),
+            "strin")
 
     def test_find_between_r_03(self):
-        """Test find_between_r with non-first and non-last indices."""
-        self.assertEqual(pipeline.find_between_r("^string$", 's', 'g'),
-            'trin')
+        """Test find_between_r with non-first and non-last indices.
+        """
+        self.assertEqual(pipeline.find_between_r("^string$", "s", "g"),
+            "trin")
+
+    def test_find_between_r_04(self):
+        """Test find_between_r with same first and last indices.
+        """
+        self.assertEqual(pipeline.find_between_r("^string$", "r", "r"),
+            "")
+
+    def test_find_between_r_05(self):
+        """Test find_between_r with an invalid first parameter.
+        """
+        self.assertEqual(pipeline.find_between_r("^string$", "e", "g"),
+            "")
+
+    def test_find_between_r_06(self):
+        """Test find_between_r with an invalid last parameter.
+        """
+        self.assertEqual(pipeline.find_between_r("^string$", "^", "q"),
+            "")
+
+    def test_find_between_r_07(self):
+        """Test find_between_r with invalid first and last parameters.
+        """
+        self.assertEqual(pipeline.find_between_r("^string$", "e", "q"),
+            "")
+
+    def test_find_left_r_00(self):
+        """Test find_left_r with first index.
+
+        TODO: This test fails, but that is due to a problem with
+            find_left_r. start-2 in the original function is -1, which
+            means this currently returns s[0:-1]
+        """
+        self.assertEqual(pipeline.find_left_r("foo", "f", "o"), "")
+
+    def test_find_left_r_01(self):
+        """Test find_left_r with last index.
+
+        TODO: This test fails, but that is due to a problem with
+            find_left_r. start in the original function is 3, so
+            calculating end throws a value error.
+        """
+        self.assertEqual(pipeline.find_left_r("bar", "r", "r"), "ba")
+
+    def test_find_left_r_02(self):
+        """Test find_left_r with non-first and non-last index.
+
+        TODO: This test fails, but that is due to a problem with
+            find_left_r. start-2 in the original function is 0, which
+            means this currently returns s[0:0]
+        """
+        self.assertEqual(pipeline.find_left_r("bar", "a", "r"), "b")
+
+    def test_addSuffix_00(self):
+        """Test addSuffix with empty input and suffix strings."""
+        self.assertEqual(pipeline.addSuffix("", ""), " ")
+
+    def test_addSuffix_01(self):
+        """Test addSuffix with empty input string."""
+        self.assertEqual(pipeline.addSuffix("", "bar"), " bar")
+
+    def test_addSuffix_02(self):
+        """Test addSuffix with empty suffix string."""
+        self.assertEqual(pipeline.addSuffix("foo", ""), "foo ")
+
+    def test_addSuffix_03(self):
+        """Test addSuffix with non-empty input and suffix strings."""
+        self.assertEqual(pipeline.addSuffix("foo", "bar"), "foo bar")
 
 class TestPipeline(unittest.TestCase):
     def test_pipeline_input_small_simple_format_full(self):
