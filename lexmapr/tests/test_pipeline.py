@@ -2,6 +2,10 @@
 TODO:
     * Make consistent with PEP8 style guidelines
         * Add appropriate docstring documentation
+    * Refactor test suites as needed, after refactoring pipeline.py
+        * Likely will not need new tests, but may want to break test
+            classes up into a pattern more consistent with end-result
+            of pipeline.py
 """
 
 import sys
@@ -163,6 +167,18 @@ class TestPipelineMethods(unittest.TestCase):
         self.assertEqual(pipeline.addSuffix("foo", ""), "foo ")
         # Non-empty input and suffix strings
         self.assertEqual(pipeline.addSuffix("foo", "bar"), "foo bar")
+
+    def test_allPermutations(self):
+        """Tests allPermutations."""
+        # Empty input string
+        self.assertSetEqual(pipeline.allPermutations(""), set([()]))
+        # 1-gram input string
+        self.assertSetEqual(pipeline.allPermutations("a"), set([("a",)]))
+        # 2-gram input string
+        self.assertSetEqual(pipeline.allPermutations("a b"),
+            set([("a", "b"), ("b", "a")]))
+        # 4-gram input string
+        self.assertEqual(len(pipeline.allPermutations("a b c d")), 24)
 
 class TestPipeline(unittest.TestCase):
     def test_pipeline_input_small_simple_format_full(self):
