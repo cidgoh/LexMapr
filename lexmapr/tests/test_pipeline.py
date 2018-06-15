@@ -16,7 +16,7 @@ import tempfile
 from lexmapr import pipeline
 
 class TestPipelineMethods(unittest.TestCase):
-    """Unit test suite for helper methods outside pipeline.run.
+    """Unit test suite for pipeline methods outside pipeline.run.
     
     Public methods:
         * test_is_number()
@@ -26,6 +26,8 @@ class TestPipelineMethods(unittest.TestCase):
         * test_find_between_r()
         * test_find_left_r()
         * test_addSuffix()
+        * test_allPermutations()
+        * test_combi()
     """
 
     def test_is_number(self):
@@ -179,6 +181,26 @@ class TestPipelineMethods(unittest.TestCase):
             set([("a", "b"), ("b", "a")]))
         # 4-gram input string
         self.assertEqual(len(pipeline.allPermutations("a b c d")), 24)
+    
+    def test_combi(self):
+        """Tests combi."""
+        # Empty input string and n=1
+        self.assertCountEqual(list(pipeline.combi("", 1)), [])
+        # Empty input string and n=2
+        self.assertCountEqual(list(pipeline.combi("", 2)), [])
+        # 1-char input string and n=1
+        self.assertCountEqual(list(pipeline.combi("a", 1)), [("a",)])
+        # 1-char input string and n=2
+        self.assertCountEqual(list(pipeline.combi("a", 2)), [])
+        # 3-char input string with unique letters and n=1
+        self.assertCountEqual(list(pipeline.combi("bar", 1)),
+            [("b",), ("a",), ("r",)])
+        # 3-char input string and n=2
+        self.assertCountEqual(list(pipeline.combi("bar", 2)),
+            [("b", "a"), ("a", "r"), ("b", "r")])
+        # 3-char input string and n=3
+        self.assertCountEqual(list(pipeline.combi("bar", 3)),
+            [("b", "a", "r")])
 
 class TestPipeline(unittest.TestCase):
     def test_pipeline_input_small_simple_format_full(self):
