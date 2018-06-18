@@ -28,6 +28,7 @@ class TestPipelineMethods(unittest.TestCase):
         * test_addSuffix()
         * test_allPermutations()
         * test_combi()
+        * test_punctuationTreatment()
     """
 
     def test_is_number(self):
@@ -192,7 +193,7 @@ class TestPipelineMethods(unittest.TestCase):
         self.assertCountEqual(list(pipeline.combi("a", 1)), [("a",)])
         # 1-char input string and n=2
         self.assertCountEqual(list(pipeline.combi("a", 2)), [])
-        # 3-char input string with unique letters and n=1
+        # 3-char input string and n=1
         self.assertCountEqual(list(pipeline.combi("bar", 1)),
             [("b",), ("a",), ("r",)])
         # 3-char input string and n=2
@@ -201,6 +202,49 @@ class TestPipelineMethods(unittest.TestCase):
         # 3-char input string and n=3
         self.assertCountEqual(list(pipeline.combi("bar", 3)),
             [("b", "a", "r")])
+
+    def test_punctuationTreatment(self):
+        """Tests punctuationTreatment.
+
+        TODO:
+            * The tests follow the specifications, but some of expected
+                values may be unintended bugs. Consult with Gurinder.
+            * Potential bugs:
+                * Three spaces between words, if there is a token
+                    consisting of a single punctuation mark between
+                    the words
+                    * e.g., foo;bar -> ["foo", ";", "bar] -> foo   bar
+                * Spaces at the beginning and/or end of the the
+                    returned string, if the input string begins and/or
+                    ends with a punctuation mark
+                    * e.g., _foo_ -> ["_foo_"] -> " foo "
+        """
+        # Punctuation list used in pipeline
+        punctuationList = ["-", "_", "(", ")", ";", "/", ":", "%"]
+        # Empty input string
+        self.assertEqual(
+            pipeline.punctuationTreatment("", punctuationList),
+            "")
+        # Single-token input string with no punctuation
+        self.assertEqual(
+            pipeline.punctuationTreatment("foo", punctuationList),
+            "foo")
+        # Multi-token input string with no punctuation
+        self.assertEqual(
+            pipeline.punctuationTreatment("foo bar", punctuationList),
+            "foo bar")
+        # Single-token input string with punctuation
+        self.assertEqual(
+            pipeline.punctuationTreatment("_foo-bar_", punctuationList),
+            " foo bar ")
+        # Multi-token input string with punctuation
+        self.assertEqual(
+            pipeline.punctuationTreatment("_foo;ba r_", punctuationList),
+            " foo   ba r ")
+        # Multi-token input string with number, date and punctuation
+        self.assertEqual(
+            pipeline.punctuationTreatment("a-b 12/22/78 -1", punctuationList),
+            "a b 12/22/78 -1")
 
 class TestPipeline(unittest.TestCase):
     def test_pipeline_input_small_simple_format_full(self):
