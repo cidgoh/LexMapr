@@ -3,9 +3,9 @@ TODO:
     * Make consistent with PEP8 style guidelines
         * Add appropriate docstring documentation
     * Refactor test suites as needed, after refactoring pipeline.py
-        * Likely will not need new tests, but may want to break test
-            classes up into a pattern more consistent with end-result
-            of pipeline.py
+        * Add new tests as needed for greater path/branch coverage
+        * Break test classes up into a pattern more consistent with
+            end-result of pipeline.py
 """
 
 import sys
@@ -29,6 +29,7 @@ class TestPipelineMethods(unittest.TestCase):
         * test_allPermutations()
         * test_combi()
         * test_punctuationTreatment()
+        * test_retainedPhrase()
     """
 
     def test_is_number(self):
@@ -245,6 +246,75 @@ class TestPipelineMethods(unittest.TestCase):
         self.assertEqual(
             pipeline.punctuationTreatment("a-b 12/22/78 -1", punctuationList),
             "a b 12/22/78 -1")
+
+    def test_retainedPhrase(self):
+        """Tests retainedPhrase.
+
+        TODO:
+            * Cannot test empty term list, because retainedPhrase
+                assumes the term list will not be empty, and
+                consequentially throws an IndexError
+            * If retainedPhrase is changed in the future to a more
+                independent function, test empty term list
+            * The tests follow the specifications, but some of expected
+                values may be unintended bugs. Consult with Gurinder.
+            * Potential bugs:
+                * If the last key-value pair in an inputted termlist is
+                    in the returned set, the value will have an single
+                    quotation mark at the end
+                    * e.g., "{'foo:bar', 'hello:world'}"
+                        -> set(["foo:bar", "hello:world'"])
+                    * This is because pipeline.retainedPhrase
+                        eliminates "'," from values--not "'"
+                * Potential to return no key-value pairs
+                    * This happens if a compound key is a subset of
+                        another compound key, but with no differing
+                        words
+                    * e.g., "{'foo bar:bar', 'foo bar bar:bar'}"
+                        -> []
+                * If no key-value pairs are to be included in the
+                    return value, an empty list--not set--is
+                    returned
+        """
+        # Single-term list
+        self.assertSetEqual(
+            pipeline.retainedPhrase("{'foo:bar'}"),
+            set(["foo:bar'"]))
+        # Multi-term list
+        self.assertSetEqual(
+            pipeline.retainedPhrase("{'foo:bar', 'hello:world'}"),
+            set(["foo:bar", "hello:world'"]))
+        # Multi-term list with "="
+        self.assertSetEqual(
+            pipeline.retainedPhrase("{'foo:b=ar', 'he=llo:world'}"),
+            set(["foo:b=ar", "he,llo:world'"]))
+        # Key substring of a key
+        self.assertSetEqual(
+            pipeline.retainedPhrase("{'foo:bar', 'foofoo:bar'}"),
+            set(["foofoo:bar'"]))
+        # Key substring of a compound key (multi-word)
+        self.assertSetEqual(
+            pipeline.retainedPhrase("{'foo:bar', 'foo bar:bar'}"),
+            set(["foo bar:bar'"]))
+        # Compound key substring of a compound key
+        self.assertSetEqual(
+            pipeline.retainedPhrase("{'foo bar hello:world', 'foo bar:bar'}"),
+            set(["foo bar hello:world"]))
+        # Compound key overlapping, but not substring of a compound key
+        self.assertSetEqual(
+            pipeline.retainedPhrase("{'foo hello:world', 'foo bar:bar'}"),
+            set(["foo hello:world", "foo bar:bar'"]))
+        # Compound key substring of a compound key (no differing words)
+        self.assertEqual(
+            pipeline.retainedPhrase("{'foo bar:bar', 'foo bar bar:bar'}"),
+            [])
+        # Identical keys, but different values
+        self.assertEqual(
+            pipeline.retainedPhrase("{'foo:bar', 'foo:foo'}"),
+            set(["foo:bar", "foo:foo'"]))
+        self.assertEqual(
+            pipeline.retainedPhrase("{'foo bar:bar', 'foo bar:foo'}"),
+            set(["foo bar:bar", "foo bar:foo'"]))
 
 class TestPipeline(unittest.TestCase):
     def test_pipeline_input_small_simple_format_full(self):
