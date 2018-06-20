@@ -4,6 +4,11 @@ TODO:
         * Add appropriate docstring documentation
     * Refactor test suites as needed, after refactoring pipeline.py
         * Add new tests as needed for greater path/branch coverage
+            * There are many internals within lexmapr.pipeline.run that
+                are difficult to test, due to the lack of modularity
+                * For now, we will take a black box approach for the
+                    entirety of lexmapr.pipeline.run, but revisit with
+                    more in-depth testing later
         * Break test classes up into a pattern more consistent with
             end-result of pipeline.py
 """
