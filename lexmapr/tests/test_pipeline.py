@@ -22,7 +22,7 @@ from lexmapr import pipeline
 
 class TestPipelineMethods(unittest.TestCase):
     """Unit test suite for pipeline methods outside pipeline.run.
-    
+
     Public methods:
         * test_is_number()
         * test_is_date()
@@ -322,6 +322,35 @@ class TestPipelineMethods(unittest.TestCase):
             set(["foo bar:bar", "foo bar:foo'"]))
 
 class TestPipeline(unittest.TestCase):
+    """Unit test suite for pipeline.run.
+
+    This test suite takes a black box approach, by using input and
+    expected output files, and examining the multiple ways an output
+    file can be written to.
+
+    Public methods:
+        * test_pipeline_input_small_simple_format_full()
+        * test_pipeline_input_small_simple_format_not_full()
+        * test_pipeline_input_empty_format_full()
+        * test_pipeline_input_empty_format_not_full()
+
+    TODO:
+        * Abstract methods, as they are almost identical
+            * Perhaps a single method, that loops through a dictionary
+                containing the various input and expected output file
+                combinations
+        * Utilize parallel programming to speed up these unit tests
+        * Potential bugs:
+            * args.format should be optional, but several calls are
+                made to args.format in pipeline.run
+                * Throws an attribute error without format argument
+                * We are currently using "not full" to test
+                    pipeline.run without "full" format
+            * If args.format != full, the values for matched_term and
+                all_matched_terms_with_resource_ids are outputted, but
+                there are no headers for these values in the first row
+    """
+
     def test_pipeline_input_small_simple_format_full(self):
         infile_path = os.path.join(os.path.dirname(__file__),
             'input/small_simple.csv')
@@ -330,6 +359,48 @@ class TestPipeline(unittest.TestCase):
             'output/small_simple.tsv')
         pipeline.run(type('',(object,),{"input_file": infile_path,
             "output": outfile_path, "format": "full"})())
+        with open(outfile_path, 'r') as outfile:
+            outfile_contents = outfile.read()
+        with open(correctfile_path, 'r') as correctfile:
+            correctfile_contents = correctfile.read()
+        self.assertMultiLineEqual(outfile_contents, correctfile_contents)
+
+    def test_pipeline_input_small_simple_format_not_full(self):
+        infile_path = os.path.join(os.path.dirname(__file__),
+            'input/small_simple.csv')
+        outfile_path = tempfile.mkstemp()[1]
+        correctfile_path = os.path.join(os.path.dirname(__file__),
+            'output/small_simple_not_full.tsv')
+        pipeline.run(type('',(object,),{"input_file": infile_path,
+            "output": outfile_path, "format": "not full"})())
+        with open(outfile_path, 'r') as outfile:
+            outfile_contents = outfile.read()
+        with open(correctfile_path, 'r') as correctfile:
+            correctfile_contents = correctfile.read()
+        self.assertMultiLineEqual(outfile_contents, correctfile_contents)
+
+    def test_pipeline_input_empty_format_full(self):
+        infile_path = os.path.join(os.path.dirname(__file__),
+            'input/empty.csv')
+        outfile_path = tempfile.mkstemp()[1]
+        correctfile_path = os.path.join(os.path.dirname(__file__),
+            'output/empty.tsv')
+        pipeline.run(type('',(object,),{"input_file": infile_path,
+            "output": outfile_path, "format": "full"})())
+        with open(outfile_path, 'r') as outfile:
+            outfile_contents = outfile.read()
+        with open(correctfile_path, 'r') as correctfile:
+            correctfile_contents = correctfile.read()
+        self.assertMultiLineEqual(outfile_contents, correctfile_contents)
+
+    def test_pipeline_input_empty_format_not_full(self):
+        infile_path = os.path.join(os.path.dirname(__file__),
+            'input/empty.csv')
+        outfile_path = tempfile.mkstemp()[1]
+        correctfile_path = os.path.join(os.path.dirname(__file__),
+            'output/empty_not_full.tsv')
+        pipeline.run(type('',(object,),{"input_file": infile_path,
+            "output": outfile_path, "format": "not full"})())
         with open(outfile_path, 'r') as outfile:
             outfile_contents = outfile.read()
         with open(correctfile_path, 'r') as correctfile:
