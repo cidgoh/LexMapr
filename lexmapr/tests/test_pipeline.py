@@ -335,10 +335,7 @@ class TestPipeline(unittest.TestCase):
     file can be written to.
 
     Public methods:
-        * test_pipeline_input_small_simple_format_full()
-        * test_pipeline_input_small_simple_format_not_full()
-        * test_pipeline_input_empty_format_full()
-        * test_pipeline_input_empty_format_not_full()
+        * test_pipeline_with_files
 
     Instance variables:
         * test_files <class "dict">
