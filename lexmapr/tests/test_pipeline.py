@@ -23,6 +23,8 @@ from lexmapr import pipeline
 class TestPipelineMethods(unittest.TestCase):
     """Unit test suite for pipeline methods outside pipeline.run.
 
+    Subclass of unittest.TestCase.
+
     Public methods:
         * test_is_number()
         * test_is_date()
@@ -324,6 +326,10 @@ class TestPipelineMethods(unittest.TestCase):
 class TestPipeline(unittest.TestCase):
     """Unit test suite for pipeline.run.
 
+    Subclass of unittest.TestCase. Overrides constructor to create
+    instance variable that tracks files used for testing, whilst
+    retaining the parental constructor.
+
     This test suite takes a black box approach, by using input and
     expected output files, and examining the multiple ways an output
     file can be written to.
@@ -334,11 +340,14 @@ class TestPipeline(unittest.TestCase):
         * test_pipeline_input_empty_format_full()
         * test_pipeline_input_empty_format_not_full()
 
+    Instance variables:
+        * test_files <class "dict">
+            * key <class "str">
+            * val <class "str">
+
     TODO:
-        * Abstract methods, as they are almost identical
-            * Perhaps a single method, that loops through a dictionary
-                containing the various input and expected output file
-                combinations
+        * If multiple assertions fail, show all failing assertions--not
+            just one
         * Utilize parallel programming to speed up these unit tests
         * Potential bugs:
             * args.format should be optional, but several calls are
@@ -351,61 +360,67 @@ class TestPipeline(unittest.TestCase):
                 there are no headers for these values in the first row
     """
 
-    def test_pipeline_input_small_simple_format_full(self):
-        infile_path = os.path.join(os.path.dirname(__file__),
-            'input/small_simple.csv')
-        outfile_path = tempfile.mkstemp()[1]
-        correctfile_path = os.path.join(os.path.dirname(__file__),
-            'output/small_simple.tsv')
-        pipeline.run(type('',(object,),{"input_file": infile_path,
-            "output": outfile_path, "format": "full"})())
-        with open(outfile_path, 'r') as outfile:
-            outfile_contents = outfile.read()
-        with open(correctfile_path, 'r') as correctfile:
-            correctfile_contents = correctfile.read()
-        self.assertMultiLineEqual(outfile_contents, correctfile_contents)
+    def __init__(self, *args, **kwargs):
+        """Extend parent constructor to create instance variables.
 
-    def test_pipeline_input_small_simple_format_not_full(self):
-        infile_path = os.path.join(os.path.dirname(__file__),
-            'input/small_simple.csv')
-        outfile_path = tempfile.mkstemp()[1]
-        correctfile_path = os.path.join(os.path.dirname(__file__),
-            'output/small_simple_not_full.tsv')
-        pipeline.run(type('',(object,),{"input_file": infile_path,
-            "output": outfile_path, "format": "not full"})())
-        with open(outfile_path, 'r') as outfile:
-            outfile_contents = outfile.read()
-        with open(correctfile_path, 'r') as correctfile:
-            correctfile_contents = correctfile.read()
-        self.assertMultiLineEqual(outfile_contents, correctfile_contents)
+        Retains call to unittest.TestCase constructor, while creating
+        an instance variable used to track input and expected output
+        file test cases.
 
-    def test_pipeline_input_empty_format_full(self):
-        infile_path = os.path.join(os.path.dirname(__file__),
-            'input/empty.csv')
-        outfile_path = tempfile.mkstemp()[1]
-        correctfile_path = os.path.join(os.path.dirname(__file__),
-            'output/empty.tsv')
-        pipeline.run(type('',(object,),{"input_file": infile_path,
-            "output": outfile_path, "format": "full"})())
-        with open(outfile_path, 'r') as outfile:
-            outfile_contents = outfile.read()
-        with open(correctfile_path, 'r') as correctfile:
-            correctfile_contents = correctfile.read()
-        self.assertMultiLineEqual(outfile_contents, correctfile_contents)
+        Arguments:
+            * *args <class "list">: Any number of arguments.
+            * **kwargs <class "list">: Any number of named arguments.
+        """
+        # Call to unittest.TestCase constructor
+        super(TestPipeline, self).__init__(*args, **kwargs)
+        # Dictionary containing the names of input and expected output
+        # file test cases without extensions. The keys are expected
+        # output files, and the values are a list with two values: the
+        # input file, and format value. It is assumed input and output
+        # files have .csv and .tsv extensions, and are in
+        # ./lexmapr/tests/input and ./lexmapr/tests/input respectively.
+        # All future test cases must be added here.
+        self.test_files = {
+            # Empty file without "full" format argument
+            "empty_not_full": ["empty", "not full"],
+            # Empty file with "full" format argument
+            "empty": ["empty", "full"],
+            # Non-empty file without "full" format argument
+            "small_simple_not_full": ["small_simple", "not full"],
+            # Non-empty file with "full" format argument
+            "small_simple": ["small_simple", "full"]
+        }
 
-    def test_pipeline_input_empty_format_not_full(self):
-        infile_path = os.path.join(os.path.dirname(__file__),
-            'input/empty.csv')
-        outfile_path = tempfile.mkstemp()[1]
-        correctfile_path = os.path.join(os.path.dirname(__file__),
-            'output/empty_not_full.tsv')
-        pipeline.run(type('',(object,),{"input_file": infile_path,
-            "output": outfile_path, "format": "not full"})())
-        with open(outfile_path, 'r') as outfile:
-            outfile_contents = outfile.read()
-        with open(correctfile_path, 'r') as correctfile:
-            correctfile_contents = correctfile.read()
-        self.assertMultiLineEqual(outfile_contents, correctfile_contents)
+    def test_pipeline_with_files(self):
+        """Compares actual pipeline.run outputs to expected outputs.
+
+        For each expected output and input pair in self.test_files, we
+        compare the contents of the actual output of pipeline.run (when
+        given input) to the contents of the expected output.
+        """
+        # Iterate over all expected outputs
+        for expected_output in self.test_files:
+            # Relative path of expected output file
+            expected_output_path = "output/" + expected_output + ".tsv"
+            # Relative path of input file
+            input = self.test_files[expected_output][0]
+            input_path = "input/" + input + ".csv"
+            # Format value
+            format = self.test_files[expected_output][1]
+            # Temporary file path to store actual output of input file
+            actual_output_path = tempfile.mkstemp()[1]
+            # Run pipeline.run using input_path and actual_output_path
+            pipeline.run(type('',(object,),{"input_file": input_path,
+                "output": actual_output_path, "format": format})())
+            # Get actual_output_path contents
+            with open(actual_output_path, 'r') as actual_output_file:
+                actual_output_contents = actual_output_file.read()
+            # Get expected_output_path contents
+            with open(expected_output_path, 'r') as expected_output_file:
+                expected_output_contents = expected_output_file.read()
+            # Compare expected output with actual output
+            self.assertMultiLineEqual(expected_output_contents,
+                actual_output_contents)
 
 if __name__ == '__main__':
     unittest.main()
