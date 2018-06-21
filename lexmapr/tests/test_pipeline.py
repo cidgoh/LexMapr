@@ -326,9 +326,7 @@ class TestPipelineMethods(unittest.TestCase):
 class TestPipeline(unittest.TestCase):
     """Unit test suite for pipeline.run.
 
-    Subclass of unittest.TestCase. Overrides constructor to create
-    instance variable that tracks files used for testing, whilst
-    retaining the parental constructor.
+    Subclass of unittest.TestCase.
 
     This test suite takes a black box approach, by using input and
     expected output files, and examining the multiple ways an output
@@ -337,7 +335,7 @@ class TestPipeline(unittest.TestCase):
     Public methods:
         * test_pipeline_with_files
 
-    Instance variables:
+    Class variables:
         * test_files <class "dict">
             * key <class "str">
             * val <class "str">
@@ -357,36 +355,23 @@ class TestPipeline(unittest.TestCase):
                 there are no headers for these values in the first row
     """
 
-    def __init__(self, *args, **kwargs):
-        """Extend parent constructor to create instance variables.
-
-        Retains call to unittest.TestCase constructor, while creating
-        an instance variable used to track input and expected output
-        file test cases.
-
-        Arguments:
-            * *args <class "list">: Any number of arguments.
-            * **kwargs <class "list">: Any number of named arguments.
-        """
-        # Call to unittest.TestCase constructor
-        super(TestPipeline, self).__init__(*args, **kwargs)
-        # Dictionary containing the names of input and expected output
-        # file test cases without extensions. The keys are expected
-        # output files, and the values are a list with two values: the
-        # input file, and format value. It is assumed input and output
-        # files have .csv and .tsv extensions, and are in
-        # ./lexmapr/tests/input and ./lexmapr/tests/input respectively.
-        # All future test cases must be added here.
-        self.test_files = {
-            # Empty file without "full" format argument
-            "empty_not_full": ["empty", "not full"],
-            # Empty file with "full" format argument
-            "empty": ["empty", "full"],
-            # Non-empty file without "full" format argument
-            "small_simple_not_full": ["small_simple", "not full"],
-            # Non-empty file with "full" format argument
-            "small_simple": ["small_simple", "full"]
-        }
+    # Dictionary containing the names of input and expected output
+    # file test cases without extensions. The keys are expected
+    # output files, and the values are a list with two values: the
+    # input file, and format value. It is assumed input and output
+    # files have .csv and .tsv extensions, and are in
+    # ./lexmapr/tests/input and ./lexmapr/tests/input respectively.
+    # All future test cases must be added here.
+    test_files = {
+        # Empty file without "full" format argument
+        "empty_not_full": ["empty", "not full"],
+        # Empty file with "full" format argument
+        "empty": ["empty", "full"],
+        # Non-empty file without "full" format argument
+        "small_simple_not_full": ["small_simple", "not full"],
+        # Non-empty file with "full" format argument
+        "small_simple": ["small_simple", "full"]
+    }
 
     def test_pipeline_with_files(self):
         """Compares actual pipeline.run outputs to expected outputs.
