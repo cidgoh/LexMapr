@@ -372,14 +372,14 @@ class TestPipeline(unittest.TestCase):
         # Non-empty file with "full" format argument
         "small_simple": ["small_simple", "full"],
         # Some rows requires punctuation treatment
-        "some_punctuation": ["some_punctuation", "full"],
+        "test_punctuation": ["test_punctuation", "full"],
         # Some rows require extra inner spaces to be removed--
         # some due to punctuation treatment.
-        "extra_inner_spaces": ["extra_inner_spaces", "full"],
+        "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
         # Varying number of tokens per row
-        "varying_num_of_tokens": ["varying_num_of_tokens", "full"],
+        "test_tokenization": ["test_tokenization", "full"],
         # Variation in preprocessing of tokens
-        "preprocessing_variation": ["preprocessing_variation", "full"]
+        "test_preprocessing": ["test_preprocessing", "full"]
     }
 
     def test_pipeline_with_files(self):
