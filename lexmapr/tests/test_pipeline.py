@@ -370,7 +370,12 @@ class TestPipeline(unittest.TestCase):
         # Non-empty file without "full" format argument
         "small_simple_not_full": ["small_simple", "not full"],
         # Non-empty file with "full" format argument
-        "small_simple": ["small_simple", "full"]
+        "small_simple": ["small_simple", "full"],
+        # Some rows requires punctuation treatment
+        "some_punctuation": ["some_punctuation", "full"],
+        # Some rows require extra inner spaces to be removed--
+        # some due to punctuation treatment.
+        "extra_inner_spaces": ["extra_inner_spaces", "full"]
     }
 
     def test_pipeline_with_files(self):
@@ -400,6 +405,9 @@ class TestPipeline(unittest.TestCase):
             # Get expected_output_path contents
             with open(expected_output_path, 'r') as expected_output_file:
                 expected_output_contents = expected_output_file.read()
+            # TODO: remove these print statements later
+            print(expected_output_contents)
+            print(actual_output_contents)
             # Compare expected output with actual output
             self.assertMultiLineEqual(expected_output_contents,
                 actual_output_contents)
