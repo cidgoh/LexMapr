@@ -376,8 +376,10 @@ class TestPipeline(unittest.TestCase):
         # Some rows require extra inner spaces to be removed--
         # some due to punctuation treatment.
         "extra_inner_spaces": ["extra_inner_spaces", "full"],
-        # Varying number of tokens
-        "varying_num_of_tokens": ["varying_num_of_tokens", "full"]
+        # Varying number of tokens per row
+        "varying_num_of_tokens": ["varying_num_of_tokens", "full"],
+        # Variation in preprocessing of tokens
+        "preprocessing_variation": ["preprocessing_variation", "full"]
     }
 
     def test_pipeline_with_files(self):
