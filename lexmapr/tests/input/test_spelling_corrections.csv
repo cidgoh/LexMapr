@@ -1,0 +1,9 @@
+SampleId,Sample
+small_simple1,chichen beast,multiple misspelled tokens
+small_simple2,Baked Potato,perfectly spelled multi-token word
+small_simple3,cantelope fruit food product,single misspelled token
+small_simple4,canteelope,single misspelled token not in ScorLex.csv
+small_simple5,chicheen beeast,multiple misspelled tokens not in ScorLex.csv
+small_simple6,chicheen beast,two misspelled tokens but only one in ScorLex.csv
+small_simple7,Yogurt,perfectly spelled single-token word
+small_simple8,POPANO,misspelled token that is only found in ScorLex.csv if converted to lowercase
