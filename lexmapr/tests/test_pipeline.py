@@ -348,8 +348,6 @@ class TestPipeline(unittest.TestCase):
                 files sometimes fail:
                 * test_pluralization
                 * test_spelling_corrections
-        * If multiple assertions fail, show all failing assertions--not
-            just one
         * Utilize parallel programming to speed up these unit tests
         * Potential bugs:
             * args.format should be optional, but several calls are
@@ -389,7 +387,7 @@ class TestPipeline(unittest.TestCase):
         "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
         # Varying number of tokens per row
         "test_tokenization": ["test_tokenization", "full"],
-        # Some tokens require preprocessing
+        Some tokens require preprocessing
         "test_preprocessing": ["test_preprocessing", "full"],
         # Some tokens require inflection treatment
         "test_pluralization": ["test_pluralization", "full"],
@@ -402,8 +400,13 @@ class TestPipeline(unittest.TestCase):
 
         For each expected output and input pair in self.test_files, we
         compare the contents of the actual output of pipeline.run (when
-        given input) to the contents of the expected output.
+        given input) to the contents of the expected output. This
+        function raises a single assertion error that lists all failed
+        assertions.
         """
+        # This will be a multi-line string containing all expected
+        # outputs that are not equal to their actual outputs.
+        failed_files = ""
         # Iterate over all expected outputs
         for expected_output in self.test_files:
             # Relative path of expected output file
@@ -416,20 +419,28 @@ class TestPipeline(unittest.TestCase):
             # Temporary file path to store actual output of input file
             actual_output_path = tempfile.mkstemp()[1]
             # Run pipeline.run using input_path and actual_output_path
-            pipeline.run(type('',(object,),{"input_file": input_path,
+            pipeline.run(type("",(object,),{"input_file": input_path,
                 "output": actual_output_path, "format": format})())
             # Get actual_output_path contents
-            with open(actual_output_path, 'r') as actual_output_file:
+            with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
             # Get expected_output_path contents
-            with open(expected_output_path, 'r') as expected_output_file:
+            with open(expected_output_path, "r") as expected_output_file:
                 expected_output_contents = expected_output_file.read()
             # TODO: remove these print statements later
             print(expected_output_contents)
             print(actual_output_contents)
-            # Compare expected output with actual output
-            self.assertMultiLineEqual(expected_output_contents,
-                actual_output_contents)
+            try:
+                # Compare expected output with actual output
+                self.assertMultiLineEqual(expected_output_contents,
+                    actual_output_contents)
+            except AssertionError as e:
+                # Add to string listing all failed comparisons
+                failed_files += "\n" + expected_output
+        # Raise AssertionError with info on failed comparisons
+        if (failed_files != ""):
+            raise AssertionError("Expected outputs != actual outputs"
+                + failed_files)
 
 if __name__ == '__main__':
     unittest.main()
