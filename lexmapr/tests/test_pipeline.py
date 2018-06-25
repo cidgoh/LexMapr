@@ -378,8 +378,10 @@ class TestPipeline(unittest.TestCase):
         "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
         # Varying number of tokens per row
         "test_tokenization": ["test_tokenization", "full"],
-        # Variation in preprocessing of tokens
-        "test_preprocessing": ["test_preprocessing", "full"]
+        Some tokens require preprocessing
+        "test_preprocessing": ["test_preprocessing", "full"],
+        # Some tokens require inflection treatment
+        "test_pluralization": ["test_pluralization", "full"]
     }
 
     def test_pipeline_with_files(self):
