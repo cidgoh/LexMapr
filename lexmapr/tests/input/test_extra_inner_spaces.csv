@@ -1,6 +1,6 @@
 SampleId,Sample
 small_simple1,Chicken Breast
-small_simple2,Baked  Potato
+small_simple2,Baked  Potato,extra innerspace
 small_simple3,Canned Corn
-small_simple4,Frozen ;Yogurt
+small_simple4,Frozen ;Yogurt,extra innerspace due to preprocessing
 small_simple5,Apple Pie
