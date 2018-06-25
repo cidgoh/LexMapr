@@ -341,6 +341,13 @@ class TestPipeline(unittest.TestCase):
             * val <class "str">
 
     TODO:
+        * Major bug in assertions: columns that take the form of
+            dictionaries can be written to .txt files in any order
+            * Currently, our tests do not account for this
+            * As a result, the tests corresponding to the following
+                files sometimes fail:
+                * test_pluralization
+                * test_spelling_corrections
         * If multiple assertions fail, show all failing assertions--not
             just one
         * Utilize parallel programming to speed up these unit tests
