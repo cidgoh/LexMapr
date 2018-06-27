@@ -384,6 +384,11 @@ class TestPipeline(unittest.TestCase):
         "test_spelling_corrections": ["test_spelling_corrections", "full"],
         # Some tokens require abbreviation or acronym translation
         "test_abbreviations": ["test_abbreviations", "full"],
+        # Some tokens require non-english to english translation
+        # TODO: We must add capitalized non-english words to
+        #       ../resources/NefLex, and then makes tests for potential
+        #       translations from nonEnglishWordsLowerDict.
+        "test_non_english_words": ["test_non_english_words", "full"],
     }
 
     def test_pipeline_with_files(self):
