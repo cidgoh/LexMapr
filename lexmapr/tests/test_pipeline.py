@@ -387,7 +387,7 @@ class TestPipeline(unittest.TestCase):
         "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
         # Varying number of tokens per row
         "test_tokenization": ["test_tokenization", "full"],
-        Some tokens require preprocessing
+        # Some tokens require preprocessing
         "test_preprocessing": ["test_preprocessing", "full"],
         # Some tokens require inflection treatment
         "test_pluralization": ["test_pluralization", "full"],
@@ -428,7 +428,7 @@ class TestPipeline(unittest.TestCase):
             with open(expected_output_path, "r") as expected_output_file:
                 expected_output_contents = expected_output_file.read()
             # TODO: remove these print statements later
-            print(expected_output_contents)
+            # print(expected_output_contents)
             print(actual_output_contents)
             try:
                 # Compare expected output with actual output
