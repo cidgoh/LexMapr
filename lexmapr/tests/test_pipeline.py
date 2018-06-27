@@ -17,7 +17,6 @@ import sys
 import os
 import unittest
 import tempfile
-import re
 
 from lexmapr import pipeline
 
@@ -342,6 +341,13 @@ class TestPipeline(unittest.TestCase):
             * val <class "str">
 
     TODO:
+        * Major bug in assertions: columns that take the form of
+            dictionaries can be written to .txt files in any order
+            * Currently, our tests do not account for this
+            * As a result, the tests corresponding to the following
+                files sometimes fail:
+                * test_pluralization
+                * test_spelling_corrections
         * Utilize parallel programming to speed up these unit tests
         * Potential bugs:
             * args.format should be optional, but several calls are
@@ -381,7 +387,7 @@ class TestPipeline(unittest.TestCase):
         "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
         # Varying number of tokens per row
         "test_tokenization": ["test_tokenization", "full"],
-        # Some tokens require preprocessing
+        Some tokens require preprocessing
         "test_preprocessing": ["test_preprocessing", "full"],
         # Some tokens require inflection treatment
         "test_pluralization": ["test_pluralization", "full"],
@@ -421,13 +427,6 @@ class TestPipeline(unittest.TestCase):
             # Get expected_output_path contents
             with open(expected_output_path, "r") as expected_output_file:
                 expected_output_contents = expected_output_file.read()
-            # To ensure accurate comparison, we order all elements
-            # between curly braces in both outputs. Such elements come
-            # from sets, which lack any built-in order.
-            actual_output_contents = self._order_contents(\
-                actual_output_contents)
-            expected_output_contents = self._order_contents(\
-                expected_output_contents)
             # TODO: remove these print statements later
             print(expected_output_contents)
             print(actual_output_contents)
@@ -439,56 +438,9 @@ class TestPipeline(unittest.TestCase):
                 # Add to string listing all failed comparisons
                 failed_files += "\n" + expected_output
         # Raise AssertionError with info on failed comparisons
-        if failed_files != "":
+        if (failed_files != ""):
             raise AssertionError("Expected outputs != actual outputs"
                 + failed_files)
-
-    def _order_contents(self, contents):
-        """Orders all elements between curly braces in contents.
-
-        TODO:
-            * we assumed there is no curly bracketed content within
-                curly bracketed content--we must fix this in the future
-                if that is not the case
-        """
-        # Contents to return
-        ret = contents
-        # Get a list of tuples containing the start and end indices
-        # of all substrings between curly braces.
-        bracket_indices = self._get_curly_bracket_indices(contents)
-        # Iterate across index pairings
-        for tup in bracket_indices:
-            # Start index
-            start = tup[0]
-            # End index
-            end = tup[1]
-            # Get curly bracketed content in set form
-            bracket_content = eval(ret[start:end+1])
-            # Convert bracket_content to sorted list
-            bracket_sorted_list = sorted(bracket_content)
-            # Convert bracked_sorted_list to string resembling set
-            bracket_sorted_string = "', '".join(bracket_sorted_list)
-            bracket_sorted_string = "{'" + bracket_sorted_string + "'}"
-            # Replace elements in contents with bracket_sorted_string
-            ret = ret[:start] + bracket_sorted_string + ret[end+1:]
-        return ret
-
-    def _get_curly_bracket_indices(self, contents):
-        """Return start and end indices of curly bracketed elements."""
-        # List to return
-        bracket_indices = []
-        # Find all indices of "{", as per
-        # https://stackoverflow.com/a/4664889.
-        starts = [m.start() for m in re.finditer("{", contents)]
-        # Find end index for each start index
-        for start in starts:
-            # Find first "}" after start
-            end = contents.find("}", start)
-            # Tuple with start and end index
-            tup = (start, end)
-            # Add tup to bracket_indices
-            bracket_indices.append(tup)
-        return bracket_indices
 
 if __name__ == '__main__':
     unittest.main()
