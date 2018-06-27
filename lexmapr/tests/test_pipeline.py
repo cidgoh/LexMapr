@@ -358,10 +358,6 @@ class TestPipeline(unittest.TestCase):
             * If args.format != full, the values for matched_term and
                 all_matched_terms_with_resource_ids are outputted, but
                 there are no headers for these values in the first row
-            * "Change Case and Spelling Correction Treatment" not
-                possible
-                * Tokens are always converted to lowercase format
-                    before spelling corrections
     """
 
     # Dictionary containing the names of input and expected output
@@ -392,7 +388,7 @@ class TestPipeline(unittest.TestCase):
         # Some tokens require inflection treatment
         "test_pluralization": ["test_pluralization", "full"],
         # Some tokens require spelling corrections
-        "test_spelling_corrections": ["test_spelling_corrections", "full"]
+        "test_spelling_corrections": ["test_spelling_corrections", "full"],
     }
 
     def test_pipeline_with_files(self):
