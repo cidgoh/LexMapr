@@ -389,6 +389,8 @@ class TestPipeline(unittest.TestCase):
         #       ../resources/NefLex, and then makes tests for potential
         #       translations from nonEnglishWordsLowerDict.
         "test_non_english_words": ["test_non_english_words", "full"],
+        # Some tokens are stop-words
+        "test_stop_word_handling": ["test_stop_word_handling", "full"]
     }
 
     def test_pipeline_with_files(self):
