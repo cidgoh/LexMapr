@@ -382,6 +382,8 @@ class TestPipeline(unittest.TestCase):
         "test_pluralization": ["test_pluralization", "full"],
         # Some tokens require spelling corrections
         "test_spelling_corrections": ["test_spelling_corrections", "full"],
+        # Some tokens require abbreviation or acronym translation
+        "test_abbreviations": ["test_abbreviations", "full"],
     }
 
     def test_pipeline_with_files(self):
