@@ -342,6 +342,9 @@ class TestPipeline(unittest.TestCase):
 
     TODO:
         * Utilize parallel programming to speed up these unit tests
+        * Cannot figure out a way to cause the following:
+            * "Cleaned Sample and Abbreviation-Acronym Treatment"
+            * "Cleaned Sample and Non English Language Words Treatment"
         * Potential bugs:
             * args.format should be optional, but several calls are
                 made to args.format in pipeline.run
@@ -390,7 +393,7 @@ class TestPipeline(unittest.TestCase):
         #       translations from nonEnglishWordsLowerDict.
         "test_non_english_words": ["test_non_english_words", "full"],
         # Some tokens are stop-words
-        "test_stop_word_handling": ["test_stop_word_handling", "full"]
+        "test_stop_word_handling": ["test_stop_word_handling", "full"],
     }
 
     def test_pipeline_with_files(self):
