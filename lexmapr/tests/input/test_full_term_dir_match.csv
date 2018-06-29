@@ -1,6 +1,11 @@
 SampleId,Sample
-small_simple1,chicken pie,full-term match
-small_simple2,Baked Potato,not full-term match
-small_simple3,taco shell,full-term match
-small_simple4,Mango Milkshake, not full-term match
-small_simple5,table salt,full-term match
+small_simple1,chicken pie,full-term direct match
+small_simple2,Baked Potato,not full-term direct match
+small_simple3,taco shell,full-term direct match
+small_simple4,Mango Milkshake, not full-term direct match
+small_simple5,table salt,full-term direct match
+small_simple6,chicken. pie,full-term direct match with cleaned sample
+small_simple7, Baked Potato ,not full-term direct match with cleaned sample
+small_simple8,taco shell's,full-term direct match with cleaned sample
+small_simple9,aam milkshake, not full-term direct match with cleaned sample
+small_simple10,tables salt,full-term direct match with cleaned sample
