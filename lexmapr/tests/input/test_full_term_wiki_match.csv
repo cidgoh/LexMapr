@@ -1,0 +1,5 @@
+SampleId,Sample
+small_simple1,Chicken Breast,cleaned sample not in collocationDict
+small_simple2,chicken manure,cleaned sample in collocationDict
+small_simple3,Canned. Corn's,cleaned sample not in collocationDict
+small_simple4,banana. Leaf's,cleaned sample in collocationDict

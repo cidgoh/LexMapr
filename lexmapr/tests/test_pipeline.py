@@ -416,6 +416,9 @@ class TestPipeline(unittest.TestCase):
         "test_full_term_perm_match": ["test_full_term_perm_match", "full"],
         # Some samples are a full-term match, if given an added suffix
         "test_full_term_sfx_match": ["test_full_term_sfx_match", "full"],
+        # Some samples are a full-term match, based on a
+        # Wikipedia-based collocation resource.
+        "test_full_term_wiki_match": ["test_full_term_wiki_match", "full"],
     }
 
     def test_pipeline_with_files(self):
