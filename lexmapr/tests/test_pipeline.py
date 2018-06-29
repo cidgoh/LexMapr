@@ -400,6 +400,9 @@ class TestPipeline(unittest.TestCase):
         "test_sample_id_only": ["test_sample_id_only", "full"],
         # Some samples are a full-term direct match
         "test_full_term_dir_match": ["test_full_term_dir_match", "full"],
+        # Some samples are a full-term match, provided a change-of-case
+        # in input or resource data.
+        "test_full_term_coc_match": ["test_full_term_coc_match", "full"],
     }
 
     def test_pipeline_with_files(self):

@@ -1,0 +1,4 @@
+SampleId,Sample
+small_simple1,Baked Potato,sample.lower() not in resourceTermsDict or resourceRevisedTermsDict
+small_simple2,Chicken Pie,sample.lower() in resourceTermsDict but not resourceRevisedTermsDict
+small_simple3,ameiurus catus,sample.lower() in resourceRevisedTermsDict but not resourceTermsDict
