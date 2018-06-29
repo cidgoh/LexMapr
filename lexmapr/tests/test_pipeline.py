@@ -403,6 +403,8 @@ class TestPipeline(unittest.TestCase):
         # Some samples are a full-term match, provided a change-of-case
         # in input or resource data.
         "test_full_term_coc_match": ["test_full_term_coc_match", "full"],
+        # Some samples are a full-term match, if permutated
+        "test_full_term_perm_match": ["test_full_term_perm_match", "full"],
     }
 
     def test_pipeline_with_files(self):
