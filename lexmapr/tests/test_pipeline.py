@@ -354,6 +354,15 @@ class TestPipeline(unittest.TestCase):
             * If args.format != full, the values for matched_term and
                 all_matched_terms_with_resource_ids are outputted, but
                 there are no headers for these values in the first row
+            * change of case in input data not recorded if the cleaned
+                sample is direct matched
+                * e.g.,
+                    * Chicken Pie -> "Change of Case in Input Data"
+                    * Chicken Pie's -> "A Direct Match with Cleaned
+                        Sample"
+            * Full-term matches made with a cleaned sample using a
+                change-of-case or permutations should have some record
+                of the comparison being made with a cleaned sample.
     """
 
     # Dictionary containing the names of input and expected output
