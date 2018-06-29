@@ -398,6 +398,8 @@ class TestPipeline(unittest.TestCase):
         "test_candidate_phrase": ["test_candidate_phrase", "full"],
         # Some Sample_Id's are missing a sample
         "test_sample_id_only": ["test_sample_id_only", "full"],
+        # Some samples are a full-term direct match
+        "test_full_term_dir_match": ["test_full_term_dir_match", "full"],
     }
 
     def test_pipeline_with_files(self):
