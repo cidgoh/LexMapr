@@ -5,3 +5,5 @@ small_simple3,proximal epiphysis of manual digit 1 proximal phalanx of,permutati
 small_simple4,enterica Salmonella,permutation with NCBI in resourceid
 small_simple5,dong kard pak,permutation of non-bracketed term
 small_simple6,anatomical fruit seed part,permutation of bracketed term
+small_simple7,dong kard. pak,permutation of non-bracketed term in cleaned sample
+small_simple8,anatomical fruit seed part's,permutation of bracketed term in cleaned sample
