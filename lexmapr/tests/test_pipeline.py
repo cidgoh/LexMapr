@@ -396,6 +396,8 @@ class TestPipeline(unittest.TestCase):
         "test_stop_word_handling": ["test_stop_word_handling", "full"],
         # Varying paths of candidate phrase creations
         "test_candidate_phrase": ["test_candidate_phrase", "full"],
+        # Some Sample_Id's are missing a sample
+        "test_sample_id_only": ["test_sample_id_only", "full"],
     }
 
     def test_pipeline_with_files(self):
