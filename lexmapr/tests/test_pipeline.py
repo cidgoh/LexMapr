@@ -394,6 +394,8 @@ class TestPipeline(unittest.TestCase):
         "test_non_english_words": ["test_non_english_words", "full"],
         # Some tokens are stop-words
         "test_stop_word_handling": ["test_stop_word_handling", "full"],
+        # Varying paths of candidate phrase creations
+        "test_candidate_phrase": ["test_candidate_phrase", "full"],
     }
 
     def test_pipeline_with_files(self):
