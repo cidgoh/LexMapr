@@ -9,8 +9,6 @@ arguments from the root directory:
     $ PYTHONHASHSEED=0 python3 lexmapr/tests/test_pipeline.py
 
 TODO:
-    * Make consistent with PEP8 style guidelines
-        * Add appropriate docstring documentation
     * Refactor test suites as needed, after refactoring pipeline.py
         * Add new tests as needed for greater path/branch coverage
             * There are many internals within lexmapr.pipeline.run that
