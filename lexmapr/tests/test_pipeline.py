@@ -1,4 +1,13 @@
-"""
+#!/usr/bin/env python
+"""Tests functionality of lexmapr.pipeline.
+
+This script uses unit testing to test the helper and run functions
+found in lexmapr.pipeline. It is currently only compatible with
+Python 3. To run these tests, enter the following command line
+arguments from the root directory:
+
+    $ PYTHONHASHSEED=0 python3 lexmapr/tests/test_pipeline.py
+
 TODO:
     * Make consistent with PEP8 style guidelines
         * Add appropriate docstring documentation
@@ -13,11 +22,9 @@ TODO:
             end-result of pipeline.py
 """
 
-import sys
 import os
-import unittest
 import tempfile
-
+import unittest
 from lexmapr import pipeline
 
 class TestPipelineMethods(unittest.TestCase):
