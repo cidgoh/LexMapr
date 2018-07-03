@@ -345,6 +345,12 @@ class TestPipeline(unittest.TestCase):
         * Cannot figure out a way to cause the following:
             * "Cleaned Sample and Abbreviation-Acronym Treatment"
             * "Cleaned Sample and Non English Language Words Treatment"
+        * Test component matching
+            * Skipped this currently, because it has been somewhat
+                indirectly tested in other tests, and because the
+                code is difficult to test
+            * Upon refactoring the code into a more elegant format,
+                we will write tests for component matching
         * Potential bugs:
             * args.format should be optional, but several calls are
                 made to args.format in pipeline.run
@@ -363,6 +369,16 @@ class TestPipeline(unittest.TestCase):
             * Full-term matches made with a cleaned sample using a
                 change-of-case or permutations should have some record
                 of the comparison being made with a cleaned sample.
+            * Cleaned phrases undergo punctuation treatment, but
+                resourceTermsDict and resourceRevisedTermsDict do not,
+                which means that it is impossible to match cleaned
+                samples to terms they should be matched to
+                * e.g.,
+                    * cleaned sample: straight chain saturated fatty
+                        acid
+                    * term in resourceTermsDict and
+                        resourceRevisedTermsDict: straight-chain
+                        saturated fatty acid
     """
 
     # Dictionary containing the names of input and expected output
