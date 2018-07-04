@@ -1,6 +1,6 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Phrase_POS_Tagged	Probable_Candidate_Terms	Matched_Term	All_matched_Terms_with_Resource_IDs	Retained_Terms_with_Resource_IDs	Number of Components(In case of Component Match)	Match_Status(Macro Level)	Match_Status(Micro Level)	Remaining_Tokens	Different Components(In case of Component Match)
-small_simple1	Breast	breast	[('breast', 'NN')]	breast	breast	['breast:Additional_FOODON_BaseTerm(HasOtherVariant)_138']	['breast:Additional_FOODON_BaseTerm(HasOtherVariant)_138']		Full Term Match	{'Change of Case in Input Data'}
-small_simple2	Baked Potato	baked potato	[('baked', 'VBN'), ('potato', 'NN')]	potato	baked potato	['potato (baked):FOODON_03302196']	['potato (baked):FOODON_03302196']		Full Term Match	{'Permutation of Tokens in Bracketed Resource Term'}
-small_simple3	by		[]			[':']	[':']		Full Term Match	{'A Direct Match with Cleaned Sample'}
-small_simple4	been does		[]			[':']	[':']		Full Term Match	{'Inflection (Plural) Treatment', 'A Direct Match with Cleaned Sample'}
-small_simple5	does Pie	pie	[('pie', 'NN')]	pie	pie	['pie:Additional_FOODON_BaseTerm(HasOtherVariant)_789']	['pie:Additional_FOODON_BaseTerm(HasOtherVariant)_789']		Full Term Match	{'Inflection (Plural) Treatment', 'A Direct Match with Cleaned Sample'}
+small_simple1	Breast	breast	[('breast', 'NN')]	breast	breast	['breast:Additional_FOODON_BaseTerm(HasOtherVariant)_138']	['breast:Additional_FOODON_BaseTerm(HasOtherVariant)_138']		Full Term Match	['Change of Case in Input Data']
+small_simple2	Baked Potato	baked potato	[('baked', 'VBN'), ('potato', 'NN')]	potato	baked potato	['potato (baked):FOODON_03302196']	['potato (baked):FOODON_03302196']		Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
+small_simple3	by		[]			[':']	[':']		Full Term Match	['A Direct Match with Cleaned Sample']
+small_simple4	been does		[]			[':']	[':']		Full Term Match	['Inflection (Plural) Treatment', 'A Direct Match with Cleaned Sample']
+small_simple5	does Pie	pie	[('pie', 'NN')]	pie	pie	['pie:Additional_FOODON_BaseTerm(HasOtherVariant)_789']	['pie:Additional_FOODON_BaseTerm(HasOtherVariant)_789']		Full Term Match	['Inflection (Plural) Treatment', 'A Direct Match with Cleaned Sample']
