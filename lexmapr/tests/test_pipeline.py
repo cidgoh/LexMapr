@@ -474,8 +474,7 @@ class TestPipeline(unittest.TestCase):
         # Iterate over all expected outputs
         for expected_output in self.test_files:
             # Path of expected output file
-            expected_output_path = "output/" + expected_output + ".tsv"
-            input_path = os.path.join(os.path.dirname(__file__),
+            expected_output_path = os.path.join(os.path.dirname(__file__),
                 "output/" + expected_output + ".tsv")
             # Path of input file
             input = self.test_files[expected_output][0]
