@@ -424,10 +424,10 @@ class TestPipeline(unittest.TestCase):
         # Some rows require extra inner spaces to be removed--
         # some due to punctuation treatment.
         "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
-        # # Varying number of tokens per row
-        # "test_tokenization": ["test_tokenization", "full"],
-        # # Some tokens require preprocessing
-        # "test_preprocessing": ["test_preprocessing", "full"],
+        # Varying number of tokens per row
+        "test_tokenization": ["test_tokenization", "full"],
+        # Some tokens require preprocessing
+        "test_preprocessing": ["test_preprocessing", "full"],
         # # Some tokens require inflection treatment
         # "test_pluralization": ["test_pluralization", "full"],
         # # Some tokens require spelling corrections
