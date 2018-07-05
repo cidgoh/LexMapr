@@ -419,11 +419,11 @@ class TestPipeline(unittest.TestCase):
         "small_simple_not_full": ["small_simple", "not full"],
         # Non-empty file with "full" format argument
         "small_simple": ["small_simple", "full"],
-        # # Some rows requires punctuation treatment
-        # "test_punctuation": ["test_punctuation", "full"],
-        # # Some rows require extra inner spaces to be removed--
-        # # some due to punctuation treatment.
-        # "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
+        # Some rows requires punctuation treatment
+        "test_punctuation": ["test_punctuation", "full"],
+        # Some rows require extra inner spaces to be removed--
+        # some due to punctuation treatment.
+        "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
         # # Varying number of tokens per row
         # "test_tokenization": ["test_tokenization", "full"],
         # # Some tokens require preprocessing
