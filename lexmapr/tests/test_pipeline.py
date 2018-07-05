@@ -344,7 +344,7 @@ class TestPipelineMethods(unittest.TestCase):
         self.assertEqual(
             pipeline.retainedPhrase("{'foo bar:bar', 'foo bar:foo'}"),
             set(["foo bar:bar", "foo bar:foo'"]))
-'''
+
 class TestPipeline(unittest.TestCase):
     """Unit test suite for pipeline.run.
 
@@ -413,50 +413,50 @@ class TestPipeline(unittest.TestCase):
     test_files = {
         # Empty file without "full" format argument
         "empty_not_full": ["empty", "not full"],
-        # Empty file with "full" format argument
-        "empty": ["empty", "full"],
-        # Non-empty file without "full" format argument
-        "small_simple_not_full": ["small_simple", "not full"],
-        # Non-empty file with "full" format argument
-        "small_simple": ["small_simple", "full"],
-        # Some rows requires punctuation treatment
-        "test_punctuation": ["test_punctuation", "full"],
-        # Some rows require extra inner spaces to be removed--
-        # some due to punctuation treatment.
-        "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
-        # Varying number of tokens per row
-        "test_tokenization": ["test_tokenization", "full"],
-        # Some tokens require preprocessing
-        "test_preprocessing": ["test_preprocessing", "full"],
-        # Some tokens require inflection treatment
-        "test_pluralization": ["test_pluralization", "full"],
-        # Some tokens require spelling corrections
-        "test_spelling_corrections": ["test_spelling_corrections", "full"],
-        # Some tokens require abbreviation or acronym translation
-        "test_abbreviations": ["test_abbreviations", "full"],
-        # Some tokens require non-english to english translation
-        # TODO: We must add capitalized non-english words to
-        #       ../resources/NefLex, and then makes tests for potential
-        #       translations from nonEnglishWordsLowerDict.
-        "test_non_english_words": ["test_non_english_words", "full"],
-        # Some tokens are stop-words
-        "test_stop_word_handling": ["test_stop_word_handling", "full"],
-        # Varying paths of candidate phrase creations
-        "test_candidate_phrase": ["test_candidate_phrase", "full"],
-        # Some Sample_Id's are missing a sample
-        "test_sample_id_only": ["test_sample_id_only", "full"],
-        # Some samples are a full-term direct match
-        "test_full_term_dir_match": ["test_full_term_dir_match", "full"],
-        # Some samples are a full-term match, provided a change-of-case
-        # in input or resource data.
-        "test_full_term_coc_match": ["test_full_term_coc_match", "full"],
-        # Some samples are a full-term match, if permutated
-        "test_full_term_perm_match": ["test_full_term_perm_match", "full"],
-        # Some samples are a full-term match, if given an added suffix
-        "test_full_term_sfx_match": ["test_full_term_sfx_match", "full"],
-        # Some samples are a full-term match, based on a
-        # Wikipedia-based collocation resource.
-        "test_full_term_wiki_match": ["test_full_term_wiki_match", "full"],
+        # # Empty file with "full" format argument
+        # "empty": ["empty", "full"],
+        # # Non-empty file without "full" format argument
+        # "small_simple_not_full": ["small_simple", "not full"],
+        # # Non-empty file with "full" format argument
+        # "small_simple": ["small_simple", "full"],
+        # # Some rows requires punctuation treatment
+        # "test_punctuation": ["test_punctuation", "full"],
+        # # Some rows require extra inner spaces to be removed--
+        # # some due to punctuation treatment.
+        # "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
+        # # Varying number of tokens per row
+        # "test_tokenization": ["test_tokenization", "full"],
+        # # Some tokens require preprocessing
+        # "test_preprocessing": ["test_preprocessing", "full"],
+        # # Some tokens require inflection treatment
+        # "test_pluralization": ["test_pluralization", "full"],
+        # # Some tokens require spelling corrections
+        # "test_spelling_corrections": ["test_spelling_corrections", "full"],
+        # # Some tokens require abbreviation or acronym translation
+        # "test_abbreviations": ["test_abbreviations", "full"],
+        # # Some tokens require non-english to english translation
+        # # TODO: We must add capitalized non-english words to
+        # #       ../resources/NefLex, and then makes tests for potential
+        # #       translations from nonEnglishWordsLowerDict.
+        # "test_non_english_words": ["test_non_english_words", "full"],
+        # # Some tokens are stop-words
+        # "test_stop_word_handling": ["test_stop_word_handling", "full"],
+        # # Varying paths of candidate phrase creations
+        # "test_candidate_phrase": ["test_candidate_phrase", "full"],
+        # # Some Sample_Id's are missing a sample
+        # "test_sample_id_only": ["test_sample_id_only", "full"],
+        # # Some samples are a full-term direct match
+        # "test_full_term_dir_match": ["test_full_term_dir_match", "full"],
+        # # Some samples are a full-term match, provided a change-of-case
+        # # in input or resource data.
+        # "test_full_term_coc_match": ["test_full_term_coc_match", "full"],
+        # # Some samples are a full-term match, if permutated
+        # "test_full_term_perm_match": ["test_full_term_perm_match", "full"],
+        # # Some samples are a full-term match, if given an added suffix
+        # "test_full_term_sfx_match": ["test_full_term_sfx_match", "full"],
+        # # Some samples are a full-term match, based on a
+        # # Wikipedia-based collocation resource.
+        # "test_full_term_wiki_match": ["test_full_term_wiki_match", "full"],
     }
 
     def test_pipeline_with_files(self):
@@ -507,6 +507,6 @@ class TestPipeline(unittest.TestCase):
         if (failed_files != ""):
             raise AssertionError("Expected outputs != actual outputs"
                 + failed_files)
-'''
+
 if __name__ == '__main__':
     unittest.main()
