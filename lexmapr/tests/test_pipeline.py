@@ -216,22 +216,22 @@ class TestPipelineMethods(unittest.TestCase):
     def test_combi(self):
         """Tests combi."""
         # Empty input string and n=1
-        self.assertCountEqual(list(pipeline.combi("", 1)), [])
+        self.assertSetEqual(set(pipeline.combi("", 1)), set([]))
         # Empty input string and n=2
-        self.assertCountEqual(list(pipeline.combi("", 2)), [])
+        self.assertSetEqual(set(pipeline.combi("", 2)), set([]))
         # 1-char input string and n=1
-        self.assertCountEqual(list(pipeline.combi("a", 1)), [("a",)])
+        self.assertSetEqual(set(pipeline.combi("a", 1)), set([("a",)]))
         # 1-char input string and n=2
-        self.assertCountEqual(list(pipeline.combi("a", 2)), [])
+        self.assertSetEqual(set(pipeline.combi("a", 2)), set([]))
         # 3-char input string and n=1
-        self.assertCountEqual(list(pipeline.combi("bar", 1)),
-            [("b",), ("a",), ("r",)])
+        self.assertSetEqual(set(pipeline.combi("bar", 1)),
+            set([("b",), ("a",), ("r",)]))
         # 3-char input string and n=2
-        self.assertCountEqual(list(pipeline.combi("bar", 2)),
-            [("b", "a"), ("a", "r"), ("b", "r")])
+        self.assertSetEqual(set(pipeline.combi("bar", 2)),
+            set([("b", "a"), ("a", "r"), ("b", "r")]))
         # 3-char input string and n=3
-        self.assertCountEqual(list(pipeline.combi("bar", 3)),
-            [("b", "a", "r")])
+        self.assertSetEqual(set(pipeline.combi("bar", 3)),
+            set([("b", "a", "r")]))
 
     def test_punctuationTreatment(self):
         """Tests punctuationTreatment.
