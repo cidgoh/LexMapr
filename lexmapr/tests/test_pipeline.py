@@ -428,8 +428,8 @@ class TestPipeline(unittest.TestCase):
         "test_tokenization": ["test_tokenization", "full"],
         # Some tokens require preprocessing
         "test_preprocessing": ["test_preprocessing", "full"],
-        # # Some tokens require inflection treatment
-        # "test_pluralization": ["test_pluralization", "full"],
+        # Some tokens require inflection treatment
+        "test_pluralization": ["test_pluralization", "full"],
         # # Some tokens require spelling corrections
         # "test_spelling_corrections": ["test_spelling_corrections", "full"],
         # # Some tokens require abbreviation or acronym translation
