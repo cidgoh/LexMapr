@@ -9,8 +9,12 @@ notifications:
   email: false
 git:
   depth: 99999999
+# TODO: remove these two settings after refactoring pipeline
 env:
   - PYTHONHASHSEED=0
+matrix:
+  allow_failures:
+    - python: "2.7"
 
 install:
   - sudo apt-get update -qq
