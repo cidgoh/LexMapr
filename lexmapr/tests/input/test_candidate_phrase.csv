@@ -1,0 +1,16 @@
+SampleId,Sample
+small_simple1,Svecia,NN
+small_simple2,Cornflakes,NNS
+small_simple3,Baked,!(NN|NNS)
+small_simple4,Svecia Potato,NN-NN
+small_simple5,Cornflakes Noodles,NNS-NNS
+small_simple6,Svecia Cornflakes,NN-NNS
+small_simple7,Cornflakes Potato,NNS-NN
+small_simple8,Baked Svecia,!(NN|NNS)-NN
+small_simple9,Baked Cornflakes,!(NN|NNS)-NNS
+small_simple10,Frosted Baked,!(NN|NNS)-!(NN|NNS)
+small_simple11,Svecia Baked,NN-!(NN|NNS)
+small_simple12,Cornflakes Baked,NNS-!(NN|NNS)
+small_simple13,Svecia Baked Cornflakes,NN-!(NN|NNS)-NNS
+small_simple14,Baked Frosted Svecia,!(NN|NNS)-!(NN|NNS)-NN
+small_simple15,Svecia Cornflakes Baked,NN-NNS-!(NN|NNS)
