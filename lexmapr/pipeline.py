@@ -16,6 +16,7 @@ import logging
 import collections
 
 logger = logging.getLogger("pipeline")
+logger.disabled = True
 
 # DIFFERENT METHODS USED (Will be organized in Modular arrangement later on)
 

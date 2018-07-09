@@ -1,0 +1,7 @@
+SampleId,Sample
+small_simple1,Raw Chicken Breast
+small_simple2,Baked. Potato's,multiple tokens require preprocessing
+small_simple3,Canned Field Corn's,single token in multi-token word requires preprocessing
+small_simple4,Frozen Yogurt
+small_simple5,Apple Pie
+small_simple6, cow's, single-token word requires processing

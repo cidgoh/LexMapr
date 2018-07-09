@@ -1,0 +1,10 @@
+SampleId,Sample
+small_simple1,avocado,single-token word not in spellingDict
+small_simple2,Baked Potato,multi-token word not in spellingDict
+small_simple3,avocaco,single-token word in spellingDict
+small_simple4,desicated avocaco,multi-token word with all tokens in spellingDict
+small_simple5,desiccated avocaco,multi-token word with one token in spellingDict
+small_simple6,laboratroy,single-token word in spellingLowerDict
+small_simple7,enlish laboratroy,multi-token word with all tokens in spellingLowerDict
+small_simple8,Pie enlish,multi-token word with one token in spellingLowerDict
+small_simple9,enlish avocaco,multi-token word with one token in spellingDict and one in spellingLowerDict
