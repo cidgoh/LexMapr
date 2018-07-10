@@ -207,7 +207,28 @@ def get_resource_dict(file_name, lower=False):
     TODO:
         * adjust docstring if necessary when we adapt to returning
             lists
+        * use lower optional argument
     """
+    # Return value
+    ret = {}
+    # Open file_name
+    with open(resource_filename('lexmapr.resources', file_name)) as csvfile:
+        # Read file_name
+        file_contents = csv.reader(csvfile, delimiter=",")
+        # Flag indicating iteration beyond first row
+        first_row_seen = False
+        # Iterate across rows in file_contents
+        for row in file_contents:
+            # This is not the first row
+            if first_row_seen:
+                # Delimited key-value pair
+                key = row[0].strip()
+                val = row[1].strip()
+                # Add key-value pair to ret
+                ret[key] = val
+            # This is the first row
+            else:
+                first_row_seen = True
     # Stub
     return {}
 
