@@ -295,16 +295,17 @@ def run(args):
             ctr += 1
 
     # 15-Get candidate processes from resource in a CSV file format and put in a dictionary to be used further
-    processDict = {}
-    with open(resource_filename('lexmapr.resources', 'candidateProcesses.csv')) as csvfile:
-        ctr = 0
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            if ctr > 0:  # It gives a first line of headings a skip
-                processTerm = row[0]
-                processExpansion = row[1]
-                processDict[processTerm.strip()] = processExpansion.strip()
-            ctr += 1
+    # processDict = {}
+    # with open(resource_filename('lexmapr.resources', 'candidateProcesses.csv')) as csvfile:
+    #     ctr = 0
+    #     readCSV = csv.reader(csvfile, delimiter=',')
+    #     for row in readCSV:
+    #         if ctr > 0:  # It gives a first line of headings a skip
+    #             processTerm = row[0]
+    #             processExpansion = row[1]
+    #             processDict[processTerm.strip()] = processExpansion.strip()
+    #         ctr += 1
+    processDict = get_resource_dict("candidateProcesses.csv")
     
     # 16-Get all semantic tags (e.g.qualities) from resource in a CSV file format and put in a dictionary to be used further
     qualityDict = {}
@@ -321,16 +322,17 @@ def run(args):
             ctr += 1
 
     # 17-Get all collocations (Wikipedia) from resource in a CSV file format and put in a dictionary to be used further
-    collocationDict = {}
-    with open(resource_filename('lexmapr.resources', 'wikipediaCollocations.csv')) as csvfile:
-        ctr = 0
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            if ctr > 0:  # It gives a first line of headings a skip
-                collocationTerm = row[0]
-                collocationId = row[1]
-                collocationDict[collocationTerm.strip()] = collocationId.strip()
-            ctr += 1
+    # collocationDict = {}
+    # with open(resource_filename('lexmapr.resources', 'wikipediaCollocations.csv')) as csvfile:
+    #     ctr = 0
+    #     readCSV = csv.reader(csvfile, delimiter=',')
+    #     for row in readCSV:
+    #         if ctr > 0:  # It gives a first line of headings a skip
+    #             collocationTerm = row[0]
+    #             collocationId = row[1]
+    #             collocationDict[collocationTerm.strip()] = collocationId.strip()
+    #         ctr += 1
+    collocationDict = get_resource_dict("wikipediaCollocations.csv")
 
     # 18-Method to get all inflection exception words from resource in CSV file format -Needed to supercede the general inflection treatment
     inflectionExceptionList = []
