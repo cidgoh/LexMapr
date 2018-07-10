@@ -187,6 +187,22 @@ def retainedPhrase(termList):
         returnedSetFinal = set(returnedSet)
     return returnedSetFinal
 
+def get_resource_dict(file_name, lower=False):
+    """Return dictionary containing resource data from a CSV file.
+
+    ...
+
+    Arguments:
+        * file_name <class "str">: ...
+    Return values:
+        * class <"dict">: ...
+    Restrictions:
+        * ...
+    Optional arguments:
+        * lower <class "bool">: ...
+    """
+    # Stub
+    return {}
 
 def run(args):
     """
