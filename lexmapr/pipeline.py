@@ -261,18 +261,8 @@ def run(args):
     abbreviationLowerDict = get_resource_dict("AbbLex.csv", True)
 
     # 13-Get all Non English Language words mappings from resource in CSV file format and put in a dictionary to be used further
-    nonEnglishWordsDict = {}
-    nonEnglishWordsLowerDict = {}
-    with open(resource_filename('lexmapr.resources', 'NefLex.csv')) as csvfile: # NefLex.csv=nonEnglish Food Names Terms.csv
-        ctr = 0
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            if ctr > 0:
-                nonEngTerm = row[0]
-                nonEngExpansion = row[1]
-                nonEnglishWordsDict[nonEngTerm.strip()] = nonEngExpansion.strip()
-                nonEnglishWordsLowerDict[nonEngTerm.strip().lower()] = nonEngExpansion.strip()
-            ctr += 1
+    nonEnglishWordsDict = get_resource_dict("Neflex.csv")
+    nonEnglishWordsLowerDict = get_resource_dict("Neflex.csv", True)
 
     # 14-Get all spelling mistake examples from resource in CSV file format and put in a dictionary to be used further
     spellingDict = {}
