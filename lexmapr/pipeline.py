@@ -257,18 +257,6 @@ def run(args):
     synonymsDict = get_resource_dict("SynLex.csv")
 
     # 12-Get all abbreviation/acronyms from resource in CSV file format and put in a dictionary to be used further
-    # abbreviationDict = {}
-    # abbreviationLowerDict = {}
-    # with open(resource_filename('lexmapr.resources', 'AbbLex.csv')) as csvfile:
-    #     ctr = 0
-    #     readCSV = csv.reader(csvfile, delimiter=',')
-    #     for row in readCSV:
-    #         if ctr > 0:
-    #             abbTerm = row[0]
-    #             abbExpansion = row[1]
-    #             abbreviationDict[abbTerm.strip()] = abbExpansion.strip()
-    #             abbreviationLowerDict[abbTerm.strip().lower()] = abbExpansion.strip()
-    #         ctr += 1
     abbreviationDict = get_resource_dict("AbbLex.csv")
     abbreviationLowerDict = get_resource_dict("AbbLex.csv", True)
 
