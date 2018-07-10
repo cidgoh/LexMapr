@@ -261,8 +261,8 @@ def run(args):
     abbreviationLowerDict = get_resource_dict("AbbLex.csv", True)
 
     # 13-Get all Non English Language words mappings from resource in CSV file format and put in a dictionary to be used further
-    nonEnglishWordsDict = get_resource_dict("Neflex.csv")
-    nonEnglishWordsLowerDict = get_resource_dict("Neflex.csv", True)
+    nonEnglishWordsDict = get_resource_dict("NefLex.csv")
+    nonEnglishWordsLowerDict = get_resource_dict("NefLex.csv", True)
 
     # 14-Get all spelling mistake examples from resource in CSV file format and put in a dictionary to be used further
     spellingDict = get_resource_dict("ScorLex.csv")
