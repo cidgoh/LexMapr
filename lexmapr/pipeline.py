@@ -272,18 +272,8 @@ def run(args):
     processDict = get_resource_dict("candidateProcesses.csv")
     
     # 16-Get all semantic tags (e.g.qualities) from resource in a CSV file format and put in a dictionary to be used further
-    qualityDict = {}
-    qualityLowerDict = {}
-    with open(resource_filename('lexmapr.resources', 'SemLex.csv')) as csvfile:              # SEmLex.csv  is a lexicon for semantic tags for qualities, Structure, Furniture, Equipment, Container etc.
-        ctr = 0
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            if ctr > 0:  # It gives a first line of headings a skip
-                qualityTerm = row[0]
-                qualityExpansion = row[1]
-                qualityDict[qualityTerm.strip()] = qualityExpansion.strip()
-                qualityLowerDict[qualityTerm.strip().lower()] = qualityExpansion.strip()
-            ctr += 1
+    qualityDict = get_resource_dict("SemLex.csv")
+    qualityLowerDict = get_resource_dict("SemLex.csv", True)
 
     # 17-Get all collocations (Wikipedia) from resource in a CSV file format and put in a dictionary to be used further
     collocationDict = get_resource_dict("wikipediaCollocations.csv")
