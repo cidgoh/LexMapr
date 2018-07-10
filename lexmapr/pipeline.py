@@ -230,8 +230,8 @@ def get_resource_dict(file_name, lower=False):
             # This is the first row
             else:
                 first_row_seen = True
-    # Stub
-    return {}
+    # Return
+    return ret
 
 def run(args):
     """
