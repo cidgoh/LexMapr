@@ -250,18 +250,7 @@ def run(args):
     resourceTermsIDBasedDict = {}
 
     # 11-Get all synonyms from resource in CSV file format and put in a dictionary to be used further
-    # synonymsDict = {}
-    # with open(resource_filename('lexmapr.resources', 'SynLex.csv')) as csvfile:
-    #     ctr = 0
-    #     readCSV = csv.reader(csvfile, delimiter=',')
-    #     for row in readCSV:
-    #         if ctr > 0:  # skips the first row in CSV file as header row
-    #             synTerm = row[0]
-    #             syn = row[1]
-    #             synonymsDict[synTerm.strip()] = syn.strip()
-    #         ctr += 1
     synonymsDict = get_resource_dict("SynLex.csv")
-
 
     # 12-Get all abbreviation/acronyms from resource in CSV file format and put in a dictionary to be used further
     abbreviationDict = {}
