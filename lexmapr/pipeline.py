@@ -190,16 +190,23 @@ def retainedPhrase(termList):
 def get_resource_dict(file_name, lower=False):
     """Return dictionary containing resource data from a CSV file.
 
-    ...
-
     Arguments:
-        * file_name <class "str">: ...
+        * file_name <class "str">: CSV file containing key-value
+            information on resources relevant to pipeline
     Return values:
-        * class <"dict">: ...
+        * class <"dict">: Contains key-value pairs from file_name
+            * key: class <"str">
+            * val: class <"str">
     Restrictions:
-        * ...
+        * Key-value pairs in file_name must be delimited, appear on
+            separate rows, and start from row 2
     Optional arguments:
-        * lower <class "bool">: ...
+        * lower <class "bool">: If set to True, all keys in the return
+            value are converted to lowercase
+
+    TODO:
+        * adjust docstring if necessary when we adapt to returning
+            lists
     """
     # Stub
     return {}
