@@ -225,6 +225,10 @@ def get_resource_dict(file_name, lower=False):
                 # Delimited key-value pair
                 key = row[0].strip()
                 val = row[1].strip()
+                # Lowercase key requested
+                if lower:
+                    # Convert key to lowercase
+                    key = key.lower()
                 # Add key-value pair to ret
                 ret[key] = val
             # This is the first row
