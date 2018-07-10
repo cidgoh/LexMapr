@@ -200,6 +200,7 @@ def get_resource_dict(file_name, lower=False):
     Restrictions:
         * Key-value pairs in file_name must be delimited, appear on
             separate rows, and start from row 2
+        * file_name must be in lexmapr/resources
     Optional arguments:
         * lower <class "bool">: If set to True, all keys in the return
             value are converted to lowercase
