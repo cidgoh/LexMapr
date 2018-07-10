@@ -265,18 +265,8 @@ def run(args):
     nonEnglishWordsLowerDict = get_resource_dict("Neflex.csv", True)
 
     # 14-Get all spelling mistake examples from resource in CSV file format and put in a dictionary to be used further
-    spellingDict = {}
-    spellingLowerDict = {}
-    with open(resource_filename('lexmapr.resources', 'ScorLex.csv')) as csvfile: # ScorLex.csv   = spellings correction lexicon
-        ctr = 0
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            if ctr > 0:
-                term = row[0]
-                expansion = row[1]
-                spellingDict[term.strip()] = expansion.strip()
-                spellingLowerDict[term.strip().lower()] = expansion.strip()
-            ctr += 1
+    spellingDict = get_resource_dict("ScorLex.csv")
+    spellingLowerDict = get_resource_dict("ScorLex.csv", True)
 
     # 15-Get candidate processes from resource in a CSV file format and put in a dictionary to be used further
     processDict = get_resource_dict("candidateProcesses.csv")
