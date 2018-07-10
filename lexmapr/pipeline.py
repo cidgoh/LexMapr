@@ -269,8 +269,8 @@ def run(args):
     #             abbreviationDict[abbTerm.strip()] = abbExpansion.strip()
     #             abbreviationLowerDict[abbTerm.strip().lower()] = abbExpansion.strip()
     #         ctr += 1
-    abbreviationDict = {"AbbLex.csv"}
-    abbreviationLowerDict = {"AbbLex.csv", True}
+    abbreviationDict = get_resource_dict("AbbLex.csv")
+    abbreviationLowerDict = get_resource_dict("AbbLex.csv", True)
 
     # 13-Get all Non English Language words mappings from resource in CSV file format and put in a dictionary to be used further
     nonEnglishWordsDict = {}
