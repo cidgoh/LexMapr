@@ -4,4 +4,4 @@ small_simple2	Baked. Potato's	baked potato	[('baked', 'VBN'), ('potato', 'NN')]	
 small_simple3	Canned Field Corn's	canned field corn	[('canned', 'JJ'), ('field', 'NN'), ('corn', 'NN')]	field corn	canned field corn	['corn (field, canned):FOODON_03316777']	['corn (field, canned):FOODON_03316777']		Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
 small_simple4	Frozen Yogurt	frozen yogurt	[('frozen', 'JJ'), ('yogurt', 'NN')]	yogurt	frozen yogurt	['frozen yogurt:FOODON_03307445']	['frozen yogurt:FOODON_03307445']		Full Term Match	['Change of Case in Input Data']
 small_simple5	Apple Pie	apple pie	[('apple', 'NN'), ('pie', 'NN')]	apple pie	apple pie	['apple pie:FOODON_03306761']	['apple pie:FOODON_03306761']		Full Term Match	['Change of Case in Input Data']
-small_simple6	cow's	cow	[('cow', 'NN')]	cow	cow 's	['cow as food source:FOODON_03411201']	['cow as food source:FOODON_03411201']		Full Term Match	['[CleanedSample-Change of Case of Resource and Suffix Addition- as food source to the Input]']
+small_simple6	cow's	cow	[('cow', 'NN')]	cow
