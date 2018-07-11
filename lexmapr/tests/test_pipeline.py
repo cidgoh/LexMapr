@@ -494,8 +494,12 @@ class TestPipeline(unittest.TestCase):
             with open(expected_output_path, "r") as expected_output_file:
                 expected_output_contents = expected_output_file.read()
             # TODO: remove these print statements later
-            # print(expected_output_contents)
-            # print(actual_output_contents)
+            print("=======BEGIN EXPECTED OUTPUT======")
+            print(expected_output_contents)
+            print("=======END EXPECTED OUTPUT========")
+            print("=======BEGIN ACTUAL OUTPUT========")
+            print(actual_output_contents)
+            print("=======END ACTUAL OUTPUT==========")
             try:
                 # Compare expected output with actual output
                 self.assertMultiLineEqual(expected_output_contents,
