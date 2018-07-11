@@ -285,15 +285,7 @@ def run(args):
     collocationDict = get_resource_dict("wikipediaCollocations.csv")
 
     # 18-Method to get all inflection exception words from resource in CSV file format -Needed to supercede the general inflection treatment
-    inflectionExceptionList = []
-    with open(resource_filename('lexmapr.resources', 'inflection-exceptions.csv')) as csvfile:
-        ctr2 = 0
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            if ctr2 > 0:
-                abbTerm = row[0]
-                inflectionExceptionList.append(abbTerm.strip().lower())
-            ctr2 += 1
+    inflectionExceptionList = get_resource_dict("inflection-exceptions.csv", True)
     
     # 19-Method to Get all stop words from resource in CSV file format -A very constrained lists of stop words is
     # used as other stop words are assumed to have some useful semantic meaning
