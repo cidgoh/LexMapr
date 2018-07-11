@@ -208,7 +208,6 @@ def get_resource_dict(file_name, lower=False):
     TODO:
         * adjust docstring if necessary when we adapt to returning
             lists
-        * use lower optional argument
     """
     # Return value
     ret = {}
