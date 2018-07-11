@@ -206,10 +206,6 @@ def get_resource_dict(file_name, lower=False):
     Optional arguments:
         * lower <class "bool">: If set to True, all keys in the return
             value are converted to lowercase
-
-    TODO:
-        * adjust docstring if necessary when we adapt to returning
-            lists
     """
     # Return value
     ret = {}
