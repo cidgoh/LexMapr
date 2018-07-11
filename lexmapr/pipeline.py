@@ -551,7 +551,6 @@ def run(args):
                 remSet.remove(thisSampleIndvToken)
             trigger = True
 
-
         # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
         if ((sample.lower() in resource_terms.keys()) and not trigger):
             if(sample.lower() in resource_terms.keys()):
