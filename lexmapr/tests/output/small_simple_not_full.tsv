@@ -1,6 +1,6 @@
 Sample_Id	Sample_Desc	Cleaned_Sample
-small_simple1	Chicken Breast	chicken breast	chicken breast	['chicken breast:Additional_FOODON_BaseTerm(HasOtherVariant)_196']
+small_simple1	Chicken Breast	chicken breast	chicken breast	['chicken breast:CandidateTerm_FoodOn_246']
 small_simple2	Baked Potato	baked potato	baked potato	['potato (baked):FOODON_03302196']
 small_simple3	Canned Corn	canned corn	canned corn	['corn (canned):FOODON_03302665']
 small_simple4	Frozen Yogurt	frozen yogurt	frozen yogurt	['frozen yogurt:FOODON_03307445']
-small_simple5	Apple Pie	apple pie	apple pie	['apple pie:FOODON_03306761']
+small_simple5	Apple Pie	apple pie	apple food product:FOODON_00001611'	pie:CandidateTerm_FoodOn_839

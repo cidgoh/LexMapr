@@ -3,4 +3,4 @@ small_simple1			[]		--	--			Empty Sample
 small_simple2	Baked Potato	baked potato	[('baked', 'VBN'), ('potato', 'NN')]	potato	baked potato	['potato (baked):FOODON_03302196']	['potato (baked):FOODON_03302196']		Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
 small_simple3	Canned Corn	canned corn	[('canned', 'VBN'), ('corn', 'NN')]	corn	canned corn	['corn (canned):FOODON_03302665']	['corn (canned):FOODON_03302665']		Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
 small_simple4			[]		--	--			Empty Sample
-small_simple5	Apple Pie	apple pie	[('apple', 'NN'), ('pie', 'NN')]	apple pie	apple pie	['apple pie:FOODON_03306761']	['apple pie:FOODON_03306761']		Full Term Match	['Change of Case in Input Data']
+small_simple5	Apple Pie	apple pie	[('apple', 'NN'), ('pie', 'NN')]	apple pie	['pie', 'apple food product']	['pie:CandidateTerm_FoodOn_839', 'apple food product:FOODON_00001611']	["apple food product:FOODON_00001611'", 'pie:CandidateTerm_FoodOn_839']	2	GComponent Match	['Suffix Addition- food product to the Input']	[]	Component1-> apple food product:FOODON_00001611', Component2-> pie:CandidateTerm_FoodOn_839
