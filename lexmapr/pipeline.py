@@ -673,7 +673,7 @@ def run(args):
             trigger = True
 
         # Here we check all the suffices that can be applied to input term to make it comparable with resource terms
-        suffixList=["(plant) as food source","plant as food source","as food source","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product",  "(food product)","food product","product"]
+        suffixList = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product",  "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
         for suff in range(len(suffixList)):
             suffixString=suffixList[suff]
             sampleRevisedWithSuffix = addSuffix(sample, suffixString)
