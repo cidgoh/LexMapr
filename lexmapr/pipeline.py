@@ -289,15 +289,7 @@ def run(args):
     
     # 19-Method to Get all stop words from resource in CSV file format -A very constrained lists of stop words is
     # used as other stop words are assumed to have some useful semantic meaning
-    stopWordsList = []
-    with open(resource_filename('lexmapr.resources', 'mining-stopwords.csv')) as csvfile:
-        ctr2 = 0
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            if ctr2 > 0:
-                abbTerm = row[0]
-                stopWordsList.append(abbTerm.strip().lower())
-            ctr2 += 1
+    stopWordsList = get_resource_dict("mining-stopwords.csv", True)
     
     # 21- To get all terms from resources- right now in a CSV file extracted from ontologies using another external script
     
