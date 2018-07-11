@@ -198,9 +198,11 @@ def get_resource_dict(file_name, lower=False):
             * key: class <"str">
             * val: class <"str">
     Restrictions:
-        * Key-value pairs in file_name must be delimited, appear on
-            separate rows, and start from row 2
-        * file_name must be in lexmapr/resources
+        * No information will be taken from the first row of file_name
+        * Unique keys must appear as the first term on unique rows
+        * Values should appear immediately after their corresponding
+            key and a comma
+            * Otherwise, an empty string value will be used
     Optional arguments:
         * lower <class "bool">: If set to True, all keys in the return
             value are converted to lowercase
