@@ -223,13 +223,18 @@ def get_resource_dict(file_name, lower=False):
         for row in file_contents:
             # This is not the first row
             if first_row_seen:
-                # Delimited key-value pair
+                # Get key
                 key = row[0].strip()
-                val = row[1].strip()
                 # Lowercase key requested
                 if lower:
                     # Convert key to lowercase
                     key = key.lower()
+                try:
+                    # Get corresponding value
+                    val = row[1].strip()
+                except IndexError:
+                    # No corresponding value
+                    val = ""
                 # Add key-value pair to ret
                 ret[key] = val
             # This is the first row
