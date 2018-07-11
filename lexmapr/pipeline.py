@@ -294,17 +294,6 @@ def run(args):
     # Convert keys in resourceTermsDict to lowercase
     resourceRevisedTermsDict = {k.lower():v
         for k,v in resourceTermsDict.items()}
-    # with open(resource_filename('lexmapr.resources', 'CombinedResourceTerms.csv')) as csvfile:  # 'ResourceTerms-copy1.csv'   #ResourceTerms-withoutnew.csv
-    #     readCSV = csv.reader(csvfile, delimiter=',')
-    #     ctr = 0
-    #     for row in readCSV:
-    #         resTerm = row[1]
-    #         resTermRevised = resTerm.lower()
-    #         resid = row[0]
-    #         # resourceTermsDict[resTerm.strip()] = resid.strip()
-    #         # resourceTermsIDBasedDict[resid.strip()] = resTerm.strip()
-    #         resourceRevisedTermsDict[resTermRevised.strip()] = resid.strip()
-    #         ctr += 1
 
     # 23-Method for getting all the permutations of Resource Terms
     resourcePermutationTermsDict = {}
