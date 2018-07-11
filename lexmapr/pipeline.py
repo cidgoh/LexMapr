@@ -285,7 +285,7 @@ def run(args):
     collocationDict = get_resource_dict("wikipediaCollocations.csv")
 
     # 18-Method to get all inflection exception words from resource in CSV file format -Needed to supercede the general inflection treatment
-    inflectionExceptionList = get_resource_dict("inflection-exceptions.csv", True)
+    inflectionExceptionDict = get_resource_dict("inflection-exceptions.csv", True)
     
     # 19-Method to Get all stop words from resource in CSV file format -A very constrained lists of stop words is
     # used as other stop words are assumed to have some useful semantic meaning
@@ -438,7 +438,7 @@ def run(args):
             # Plurals are converted to singulars with exceptions
             if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith("ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
                 lemma = tkn
-            elif (tkn not in inflectionExceptionList):  # Further Inflection Exception list is taken into account
+            elif (tkn not in inflectionExceptionDict):  # Further Inflection Exception list is taken into account
                 lemma = inflection.singularize(tkn)
                 if (tkn != lemma):  #Only in case when inflection makes some changes in lemma
                     statusAddendum = "Inflection (Plural) Treatment"
