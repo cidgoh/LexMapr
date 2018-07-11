@@ -288,7 +288,7 @@ def run(args):
     stopWordsDict = get_resource_dict("mining-stopwords.csv", True)
     
     # 21- To get all terms from resources- right now in a CSV file extracted from ontologies using another external script
-    
+    resourceTermsIDBasedDict = get_resource_dict("CombinedResourceTerms.csv")
     with open(resource_filename('lexmapr.resources', 'CombinedResourceTerms.csv')) as csvfile:  # 'ResourceTerms-copy1.csv'   #ResourceTerms-withoutnew.csv
         readCSV = csv.reader(csvfile, delimiter=',')
         ctr = 0
@@ -297,7 +297,7 @@ def run(args):
             resTermRevised = resTerm.lower()
             resid = row[0]
             resourceTermsDict[resTerm.strip()] = resid.strip()
-            resourceTermsIDBasedDict[resid.strip()] = resTerm.strip()
+            # resourceTermsIDBasedDict[resid.strip()] = resTerm.strip()
             resourceRevisedTermsDict[resTermRevised.strip()] = resid.strip()
             ctr += 1
 
