@@ -289,7 +289,7 @@ def run(args):
     
     # 19-Method to Get all stop words from resource in CSV file format -A very constrained lists of stop words is
     # used as other stop words are assumed to have some useful semantic meaning
-    stopWordsList = get_resource_dict("mining-stopwords.csv", True)
+    stopWordsDict = get_resource_dict("mining-stopwords.csv", True)
     
     # 21- To get all terms from resources- right now in a CSV file extracted from ontologies using another external script
     
@@ -467,10 +467,10 @@ def run(args):
 
 
             # ===This will create a cleaned sample after above treatments [Here we are making new phrase now in lower case]
-            if (not newPhrase and lemma.lower() not in stopWordsList):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
+            if (not newPhrase and lemma.lower() not in stopWordsDict):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
                 newPhrase = lemma.lower()
             elif (
-                lemma.lower() not in stopWordsList):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
+                lemma.lower() not in stopWordsDict):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
                 newPhrase = newPhrase + " " + lemma.lower()
 
             newPhrase = re.sub(' +', ' ', newPhrase)  # Extra innner spaces removed from cleaned sample
