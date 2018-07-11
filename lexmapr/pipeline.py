@@ -211,31 +211,26 @@ def get_resource_dict(file_name, lower=False):
     ret = {}
     # Open file_name
     with open(resource_filename('lexmapr.resources', file_name)) as csvfile:
+        # Skip first line
+        next(csvfile)
         # Read file_name
         file_contents = csv.reader(csvfile, delimiter=",")
-        # Flag indicating iteration beyond first row
-        first_row_seen = False
         # Iterate across rows in file_contents
         for row in file_contents:
-            # This is not the first row
-            if first_row_seen:
-                # Get key
-                key = row[0].strip()
-                # Lowercase key requested
-                if lower:
-                    # Convert key to lowercase
-                    key = key.lower()
-                try:
-                    # Get corresponding value
-                    val = row[1].strip()
-                except IndexError:
-                    # No corresponding value
-                    val = ""
-                # Add key-value pair to ret
-                ret[key] = val
-            # This is the first row
-            else:
-                first_row_seen = True
+            # Get key
+            key = row[0].strip()
+            # Lowercase key requested
+            if lower:
+                # Convert key to lowercase
+                key = key.lower()
+            try:
+                # Get corresponding value
+                val = row[1].strip()
+            except IndexError:
+                # No corresponding value
+                val = ""
+            # Add key-value pair to ret
+            ret[key] = val
     # Return
     return ret
 
