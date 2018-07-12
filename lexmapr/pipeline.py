@@ -234,15 +234,39 @@ def get_resource_dict(file_name, lower=False):
     # Return
     return ret
 
-def get_annotations(sample):
-    """Return dictionary containing annotations for a sample.
+def find_full_term_match(sample):
+    """Find an annotated, full-term match for a sample.
 
     TODO:
         * complete function docstring
         * implement function
+        * descriptive comments for ret keys
+        * create an specific exception class for failure to find a
+            full-term match
     """
-    # Stub
-    return {}
+    # Dictionary to return
+    ret = {
+        # ...
+        "matched_term": "",
+        # ...
+        "all_match_terms_with_resource_ids": "",
+        # ...
+        "retained_terms_with_resource_ids": "",
+        # ...
+        "number_of_components_for_component_match": "",
+        # ...
+        "match_status_macro_level": "",
+        # ...
+        "match_status_micro_level": "",
+    }
+    # Empty sample
+    if sample == "":
+        ret["match_status_micro_level"] = "Empty Sample"
+    # Full-term match not found
+    else:
+        raise Exception("Full-term match not found for: " + sample)
+    # Return
+    return ret
 
 def run(args):
     """
@@ -524,12 +548,13 @@ def run(args):
 
         #---------------------------STARTS APPLICATION OF RULES-----------------------------------------------
         # Rule1: Annotate all the empty samples
-        if not sample:
-            status = "Empty Sample"
-            if args.format == 'full':
-                # output fields: 'matched_term' ... 'different_components_for_component_match'
-                fw.write("\t--" + "\t--" + "\t" + "\t" + "\t" + status)
+        try:
+            full_term_match = find_full_term_match(sample)
+            fw.write("\t--" + "\t--" + "\t" + "\t" + "\t"
+                + full_term_match["match_status_micro_level"])
             trigger = True
+        except Exception:
+            pass
 
         # Rule2: Annotate all the Full Term Matches of Terms without any treatment
         if ((sample in resource_terms.keys() ) and not trigger):
