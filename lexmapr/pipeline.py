@@ -235,17 +235,26 @@ def get_resource_dict(file_name, lower=False):
     return ret
 
 class MatchNotFoundError(Exception):
-    """...
+    """Exception class for indicating failed full-term matches.
 
-    TODO:
-        * class and function docstrings
+    This subclass inherits it behaviour from the Exception class, and
+    should be raised when a full-term match for a sample is
+    not found.
+
+    Instance variables:
+        * message <class "str">
     """
+
     def __init__(self, message):
-        """..."""
+        """Creates instance variable used as error message.
+
+        Arguments:
+            * message: User-inputted error message to be raised
+        """
         self.message = message
 
     def __str__(self):
-        """..."""
+        """Return message when this class is raised as an exception."""
         return repr(self.message)
 
 def find_full_term_match(sample):
