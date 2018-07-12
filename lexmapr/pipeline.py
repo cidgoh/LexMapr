@@ -261,6 +261,8 @@ def find_full_term_match(sample):
     }
     # Empty sample
     if sample == "":
+        ret["matched_term"] = "--"
+        ret["all_match_terms_with_resource_ids"] = "--"
         ret["match_status_micro_level"] = "Empty Sample"
     # Full-term match not found
     else:
@@ -550,8 +552,9 @@ def run(args):
         # Rule1: Annotate all the empty samples
         try:
             full_term_match = find_full_term_match(sample)
-            fw.write("\t--" + "\t--" + "\t" + "\t" + "\t"
-                + full_term_match["match_status_micro_level"])
+            fw.write("\t" + full_term_match["matched_term"] + "\t"
+                + full_term_match["all_match_terms_with_resource_ids"] + "\t"
+                + "\t" + "\t" + full_term_match["match_status_micro_level"])
             trigger = True
         except Exception:
             pass
