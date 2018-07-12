@@ -234,6 +234,20 @@ def get_resource_dict(file_name, lower=False):
     # Return
     return ret
 
+class MatchNotFoundError(Exception):
+    """...
+
+    TODO:
+        * class and function docstrings
+    """
+    def __init__(self, message):
+        """..."""
+        self.message = message
+
+    def __str__(self):
+        """..."""
+        return repr(self.message)
+
 def find_full_term_match(sample):
     """Find an annotated, full-term match for a sample.
 
@@ -266,7 +280,7 @@ def find_full_term_match(sample):
         ret["match_status_micro_level"] = "Empty Sample"
     # Full-term match not found
     else:
-        raise Exception("Full-term match not found for: " + sample)
+        raise MatchNotFoundError("Full-term match not found for: " + sample)
     # Return
     return ret
 
@@ -556,7 +570,7 @@ def run(args):
                 + full_term_match["all_match_terms_with_resource_ids"] + "\t"
                 + "\t" + "\t" + full_term_match["match_status_micro_level"])
             trigger = True
-        except Exception:
+        except MatchNotFoundError:
             pass
 
         # Rule2: Annotate all the Full Term Matches of Terms without any treatment
