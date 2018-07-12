@@ -1,0 +1,10 @@
+SampleId,Sample
+small_simple1,Breast,single-token word not in abbreviationDict
+small_simple2,Baked Potato,multi-token word not in abbreviationDict
+small_simple3,fld,single-token word in abbreviationDict
+small_simple4,froz fld,multi-token word with all tokens in abbreviationDict
+small_simple5,fld apple,multi-token word with one token in abbreviationDict
+small_simple6,csf,single-token word in abbreviationLowerDict
+small_simple7,csf f,multi-token word with all tokens in abbreviationLowerDict
+small_simple8,Pie csf,multi-token word with one token in abbreviationLowerDict
+small_simple9,csf fld,multi-token word with one token in abbreviationDict and one in abbreviationLowerDict
