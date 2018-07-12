@@ -234,6 +234,16 @@ def get_resource_dict(file_name, lower=False):
     # Return
     return ret
 
+def get_annotations(sample):
+    """Return dictionary containing annotations for a sample.
+
+    TODO:
+        * complete function docstring
+        * implement function
+    """
+    # Stub
+    return {}
+
 def run(args):
     """
     Main text mining pipeline.
