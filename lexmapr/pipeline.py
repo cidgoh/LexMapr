@@ -582,9 +582,12 @@ def run(args):
             }
             # Empty sample
             if sample == "":
-                ret["matched_term"] = "--"
-                ret["all_match_terms_with_resource_ids"] = "--"
-                ret["match_status_micro_level"] = "Empty Sample"
+                # Update ret
+                ret.update({
+                    "matched_term": "--",
+                    "all_match_terms_with_resource_ids": "--",
+                    "match_status_micro_level": "Empty Sample",
+                })
             # Full-term match not found
             else:
                 raise MatchNotFoundError("Full-term match not found for: " + sample)
