@@ -257,42 +257,6 @@ class MatchNotFoundError(Exception):
         """Return message when this class is raised as an exception."""
         return repr(self.message)
 
-def find_full_term_match(sample):
-    """Find an annotated, full-term match for a sample.
-
-    TODO:
-        * complete function docstring
-        * implement function
-        * descriptive comments for ret keys
-        * create an specific exception class for failure to find a
-            full-term match
-    """
-    # Dictionary to return
-    ret = {
-        # ...
-        "matched_term": "",
-        # ...
-        "all_match_terms_with_resource_ids": "",
-        # ...
-        "retained_terms_with_resource_ids": "",
-        # ...
-        "number_of_components_for_component_match": "",
-        # ...
-        "match_status_macro_level": "",
-        # ...
-        "match_status_micro_level": "",
-    }
-    # Empty sample
-    if sample == "":
-        ret["matched_term"] = "--"
-        ret["all_match_terms_with_resource_ids"] = "--"
-        ret["match_status_micro_level"] = "Empty Sample"
-    # Full-term match not found
-    else:
-        raise MatchNotFoundError("Full-term match not found for: " + sample)
-    # Return
-    return ret
-
 def run(args):
     """
     Main text mining pipeline.
@@ -572,6 +536,61 @@ def run(args):
             fw.write('\t' + str(prevPhraseStr))
 
         #---------------------------STARTS APPLICATION OF RULES-----------------------------------------------
+        def find_full_term_match(sample):
+            """Find an annotated, full-term match for a sample.
+
+            TODO:
+                * complete function docstring
+                * implement function
+                * descriptive comments for ret keys
+                * move this function out of run
+                    * The reason it is currently in run is because we
+                        need access to several variables that are local
+                        to run
+                    * There are two potential solutions:
+                        * Pass all local variables to this function
+                            * Unreasonable, there are too many
+                        * Create a class with the following:
+                            * Constructer with all variables relevant
+                                to application rules
+                            * get_resource_dict
+                                * Likely called in constructer
+                            * find_full_term_match
+                            * MatchNotFoundError
+                            * This is the most reasonable solution
+                            * Before beginning the design and
+                                construction of a class, we may want to
+                                do the following:
+                                    * Get find_full_term_match working
+                                    * Abstract component matching
+                                        * May fit in new class
+            """
+            # Dictionary to return
+            ret = {
+                # ...
+                "matched_term": "",
+                # ...
+                "all_match_terms_with_resource_ids": "",
+                # ...
+                "retained_terms_with_resource_ids": "",
+                # TODO: Remove this? Not used in full-term match.
+                "number_of_components_for_component_match": "",
+                # ...
+                "match_status_macro_level": "",
+                # ...
+                "match_status_micro_level": "",
+            }
+            # Empty sample
+            if sample == "":
+                ret["matched_term"] = "--"
+                ret["all_match_terms_with_resource_ids"] = "--"
+                ret["match_status_micro_level"] = "Empty Sample"
+            # Full-term match not found
+            else:
+                raise MatchNotFoundError("Full-term match not found for: " + sample)
+            # Return
+            return ret
+
         # Rule1: Annotate all the empty samples
         try:
             full_term_match = find_full_term_match(sample)
