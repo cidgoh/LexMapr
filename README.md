@@ -3,8 +3,9 @@ A Lexicon and Rule-Based Tool for Translating Short Biomedical Specimen Descript
 
 ## Build status
 
-[![Build Status](https://travis-ci.org/lexmapr/LexMapr.svg?branch=development)](https://travis-ci.org/lexmapr/LexMapr)
-[![Coverage Status](https://coveralls.io/repos/github/lexmapr/LexMapr/badge.svg?branch=development)](https://coveralls.io/github/lexmapr/LexMapr?branch=development)
+[![Build Status](https://travis-ci.org/lexmapr/LexMapr.svg?branch=master)](https://travis-ci.org/lexmapr/LexMapr)
+[![Coverage Status](https://coveralls.io/repos/github/lexmapr/LexMapr/badge.svg?branch=master)](https://coveralls.io/github/lexmapr/LexMapr?branch=master)
+[![bioconda-badge](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square)](http://bioconda.github.io)
 
 The main script file for processing is `bin/lexmapr`
 
