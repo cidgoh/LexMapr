@@ -407,7 +407,7 @@ def run(args):
         trigger = False
         status = ""  # variable reflecting status of Matching to be displayed for evry rule/section
         # statusAddendum = ""
-        statusAddendumSet = []
+        status_addendum = []
         final_status = []
         del final_status [:]
         retained_tokens = []
@@ -441,7 +441,7 @@ def run(args):
                 lemma = inflection.singularize(tkn)
                 if (tkn != lemma):  #Only in case when inflection makes some changes in lemma
                     # statusAddendum = "Inflection (Plural) Treatment"
-                    statusAddendumSet.append("Inflection (Plural) Treatment")
+                    status_addendum.append("Inflection (Plural) Treatment")
             else:
                 lemma = tkn
 
@@ -449,28 +449,28 @@ def run(args):
             if (lemma in spelling_mistakes.keys()):  # spelling mistakes taken care of
                 lemma = spelling_mistakes[lemma]
                 # statusAddendum = statusAddendum + "Spelling Correction Treatment"
-                statusAddendumSet.append("Spelling Correction Treatment")
+                status_addendum.append("Spelling Correction Treatment")
             elif (lemma.lower() in spelling_mistakes_lower.keys()):
                 lemma = spelling_mistakes_lower[lemma.lower()]
                 # statusAddendum = statusAddendum + "Change Case and Spelling Correction Treatment"
-                statusAddendumSet.append("Change Case and Spelling Correction Treatment")
+                status_addendum.append("Change Case and Spelling Correction Treatment")
             if (lemma in abbreviations.keys()):  # Abbreviations, acronyms, foreign language words taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
                 lemma = abbreviations[lemma]
                 # statusAddendum = "Abbreviation-Acronym Treatment"
-                statusAddendumSet.append("Abbreviation-Acronym Treatment")
+                status_addendum.append("Abbreviation-Acronym Treatment")
             elif (lemma.lower() in abbreviation_lower.keys()):
                 lemma = abbreviation_lower[lemma.lower()]
                 # statusAddendum = "Change Case and Abbreviation-Acronym Treatment"
-                statusAddendumSet.append("Change Case and Abbreviation-Acronym Treatment")
+                status_addendum.append("Change Case and Abbreviation-Acronym Treatment")
 
             if (lemma in non_english_words.keys()):  # Non English language words taken care of
                 lemma = non_english_words[lemma]
                 # statusAddendum = statusAddendum + "Non English Language Words Treatment"
-                statusAddendumSet.append("Non English Language Words Treatment")
+                status_addendum.append("Non English Language Words Treatment")
             elif (lemma.lower() in non_english_words_lower.keys()):
                 lemma = non_english_words_lower[lemma.lower()]
                 # statusAddendum = statusAddendum + "Change Case and Non English Language Words Treatment"
-                statusAddendumSet.append("Change Case and Non English Language Words Treatment")
+                status_addendum.append("Change Case and Non English Language Words Treatment")
 
 
             # ===This will create a cleaned sample after above treatments [Here we are making new phrase now in lower case]
@@ -485,21 +485,21 @@ def run(args):
             if (newPhrase in abbreviations.keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
                 newPhrase = abbreviations[newPhrase]
                 # statusAddendum = statusAddendum + "Cleaned Sample and Abbreviation-Acronym Treatment"
-                statusAddendumSet.append("Cleaned Sample and Abbreviation-Acronym Treatment")
+                status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
             elif (newPhrase in abbreviation_lower.keys()):
                 newPhrase = abbreviation_lower[newPhrase]
                 # statusAddendum = statusAddendum + "Cleaned Sample and Abbreviation-Acronym Treatment"
-                statusAddendumSet.append("Cleaned Sample and Abbreviation-Acronym Treatment")
+                status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
 
             if (newPhrase in non_english_words.keys()):  # non English words taken care of
                 newPhrase = non_english_words[newPhrase]
                 # # statusAddendum = statusAddendum + "Non English Language Words Treatment"
                 # statusAddendum = statusAddendum + "Cleaned Sample and Non English Language Words Treatment"
-                statusAddendumSet.append("Cleaned Sample and Non English Language Words Treatment")
+                status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
             elif (newPhrase in non_english_words_lower.keys()):
                 newPhrase = non_english_words_lower[newPhrase]
                 # statusAddendum = statusAddendum + "Cleaned Sample and Non English Language Words Treatment"
-                statusAddendumSet.append("Cleaned Sample and Non English Language Words Treatment")
+                status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
 
         # Here we are making the tokens of cleaned sample phrase
         newSampleTokens = word_tokenize(newPhrase.lower())
@@ -597,10 +597,10 @@ def run(args):
                 # Update retained_tokens
                 # TODO: Can this be a local variable?
                 retained_tokens.append(sample + ":" + resource_terms[sample])
-                # Update statusAddendumSet
-                statusAddendumSet.append("A Direct Match")
-                # statusAddendumSet without duplicates
-                final_status = set(statusAddendumSet)
+                # Update status_addendum
+                status_addendum.append("A Direct Match")
+                # status_addendum without duplicates
+                final_status = set(status_addendum)
                 # Update ret
                 ret.update({
                     "matched_term": sample,
@@ -644,8 +644,8 @@ def run(args):
                 resourceId = resource_terms[sample.lower()]  # Gets the id of the resource for matched term
             status = "Full Term Match"
             # statusAddendum = "[Change of Case in Input Data]"
-            statusAddendumSet.append("Change of Case in Input Data")
-            final_status = set(statusAddendumSet)
+            status_addendum.append("Change of Case in Input Data")
+            final_status = set(status_addendum)
             retained_tokens.append(sample.lower() + ":" + resourceId)
             if args.format == "full":
                 # output fields:
@@ -673,8 +673,8 @@ def run(args):
                 resourceId = resource_terms_revised[sample.lower()]  # Gets the id of the resource for matched term
             status = "Full Term Match"
             # statusAddendum = "[Change of Case in Input or Resource Data]"
-            statusAddendumSet.append("Change of Case in Resource Data")
-            final_status = set(statusAddendumSet)
+            status_addendum.append("Change of Case in Resource Data")
+            final_status = set(status_addendum)
             retained_tokens.append(sample.lower() + ":" + resourceId)
             if args.format == 'full':
                 # output fields:
@@ -703,8 +703,8 @@ def run(args):
             resourceOriginalTerm = resource_terms_ID_based[resourceId]
             status = "Full Term Match"
             # statusAddendum = "[Permutation of Tokens in Resource Term]"
-            statusAddendumSet.append("Permutation of Tokens in Resource Term")
-            final_status = set(statusAddendumSet)
+            status_addendum.append("Permutation of Tokens in Resource Term")
+            final_status = set(status_addendum)
             retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
             if args.format == 'full':
                 # output fields:
@@ -734,8 +734,8 @@ def run(args):
             resourceOriginalTerm = resource_terms_ID_based[resourceId]
             status = "Full Term Match"
             # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
-            statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
-            final_status = set(statusAddendumSet)
+            status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
+            final_status = set(status_addendum)
             retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
             if args.format == 'full':
                 # output fields:
@@ -767,8 +767,8 @@ def run(args):
                 resourceId = resource_terms_revised[sampleRevisedWithSuffix]
                 status = "Full Term Match"
                 # statusAddendum = "[Change of Case of Resource and Suffix Addition- "+suffixString+" to the Input]"
-                statusAddendumSet.append("[Change of Case of Resource and Suffix Addition- "+suffixString+" to the Input]")
-                final_status = set(statusAddendumSet)
+                status_addendum.append("[Change of Case of Resource and Suffix Addition- "+suffixString+" to the Input]")
+                final_status = set(status_addendum)
                 retained_tokens.append(sampleRevisedWithSuffix + ":" + resourceId)
                 if args.format == 'full':
                     # output fields:
@@ -804,8 +804,8 @@ def run(args):
                     resourceId = resource_terms[newPhrase.lower()]  # Gets the id of the resource for matched term
                 status = "Full Term Match"  # -Inflection, Synonym, Spelling Correction, Foreign Language Treatment "
                 # statusAddendum = statusAddendum + "[A Direct Match with Cleaned Sample]"
-                statusAddendumSet.append("A Direct Match with Cleaned Sample")
-                final_status = set(statusAddendumSet)
+                status_addendum.append("A Direct Match with Cleaned Sample")
+                final_status = set(status_addendum)
                 retained_tokens.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
                     # output fields:
@@ -834,8 +834,8 @@ def run(args):
                     resourceId = resource_terms_revised[newPhrase.lower()]  # Gets the id of the resource for matched term
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Change of Case of Resource Terms]"
-                statusAddendumSet.append("Change of Case of Resource Terms")
-                final_status = set(statusAddendumSet)
+                status_addendum.append("Change of Case of Resource Terms")
+                final_status = set(status_addendum)
                 retained_tokens.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
                     fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
@@ -852,8 +852,8 @@ def run(args):
                 resourceId = resourcePermutationTermsDict[newPhrase.lower()]
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Permutation of Tokens in Resource Term]"
-                statusAddendumSet.append("Permutation of Tokens in Resource Term")
-                final_status = set(statusAddendumSet)
+                status_addendum.append("Permutation of Tokens in Resource Term")
+                final_status = set(status_addendum)
                 resourceOriginalTerm = resource_terms_ID_based[resourceId]
                 retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
                 if args.format == 'full':
@@ -871,8 +871,8 @@ def run(args):
                 resourceId = resourceBracketedPermutationTermsDict[newPhrase.lower()]
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Permutation of Tokens in Bracketed Resource Term]"
-                statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
-                final_status = set(statusAddendumSet)
+                status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
+                final_status = set(status_addendum)
                 resourceOriginalTerm = resource_terms_ID_based[resourceId]
                 retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
                 if args.format == 'full':
@@ -893,8 +893,8 @@ def run(args):
                     resourceId = resource_terms_revised[sampleRevisedWithSuffix]
                     status = "Full Term Match"
                     # statusAddendum = "[CleanedSample-Change of Case of Resource and Suffix Addition- " + suffixString + " to the Input]"
-                    statusAddendumSet.append("[CleanedSample-Change of Case of Resource and Suffix Addition- " + suffixString + " to the Input]")
-                    final_status = set(statusAddendumSet)
+                    status_addendum.append("[CleanedSample-Change of Case of Resource and Suffix Addition- " + suffixString + " to the Input]")
+                    final_status = set(status_addendum)
                     retained_tokens.append(sampleRevisedWithSuffix + ":" + resourceId)
                     if args.format == 'full':
                         fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
@@ -919,8 +919,8 @@ def run(args):
                 resourceId = collocations[newPhrase.lower()]
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[New Candidadte Terms -validated with Wikipedia Based Collocation Resource]"
-                statusAddendumSet.append("New Candidadte Terms -validated with Wikipedia Based Collocation Resource")
-                final_status = set(statusAddendumSet)
+                status_addendum.append("New Candidadte Terms -validated with Wikipedia Based Collocation Resource")
+                final_status = set(status_addendum)
                 retained_tokens.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
                     fw.write('\t' + newPhrase.lower() + '\t' +str(list(retained_tokens)) + '\t' + str(list(retained_tokens))  + '\t' + '\t' + status + '\t' + str(list(final_status)))
@@ -959,15 +959,15 @@ def run(args):
                     if (grm in abbreviations.keys()):  # rule for abbreviation
                         grm = abbreviations[grm]
                         # statusAddendum = statusAddendum + "[Abbreviation-Acronym Treatment]"
-                        statusAddendumSet.append("Abbreviation-Acronym Treatment")
+                        status_addendum.append("Abbreviation-Acronym Treatment")
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
                         # statusAddendum = statusAddendum + "[Non English Language Words Treatment]"
-                        statusAddendumSet.append("Non English Language Words Treatment")
+                        status_addendum.append("Non English Language Words Treatment")
                     if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
                         grm = synonyms[grm]
                         # statusAddendum = statusAddendum + "[Synonym Usage]"
-                        statusAddendumSet.append("Synonym Usage")
+                        status_addendum.append("Synonym Usage")
 
                     # Matching Test for 5-gram chunk
                     if ((grm in resource_terms.keys() ) and not localTrigger):
@@ -994,7 +994,7 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
-                        statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
+                        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
                     for suff in range(len(suffixList)):
                         suffixString = suffixList[suff]
@@ -1003,7 +1003,7 @@ def run(args):
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                             partialMatchedList.append(sampleRevisedWithSuffix)
                             # statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
-                            statusAddendumSet.append("Suffix Addition- " + suffixString + " to the Input")
+                            status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                             for eachTkn in grmTokens:
                                 coveredAllTokensSet.append(eachTkn)
                                 if eachTkn in remaining_tokens:
@@ -1026,15 +1026,15 @@ def run(args):
                     if (grm in abbreviations.keys()):  # rule for abbreviation
                         grm = abbreviations[grm]
                         # statusAddendum = statusAddendum + "[Abbreviation-Acronym Treatment]"
-                        statusAddendumSet.append("Abbreviation-Acronym Treatment")
+                        status_addendum.append("Abbreviation-Acronym Treatment")
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
                         # statusAddendum = statusAddendum + "[Non English Language Words Treatment]"
-                        statusAddendumSet.append("Non English Language Words Treatment")
+                        status_addendum.append("Non English Language Words Treatment")
                     if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
                         grm = synonyms[grm]
                         # statusAddendum = statusAddendum + "[Synonym Usage]"
-                        statusAddendumSet.append("Synonym Usage")
+                        status_addendum.append("Synonym Usage")
 
                     # Matching Test for 4-gram chunk
                     if ((grm in resource_terms.keys()) and not localTrigger):
@@ -1060,7 +1060,7 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
-                        statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
+                        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
                     for suff in range(len(suffixList)):
                         suffixString = suffixList[suff]
@@ -1069,7 +1069,7 @@ def run(args):
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         # statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
-                        statusAddendumSet.append("Suffix Addition- " + suffixString + " to the Input")
+                        status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                         for eachTkn in grmTokens:
                             coveredAllTokensSet.append(eachTkn)
                             if eachTkn in remaining_tokens:
@@ -1093,15 +1093,15 @@ def run(args):
                     if (grm in abbreviations.keys()):  # rule for abbreviation
                         grm = abbreviations[grm]
                         # statusAddendum = statusAddendum + "[Abbreviation-Acronym Treatment]"
-                        statusAddendumSet.append("Abbreviation-Acronym Treatment")
+                        status_addendum.append("Abbreviation-Acronym Treatment")
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
                         # statusAddendum = statusAddendum + "[Non English Language Words Treatment]"
-                        statusAddendumSet.append("Non English Language Words Treatment")
+                        status_addendum.append("Non English Language Words Treatment")
                     if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
                         grm = synonyms[grm]
                         # statusAddendum = statusAddendum + "[Synonym Usage]"
-                        statusAddendumSet.append("Synonym Usage")
+                        status_addendum.append("Synonym Usage")
 
                     # Matching Test for 3-gram chunk
                     if ((grm in resource_terms.keys() ) and not localTrigger):
@@ -1128,7 +1128,7 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
-                        statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
+                        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
                     for suff in range(len(suffixList)):
                         suffixString = suffixList[suff]
@@ -1137,7 +1137,7 @@ def run(args):
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                             partialMatchedList.append(sampleRevisedWithSuffix)
                             # statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
-                            statusAddendumSet.append("Suffix Addition- " + suffixString + " to the Input")
+                            status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                             for eachTkn in grmTokens:
                                 coveredAllTokensSet.append(eachTkn)
                                 if eachTkn in remaining_tokens:
@@ -1149,7 +1149,7 @@ def run(args):
                         quality = qualities_lower[grm]
                         partialMatchedList.append(grm)
                         # statusAddendum = statusAddendum + "[Using Semantic Tagging Resources]"
-                        statusAddendumSet.append("Using Semantic Tagging Resources")
+                        status_addendum.append("Using Semantic Tagging Resources")
                         localTrigger = True
                         for eachTkn in grmTokens:
                             coveredAllTokensSet.append(eachTkn)
@@ -1172,15 +1172,15 @@ def run(args):
                     if (grm in abbreviations.keys()):  # rule for abbreviation
                         grm = abbreviations[grm]
                         # statusAddendum = statusAddendum + "[Abbreviation-Acronym Treatment]"
-                        statusAddendumSet.append("Abbreviation-Acronym Treatment")
+                        status_addendum.append("Abbreviation-Acronym Treatment")
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
                         # statusAddendum = statusAddendum + "[Non English Language Words Treatment]"
-                        statusAddendumSet.append("Non English Language Words Treatment")
+                        status_addendum.append("Non English Language Words Treatment")
                     if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
                         grm = synonyms[grm]
                         # statusAddendum = statusAddendum + "[Synonym Usage]"
-                        statusAddendumSet.append("Synonym Usage")
+                        status_addendum.append("Synonym Usage")
 
                     # Matching Test for 2-gram chunk
                     if ((grm in resource_terms.keys() ) and not localTrigger):
@@ -1206,7 +1206,7 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
-                        statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
+                        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
                     for suff in range(len(suffixList)):
                         suffixString = suffixList[suff]
@@ -1215,7 +1215,7 @@ def run(args):
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         # statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
-                        statusAddendumSet.append("Suffix Addition- " + suffixString + " to the Input")
+                        status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                         for eachTkn in grmTokens:
                             coveredAllTokensSet.append(eachTkn)
                             if eachTkn in remaining_tokens:
@@ -1227,7 +1227,7 @@ def run(args):
                         quality = qualities_lower[grm]
                         partialMatchedList.append(grm)
                         # statusAddendum = statusAddendum + "[Using Semantic Tagging Resources]"
-                        statusAddendumSet.append("Using Semantic Tagging Resources")
+                        status_addendum.append("Using Semantic Tagging Resources")
                         localTrigger = True
                         for eachTkn in grmTokens:
                             coveredAllTokensSet.append(eachTkn)
@@ -1249,15 +1249,15 @@ def run(args):
                 if (grm in abbreviations.keys()):  # rule for abbreviation
                     grm = abbreviations[grm]
                     # statusAddendum = statusAddendum + "[Abbreviation-Acronym Treatment]"
-                    statusAddendumSet.append("Abbreviation-Acronym Treatment")
+                    status_addendum.append("Abbreviation-Acronym Treatment")
                 if (grm in non_english_words.keys()):  # rule for abbreviation
                     grm = non_english_words[grm]
                     # statusAddendum = statusAddendum + "[Non English Language Words Treatment]"
-                    statusAddendumSet.append("Non English Language Words Treatment")
+                    status_addendum.append("Non English Language Words Treatment")
                 if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
                     grm = synonyms[grm]
                     # statusAddendum = statusAddendum + "[Synonym Usage]"
-                    statusAddendumSet.append("Synonym Usage")
+                    status_addendum.append("Synonym Usage")
 
                 # Matching Test for 1-gram chunk
                 if ((grm in resource_terms.keys() ) and not localTrigger):
@@ -1284,7 +1284,7 @@ def run(args):
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         # statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
-                        statusAddendumSet.append("Suffix Addition- " + suffixString + " to the Input")
+                        status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                         for eachTkn in grmTokens:
                             coveredAllTokensSet.append(eachTkn)
                             if eachTkn in remaining_tokens:
@@ -1296,7 +1296,7 @@ def run(args):
                     quality = qualities_lower[grm]
                     partialMatchedList.append(grm)
                     # statusAddendum = statusAddendum + "[Using Semantic Tagging Resources]"
-                    statusAddendumSet.append("Using Semantic Tagging Resources")
+                    status_addendum.append("Using Semantic Tagging Resources")
                     localTrigger = True
                     for eachTkn in grmTokens:
                         coveredAllTokensSet.append(eachTkn)
@@ -1309,7 +1309,7 @@ def run(args):
                     proc = processes[grm]
                     partialMatchedList.append(grm)
                     # statusAddendum = statusAddendum + "[Using Candidate Processes]"
-                    statusAddendumSet.append("Using Candidate Processes")
+                    status_addendum.append("Using Candidate Processes")
                     localTrigger = True
                     for eachTkn in grmTokens:
                         coveredAllTokensSet.append(eachTkn)
@@ -1387,7 +1387,7 @@ def run(args):
                 logger.debug("retainedSet " + str(retainedSet))
                 # HERE SHOULD HAVE ANOTHER RETAING SET
 
-            final_status = set(statusAddendumSet)
+            final_status = set(status_addendum)
 
             # In case it is for componet matching and we have at least one component matched
             if (len(partialMatchedSet) > 0):
