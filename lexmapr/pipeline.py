@@ -410,7 +410,7 @@ def run(args):
         statusAddendumSet = []
         statusAddendumSetFinal = []
         del statusAddendumSetFinal [:]
-        retSet = []
+        retained_tokens = []
         remSet = []
         #Writing in the output file with sampleid and sample to start with
         # output fields:
@@ -592,11 +592,11 @@ def run(args):
             elif sample in resource_terms:
                 # Matched term and its resource ID
                 # TODO: We should make this more consistent with other
-                #       match scenarios, where retSet is used instead.
+                #       match scenarios, where retained_tokens is used instead.
                 term_and_id = "[" + sample + ":" + resource_terms[sample] + "]"
-                # Update retSet
+                # Update retained_tokens
                 # TODO: Can this be a local variable?
-                retSet.append(sample + ":" + resource_terms[sample])
+                retained_tokens.append(sample + ":" + resource_terms[sample])
                 # Update statusAddendumSet
                 statusAddendumSet.append("A Direct Match")
                 # statusAddendumSet without duplicates
@@ -605,7 +605,7 @@ def run(args):
                 ret.update({
                     "matched_term": sample,
                     "all_match_terms_with_resource_ids": term_and_id,
-                    "retained_terms_with_resource_ids": str(list(retSet)),
+                    "retained_terms_with_resource_ids": str(list(retained_tokens)),
                     "match_status_macro_level": "Full Term Match",
                     "match_status_micro_level": str(list(statusAddendumSetFinal)),
                 })
@@ -627,6 +627,7 @@ def run(args):
         # Rule2: Annotate all the Full Term Matches of Terms without any treatment
         try:
             full_term_match = find_full_term_match(sample)
+            # TODO: Account for args.format != full.
             fw.write("\t" + full_term_match["matched_term"] + "\t"
                 + full_term_match["all_match_terms_with_resource_ids"] + "\t"
                 + full_term_match["retained_terms_with_resource_ids"] + "\t"
@@ -645,21 +646,21 @@ def run(args):
             # statusAddendum = "[Change of Case in Input Data]"
             statusAddendumSet.append("Change of Case in Input Data")
             statusAddendumSetFinal = set(statusAddendumSet)
-            retSet.append(sample.lower() + ":" + resourceId)
+            retained_tokens.append(sample.lower() + ":" + resourceId)
             if args.format == "full":
                 # output fields:
                 #   'matched_term':                             sample.lower()
-                #   'all_matched_terms_with_resource_ids':      str(retSet)
-                #   'retained_terms_with_resource_ids'          str(retSet)
+                #   'all_matched_terms_with_resource_ids':      str(retained_tokens)
+                #   'retained_terms_with_resource_ids'          str(retained_tokens)
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
                 #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
-                #   'all_matched_terms_with_resource_ids': str(list(retSet))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
+                #   'all_matched_terms_with_resource_ids': str(list(retained_tokens))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -674,21 +675,21 @@ def run(args):
             # statusAddendum = "[Change of Case in Input or Resource Data]"
             statusAddendumSet.append("Change of Case in Resource Data")
             statusAddendumSetFinal = set(statusAddendumSet)
-            retSet.append(sample.lower() + ":" + resourceId)
+            retained_tokens.append(sample.lower() + ":" + resourceId)
             if args.format == 'full':
                 # output fields:
                 #   'matched_term':                             sample.lower()
-                #   'all_matched_terms_with_resource_ids':      str(list(retSet))
-                #   'retained_terms_with_resource_ids'          str(list(retSet))
+                #   'all_matched_terms_with_resource_ids':      str(list(retained_tokens))
+                #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
                 #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + "\t" + str(list(statusAddendumSetFinal)))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + "\t" + str(list(statusAddendumSetFinal)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
-                #   'all_matched_terms_with_resource_ids': str(retSet)
-                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
+                #   'all_matched_terms_with_resource_ids': str(retained_tokens)
+                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -704,21 +705,21 @@ def run(args):
             # statusAddendum = "[Permutation of Tokens in Resource Term]"
             statusAddendumSet.append("Permutation of Tokens in Resource Term")
             statusAddendumSetFinal = set(statusAddendumSet)
-            retSet.append(resourceOriginalTerm + ":" + resourceId)
+            retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
             if args.format == 'full':
                 # output fields:
                 #   'matched_term':                             sample.lower()
-                #   'all_matched_terms_with_resource_ids':      str(list(retSet))
-                #   'retained_terms_with_resource_ids'          str(list(retSet))
+                #   'all_matched_terms_with_resource_ids':      str(list(retained_tokens))
+                #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
                 #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
-                #   'all_matched_terms_with_resource_ids': str(list(retSet))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
+                #   'all_matched_terms_with_resource_ids': str(list(retained_tokens))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -735,21 +736,21 @@ def run(args):
             # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
             statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
             statusAddendumSetFinal = set(statusAddendumSet)
-            retSet.append(resourceOriginalTerm + ":" + resourceId)
+            retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
             if args.format == 'full':
                 # output fields:
                 #   'matched_term':                             sample.lower()
-                #   'all_matched_terms_with_resource_ids':      str(list(retSet))
-                #   'retained_terms_with_resource_ids'          str(list(retSet))
+                #   'all_matched_terms_with_resource_ids':      str(list(retained_tokens))
+                #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
                 #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                fw.write('\t' + sample.lower() + '\t' +  str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                fw.write('\t' + sample.lower() + '\t' +  str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
-                #   'all_matched_terms_with_resource_ids': str(list(retSet))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
+                #   'all_matched_terms_with_resource_ids': str(list(retained_tokens))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
@@ -768,21 +769,21 @@ def run(args):
                 # statusAddendum = "[Change of Case of Resource and Suffix Addition- "+suffixString+" to the Input]"
                 statusAddendumSet.append("[Change of Case of Resource and Suffix Addition- "+suffixString+" to the Input]")
                 statusAddendumSetFinal = set(statusAddendumSet)
-                retSet.append(sampleRevisedWithSuffix + ":" + resourceId)
+                retained_tokens.append(sampleRevisedWithSuffix + ":" + resourceId)
                 if args.format == 'full':
                     # output fields:
                     #   'matched_term':                             sample.lower()
-                    #   'all_matched_terms_with_resource_ids':      str(list(retSet))
-                    #   'retained_terms_with_resource_ids'          str(list(retSet))
+                    #   'all_matched_terms_with_resource_ids':      str(list(retained_tokens))
+                    #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
                     #   'number_of_components_for_component_match': 
                     #   'match_status_macro_level':                 status
                     #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                    fw.write('\t' + sample.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
                     # output fields:
                     #   'matched_term':                        sample.lower()
-                    #   'all_matched_terms_with_resource_ids': str(list(retSet))
-                    fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
+                    #   'all_matched_terms_with_resource_ids': str(list(retained_tokens))
+                    fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
                 trigger = True
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
@@ -805,21 +806,21 @@ def run(args):
                 # statusAddendum = statusAddendum + "[A Direct Match with Cleaned Sample]"
                 statusAddendumSet.append("A Direct Match with Cleaned Sample")
                 statusAddendumSetFinal = set(statusAddendumSet)
-                retSet.append(newPhrase.lower() + ":" + resourceId)
+                retained_tokens.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
                     # output fields:
                     #   '': newPhrase.lower()
-                    #   '': str(list(retSet))
+                    #   '': str(list(retained_tokens))
                     #   '': str(list(retDet))
                     #   '':
                     #   '': status
                     #   '': str(list(statusAddendumSetFinal))
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
                     # output fields:
                     #   '': newPhrase.lower()
-                    #   '': str(retSet)
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)))
+                    #   '': str(retained_tokens)
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -835,11 +836,11 @@ def run(args):
                 # statusAddendum = statusAddendum + "[Change of Case of Resource Terms]"
                 statusAddendumSet.append("Change of Case of Resource Terms")
                 statusAddendumSetFinal = set(statusAddendumSet)
-                retSet.append(newPhrase.lower() + ":" + resourceId)
+                retained_tokens.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -854,11 +855,11 @@ def run(args):
                 statusAddendumSet.append("Permutation of Tokens in Resource Term")
                 statusAddendumSetFinal = set(statusAddendumSet)
                 resourceOriginalTerm = resource_terms_ID_based[resourceId]
-                retSet.append(resourceOriginalTerm + ":" + resourceId)
+                retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -873,11 +874,11 @@ def run(args):
                 statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
                 statusAddendumSetFinal = set(statusAddendumSet)
                 resourceOriginalTerm = resource_terms_ID_based[resourceId]
-                retSet.append(resourceOriginalTerm + ":" + resourceId)
+                retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -894,11 +895,11 @@ def run(args):
                     # statusAddendum = "[CleanedSample-Change of Case of Resource and Suffix Addition- " + suffixString + " to the Input]"
                     statusAddendumSet.append("[CleanedSample-Change of Case of Resource and Suffix Addition- " + suffixString + " to the Input]")
                     statusAddendumSetFinal = set(statusAddendumSet)
-                    retSet.append(sampleRevisedWithSuffix + ":" + resourceId)
+                    retained_tokens.append(sampleRevisedWithSuffix + ":" + resourceId)
                     if args.format == 'full':
-                        fw.write('\t' + sample.lower() + '\t' + str(list(retSet)) + '\t' + str(list(retSet)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                        fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                     else:
-                        fw.write('\t' + sample.lower() + '\t' + str(list(retSet)))
+                        fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
                     # To Count the Covered Tokens(words)
                     thisSampleTokens = word_tokenize(sample.lower())
                     for thisSampleIndvToken in thisSampleTokens:
@@ -920,11 +921,11 @@ def run(args):
                 # statusAddendum = statusAddendum + "[New Candidadte Terms -validated with Wikipedia Based Collocation Resource]"
                 statusAddendumSet.append("New Candidadte Terms -validated with Wikipedia Based Collocation Resource")
                 statusAddendumSetFinal = set(statusAddendumSet)
-                retSet.append(newPhrase.lower() + ":" + resourceId)
+                retained_tokens.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' +str(list(retSet)) + '\t' + str(list(retSet))  + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    fw.write('\t' + newPhrase.lower() + '\t' +str(list(retained_tokens)) + '\t' + str(list(retained_tokens))  + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retSet)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
