@@ -663,13 +663,16 @@ def run(args):
         # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
         try:
             full_term_match = find_full_term_match(sample)
-            # TODO: Account for args.format != full.
-            fw.write("\t" + full_term_match["matched_term"] + "\t"
-                + full_term_match["all_match_terms_with_resource_ids"] + "\t"
-                + full_term_match["retained_terms_with_resource_ids"] + "\t"
-                + full_term_match["number_of_components_for_component_match"]
-                + "\t" + full_term_match["match_status_macro_level"]
-                + "\t" + full_term_match["match_status_micro_level"])
+            if args.format == "full":
+                fw.write("\t" + full_term_match["matched_term"] + "\t"
+                    + full_term_match["all_match_terms_with_resource_ids"] + "\t"
+                    + full_term_match["retained_terms_with_resource_ids"] + "\t"
+                    + full_term_match["number_of_components_for_component_match"]
+                    + "\t" + full_term_match["match_status_macro_level"]
+                    + "\t" + full_term_match["match_status_micro_level"])
+            else:
+                fw.write("\t" + full_term_match["matched_term"] + "\t"
+                    + full_term_match["all_match_terms_with_resource_ids"])
             trigger = True
         except MatchNotFoundError:
             pass
