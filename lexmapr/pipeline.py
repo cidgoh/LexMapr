@@ -262,7 +262,7 @@ def run(args):
     Main text mining pipeline.
     """
     punctuationsList = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuationsList for basic treatment
-    coveredAllTokensSet = []
+    covered_tokens = []
     remainingAllTokensSet = []
     remainingTokenSet = []
     prioritizedRetainedSet=[]
@@ -622,8 +622,8 @@ def run(args):
                 sample_tokens = word_tokenize(sample.lower())
                 # Iterate over tokens
                 for token in sample_tokens:
-                    # Add token to coveredAllTokensSet
-                    coveredAllTokensSet.append(token)
+                    # Add token to covered_tokens
+                    covered_tokens.append(token)
                     # Remove token from remaining_tokens
                     remaining_tokens.remove(token)
             # Full-term match with change-of-case treatment
@@ -648,8 +648,8 @@ def run(args):
                 sample_tokens = word_tokenize(sample.lower())
                 # Iterate over tokens
                 for token in sample_tokens:
-                    # Add token to coveredAllTokensSet
-                    coveredAllTokensSet.append(token)
+                    # Add token to covered_tokens
+                    covered_tokens.append(token)
                     # Remove token from remaining_tokens
                     remaining_tokens.remove(token)
             # Full-term match not found
@@ -703,7 +703,7 @@ def run(args):
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
-                coveredAllTokensSet.append(thisSampleIndvToken)
+                covered_tokens.append(thisSampleIndvToken)
                 remaining_tokens.remove(thisSampleIndvToken)
             trigger = True
 
@@ -733,7 +733,7 @@ def run(args):
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
-                coveredAllTokensSet.append(thisSampleIndvToken)
+                covered_tokens.append(thisSampleIndvToken)
                 remaining_tokens.remove(thisSampleIndvToken)
             trigger = True
 
@@ -764,7 +764,7 @@ def run(args):
             # To Count the Covered Tokens(words)
             thisSampleTokens = word_tokenize(sample.lower())
             for thisSampleIndvToken in thisSampleTokens:
-                coveredAllTokensSet.append(thisSampleIndvToken)
+                covered_tokens.append(thisSampleIndvToken)
                 remaining_tokens.remove(thisSampleIndvToken)
             trigger = True
 
@@ -798,7 +798,7 @@ def run(args):
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
-                    coveredAllTokensSet.append(thisSampleIndvToken)
+                    covered_tokens.append(thisSampleIndvToken)
                     remaining_tokens.remove(thisSampleIndvToken)
 
 
@@ -834,7 +834,7 @@ def run(args):
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
-                    coveredAllTokensSet.append(thisSampleIndvToken)
+                    covered_tokens.append(thisSampleIndvToken)
                     remaining_tokens.remove(thisSampleIndvToken)
                 trigger = True
 
@@ -854,7 +854,7 @@ def run(args):
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
-                    coveredAllTokensSet.append(thisSampleIndvToken)
+                    covered_tokens.append(thisSampleIndvToken)
                     remaining_tokens.remove(thisSampleIndvToken)
                 trigger = True
 
@@ -873,7 +873,7 @@ def run(args):
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
-                    coveredAllTokensSet.append(thisSampleIndvToken)
+                    covered_tokens.append(thisSampleIndvToken)
                     remaining_tokens.remove(thisSampleIndvToken)
                 trigger = True
 
@@ -892,7 +892,7 @@ def run(args):
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
-                    coveredAllTokensSet.append(thisSampleIndvToken)
+                    covered_tokens.append(thisSampleIndvToken)
                     remaining_tokens.remove(thisSampleIndvToken)
                 trigger = True
 
@@ -913,7 +913,7 @@ def run(args):
                     # To Count the Covered Tokens(words)
                     thisSampleTokens = word_tokenize(sample.lower())
                     for thisSampleIndvToken in thisSampleTokens:
-                        coveredAllTokensSet.append(thisSampleIndvToken)
+                        covered_tokens.append(thisSampleIndvToken)
                         remaining_tokens.remove(thisSampleIndvToken)
                     trigger = True
 
@@ -939,7 +939,7 @@ def run(args):
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
-                    coveredAllTokensSet.append(thisSampleIndvToken)
+                    covered_tokens.append(thisSampleIndvToken)
                     remaining_tokens.remove(thisSampleIndvToken)
                 trigger = True
 
@@ -983,7 +983,7 @@ def run(args):
                     if ((grm in resource_terms.keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
@@ -991,7 +991,7 @@ def run(args):
                     elif ((grm in resource_terms_revised.keys() )and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                             # # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
@@ -1000,7 +1000,7 @@ def run(args):
                         resourceId = resourceBracketedPermutationTermsDict[grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
@@ -1015,7 +1015,7 @@ def run(args):
                             # statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
                             status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                             for eachTkn in grmTokens:
-                                coveredAllTokensSet.append(eachTkn)
+                                covered_tokens.append(eachTkn)
                                 if eachTkn in remaining_tokens:
                                     remaining_tokens.remove(eachTkn)
                             localTrigger = True
@@ -1050,7 +1050,7 @@ def run(args):
                     if ((grm in resource_terms.keys()) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
@@ -1058,7 +1058,7 @@ def run(args):
                     elif ((  grm in resource_terms_revised.keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
@@ -1066,7 +1066,7 @@ def run(args):
                         resourceId = resourceBracketedPermutationTermsDict[grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
@@ -1081,7 +1081,7 @@ def run(args):
                         # statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
                         status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
@@ -1117,7 +1117,7 @@ def run(args):
                     if ((grm in resource_terms.keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
@@ -1125,7 +1125,7 @@ def run(args):
                     elif ((grm in resource_terms_revised.keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                             # # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
@@ -1134,7 +1134,7 @@ def run(args):
                         resourceId = resourceBracketedPermutationTermsDict[grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
@@ -1149,7 +1149,7 @@ def run(args):
                             # statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
                             status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                             for eachTkn in grmTokens:
-                                coveredAllTokensSet.append(eachTkn)
+                                covered_tokens.append(eachTkn)
                                 if eachTkn in remaining_tokens:
                                     remaining_tokens.remove(eachTkn)
                             localTrigger = True
@@ -1162,7 +1162,7 @@ def run(args):
                         status_addendum.append("Using Semantic Tagging Resources")
                         localTrigger = True
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
@@ -1196,14 +1196,14 @@ def run(args):
                     if ((grm in resource_terms.keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
                     elif (( grm in resource_terms_revised.keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                             # # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
@@ -1212,7 +1212,7 @@ def run(args):
                         resourceId = resourceBracketedPermutationTermsDict[grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
@@ -1227,7 +1227,7 @@ def run(args):
                         # statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
                         status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
@@ -1240,7 +1240,7 @@ def run(args):
                         status_addendum.append("Using Semantic Tagging Resources")
                         localTrigger = True
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
@@ -1273,7 +1273,7 @@ def run(args):
                 if ((grm in resource_terms.keys() ) and not localTrigger):
                     partialMatchedList.append(grm)
                     for eachTkn in grmTokens:
-                        coveredAllTokensSet.append(eachTkn)
+                        covered_tokens.append(eachTkn)
                         if eachTkn in remaining_tokens:
                             remaining_tokens.remove(eachTkn)
                     localTrigger = True
@@ -1281,7 +1281,7 @@ def run(args):
                 elif ((grm in resource_terms_revised.keys() ) and not localTrigger):
                     partialMatchedList.append(grm)
                     for eachTkn in grmTokens:
-                        coveredAllTokensSet.append(eachTkn)
+                        covered_tokens.append(eachTkn)
                         if eachTkn in remaining_tokens:
                             remaining_tokens.remove(eachTkn)
                         # # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
@@ -1296,7 +1296,7 @@ def run(args):
                         # statusAddendum = statusAddendum + "[Suffix Addition- " + suffixString + " to the Input]"
                         status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                         for eachTkn in grmTokens:
-                            coveredAllTokensSet.append(eachTkn)
+                            covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger=True
@@ -1309,7 +1309,7 @@ def run(args):
                     status_addendum.append("Using Semantic Tagging Resources")
                     localTrigger = True
                     for eachTkn in grmTokens:
-                        coveredAllTokensSet.append(eachTkn)
+                        covered_tokens.append(eachTkn)
                         if eachTkn in remaining_tokens:
                             remaining_tokens.remove(eachTkn)
 
@@ -1322,7 +1322,7 @@ def run(args):
                     status_addendum.append("Using Candidate Processes")
                     localTrigger = True
                     for eachTkn in grmTokens:
-                        coveredAllTokensSet.append(eachTkn)
+                        covered_tokens.append(eachTkn)
                         if eachTkn in remaining_tokens:
                             remaining_tokens.remove(eachTkn)
 
@@ -1331,7 +1331,7 @@ def run(args):
             status = "GComponent Match"             #Note: GComponent instead of is used as tag to help sorting later in result file
 
             remSetConv = set(remaining_tokens)
-            coveredAllTokensSetConv=set(coveredAllTokensSet)
+            coveredAllTokensSetConv=set(covered_tokens)
             remSetDiff = remSetConv.difference(coveredAllTokensSetConv)
             # Checking of coverage of tokens for sample as well overall dataset
             coveredTSet = []
@@ -1344,16 +1344,16 @@ def run(args):
                         entityPart = resList[0]
                         entityTag = resList[1]
                         coveredTSet.append(entityPart)
-                        coveredAllTokensSet.append(entityPart)
+                        covered_tokens.append(entityPart)
                     else:
                         coveredTSet.append(eachTkn)
-                        coveredAllTokensSet.append(eachTkn)
+                        covered_tokens.append(eachTkn)
 
             # To find the remaining unmatched token set (Currently has those ones also which otherwise are removed by lexicons such as - synonyms. So need to be removed)
             for chktkn in sampleTokens:
                 if (chktkn not in coveredTSet):
                     remainingTSet.append(chktkn)
-                if (chktkn not in coveredAllTokensSet):
+                if (chktkn not in covered_tokens):
                     remainingTokenSet.append(chktkn)
 
             #Decoding the partial matched set to get back resource ids
