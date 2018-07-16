@@ -588,6 +588,35 @@ def run(args):
                     "all_match_terms_with_resource_ids": "--",
                     "match_status_micro_level": "Empty Sample",
                 })
+            # Full-term match without any treatment
+            elif sample in resource_terms:
+                # Matched term and its resource ID
+                # TODO: We should make this more consistent with other
+                #       match scenarios, where retSet is used instead.
+                term_and_id = "[" + sample + ":" + resource_terms[sample] + "]"
+                # Update retSet
+                # TODO: Can this be a local variable?
+                retSet.append(sample + ":" + resource_terms[sample])
+                # Update statusAddendumSet
+                statusAddendumSet.append("A Direct Match")
+                # statusAddendumSet without duplicates
+                statusAddendumSetFinal = set(statusAddendumSet)
+                # Update ret
+                ret.update({
+                    "matched_term": sample,
+                    "all_match_terms_with_resource_ids": term_and_id,
+                    "retained_terms_with_resource_ids": str(list(retSet)),
+                    "match_status_macro_level": "Full Term Match",
+                    "match_status_micro_level": str(list(statusAddendumSetFinal)),
+                })
+                # Tokenize sample
+                sample_tokens = word_tokenize(sample.lower())
+                # Iterate over tokens
+                for token in sample_tokens:
+                    # Add token to coveredAllTokensSet
+                    coveredAllTokensSet.append(token)
+                    # Remove token from remSet
+                    remSet.remove(token)
             # Full-term match not found
             else:
                 raise MatchNotFoundError("Full-term match not found for: " + sample)
@@ -595,44 +624,18 @@ def run(args):
             return ret
 
         # Rule1: Annotate all the empty samples
+        # Rule2: Annotate all the Full Term Matches of Terms without any treatment
         try:
             full_term_match = find_full_term_match(sample)
             fw.write("\t" + full_term_match["matched_term"] + "\t"
                 + full_term_match["all_match_terms_with_resource_ids"] + "\t"
-                + "\t" + "\t" + full_term_match["match_status_micro_level"])
+                + full_term_match["retained_terms_with_resource_ids"] + "\t"
+                + full_term_match["number_of_components_for_component_match"]
+                + "\t" + full_term_match["match_status_macro_level"]
+                + "\t" + full_term_match["match_status_micro_level"])
             trigger = True
         except MatchNotFoundError:
             pass
-
-        # Rule2: Annotate all the Full Term Matches of Terms without any treatment
-        if ((sample in resource_terms.keys() ) and not trigger):
-            if(sample in resource_terms.keys()):
-                resourceId = resource_terms[sample]  # Gets the id of the resource for matched term
-            status = "Full Term Match"
-            # statusAddendum = "[A DirectMatch]"
-            statusAddendumSet.append("A Direct Match")
-            statusAddendumSetFinal = set(statusAddendumSet)
-            retSet.append(sample + ":" + resourceId)
-            if args.format == 'full':
-                # output fields:
-                #   'matched_term':                             sample,
-                #   'all_matched_terms_with_resource_ids':      "[" + (sample + ":" + resourceId) + "]"
-                #   'retained_terms_with_resource_ids':         str(retSet)
-                #   'number_of_components_for_component_match': 
-                #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                fw.write('\t' + sample + '\t' + "[" + (sample + ":" + resourceId) + "]" + '\t' + str(retSet) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
-            else:
-                # output fields:
-                #   'matched_term':                        sample
-                #   'all_matched_terms_with_resource_ids': "[" + (sample + ":" + resourceId) + "]"
-                fw.write('\t' + sample + '\t' + "[" + (sample + ":" + resourceId) + "]" )
-            # To Count the Covered Tokens(words)
-            thisSampleTokens = word_tokenize(sample.lower())
-            for thisSampleIndvToken in thisSampleTokens:
-                coveredAllTokensSet.append(thisSampleIndvToken)
-                remSet.remove(thisSampleIndvToken)
-            trigger = True
 
         # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
         if ((sample.lower() in resource_terms.keys()) and not trigger):
