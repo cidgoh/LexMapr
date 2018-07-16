@@ -564,6 +564,14 @@ def run(args):
                                     * Get find_full_term_match working
                                     * Abstract component matching
                                         * May fit in new class
+                * simplify change-of-case treatments as follows:
+                    * resource dictionaries only contain lower-case
+                        words
+                    * check if sample.lower() is in a given dictionary
+                    * add appropriate status addendum
+                    * check if sample != sample.lower()
+                        * if true, add change-of-case treatment to
+                            status addendum
             """
             # Dictionary to return
             ret = {
@@ -592,7 +600,8 @@ def run(args):
             elif sample in resource_terms:
                 # Matched term and its resource ID
                 # TODO: We should make this more consistent with other
-                #       match scenarios, where retained_tokens is used instead.
+                #       match scenarios, where retained_tokens is used
+                #       instead.
                 term_and_id = "[" + sample + ":" + resource_terms[sample] + "]"
                 # Update retained_tokens
                 # TODO: Can this be a local variable?
@@ -617,6 +626,32 @@ def run(args):
                     coveredAllTokensSet.append(token)
                     # Remove token from remaining_tokens
                     remaining_tokens.remove(token)
+            # Full-term match with change-of-case treatment
+            elif sample.lower() in resource_terms:
+                # Resource ID for matched term
+                resource_id = resource_terms[sample.lower()]
+                # Update retained tokens
+                retained_tokens.append(sample.lower() + ":" + resource_id)
+                # Update status_addendum
+                status_addendum.append("Change of Case in Input Data")
+                # status_addendum without duplicates
+                final_status = set(status_addendum)
+                # Update ret
+                ret.update({
+                    "matched_term": sample.lower(),
+                    "all_match_terms_with_resource_ids": str(list(retained_tokens)),
+                    "retained_terms_with_resource_ids": str(list(retained_tokens)),
+                    "match_status_macro_level": "Full Term Match",
+                    "match_status_micro_level": str(list(final_status)),
+                })
+                # Tokenize sample
+                sample_tokens = word_tokenize(sample.lower())
+                # Iterate over tokens
+                for token in sample_tokens:
+                    # Add token to coveredAllTokensSet
+                    coveredAllTokensSet.append(token)
+                    # Remove token from remaining_tokens
+                    remaining_tokens.remove(token)
             # Full-term match not found
             else:
                 raise MatchNotFoundError("Full-term match not found for: " + sample)
@@ -625,6 +660,7 @@ def run(args):
 
         # Rule1: Annotate all the empty samples
         # Rule2: Annotate all the Full Term Matches of Terms without any treatment
+        # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
         try:
             full_term_match = find_full_term_match(sample)
             # TODO: Account for args.format != full.
@@ -639,36 +675,7 @@ def run(args):
             pass
 
         # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
-        if ((sample.lower() in resource_terms.keys()) and not trigger):
-            if(sample.lower() in resource_terms.keys()):
-                resourceId = resource_terms[sample.lower()]  # Gets the id of the resource for matched term
-            status = "Full Term Match"
-            # statusAddendum = "[Change of Case in Input Data]"
-            status_addendum.append("Change of Case in Input Data")
-            final_status = set(status_addendum)
-            retained_tokens.append(sample.lower() + ":" + resourceId)
-            if args.format == "full":
-                # output fields:
-                #   'matched_term':                             sample.lower()
-                #   'all_matched_terms_with_resource_ids':      str(retained_tokens)
-                #   'retained_terms_with_resource_ids'          str(retained_tokens)
-                #   'number_of_components_for_component_match': 
-                #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(list(final_status))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
-            else:
-                # output fields:
-                #   'matched_term':                        sample.lower()
-                #   'all_matched_terms_with_resource_ids': str(list(retained_tokens))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
-            # To Count the Covered Tokens(words)
-            thisSampleTokens = word_tokenize(sample.lower())
-            for thisSampleIndvToken in thisSampleTokens:
-                coveredAllTokensSet.append(thisSampleIndvToken)
-                remaining_tokens.remove(thisSampleIndvToken)
-            trigger = True  # resourcePermutationTermsDict
-
-        elif ((sample.lower() in resource_terms_revised.keys() ) and not trigger):
+        if ((sample.lower() in resource_terms_revised.keys() ) and not trigger):
             if (sample.lower() in resource_terms_revised.keys()):
                 resourceId = resource_terms_revised[sample.lower()]  # Gets the id of the resource for matched term
             status = "Full Term Match"
