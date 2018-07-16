@@ -408,8 +408,8 @@ def run(args):
         status = ""  # variable reflecting status of Matching to be displayed for evry rule/section
         # statusAddendum = ""
         statusAddendumSet = []
-        statusAddendumSetFinal = []
-        del statusAddendumSetFinal [:]
+        final_status = []
+        del final_status [:]
         retained_tokens = []
         remaining_tokens = []
         #Writing in the output file with sampleid and sample to start with
@@ -600,14 +600,14 @@ def run(args):
                 # Update statusAddendumSet
                 statusAddendumSet.append("A Direct Match")
                 # statusAddendumSet without duplicates
-                statusAddendumSetFinal = set(statusAddendumSet)
+                final_status = set(statusAddendumSet)
                 # Update ret
                 ret.update({
                     "matched_term": sample,
                     "all_match_terms_with_resource_ids": term_and_id,
                     "retained_terms_with_resource_ids": str(list(retained_tokens)),
                     "match_status_macro_level": "Full Term Match",
-                    "match_status_micro_level": str(list(statusAddendumSetFinal)),
+                    "match_status_micro_level": str(list(final_status)),
                 })
                 # Tokenize sample
                 sample_tokens = word_tokenize(sample.lower())
@@ -645,7 +645,7 @@ def run(args):
             status = "Full Term Match"
             # statusAddendum = "[Change of Case in Input Data]"
             statusAddendumSet.append("Change of Case in Input Data")
-            statusAddendumSetFinal = set(statusAddendumSet)
+            final_status = set(statusAddendumSet)
             retained_tokens.append(sample.lower() + ":" + resourceId)
             if args.format == "full":
                 # output fields:
@@ -654,8 +654,8 @@ def run(args):
                 #   'retained_terms_with_resource_ids'          str(retained_tokens)
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                #   'match_status_micro_level':                 str(list(final_status))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
@@ -674,7 +674,7 @@ def run(args):
             status = "Full Term Match"
             # statusAddendum = "[Change of Case in Input or Resource Data]"
             statusAddendumSet.append("Change of Case in Resource Data")
-            statusAddendumSetFinal = set(statusAddendumSet)
+            final_status = set(statusAddendumSet)
             retained_tokens.append(sample.lower() + ":" + resourceId)
             if args.format == 'full':
                 # output fields:
@@ -683,8 +683,8 @@ def run(args):
                 #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + "\t" + str(list(statusAddendumSetFinal)))
+                #   'match_status_micro_level':                 str(list(final_status))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + "\t" + str(list(final_status)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
@@ -704,7 +704,7 @@ def run(args):
             status = "Full Term Match"
             # statusAddendum = "[Permutation of Tokens in Resource Term]"
             statusAddendumSet.append("Permutation of Tokens in Resource Term")
-            statusAddendumSetFinal = set(statusAddendumSet)
+            final_status = set(statusAddendumSet)
             retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
             if args.format == 'full':
                 # output fields:
@@ -713,8 +713,8 @@ def run(args):
                 #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                #   'match_status_micro_level':                 str(list(final_status))
+                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
@@ -735,7 +735,7 @@ def run(args):
             status = "Full Term Match"
             # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
             statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
-            statusAddendumSetFinal = set(statusAddendumSet)
+            final_status = set(statusAddendumSet)
             retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
             if args.format == 'full':
                 # output fields:
@@ -744,8 +744,8 @@ def run(args):
                 #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
                 #   'number_of_components_for_component_match': 
                 #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                fw.write('\t' + sample.lower() + '\t' +  str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                #   'match_status_micro_level':                 str(list(final_status))
+                fw.write('\t' + sample.lower() + '\t' +  str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
             else:
                 # output fields:
                 #   'matched_term':                        sample.lower()
@@ -768,7 +768,7 @@ def run(args):
                 status = "Full Term Match"
                 # statusAddendum = "[Change of Case of Resource and Suffix Addition- "+suffixString+" to the Input]"
                 statusAddendumSet.append("[Change of Case of Resource and Suffix Addition- "+suffixString+" to the Input]")
-                statusAddendumSetFinal = set(statusAddendumSet)
+                final_status = set(statusAddendumSet)
                 retained_tokens.append(sampleRevisedWithSuffix + ":" + resourceId)
                 if args.format == 'full':
                     # output fields:
@@ -777,8 +777,8 @@ def run(args):
                     #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
                     #   'number_of_components_for_component_match': 
                     #   'match_status_macro_level':                 status
-                    #   'match_status_micro_level':                 str(list(statusAddendumSetFinal))
-                    fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    #   'match_status_micro_level':                 str(list(final_status))
+                    fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
                     # output fields:
                     #   'matched_term':                        sample.lower()
@@ -805,7 +805,7 @@ def run(args):
                 status = "Full Term Match"  # -Inflection, Synonym, Spelling Correction, Foreign Language Treatment "
                 # statusAddendum = statusAddendum + "[A Direct Match with Cleaned Sample]"
                 statusAddendumSet.append("A Direct Match with Cleaned Sample")
-                statusAddendumSetFinal = set(statusAddendumSet)
+                final_status = set(statusAddendumSet)
                 retained_tokens.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
                     # output fields:
@@ -814,8 +814,8 @@ def run(args):
                     #   '': str(list(retDet))
                     #   '':
                     #   '': status
-                    #   '': str(list(statusAddendumSetFinal))
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    #   '': str(list(final_status))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
                     # output fields:
                     #   '': newPhrase.lower()
@@ -835,10 +835,10 @@ def run(args):
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Change of Case of Resource Terms]"
                 statusAddendumSet.append("Change of Case of Resource Terms")
-                statusAddendumSetFinal = set(statusAddendumSet)
+                final_status = set(statusAddendumSet)
                 retained_tokens.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
                     fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
@@ -853,11 +853,11 @@ def run(args):
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Permutation of Tokens in Resource Term]"
                 statusAddendumSet.append("Permutation of Tokens in Resource Term")
-                statusAddendumSetFinal = set(statusAddendumSet)
+                final_status = set(statusAddendumSet)
                 resourceOriginalTerm = resource_terms_ID_based[resourceId]
                 retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
                     fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
@@ -872,11 +872,11 @@ def run(args):
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Permutation of Tokens in Bracketed Resource Term]"
                 statusAddendumSet.append("Permutation of Tokens in Bracketed Resource Term")
-                statusAddendumSetFinal = set(statusAddendumSet)
+                final_status = set(statusAddendumSet)
                 resourceOriginalTerm = resource_terms_ID_based[resourceId]
                 retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
                     fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
@@ -894,10 +894,10 @@ def run(args):
                     status = "Full Term Match"
                     # statusAddendum = "[CleanedSample-Change of Case of Resource and Suffix Addition- " + suffixString + " to the Input]"
                     statusAddendumSet.append("[CleanedSample-Change of Case of Resource and Suffix Addition- " + suffixString + " to the Input]")
-                    statusAddendumSetFinal = set(statusAddendumSet)
+                    final_status = set(statusAddendumSet)
                     retained_tokens.append(sampleRevisedWithSuffix + ":" + resourceId)
                     if args.format == 'full':
-                        fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                        fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
                     else:
                         fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
                     # To Count the Covered Tokens(words)
@@ -920,10 +920,10 @@ def run(args):
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[New Candidadte Terms -validated with Wikipedia Based Collocation Resource]"
                 statusAddendumSet.append("New Candidadte Terms -validated with Wikipedia Based Collocation Resource")
-                statusAddendumSetFinal = set(statusAddendumSet)
+                final_status = set(statusAddendumSet)
                 retained_tokens.append(newPhrase.lower() + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' +str(list(retained_tokens)) + '\t' + str(list(retained_tokens))  + '\t' + '\t' + status + '\t' + str(list(statusAddendumSetFinal)))
+                    fw.write('\t' + newPhrase.lower() + '\t' +str(list(retained_tokens)) + '\t' + str(list(retained_tokens))  + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
                     fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
@@ -1387,12 +1387,12 @@ def run(args):
                 logger.debug("retainedSet " + str(retainedSet))
                 # HERE SHOULD HAVE ANOTHER RETAING SET
 
-            statusAddendumSetFinal = set(statusAddendumSet)
+            final_status = set(statusAddendumSet)
 
             # In case it is for componet matching and we have at least one component matched
             if (len(partialMatchedSet) > 0):
                 if args.format == 'full':
-                    fw.write('\t' + str(list(partialMatchedSet)) + '\t' + str(list(partialMatchedResourceListSet)) + '\t' + str(list(retainedSet)) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(list(statusAddendumSetFinal)) + '\t' + str(list(remSetDiff)))
+                    fw.write('\t' + str(list(partialMatchedSet)) + '\t' + str(list(partialMatchedResourceListSet)) + '\t' + str(list(retainedSet)) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(list(final_status)) + '\t' + str(list(remSetDiff)))
                 compctr = 0
                 if args.format == 'full':
                     fw.write("\t")
