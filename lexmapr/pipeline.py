@@ -604,20 +604,15 @@ def run(args):
                 # Term with we found a full-term match for
                 matched_term = sample
                 # Resource ID for matched term
-                resource_id = resource_terms[sample]
-                # Update retained_tokens
-                # TODO: Can this be a local variable?
-                retained_tokens.append(sample + ":" + resource_id)
+                resource_id = resource_terms[matched_term]
                 # Update status_addendum
                 status_addendum.append("A Direct Match")
-            # Full-term match with change-of-case treatment
+            # Full-term match with change-of-case in input data
             elif sample.lower() in resource_terms:
                 # Term with we found a full-term match for
                 matched_term = sample.lower()
                 # Resource ID for matched term
-                resource_id = resource_terms[sample.lower()]
-                # Update retained tokens
-                retained_tokens.append(sample.lower() + ":" + resource_id)
+                resource_id = resource_terms[matched_term]
                 # Update status_addendum
                 status_addendum.append("Change of Case in Input Data")
             # Full-term match not found
@@ -628,11 +623,16 @@ def run(args):
             # non-empty sample.
             # status_addendum without duplicates
             final_status = set(status_addendum)
+            # Update retained_tokens
+            # TODO: Can this be a local variable?
+            retained_tokens.append(matched_term + ":" + resource_id)
             # Update ret
             ret.update({
                 "matched_term": matched_term,
-                "all_match_terms_with_resource_ids": str(list(retained_tokens)),
-                "retained_terms_with_resource_ids": str(list(retained_tokens)),
+                "all_match_terms_with_resource_ids":
+                    str(list(retained_tokens)),
+                "retained_terms_with_resource_ids":
+                    str(list(retained_tokens)),
                 "match_status_macro_level": "Full Term Match",
                 "match_status_micro_level": str(list(final_status)),
             })
@@ -654,11 +654,12 @@ def run(args):
             full_term_match = find_full_term_match(sample)
             if args.format == "full":
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
-                    + full_term_match["all_match_terms_with_resource_ids"] + "\t"
-                    + full_term_match["retained_terms_with_resource_ids"] + "\t"
-                    + full_term_match["number_of_components_for_component_match"]
-                    + "\t" + full_term_match["match_status_macro_level"]
-                    + "\t" + full_term_match["match_status_micro_level"])
+                    + full_term_match["all_match_terms_with_resource_ids"]
+                    + "\t"
+                    + full_term_match["retained_terms_with_resource_ids"]
+                    + "\t" + "\t"
+                    + full_term_match["match_status_macro_level"] + "\t"
+                    + full_term_match["match_status_micro_level"])
             else:
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
                     + full_term_match["all_match_terms_with_resource_ids"])
