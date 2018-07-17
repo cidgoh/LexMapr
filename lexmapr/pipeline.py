@@ -313,7 +313,7 @@ def run(args):
     resource_terms_revised = {k.lower():v for k,v in resource_terms.items()}
 
     # 23-Method for getting all the permutations of Resource Terms
-    resourcePermutationTermsDict = {}
+    resource_permutation_terms = {}
     # Iterate
     for k, v in resource_terms_revised.items():
         resourceid = v
@@ -329,7 +329,7 @@ def run(args):
                 logger.debug("sssssssssssssss=== " + str(setPerm))
                 for perm in setPerm:
                     permString = ' '.join(perm)
-                    resourcePermutationTermsDict[permString.strip()] = resourceid.strip()
+                    resource_permutation_terms[permString.strip()] = resourceid.strip()
 
     # 24-Method for getting all the permutations of Bracketed Resource Terms
     resourceBracketedPermutationTermsDict={}
@@ -676,8 +676,8 @@ def run(args):
             pass
 
         # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
-        if (sample.lower() in resourcePermutationTermsDict.keys() and not trigger):
-            resourceId = resourcePermutationTermsDict[sample.lower()]
+        if (sample.lower() in resource_permutation_terms.keys() and not trigger):
+            resourceId = resource_permutation_terms[sample.lower()]
             # here need to do the actualResourceTerm=resourceTermsDict.get(resourceId)
             resourceOriginalTerm = resource_terms_ID_based[resourceId]
             status = "Full Term Match"
@@ -827,8 +827,8 @@ def run(args):
                     remaining_tokens.remove(thisSampleIndvToken)
                 trigger = True
 
-            elif (newPhrase.lower() in resourcePermutationTermsDict.keys() and not trigger):
-                resourceId = resourcePermutationTermsDict[newPhrase.lower()]
+            elif (newPhrase.lower() in resource_permutation_terms.keys() and not trigger):
+                resourceId = resource_permutation_terms[newPhrase.lower()]
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Permutation of Tokens in Resource Term]"
                 status_addendum.append("Permutation of Tokens in Resource Term")
@@ -1333,8 +1333,8 @@ def run(args):
                 elif (matchstring in resource_terms_revised.keys()):
                     resourceId = resource_terms_revised[matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
-                elif (matchstring in resourcePermutationTermsDict.keys()):
-                    resourceId = resourcePermutationTermsDict[matchstring]
+                elif (matchstring in resource_permutation_terms.keys()):
+                    resourceId = resource_permutation_terms[matchstring]
                     resourceOriginalTerm = resource_terms_ID_based[resourceId]
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
                 elif (matchstring in resourceBracketedPermutationTermsDict.keys()):
