@@ -644,6 +644,21 @@ def run(args):
                 # Update status_addendum
                 status_addendum.append(
                     "Permutation of Tokens in Resource Term")
+            # Full-term match with permutation of bracketed resource term
+            elif sample.lower() in resource_bracketed_permutation_terms:
+                # Term we found a permutation for
+                matched_term = sample.lower()
+                # Resource ID for matched_term's permutation
+                resource_id =\
+                    resource_bracketed_permutation_terms[matched_term]
+                # Permutation corresponding to matched_term
+                matched_permutation = resource_terms_ID_based[resource_id]
+                # Update retained_tokens
+                retained_tokens.append(matched_permutation + ":"
+                    + resource_id)
+                # Update status_addendum
+                status_addendum.append(
+                    "Permutation of Tokens in Bracketed Resource Term")
             # Full-term match not found
             else:
                 raise MatchNotFoundError("Full-term match not found for: " + sample)
@@ -692,37 +707,6 @@ def run(args):
             trigger = True
         except MatchNotFoundError:
             pass
-
-        # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
-        if (sample.lower() in resource_bracketed_permutation_terms.keys() and not trigger):
-            resourceId = resource_bracketed_permutation_terms[sample.lower()]
-            # here need to do the actualResourceTerm=resourceTermsDict.get(resourceId)
-            resourceOriginalTerm = resource_terms_ID_based[resourceId]
-            status = "Full Term Match"
-            # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
-            status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
-            final_status = set(status_addendum)
-            retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
-            if args.format == 'full':
-                # output fields:
-                #   'matched_term':                             sample.lower()
-                #   'all_matched_terms_with_resource_ids':      str(list(retained_tokens))
-                #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
-                #   'number_of_components_for_component_match': 
-                #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(list(final_status))
-                fw.write('\t' + sample.lower() + '\t' +  str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
-            else:
-                # output fields:
-                #   'matched_term':                        sample.lower()
-                #   'all_matched_terms_with_resource_ids': str(list(retained_tokens))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
-            # To Count the Covered Tokens(words)
-            thisSampleTokens = word_tokenize(sample.lower())
-            for thisSampleIndvToken in thisSampleTokens:
-                covered_tokens.append(thisSampleIndvToken)
-                remaining_tokens.remove(thisSampleIndvToken)
-            trigger = True
 
         # Here we check all the suffices that can be applied to input term to make it comparable with resource terms
         suffixList = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
