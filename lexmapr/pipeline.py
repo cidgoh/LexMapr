@@ -598,14 +598,11 @@ def run(args):
                 })
             # Full-term match without any treatment
             elif sample in resource_terms:
-                # Matched term and its resource ID
-                # TODO: We should make this more consistent with other
-                #       match scenarios, where retained_tokens is used
-                #       instead.
-                term_and_id = "[" + sample + ":" + resource_terms[sample] + "]"
+                # Resource ID for matched term
+                resource_id = resource_terms[sample]
                 # Update retained_tokens
                 # TODO: Can this be a local variable?
-                retained_tokens.append(sample + ":" + resource_terms[sample])
+                retained_tokens.append(sample + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("A Direct Match")
                 # status_addendum without duplicates
@@ -613,7 +610,7 @@ def run(args):
                 # Update ret
                 ret.update({
                     "matched_term": sample,
-                    "all_match_terms_with_resource_ids": term_and_id,
+                    "all_match_terms_with_resource_ids": str(list(retained_tokens)),
                     "retained_terms_with_resource_ids": str(list(retained_tokens)),
                     "match_status_macro_level": "Full Term Match",
                     "match_status_micro_level": str(list(final_status)),
