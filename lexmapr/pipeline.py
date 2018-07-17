@@ -694,38 +694,7 @@ def run(args):
             pass
 
         # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
-        if (sample.lower() in resource_permutation_terms.keys() and not trigger):
-            resourceId = resource_permutation_terms[sample.lower()]
-            # here need to do the actualResourceTerm=resourceTermsDict.get(resourceId)
-            resourceOriginalTerm = resource_terms_ID_based[resourceId]
-            status = "Full Term Match"
-            # statusAddendum = "[Permutation of Tokens in Resource Term]"
-            status_addendum.append("Permutation of Tokens in Resource Term")
-            final_status = set(status_addendum)
-            retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
-            if args.format == 'full':
-                # output fields:
-                #   'matched_term':                             sample.lower()
-                #   'all_matched_terms_with_resource_ids':      str(list(retained_tokens))
-                #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
-                #   'number_of_components_for_component_match': 
-                #   'match_status_macro_level':                 status
-                #   'match_status_micro_level':                 str(list(final_status))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
-            else:
-                # output fields:
-                #   'matched_term':                        sample.lower()
-                #   'all_matched_terms_with_resource_ids': str(list(retained_tokens))
-                fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
-            # To Count the Covered Tokens(words)
-            thisSampleTokens = word_tokenize(sample.lower())
-            for thisSampleIndvToken in thisSampleTokens:
-                covered_tokens.append(thisSampleIndvToken)
-                remaining_tokens.remove(thisSampleIndvToken)
-            trigger = True
-
-
-        elif (sample.lower() in resourceBracketedPermutationTermsDict.keys() and not trigger):
+        if (sample.lower() in resourceBracketedPermutationTermsDict.keys() and not trigger):
             resourceId = resourceBracketedPermutationTermsDict[sample.lower()]
             # here need to do the actualResourceTerm=resourceTermsDict.get(resourceId)
             resourceOriginalTerm = resource_terms_ID_based[resourceId]
