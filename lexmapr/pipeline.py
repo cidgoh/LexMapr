@@ -332,7 +332,7 @@ def run(args):
                     resource_permutation_terms[permString.strip()] = resourceid.strip()
 
     # 24-Method for getting all the permutations of Bracketed Resource Terms
-    resourceBracketedPermutationTermsDict={}
+    resource_bracketed_permutation_terms={}
     # Iterate
     for k, v in resource_terms_revised.items():
         resourceid = v
@@ -349,7 +349,7 @@ def run(args):
                     setPerm = allPermutations(candidate)
                     for perm in setPerm:
                         permString = ' '.join(perm)
-                        resourceBracketedPermutationTermsDict[permString.strip()] = resourceid.strip()
+                        resource_bracketed_permutation_terms[permString.strip()] = resourceid.strip()
                 elif "," in part2:
                     lst = part2.split(",")
                     bracketedPart = ""
@@ -362,7 +362,7 @@ def run(args):
                     setPerm = allPermutations(candidate)
                     for perm in setPerm:
                         permString = ' '.join(perm)
-                        resourceBracketedPermutationTermsDict[permString.strip()] = resourceid.strip()
+                        resource_bracketed_permutation_terms[permString.strip()] = resourceid.strip()
                     
     # Output file Column Headings
     OUTPUT_FIELDS = [
@@ -694,8 +694,8 @@ def run(args):
             pass
 
         # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
-        if (sample.lower() in resourceBracketedPermutationTermsDict.keys() and not trigger):
-            resourceId = resourceBracketedPermutationTermsDict[sample.lower()]
+        if (sample.lower() in resource_bracketed_permutation_terms.keys() and not trigger):
+            resourceId = resource_bracketed_permutation_terms[sample.lower()]
             # here need to do the actualResourceTerm=resourceTermsDict.get(resourceId)
             resourceOriginalTerm = resource_terms_ID_based[resourceId]
             status = "Full Term Match"
@@ -833,8 +833,8 @@ def run(args):
                     remaining_tokens.remove(thisSampleIndvToken)
                 trigger = True
 
-            elif (newPhrase.lower() in resourceBracketedPermutationTermsDict.keys() and not trigger):
-                resourceId = resourceBracketedPermutationTermsDict[newPhrase.lower()]
+            elif (newPhrase.lower() in resource_bracketed_permutation_terms.keys() and not trigger):
+                resourceId = resource_bracketed_permutation_terms[newPhrase.lower()]
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Permutation of Tokens in Bracketed Resource Term]"
                 status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
@@ -952,8 +952,8 @@ def run(args):
                                 remaining_tokens.remove(eachTkn)
                             # # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
                         localTrigger = True
-                    elif (grm in resourceBracketedPermutationTermsDict.keys() and not localTrigger):
-                        resourceId = resourceBracketedPermutationTermsDict[grm]
+                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
+                        resourceId = resource_bracketed_permutation_terms[grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1018,8 +1018,8 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (grm in resourceBracketedPermutationTermsDict.keys() and not localTrigger):
-                        resourceId = resourceBracketedPermutationTermsDict[grm]
+                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
+                        resourceId = resource_bracketed_permutation_terms[grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1086,8 +1086,8 @@ def run(args):
                                 remaining_tokens.remove(eachTkn)
                             # # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
                         localTrigger = True
-                    elif (grm in resourceBracketedPermutationTermsDict.keys() and not localTrigger):
-                        resourceId = resourceBracketedPermutationTermsDict[grm]
+                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
+                        resourceId = resource_bracketed_permutation_terms[grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1164,8 +1164,8 @@ def run(args):
                                 remaining_tokens.remove(eachTkn)
                             # # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
                         localTrigger = True
-                    elif (grm in resourceBracketedPermutationTermsDict.keys() and not localTrigger):
-                        resourceId = resourceBracketedPermutationTermsDict[grm]
+                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
+                        resourceId = resource_bracketed_permutation_terms[grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1324,8 +1324,8 @@ def run(args):
                     resourceId = resource_permutation_terms[matchstring]
                     resourceOriginalTerm = resource_terms_ID_based[resourceId]
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
-                elif (matchstring in resourceBracketedPermutationTermsDict.keys()):
-                    resourceId = resourceBracketedPermutationTermsDict[matchstring]
+                elif (matchstring in resource_bracketed_permutation_terms.keys()):
+                    resourceId = resource_bracketed_permutation_terms[matchstring]
                     resourceOriginalTerm = resource_terms_ID_based[resourceId]
                     resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
