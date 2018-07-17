@@ -538,12 +538,20 @@ def run(args):
             fw.write('\t' + str(prevPhraseStr))
 
         #---------------------------STARTS APPLICATION OF RULES-----------------------------------------------
-        def find_full_term_match(sample):
-            """Find an annotated, full-term match for a sample.
+        def find_full_term_match():
+            """Retrieve an annotated, full-term match for a sample.
+
+            Return values:
+                * class <"dict">: Contains information about match
+                    * key: class <"str">
+                    * val: class <"str">
+            Exceptions raised:
+                * MatchNotFoundError: Full-term match not found
+            Restrictions:
+                * Must be called inside run
+                    * See TODO for details
 
             TODO:
-                * complete function docstring
-                * implement function
                 * descriptive comments for ret keys
                 * move this function out of run
                     * The reason it is currently in run is because we
@@ -815,7 +823,7 @@ def run(args):
         # Rule4: This will open now the cleaned sample to the test of Full Term Matching
         # Rule5: Full Term Match if possible from multi-word collocations -e.g. from Wikipedia
         try:
-            full_term_match = find_full_term_match(sample)
+            full_term_match = find_full_term_match()
             if args.format == "full":
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
                     + full_term_match["all_match_terms_with_resource_ids"]
