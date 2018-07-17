@@ -541,8 +541,16 @@ def run(args):
         def find_full_term_match():
             """Retrieve an annotated, full-term match for a sample.
 
+            The sample matched, along with multiple resource
+            collections, are local to run. Therefore, no parameters are
+            needed, and this function is restricted to being contained
+            within run.
+
+            Also returns relevant information for empty samples.
+
             Return values:
-                * class <"dict">: Contains information about match
+                * class <"dict">: Contains all relevant annotations for
+                    output headers.
                     * key: class <"str">
                     * val: class <"str">
             Exceptions raised:
@@ -553,6 +561,7 @@ def run(args):
 
             TODO:
                 * descriptive comments for ret keys
+                    * Maybe not in this function, but somewhere else
                 * move this function out of run
                     * The reason it is currently in run is because we
                         need access to several variables that are local
@@ -584,21 +593,14 @@ def run(args):
                             status addendum
             """
             # Dictionary to return
-            ret = {
-                # ...
-                "matched_term": "",
-                # ...
-                "all_match_terms_with_resource_ids": "",
-                # ...
-                "retained_terms_with_resource_ids": "",
-                # TODO: Remove this? Not used in full-term match.
-                "number_of_components_for_component_match": "",
-                # ...
-                "match_status_macro_level": "",
-                # ...
-                "match_status_micro_level": "",
-            }
-
+            ret = dict.fromkeys([
+                "matched_term",
+                "all_match_terms_with_resource_ids",
+                "retained_terms_with_resource_ids",
+                "match_status_macro_level",
+                "match_status_micro_level"],
+                # Initialize values with empty string
+                "")
             # Empty sample
             if sample == "":
                 # Update ret
