@@ -713,6 +713,21 @@ def run(args):
                 # Update status_addendum
                 status_addendum.append(
                     "Permutation of Tokens in Bracketed Resource Term")
+            # A full-term cleaned sample match with multi-word
+            # collocation from Wikipedia exists.
+            elif cleaned_sample.lower() in collocations:
+                # Term we found a full-term match for
+                matched_term = cleaned_sample.lower()
+                # Resource ID for matched_term
+                resource_id = collocations[matched_term]
+                # Update retained_tokens
+                retained_tokens.append(matched_term + ":"
+                    + resource_id)
+                # Update status_addendum
+                status_addendum.append(
+                    "New Candidadte Terms -"
+                    + "validated with Wikipedia Based Collocation Resource"
+                )
             # Full-term match not found
             else:
                 # Find all suffixes that when appended to sample, are
@@ -798,6 +813,7 @@ def run(args):
         # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
         # Here we check all the suffices that can be applied to input term to make it comparable with resource terms
         # Rule4: This will open now the cleaned sample to the test of Full Term Matching
+        # Rule5: Full Term Match if possible from multi-word collocations -e.g. from Wikipedia
         try:
             full_term_match = find_full_term_match(sample)
             if args.format == "full":
@@ -814,30 +830,6 @@ def run(args):
             trigger = True
         except MatchNotFoundError:
             pass
-
-        # Rule5: Full Term Match if possible from multi-word collocations -e.g. from Wikipedia
-        if (not trigger):
-            logger.debug("We will go further with other rules")
-            sampleTokens = word_tokenize(sample.lower())
-            logger.debug("==============" + sample.lower())
-            logger.debug("--------------" + cleaned_sample.lower())
-            if (cleaned_sample.lower() in collocations.keys()):
-                resourceId = collocations[cleaned_sample.lower()]
-                status = "Full Term Match"
-                # statusAddendum = statusAddendum + "[New Candidadte Terms -validated with Wikipedia Based Collocation Resource]"
-                status_addendum.append("New Candidadte Terms -validated with Wikipedia Based Collocation Resource")
-                final_status = set(status_addendum)
-                retained_tokens.append(cleaned_sample.lower() + ":" + resourceId)
-                if args.format == 'full':
-                    fw.write('\t' + cleaned_sample.lower() + '\t' +str(list(retained_tokens)) + '\t' + str(list(retained_tokens))  + '\t' + '\t' + status + '\t' + str(list(final_status)))
-                else:
-                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)))
-                # To Count the Covered Tokens(words)
-                thisSampleTokens = word_tokenize(sample.lower())
-                for thisSampleIndvToken in thisSampleTokens:
-                    covered_tokens.append(thisSampleIndvToken)
-                    remaining_tokens.remove(thisSampleIndvToken)
-                trigger = True
 
         # Component Matches Section
         if (not trigger):
