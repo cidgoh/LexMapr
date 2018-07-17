@@ -588,6 +588,7 @@ def run(args):
                 # ...
                 "match_status_micro_level": "",
             }
+
             # Empty sample
             if sample == "":
                 # Update ret
@@ -596,8 +597,12 @@ def run(args):
                     "all_match_terms_with_resource_ids": "--",
                     "match_status_micro_level": "Empty Sample",
                 })
+                # Return
+                return ret
             # Full-term match without any treatment
             elif sample in resource_terms:
+                # Term with we found a full-term match for
+                matched_term = sample
                 # Resource ID for matched term
                 resource_id = resource_terms[sample]
                 # Update retained_tokens
@@ -605,53 +610,40 @@ def run(args):
                 retained_tokens.append(sample + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("A Direct Match")
-                # status_addendum without duplicates
-                final_status = set(status_addendum)
-                # Update ret
-                ret.update({
-                    "matched_term": sample,
-                    "all_match_terms_with_resource_ids": str(list(retained_tokens)),
-                    "retained_terms_with_resource_ids": str(list(retained_tokens)),
-                    "match_status_macro_level": "Full Term Match",
-                    "match_status_micro_level": str(list(final_status)),
-                })
-                # Tokenize sample
-                sample_tokens = word_tokenize(sample.lower())
-                # Iterate over tokens
-                for token in sample_tokens:
-                    # Add token to covered_tokens
-                    covered_tokens.append(token)
-                    # Remove token from remaining_tokens
-                    remaining_tokens.remove(token)
             # Full-term match with change-of-case treatment
             elif sample.lower() in resource_terms:
+                # Term with we found a full-term match for
+                matched_term = sample.lower()
                 # Resource ID for matched term
                 resource_id = resource_terms[sample.lower()]
                 # Update retained tokens
                 retained_tokens.append(sample.lower() + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("Change of Case in Input Data")
-                # status_addendum without duplicates
-                final_status = set(status_addendum)
-                # Update ret
-                ret.update({
-                    "matched_term": sample.lower(),
-                    "all_match_terms_with_resource_ids": str(list(retained_tokens)),
-                    "retained_terms_with_resource_ids": str(list(retained_tokens)),
-                    "match_status_macro_level": "Full Term Match",
-                    "match_status_micro_level": str(list(final_status)),
-                })
-                # Tokenize sample
-                sample_tokens = word_tokenize(sample.lower())
-                # Iterate over tokens
-                for token in sample_tokens:
-                    # Add token to covered_tokens
-                    covered_tokens.append(token)
-                    # Remove token from remaining_tokens
-                    remaining_tokens.remove(token)
             # Full-term match not found
             else:
                 raise MatchNotFoundError("Full-term match not found for: " + sample)
+
+            # If we reach here, we had a full-term match with a
+            # non-empty sample.
+            # status_addendum without duplicates
+            final_status = set(status_addendum)
+            # Update ret
+            ret.update({
+                "matched_term": matched_term,
+                "all_match_terms_with_resource_ids": str(list(retained_tokens)),
+                "retained_terms_with_resource_ids": str(list(retained_tokens)),
+                "match_status_macro_level": "Full Term Match",
+                "match_status_micro_level": str(list(final_status)),
+            })
+            # Tokenize sample
+            sample_tokens = word_tokenize(sample.lower())
+            # Iterate over tokens
+            for token in sample_tokens:
+                # Add token to covered_tokens
+                covered_tokens.append(token)
+                # Remove token from remaining_tokens
+                remaining_tokens.remove(token)
             # Return
             return ret
 
