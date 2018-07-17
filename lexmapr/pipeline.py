@@ -272,6 +272,7 @@ def run(args):
     resource_terms = {}
     resource_terms_revised = {}
     resource_terms_ID_based = {}
+    suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
 
     # 11-Get all synonyms from resource in CSV file format and put in a dictionary to be used further
     synonyms = get_resource_dict("SynLex.csv")
@@ -709,9 +710,8 @@ def run(args):
             pass
 
         # Here we check all the suffices that can be applied to input term to make it comparable with resource terms
-        suffixList = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-        for suff in range(len(suffixList)):
-            suffixString=suffixList[suff]
+        for suff in range(len(suffixes)):
+            suffixString=suffixes[suff]
             sampleRevisedWithSuffix = addSuffix(sample, suffixString)
             if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not trigger):
                 resourceId = resource_terms_revised[sampleRevisedWithSuffix]
@@ -836,8 +836,8 @@ def run(args):
                     remaining_tokens.remove(thisSampleIndvToken)
                 trigger = True
 
-            for suff in range(len(suffixList)):
-                suffixString = suffixList[suff]
+            for suff in range(len(suffixes)):
+                suffixString = suffixes[suff]
                 sampleRevisedWithSuffix = addSuffix(newPhrase.lower(), suffixString)
                 if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not trigger):
                     resourceId = resource_terms_revised[sampleRevisedWithSuffix]
@@ -946,8 +946,8 @@ def run(args):
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
                         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
-                    for suff in range(len(suffixList)):
-                        suffixString = suffixList[suff]
+                    for suff in range(len(suffixes)):
+                        suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = addSuffix(grm, suffixString)
                         if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
@@ -1012,8 +1012,8 @@ def run(args):
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
                         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
-                    for suff in range(len(suffixList)):
-                        suffixString = suffixList[suff]
+                    for suff in range(len(suffixes)):
+                        suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = addSuffix(grm, suffixString)
                     if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
@@ -1080,8 +1080,8 @@ def run(args):
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
                         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
-                    for suff in range(len(suffixList)):
-                        suffixString = suffixList[suff]
+                    for suff in range(len(suffixes)):
+                        suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = addSuffix(grm, suffixString)
                         if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
@@ -1158,8 +1158,8 @@ def run(args):
                         # statusAddendum = "[Permutation of Tokens in Bracketed Resource Term]"
                         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
-                    for suff in range(len(suffixList)):
-                        suffixString = suffixList[suff]
+                    for suff in range(len(suffixes)):
+                        suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = addSuffix(grm, suffixString)
                     if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
@@ -1227,8 +1227,8 @@ def run(args):
                         # # statusAddendum = "Match with 5-Gram Chunk"+statusAddendum
                     localTrigger = True
 
-                for suff in range(len(suffixList)):
-                    suffixString = suffixList[suff]
+                for suff in range(len(suffixes)):
+                    suffixString = suffixes[suff]
                     sampleRevisedWithSuffix = addSuffix(grm, suffixString)
                     if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
