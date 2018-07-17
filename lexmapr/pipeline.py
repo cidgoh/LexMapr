@@ -603,26 +603,47 @@ def run(args):
             elif sample in resource_terms:
                 # Term with we found a full-term match for
                 matched_term = sample
-                # Resource ID for matched term
+                # Resource ID for matched_term
                 resource_id = resource_terms[matched_term]
+                # Update retained_tokens
+                # TODO: Can this be a local variable?
+                retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("A Direct Match")
             # Full-term match with change-of-case in input data
             elif sample.lower() in resource_terms:
                 # Term with we found a full-term match for
                 matched_term = sample.lower()
-                # Resource ID for matched term
+                # Resource ID for matched_term
                 resource_id = resource_terms[matched_term]
+                # Update retained_tokens
+                retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("Change of Case in Input Data")
             # Full-term match with change-of-case in resource data
             elif sample.lower() in resource_terms_revised:
                 # Term with we found a full-term match for
                 matched_term = sample.lower()
-                # Resource ID for matched term
+                # Resource ID for matched_term
                 resource_id = resource_terms_revised[matched_term]
+                # Update retained_tokens
+                retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("Change of Case in Resource Data")
+            # Full-term match with permutation of resource term
+            elif sample.lower() in resource_permutation_terms:
+                # Term we found a permutation for
+                matched_term = sample.lower()
+                # Resource ID for matched_term's permutation
+                resource_id = resource_permutation_terms[matched_term]
+                # Permutation corresponding to matched_term
+                matched_permutation = resource_terms_ID_based[resource_id]
+                # Update retained_tokens
+                retained_tokens.append(matched_permutation + ":"
+                    + resource_id)
+                # Update status_addendum
+                status_addendum.append(
+                    "Permutation of Tokens in Resource Term")
             # Full-term match not found
             else:
                 raise MatchNotFoundError("Full-term match not found for: " + sample)
@@ -631,9 +652,6 @@ def run(args):
             # non-empty sample.
             # status_addendum without duplicates
             final_status = set(status_addendum)
-            # Update retained_tokens
-            # TODO: Can this be a local variable?
-            retained_tokens.append(matched_term + ":" + resource_id)
             # Update ret
             ret.update({
                 "matched_term": matched_term,
