@@ -424,7 +424,7 @@ def run(args):
         sample = re.sub(' +', ' ', sample)  # Extra innner spaces are removed
         sampleTokens = word_tokenize(sample.lower())    #Sample is tokenized into tokenList
 
-        newPhrase = ""  # Phrase that will be used for cleaned sample
+        cleaned_sample = ""  # Phrase that will be used for cleaned sample
         lemma = ""
 
         for tkn in sampleTokens:
@@ -476,45 +476,45 @@ def run(args):
 
 
             # ===This will create a cleaned sample after above treatments [Here we are making new phrase now in lower case]
-            if (not newPhrase and lemma.lower() not in stop_words):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
-                newPhrase = lemma.lower()
+            if (not cleaned_sample and lemma.lower() not in stop_words):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
+                cleaned_sample = lemma.lower()
             elif (
                 lemma.lower() not in stop_words):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
-                newPhrase = newPhrase + " " + lemma.lower()
+                cleaned_sample = cleaned_sample + " " + lemma.lower()
 
-            newPhrase = re.sub(' +', ' ', newPhrase)  # Extra innner spaces removed from cleaned sample
+            cleaned_sample = re.sub(' +', ' ', cleaned_sample)  # Extra innner spaces removed from cleaned sample
 
-            if (newPhrase in abbreviations.keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
-                newPhrase = abbreviations[newPhrase]
+            if (cleaned_sample in abbreviations.keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
+                cleaned_sample = abbreviations[cleaned_sample]
                 # statusAddendum = statusAddendum + "Cleaned Sample and Abbreviation-Acronym Treatment"
                 status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
-            elif (newPhrase in abbreviation_lower.keys()):
-                newPhrase = abbreviation_lower[newPhrase]
+            elif (cleaned_sample in abbreviation_lower.keys()):
+                cleaned_sample = abbreviation_lower[cleaned_sample]
                 # statusAddendum = statusAddendum + "Cleaned Sample and Abbreviation-Acronym Treatment"
                 status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
 
-            if (newPhrase in non_english_words.keys()):  # non English words taken care of
-                newPhrase = non_english_words[newPhrase]
+            if (cleaned_sample in non_english_words.keys()):  # non English words taken care of
+                cleaned_sample = non_english_words[cleaned_sample]
                 # # statusAddendum = statusAddendum + "Non English Language Words Treatment"
                 # statusAddendum = statusAddendum + "Cleaned Sample and Non English Language Words Treatment"
                 status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
-            elif (newPhrase in non_english_words_lower.keys()):
-                newPhrase = non_english_words_lower[newPhrase]
+            elif (cleaned_sample in non_english_words_lower.keys()):
+                cleaned_sample = non_english_words_lower[cleaned_sample]
                 # statusAddendum = statusAddendum + "Cleaned Sample and Non English Language Words Treatment"
                 status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
 
         # Here we are making the tokens of cleaned sample phrase
-        newSampleTokens = word_tokenize(newPhrase.lower())
+        newSampleTokens = word_tokenize(cleaned_sample.lower())
         tokens_pos = pos_tag(newSampleTokens)
         if args.format == "full":
             # output fields:
-            #   'cleaned_sample': newPhrase
+            #   'cleaned_sample': cleaned_sample
             #   'phrase_pos_tagged': str(tokens_pos)
-            fw.write('\t' + newPhrase + '\t' + str(tokens_pos))
+            fw.write('\t' + cleaned_sample + '\t' + str(tokens_pos))
         else:
             # output_fields:
-            #   'cleaned_sample': newPhrase
-            fw.write('\t' + newPhrase )
+            #   'cleaned_sample': cleaned_sample
+            fw.write('\t' + cleaned_sample )
 
         # This part works for getting the Candidate phrase based on POS tagging and application of the relevant rule  [Not a major contributor -not used now except for printing]
         qualityList = []
@@ -741,30 +741,30 @@ def run(args):
             logger.debug("We will go further with other rules now on cleaned sample")
             sampleTokens = word_tokenize(sample.lower())
             logger.debug("==============" + sample.lower())
-            logger.debug("--------------" + newPhrase.lower())
+            logger.debug("--------------" + cleaned_sample.lower())
 
-            if ((newPhrase.lower() in resource_terms.keys() ) and not trigger):
-                if (newPhrase.lower() in resource_terms.keys()):
-                    resourceId = resource_terms[newPhrase.lower()]  # Gets the id of the resource for matched term
+            if ((cleaned_sample.lower() in resource_terms.keys() ) and not trigger):
+                if (cleaned_sample.lower() in resource_terms.keys()):
+                    resourceId = resource_terms[cleaned_sample.lower()]  # Gets the id of the resource for matched term
                 status = "Full Term Match"  # -Inflection, Synonym, Spelling Correction, Foreign Language Treatment "
                 # statusAddendum = statusAddendum + "[A Direct Match with Cleaned Sample]"
                 status_addendum.append("A Direct Match with Cleaned Sample")
                 final_status = set(status_addendum)
-                retained_tokens.append(newPhrase.lower() + ":" + resourceId)
+                retained_tokens.append(cleaned_sample.lower() + ":" + resourceId)
                 if args.format == 'full':
                     # output fields:
-                    #   '': newPhrase.lower()
+                    #   '': cleaned_sample.lower()
                     #   '': str(list(retained_tokens))
                     #   '': str(list(retDet))
                     #   '':
                     #   '': status
                     #   '': str(list(final_status))
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
+                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
                     # output fields:
-                    #   '': newPhrase.lower()
+                    #   '': cleaned_sample.lower()
                     #   '': str(retained_tokens)
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
+                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -773,18 +773,18 @@ def run(args):
                 trigger = True
 
 
-            elif ((newPhrase.lower() in resource_terms_revised.keys() ) and not trigger):
-                if (newPhrase.lower() in resource_terms_revised.keys()):
-                    resourceId = resource_terms_revised[newPhrase.lower()]  # Gets the id of the resource for matched term
+            elif ((cleaned_sample.lower() in resource_terms_revised.keys() ) and not trigger):
+                if (cleaned_sample.lower() in resource_terms_revised.keys()):
+                    resourceId = resource_terms_revised[cleaned_sample.lower()]  # Gets the id of the resource for matched term
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Change of Case of Resource Terms]"
                 status_addendum.append("Change of Case of Resource Terms")
                 final_status = set(status_addendum)
-                retained_tokens.append(newPhrase.lower() + ":" + resourceId)
+                retained_tokens.append(cleaned_sample.lower() + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
+                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
+                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -792,8 +792,8 @@ def run(args):
                     remaining_tokens.remove(thisSampleIndvToken)
                 trigger = True
 
-            elif (newPhrase.lower() in resource_permutation_terms.keys() and not trigger):
-                resourceId = resource_permutation_terms[newPhrase.lower()]
+            elif (cleaned_sample.lower() in resource_permutation_terms.keys() and not trigger):
+                resourceId = resource_permutation_terms[cleaned_sample.lower()]
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Permutation of Tokens in Resource Term]"
                 status_addendum.append("Permutation of Tokens in Resource Term")
@@ -801,9 +801,9 @@ def run(args):
                 resourceOriginalTerm = resource_terms_ID_based[resourceId]
                 retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
+                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
+                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -811,8 +811,8 @@ def run(args):
                     remaining_tokens.remove(thisSampleIndvToken)
                 trigger = True
 
-            elif (newPhrase.lower() in resource_bracketed_permutation_terms.keys() and not trigger):
-                resourceId = resource_bracketed_permutation_terms[newPhrase.lower()]
+            elif (cleaned_sample.lower() in resource_bracketed_permutation_terms.keys() and not trigger):
+                resourceId = resource_bracketed_permutation_terms[cleaned_sample.lower()]
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[Permutation of Tokens in Bracketed Resource Term]"
                 status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
@@ -820,9 +820,9 @@ def run(args):
                 resourceOriginalTerm = resource_terms_ID_based[resourceId]
                 retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
+                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
+                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -832,7 +832,7 @@ def run(args):
 
             for suff in range(len(suffixes)):
                 suffixString = suffixes[suff]
-                sampleRevisedWithSuffix = addSuffix(newPhrase.lower(), suffixString)
+                sampleRevisedWithSuffix = addSuffix(cleaned_sample.lower(), suffixString)
                 if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not trigger):
                     resourceId = resource_terms_revised[sampleRevisedWithSuffix]
                     status = "Full Term Match"
@@ -858,18 +858,18 @@ def run(args):
             logger.debug("We will go further with other rules")
             sampleTokens = word_tokenize(sample.lower())
             logger.debug("==============" + sample.lower())
-            logger.debug("--------------" + newPhrase.lower())
-            if (newPhrase.lower() in collocations.keys()):
-                resourceId = collocations[newPhrase.lower()]
+            logger.debug("--------------" + cleaned_sample.lower())
+            if (cleaned_sample.lower() in collocations.keys()):
+                resourceId = collocations[cleaned_sample.lower()]
                 status = "Full Term Match"
                 # statusAddendum = statusAddendum + "[New Candidadte Terms -validated with Wikipedia Based Collocation Resource]"
                 status_addendum.append("New Candidadte Terms -validated with Wikipedia Based Collocation Resource")
                 final_status = set(status_addendum)
-                retained_tokens.append(newPhrase.lower() + ":" + resourceId)
+                retained_tokens.append(cleaned_sample.lower() + ":" + resourceId)
                 if args.format == 'full':
-                    fw.write('\t' + newPhrase.lower() + '\t' +str(list(retained_tokens)) + '\t' + str(list(retained_tokens))  + '\t' + '\t' + status + '\t' + str(list(final_status)))
+                    fw.write('\t' + cleaned_sample.lower() + '\t' +str(list(retained_tokens)) + '\t' + str(list(retained_tokens))  + '\t' + '\t' + status + '\t' + str(list(final_status)))
                 else:
-                    fw.write('\t' + newPhrase.lower() + '\t' + str(list(retained_tokens)))
+                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)))
                 # To Count the Covered Tokens(words)
                 thisSampleTokens = word_tokenize(sample.lower())
                 for thisSampleIndvToken in thisSampleTokens:
@@ -884,7 +884,7 @@ def run(args):
             partialMatchedList = []
             partialMatchedResourceList = []
             partialMatchedSet = []
-            newChunk = newPhrase.lower()
+            newChunk = cleaned_sample.lower()
             newChunkTokens = word_tokenize(newChunk.lower())
 
             # This is the case of making 5-gram chunks and subsequent processing for cleaned samples
