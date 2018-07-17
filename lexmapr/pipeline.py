@@ -89,6 +89,7 @@ def find_left_r(s, first, last):
 
 
 # 7-Methods to add suffixes such as food product or product to input phrase to improve Term matching
+# TODO: Does a simple operation like this warrant a function?
 def addSuffix(inputstring, suffixString):
     output = inputstring + " " + suffixString
     return output
@@ -662,7 +663,32 @@ def run(args):
                     "Permutation of Tokens in Bracketed Resource Term")
             # Full-term match not found
             else:
-                raise MatchNotFoundError("Full-term match not found for: " + sample)
+                # Find all suffixes that when appended to sample, are
+                # in resource_terms_revised.
+                matched_suffixes =\
+                    [s for s in suffixes
+                        if sample+" "+s in resource_terms_revised]
+                # A full-term match with change of resource and suffix
+                # addition exists.
+                if matched_suffixes:
+                    # Term with first suffix in suffixes that provides
+                    # a full-term match.
+                    term_with_suffix = sample + " " + matched_suffixes[0]
+                    # Term with we found a full-term match for
+                    matched_term = sample.lower()
+                    # Resource ID for matched_term
+                    resource_id = resource_terms_revised[term_with_suffix]
+                    # Update retained_tokens
+                    retained_tokens.append(term_with_suffix + ":"
+                        + resource_id)
+                    # Update status_addendum
+                    status_addendum.append(
+                        "[Change of Case of Resource and Suffix Addition- "
+                        + matched_suffixes[0]
+                        + " to the Input]")
+                # No full-term match possible with suffixes either
+                else:
+                    raise MatchNotFoundError("Full-term match not found for: " + sample)
 
             # If we reach here, we had a full-term match with a
             # non-empty sample.
@@ -692,6 +718,7 @@ def run(args):
         # Rule1: Annotate all the empty samples
         # Rule2: Annotate all the Full Term Matches of Terms without any treatment
         # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
+        # Here we check all the suffices that can be applied to input term to make it comparable with resource terms
         try:
             full_term_match = find_full_term_match(sample)
             if args.format == "full":
@@ -708,39 +735,6 @@ def run(args):
             trigger = True
         except MatchNotFoundError:
             pass
-
-        # Here we check all the suffices that can be applied to input term to make it comparable with resource terms
-        for suff in range(len(suffixes)):
-            suffixString=suffixes[suff]
-            sampleRevisedWithSuffix = addSuffix(sample, suffixString)
-            if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not trigger):
-                resourceId = resource_terms_revised[sampleRevisedWithSuffix]
-                status = "Full Term Match"
-                # statusAddendum = "[Change of Case of Resource and Suffix Addition- "+suffixString+" to the Input]"
-                status_addendum.append("[Change of Case of Resource and Suffix Addition- "+suffixString+" to the Input]")
-                final_status = set(status_addendum)
-                retained_tokens.append(sampleRevisedWithSuffix + ":" + resourceId)
-                if args.format == 'full':
-                    # output fields:
-                    #   'matched_term':                             sample.lower()
-                    #   'all_matched_terms_with_resource_ids':      str(list(retained_tokens))
-                    #   'retained_terms_with_resource_ids'          str(list(retained_tokens))
-                    #   'number_of_components_for_component_match': 
-                    #   'match_status_macro_level':                 status
-                    #   'match_status_micro_level':                 str(list(final_status))
-                    fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
-                else:
-                    # output fields:
-                    #   'matched_term':                        sample.lower()
-                    #   'all_matched_terms_with_resource_ids': str(list(retained_tokens))
-                    fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
-                trigger = True
-                # To Count the Covered Tokens(words)
-                thisSampleTokens = word_tokenize(sample.lower())
-                for thisSampleIndvToken in thisSampleTokens:
-                    covered_tokens.append(thisSampleIndvToken)
-                    remaining_tokens.remove(thisSampleIndvToken)
-
 
         # Rule4: This will open now the cleaned sample to the test of Full Term Matching
         if (not trigger):
