@@ -720,13 +720,18 @@ def run(args):
                 matched_suffixes =\
                     [s for s in suffixes
                         if sample+" "+s in resource_terms_revised]
+                # Find all suffixes that when appended to cleaned
+                # sample, are in resource_terms_revised.
+                matched_clean_suffixes =\
+                    [s for s in suffixes
+                        if cleaned_sample+" "+s in resource_terms_revised]
                 # A full-term match with change of resource and suffix
                 # addition exists.
                 if matched_suffixes:
                     # Term with first suffix in suffixes that provides
                     # a full-term match.
                     term_with_suffix = sample + " " + matched_suffixes[0]
-                    # Term with we found a full-term match for
+                    # Term we add a suffix to
                     matched_term = sample.lower()
                     # Resource ID for matched_term
                     resource_id = resource_terms_revised[term_with_suffix]
@@ -737,6 +742,26 @@ def run(args):
                     status_addendum.append(
                         "[Change of Case of Resource and Suffix Addition- "
                         + matched_suffixes[0]
+                        + " to the Input]")
+                # A full-term cleaned sample match with change of resource and
+                # suffix addition exists.
+                elif matched_clean_suffixes:
+                    # Term with first suffix in suffixes that provides
+                    # a full-term match.
+                    term_with_suffix = cleaned_sample.lower() + " "\
+                        + matched_clean_suffixes[0]
+                    # Term we cleaned and added a suffix to
+                    matched_term = sample.lower()
+                    # Resource ID for matched_term
+                    resource_id = resource_terms_revised[term_with_suffix]
+                    # Update retained_tokens
+                    retained_tokens.append(term_with_suffix + ":"
+                        + resource_id)
+                    # Update status_addendum
+                    status_addendum.append(
+                        "[CleanedSample-"
+                        + "Change of Case of Resource and Suffix Addition- "
+                        + matched_clean_suffixes[0]
                         + " to the Input]")
                 # No full-term match possible with suffixes either
                 else:
@@ -789,36 +814,6 @@ def run(args):
             trigger = True
         except MatchNotFoundError:
             pass
-
-        # Rule4: This will open now the cleaned sample to the test of Full Term Matching
-        if (not trigger):
-            logger.debug("We will go further with other rules now on cleaned sample")
-            sampleTokens = word_tokenize(sample.lower())
-            logger.debug("==============" + sample.lower())
-            logger.debug("--------------" + cleaned_sample.lower())
-
-            for suff in range(len(suffixes)):
-                suffixString = suffixes[suff]
-                sampleRevisedWithSuffix = addSuffix(cleaned_sample.lower(), suffixString)
-                if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not trigger):
-                    resourceId = resource_terms_revised[sampleRevisedWithSuffix]
-                    status = "Full Term Match"
-                    # statusAddendum = "[CleanedSample-Change of Case of Resource and Suffix Addition- " + suffixString + " to the Input]"
-                    status_addendum.append("[CleanedSample-Change of Case of Resource and Suffix Addition- " + suffixString + " to the Input]")
-                    final_status = set(status_addendum)
-                    retained_tokens.append(sampleRevisedWithSuffix + ":" + resourceId)
-                    if args.format == 'full':
-                        fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
-                    else:
-                        fw.write('\t' + sample.lower() + '\t' + str(list(retained_tokens)))
-                    # To Count the Covered Tokens(words)
-                    thisSampleTokens = word_tokenize(sample.lower())
-                    for thisSampleIndvToken in thisSampleTokens:
-                        covered_tokens.append(thisSampleIndvToken)
-                        remaining_tokens.remove(thisSampleIndvToken)
-                    trigger = True
-
-
 
         # Rule5: Full Term Match if possible from multi-word collocations -e.g. from Wikipedia
         if (not trigger):
