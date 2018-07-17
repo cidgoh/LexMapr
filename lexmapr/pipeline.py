@@ -697,6 +697,22 @@ def run(args):
                 # Update status_addendum
                 status_addendum.append(
                     "Permutation of Tokens in Resource Term")
+            # Full-term cleaned sample match with permutation of
+            # bracketed resource term.
+            elif cleaned_sample.lower() in resource_bracketed_permutation_terms:
+                # Term we found a permutation for
+                matched_term = cleaned_sample.lower()
+                # Resource ID for matched_term's permutation
+                resource_id =\
+                    resource_bracketed_permutation_terms[matched_term]
+                # Permutation corresponding to matched_term
+                matched_permutation = resource_terms_ID_based[resource_id]
+                # Update retained_tokens
+                retained_tokens.append(matched_permutation + ":"
+                    + resource_id)
+                # Update status_addendum
+                status_addendum.append(
+                    "Permutation of Tokens in Bracketed Resource Term")
             # Full-term match not found
             else:
                 # Find all suffixes that when appended to sample, are
@@ -780,25 +796,6 @@ def run(args):
             sampleTokens = word_tokenize(sample.lower())
             logger.debug("==============" + sample.lower())
             logger.debug("--------------" + cleaned_sample.lower())
-
-            if (cleaned_sample.lower() in resource_bracketed_permutation_terms.keys() and not trigger):
-                resourceId = resource_bracketed_permutation_terms[cleaned_sample.lower()]
-                status = "Full Term Match"
-                # statusAddendum = statusAddendum + "[Permutation of Tokens in Bracketed Resource Term]"
-                status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
-                final_status = set(status_addendum)
-                resourceOriginalTerm = resource_terms_ID_based[resourceId]
-                retained_tokens.append(resourceOriginalTerm + ":" + resourceId)
-                if args.format == 'full':
-                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)) + '\t' + str(list(retained_tokens)) + '\t' + '\t' + status + '\t' + str(list(final_status)))
-                else:
-                    fw.write('\t' + cleaned_sample.lower() + '\t' + str(list(retained_tokens)))
-                # To Count the Covered Tokens(words)
-                thisSampleTokens = word_tokenize(sample.lower())
-                for thisSampleIndvToken in thisSampleTokens:
-                    covered_tokens.append(thisSampleIndvToken)
-                    remaining_tokens.remove(thisSampleIndvToken)
-                trigger = True
 
             for suff in range(len(suffixes)):
                 suffixString = suffixes[suff]
