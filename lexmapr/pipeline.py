@@ -608,7 +608,6 @@ def run(args):
                 # Resource ID for matched_term
                 resource_id = resource_terms[matched_term]
                 # Update retained_tokens
-                # TODO: Can this be a local variable?
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("A Direct Match")
