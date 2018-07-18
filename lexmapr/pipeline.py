@@ -810,14 +810,10 @@ def run(args):
             # Return
             return ret
 
-        # Rule1: Annotate all the empty samples
-        # Rule2: Annotate all the Full Term Matches of Terms without any treatment
-        # Rule3: Annotate all the Full Term Matches of Terms with change of case  -resourceRevisedTermsDict
-        # Here we check all the suffices that can be applied to input term to make it comparable with resource terms
-        # Rule4: This will open now the cleaned sample to the test of Full Term Matching
-        # Rule5: Full Term Match if possible from multi-word collocations -e.g. from Wikipedia
         try:
+            # Find full-term match for sample
             full_term_match = find_full_term_match()
+            # Write to all headers
             if args.format == "full":
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
                     + full_term_match["all_match_terms_with_resource_ids"]
@@ -826,11 +822,15 @@ def run(args):
                     + "\t" + "\t"
                     + full_term_match["match_status_macro_level"] + "\t"
                     + full_term_match["match_status_micro_level"])
+            # Write to some headers
             else:
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
                     + full_term_match["all_match_terms_with_resource_ids"])
+            # Set trigger to True
             trigger = True
+        # Full-term match not found
         except MatchNotFoundError:
+            # Continue on
             pass
 
         # Component Matches Section
