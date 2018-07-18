@@ -549,11 +549,8 @@ def run(args):
                 * MatchNotFoundError: Full-term match not found
             Restrictions:
                 * Must be called inside run
-                    * See TODO for details
 
             TODO:
-                * descriptive comments for ret keys
-                    * Maybe not in this function, but somewhere else
                 * move this function out of run
                     * The reason it is currently in run is because we
                         need access to several variables that are local
