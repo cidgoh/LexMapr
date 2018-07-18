@@ -404,7 +404,6 @@ def run(args):
         status_addendum = []
         final_status = []
         del final_status [:]
-        retained_tokens = []
         remaining_tokens = []
         #Writing in the output file with sampleid and sample to start with
         # output fields:
@@ -581,6 +580,8 @@ def run(args):
                         * if true, add change-of-case treatment to
                             status addendum
             """
+            # Tokens to retain for all_match_terms_with_resource_ids
+            retained_tokens = []
             # Dictionary to return
             ret = dict.fromkeys([
                 "matched_term",
