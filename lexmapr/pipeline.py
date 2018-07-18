@@ -848,6 +848,7 @@ def run(args):
                 trigger = True
 
         # Component Matches Section
+        # TODO: abstract similar code in this section
         if (not trigger):
             logger.debug("We will go further with other rules now targetting components of input data")
             # Some Declarations for component match cases
