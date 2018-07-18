@@ -87,14 +87,6 @@ def find_left_r(s, first, last):
     except ValueError:
         return ""
 
-
-# 7-Methods to add suffixes such as food product or product to input phrase to improve Term matching
-# TODO: Does a simple operation like this warrant a function?
-def addSuffix(inputstring, suffixString):
-    output = inputstring + " " + suffixString
-    return output
-
-
 # 8-Method to get all permutations of input string          -has overhead so the size of the phrase has been limited to 4-grams
 def allPermutations(inputstring):
     listOfPermutations = inputstring.split()
@@ -906,7 +898,7 @@ def run(args):
                         localTrigger = True
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
-                        sampleRevisedWithSuffix = addSuffix(grm, suffixString)
+                        sampleRevisedWithSuffix = grm + " " + suffixString
                         if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                             partialMatchedList.append(sampleRevisedWithSuffix)
@@ -972,7 +964,7 @@ def run(args):
                         localTrigger = True
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
-                        sampleRevisedWithSuffix = addSuffix(grm, suffixString)
+                        sampleRevisedWithSuffix = grm + " " + suffixString
                     if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
@@ -1040,7 +1032,7 @@ def run(args):
                         localTrigger = True
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
-                        sampleRevisedWithSuffix = addSuffix(grm, suffixString)
+                        sampleRevisedWithSuffix = grm + " " + suffixString
                         if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                             partialMatchedList.append(sampleRevisedWithSuffix)
@@ -1118,7 +1110,7 @@ def run(args):
                         localTrigger = True
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
-                        sampleRevisedWithSuffix = addSuffix(grm, suffixString)
+                        sampleRevisedWithSuffix = grm + " " + suffixString
                     if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
@@ -1187,7 +1179,7 @@ def run(args):
 
                 for suff in range(len(suffixes)):
                     suffixString = suffixes[suff]
-                    sampleRevisedWithSuffix = addSuffix(grm, suffixString)
+                    sampleRevisedWithSuffix = grm + " " + suffixString
                     if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
