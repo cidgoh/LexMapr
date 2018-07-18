@@ -301,9 +301,9 @@ def run(args):
     
     # 21- To get all terms from resources- right now in a CSV file extracted from ontologies using another external script
     resource_terms_ID_based = get_resource_dict("CombinedResourceTerms.csv")
-    # Swap keys and values in resourceTermsIDBasedDict
+    # Swap keys and values in resource_terms_ID_based
     resource_terms = {v:k for k,v in resource_terms_ID_based.items()}
-    # Convert keys in resourceTermsDict to lowercase
+    # Convert keys in resource_terms to lowercase
     resource_terms_revised = {k.lower():v for k,v in resource_terms.items()}
 
     # 23-Method for getting all the permutations of Resource Terms
