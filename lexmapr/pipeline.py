@@ -880,8 +880,6 @@ def run(args):
                         return ngrams(cleaned_chunk, num)
                 # Dictionary to contain 1-5 grams of cleaned_chunk
                 cleaned_chunk_grams = {}
-                # Temporary key-value for refactoring purposes
-                cleaned_chunk_grams["local_trigger"] = False
                 # Iterate through numbers 1 to 5
                 for i in range(1,6):
                     # Add i-gram of cleaned_chunk to
@@ -955,7 +953,6 @@ def run(args):
                                             if eachTkn in remSet:
                                                 remSet.remove(eachTkn)
                                         localTrigger = True
-                            cleaned_chunk_grams["local_trigger"] = localTrigger
                 # Temporary return for refactoring purposes
                 return cleaned_chunk_grams
 
@@ -965,7 +962,6 @@ def run(args):
             cleaned_chunk_3_grams = tmp[3]
             cleaned_chunk_4_grams = tmp[4]
             cleaned_chunk_5_grams = tmp[5]
-            localTrigger = tmp["local_trigger"]
 
             for nc in cleaned_chunk_4_grams:
                 grm1 = ' '.join(nc)
