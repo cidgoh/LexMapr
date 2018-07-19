@@ -102,6 +102,7 @@ def allPermutations(inputstring):
 
 
 # 9-Method to get all combinations of input string
+# TODO: This function seems unneccessary. Delete it.
 def combi(input, n):
     output=combinations(input, n)
     return output
@@ -858,21 +859,40 @@ def run(args):
             newChunk = newPhrase.lower()
             newChunkTokens = word_tokenize(newChunk.lower())
 
-            def find_component_match(grams):
-                """...
+            def find_component_match():
+                """...WIP
 
                 TODO:
                     * complete function docstring
                     * implement function
                 """
-                # Stub
-                return
+                def get_gram_chunks(num):
+                    """Make num-gram chunks"""
+                    # newChunkTokens has less than 7 tokens
+                    if len(newChunkTokens) < 7:
+                        # We return all num-token combinations of
+                        # newChunkTokens.
+                        return combi(newChunkTokens, num)
+                    # newChunkTokens has 7 or more tokens
+                    else:
+                        # We return all num-character length substrings
+                        # of newChunk.
+                        return ngrams(newChunk, num)
+                ret = [
+                    get_gram_chunks(1),
+                    get_gram_chunks(2),
+                    get_gram_chunks(3),
+                    get_gram_chunks(4),
+                    get_gram_chunks(5),
+                ]
+                return ret
 
-            # This is the case of making 5-gram chunks and subsequent processing for cleaned samples
-            if len(newChunkTokens)<7:
-                newChunk5Grams = combi(newChunkTokens, 5)
-            else:
-                newChunk5Grams = ngrams(newChunk, 5)
+            tmp = find_component_match()
+            newChunk1Grams = tmp[0]
+            newChunk2Grams = tmp[1]
+            newChunk3Grams = tmp[2]
+            newChunk4Grams = tmp[3]
+            newChunk5Grams = tmp[4]
 
             for nc in newChunk5Grams:
                 grm1 = ' '.join(nc)
@@ -935,12 +955,6 @@ def run(args):
                                     remSet.remove(eachTkn)
                             localTrigger = True
 
-
-            # This is the case of making 4-gram chunks and subsequent processing for cleaned samples
-            if len(newChunkTokens)<7:
-                newChunk4Grams = combi(newChunkTokens, 4)
-            else:
-                newChunk4Grams = ngrams(newChunk, 4)
             for nc in newChunk4Grams:
                 grm1 = ' '.join(nc)
                 grmTokens = word_tokenize(grm1.lower())
@@ -1001,12 +1015,6 @@ def run(args):
                                 remSet.remove(eachTkn)
                         localTrigger = True
 
-
-            # This is the case of making 3-gram (trigram) chunks and subsequent processing for cleaned samples
-            if len(newChunkTokens)<7:
-                newChunk3Grams = combi(newChunkTokens, 3)
-            else:
-                newChunk3Grams = ngrams(newChunk, 3)
             for nc in newChunk3Grams:
                 grm1 = ' '.join(nc)
                 grmTokens = word_tokenize(grm1.lower())
@@ -1082,11 +1090,6 @@ def run(args):
                                 remSet.remove(eachTkn)
                         localTrigger = True
 
-            # This is the case of making 2-gram (bigram) chunks and subsequent processing for cleaned samples
-            if len(newChunkTokens)<7:
-                newChunk2Grams = combi(newChunkTokens, 2)
-            else:
-                newChunk2Grams = ngrams(newChunk, 2)
             for nc in newChunk2Grams:
                 grm1 = ' '.join(nc)
                 grmTokens = word_tokenize(grm1.lower())
@@ -1160,12 +1163,6 @@ def run(args):
                                 remSet.remove(eachTkn)
                         localTrigger = True
 
-
-            # This is the case of making 1-gram (unigram) chunks and subsequent processing for cleaned samples
-            if len(newChunkTokens)<7:
-                newChunk1Grams = combi(newChunkTokens, 1)
-            else:
-                newChunk1Grams = ngrams(newChunk, 1)
             for nc in newChunk1Grams:
                 grm = ' '.join(nc)
                 grmTokens = word_tokenize(grm.lower())
