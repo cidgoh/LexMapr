@@ -889,11 +889,11 @@ def run(args):
                 return cleaned_chunk_grams
 
             tmp = find_component_match()
-            cleaned_chunk_1_grams = tmp[0]
-            cleaned_chunk_2_grams = tmp[1]
-            cleaned_chunk_3_grams = tmp[2]
-            cleaned_chunk_4_grams = tmp[3]
-            cleaned_chunk_5_grams = tmp[4]
+            cleaned_chunk_1_grams = tmp[1]
+            cleaned_chunk_2_grams = tmp[2]
+            cleaned_chunk_3_grams = tmp[3]
+            cleaned_chunk_4_grams = tmp[4]
+            cleaned_chunk_5_grams = tmp[5]
 
             for nc in cleaned_chunk_5_grams:
                 grm1 = ' '.join(nc)
