@@ -858,6 +858,16 @@ def run(args):
             newChunk = newPhrase.lower()
             newChunkTokens = word_tokenize(newChunk.lower())
 
+            def find_component_match(grams):
+                """...
+
+                TODO:
+                    * complete function docstring
+                    * implement function
+                """
+                # Stub
+                return
+
             # This is the case of making 5-gram chunks and subsequent processing for cleaned samples
             if len(newChunkTokens)<7:
                 newChunk5Grams = combi(newChunkTokens, 5)
