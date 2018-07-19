@@ -190,17 +190,6 @@ class TestPipelineMethods(unittest.TestCase):
         # self.assertEqual(pipeline.find_left_r("bar", "a", "r"), "b")
         self.assertEqual(pipeline.find_left_r("bar", "a", "r"), "")
 
-    def test_addSuffix(self):
-        """Tests addSuffix."""
-        # Empty input and suffix strings
-        self.assertEqual(pipeline.addSuffix("", ""), " ")
-        # Empty input string
-        self.assertEqual(pipeline.addSuffix("", "bar"), " bar")
-        # Empty suffix string
-        self.assertEqual(pipeline.addSuffix("foo", ""), "foo ")
-        # Non-empty input and suffix strings
-        self.assertEqual(pipeline.addSuffix("foo", "bar"), "foo bar")
-
     def test_allPermutations(self):
         """Tests allPermutations."""
         # Empty input string
