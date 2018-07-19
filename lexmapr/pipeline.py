@@ -878,14 +878,15 @@ def run(args):
                         # We return all num-character length substrings
                         # of cleaned_chunk.
                         return ngrams(cleaned_chunk, num)
-                ret = [
-                    get_gram_chunks(1),
-                    get_gram_chunks(2),
-                    get_gram_chunks(3),
-                    get_gram_chunks(4),
-                    get_gram_chunks(5),
-                ]
-                return ret
+                # Dictionary to contain 1-5 grams of cleaned_chunk
+                cleaned_chunk_grams = {}
+                # Iterate through numbers 1 to 5
+                for i in range(1,6):
+                    # Add i-gram of cleaned_chunk to
+                    # cleaned_chunk_grams.
+                    cleaned_chunk_grams[i] = get_gram_chunks(i)
+                # Temporary return for refactoring purposes
+                return cleaned_chunk_grams
 
             tmp = find_component_match()
             cleaned_chunk_1_grams = tmp[0]
