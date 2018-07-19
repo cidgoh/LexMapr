@@ -859,10 +859,9 @@ def run(args):
                     #       just call get_gram_chunks, and do the
                     #       necessary work with it in this loop.
                     cleaned_chunk_grams[i] = get_gram_chunks(i)
-                    # TODO: No need for this if-statement in the
-                    #       future. We will do work on all grams.
+                    # TODO: Eliminate need for if-else statements
+                    #       through abstraction.
                     if (i == 5):
-                        # TODO: Abstract this code more
                         for gram_chunk in get_gram_chunks(i):
                             grm1 = ' '.join(gram_chunk)
                             grmTokens = word_tokenize(grm1.lower())
@@ -916,6 +915,60 @@ def run(args):
                                             if eachTkn in remaining_tokens:
                                                 remaining_tokens.remove(eachTkn)
                                         localTrigger = True
+                    elif (i == 4):
+                        for gram_chunk in get_gram_chunks(i):
+                            grm1 = ' '.join(gram_chunk)
+                            grmTokens = word_tokenize(grm1.lower())
+                            localTrigger = False
+                            setPerm = allPermutations(grm1)  # Gets the set of all possible permutations for this gram type chunks
+                            for perm in setPerm:
+                                grm = ' '.join(perm)
+                                if (grm in abbreviations.keys()):  # rule for abbreviation
+                                    grm = abbreviations[grm]
+                                    status_addendum.append("Abbreviation-Acronym Treatment")
+                                if (grm in non_english_words.keys()):  # rule for abbreviation
+                                    grm = non_english_words[grm]
+                                    status_addendum.append("Non English Language Words Treatment")
+                                if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
+                                    grm = synonyms[grm]
+                                    status_addendum.append("Synonym Usage")
+
+                                # Matching Test for 4-gram chunk
+                                if ((grm in resource_terms.keys()) and not localTrigger):
+                                    partialMatchedList.append(grm)
+                                    for eachTkn in grmTokens:
+                                        covered_tokens.append(eachTkn)
+                                        if eachTkn in remaining_tokens:
+                                            remaining_tokens.remove(eachTkn)
+                                    localTrigger = True
+                                elif ((  grm in resource_terms_revised.keys() ) and not localTrigger):
+                                    partialMatchedList.append(grm)
+                                    for eachTkn in grmTokens:
+                                        covered_tokens.append(eachTkn)
+                                        if eachTkn in remaining_tokens:
+                                            remaining_tokens.remove(eachTkn)
+                                    localTrigger = True
+                                elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
+                                    resourceId = resource_bracketed_permutation_terms[grm]
+                                    partialMatchedList.append(grm)
+                                    for eachTkn in grmTokens:
+                                        covered_tokens.append(eachTkn)
+                                        if eachTkn in remaining_tokens:
+                                            remaining_tokens.remove(eachTkn)
+                                    status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
+                                    localTrigger = True
+                                for suff in range(len(suffixes)):
+                                    suffixString = suffixes[suff]
+                                    sampleRevisedWithSuffix = grm + " " + suffixString
+                                if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                                    # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
+                                    partialMatchedList.append(sampleRevisedWithSuffix)
+                                    status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
+                                    for eachTkn in grmTokens:
+                                        covered_tokens.append(eachTkn)
+                                        if eachTkn in remaining_tokens:
+                                            remaining_tokens.remove(eachTkn)
+                                    localTrigger = True
                 # Temporary return for refactoring purposes
                 return cleaned_chunk_grams
 
@@ -923,62 +976,6 @@ def run(args):
             cleaned_chunk_1_grams = tmp[1]
             cleaned_chunk_2_grams = tmp[2]
             cleaned_chunk_3_grams = tmp[3]
-            cleaned_chunk_4_grams = tmp[4]
-            cleaned_chunk_5_grams = tmp[5]
-
-            for nc in cleaned_chunk_4_grams:
-                grm1 = ' '.join(nc)
-                grmTokens = word_tokenize(grm1.lower())
-                localTrigger = False
-                setPerm = allPermutations(grm1)  # Gets the set of all possible permutations for this gram type chunks
-                for perm in setPerm:
-                    grm = ' '.join(perm)
-                    if (grm in abbreviations.keys()):  # rule for abbreviation
-                        grm = abbreviations[grm]
-                        status_addendum.append("Abbreviation-Acronym Treatment")
-                    if (grm in non_english_words.keys()):  # rule for abbreviation
-                        grm = non_english_words[grm]
-                        status_addendum.append("Non English Language Words Treatment")
-                    if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                        grm = synonyms[grm]
-                        status_addendum.append("Synonym Usage")
-
-                    # Matching Test for 4-gram chunk
-                    if ((grm in resource_terms.keys()) and not localTrigger):
-                        partialMatchedList.append(grm)
-                        for eachTkn in grmTokens:
-                            covered_tokens.append(eachTkn)
-                            if eachTkn in remaining_tokens:
-                                remaining_tokens.remove(eachTkn)
-                        localTrigger = True
-                    elif ((  grm in resource_terms_revised.keys() ) and not localTrigger):
-                        partialMatchedList.append(grm)
-                        for eachTkn in grmTokens:
-                            covered_tokens.append(eachTkn)
-                            if eachTkn in remaining_tokens:
-                                remaining_tokens.remove(eachTkn)
-                        localTrigger = True
-                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
-                        resourceId = resource_bracketed_permutation_terms[grm]
-                        partialMatchedList.append(grm)
-                        for eachTkn in grmTokens:
-                            covered_tokens.append(eachTkn)
-                            if eachTkn in remaining_tokens:
-                                remaining_tokens.remove(eachTkn)
-                        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
-                        localTrigger = True
-                    for suff in range(len(suffixes)):
-                        suffixString = suffixes[suff]
-                        sampleRevisedWithSuffix = grm + " " + suffixString
-                    if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
-                        # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
-                        partialMatchedList.append(sampleRevisedWithSuffix)
-                        status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
-                        for eachTkn in grmTokens:
-                            covered_tokens.append(eachTkn)
-                            if eachTkn in remaining_tokens:
-                                remaining_tokens.remove(eachTkn)
-                        localTrigger = True
 
             for nc in cleaned_chunk_3_grams:
                 grm1 = ' '.join(nc)
