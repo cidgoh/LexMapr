@@ -856,8 +856,8 @@ def run(args):
             partialMatchedList = []
             partialMatchedResourceList = []
             partialMatchedSet = []
-            newChunk = newPhrase.lower()
-            newChunkTokens = word_tokenize(newChunk.lower())
+            cleaned_chunk = newPhrase.lower()
+            cleaned_chunk_tokens = word_tokenize(cleaned_chunk.lower())
 
             def find_component_match():
                 """...WIP
@@ -868,16 +868,16 @@ def run(args):
                 """
                 def get_gram_chunks(num):
                     """Make num-gram chunks"""
-                    # newChunkTokens has less than 7 tokens
-                    if len(newChunkTokens) < 7:
+                    # cleaned_chunk_tokens has less than 7 tokens
+                    if len(cleaned_chunk_tokens) < 7:
                         # We return all num-token combinations of
-                        # newChunkTokens.
-                        return combi(newChunkTokens, num)
-                    # newChunkTokens has 7 or more tokens
+                        # cleaned_chunk_tokens.
+                        return combi(cleaned_chunk_tokens, num)
+                    # cleaned_chunk_tokens has 7 or more tokens
                     else:
                         # We return all num-character length substrings
-                        # of newChunk.
-                        return ngrams(newChunk, num)
+                        # of cleaned_chunk.
+                        return ngrams(cleaned_chunk, num)
                 ret = [
                     get_gram_chunks(1),
                     get_gram_chunks(2),
@@ -888,13 +888,13 @@ def run(args):
                 return ret
 
             tmp = find_component_match()
-            newChunk1Grams = tmp[0]
-            newChunk2Grams = tmp[1]
-            newChunk3Grams = tmp[2]
-            newChunk4Grams = tmp[3]
-            newChunk5Grams = tmp[4]
+            cleaned_chunk_1_grams = tmp[0]
+            cleaned_chunk_2_grams = tmp[1]
+            cleaned_chunk_3_grams = tmp[2]
+            cleaned_chunk_4_grams = tmp[3]
+            cleaned_chunk_5_grams = tmp[4]
 
-            for nc in newChunk5Grams:
+            for nc in cleaned_chunk_5_grams:
                 grm1 = ' '.join(nc)
                 grmTokens = word_tokenize(grm1.lower())
                 localTrigger = False
@@ -955,7 +955,7 @@ def run(args):
                                     remSet.remove(eachTkn)
                             localTrigger = True
 
-            for nc in newChunk4Grams:
+            for nc in cleaned_chunk_4_grams:
                 grm1 = ' '.join(nc)
                 grmTokens = word_tokenize(grm1.lower())
                 localTrigger = False
@@ -1015,7 +1015,7 @@ def run(args):
                                 remSet.remove(eachTkn)
                         localTrigger = True
 
-            for nc in newChunk3Grams:
+            for nc in cleaned_chunk_3_grams:
                 grm1 = ' '.join(nc)
                 grmTokens = word_tokenize(grm1.lower())
                 localTrigger = False
@@ -1090,7 +1090,7 @@ def run(args):
                                 remSet.remove(eachTkn)
                         localTrigger = True
 
-            for nc in newChunk2Grams:
+            for nc in cleaned_chunk_2_grams:
                 grm1 = ' '.join(nc)
                 grmTokens = word_tokenize(grm1.lower())
                 localTrigger=False
@@ -1163,7 +1163,7 @@ def run(args):
                                 remSet.remove(eachTkn)
                         localTrigger = True
 
-            for nc in newChunk1Grams:
+            for nc in cleaned_chunk_1_grams:
                 grm = ' '.join(nc)
                 grmTokens = word_tokenize(grm.lower())
                 localTrigger = False
