@@ -854,8 +854,8 @@ def run(args):
                     # TODO: Eliminate need for if statements through
                     #       abstraction.
                     # 4 and 5-gram component matching
-                    if i > 3:
-                        for gram_chunk in get_gram_chunks(i):
+                    for gram_chunk in get_gram_chunks(i):
+                        if i >= 3:
                             grm1 = ' '.join(gram_chunk)
                             grmTokens = word_tokenize(grm1.lower())
                             localTrigger = False
@@ -908,8 +908,7 @@ def run(args):
                                             if eachTkn in remaining_tokens:
                                                 remaining_tokens.remove(eachTkn)
                                         localTrigger = True
-                    if i == 3:
-                        for gram_chunk in get_gram_chunks(i):
+                        if i == 3:
                             grm1 = ' '.join(gram_chunk)
                             grmTokens = word_tokenize(grm1.lower())
                             localTrigger = False
@@ -975,8 +974,7 @@ def run(args):
                                         if eachTkn in remaining_tokens:
                                             remaining_tokens.remove(eachTkn)
                                     localTrigger = True
-                    if i == 2:
-                        for gram_chunk in get_gram_chunks(i):
+                        if i == 2:
                             grm1 = ' '.join(gram_chunk)
                             grmTokens = word_tokenize(grm1.lower())
                             localTrigger=False
@@ -1041,8 +1039,7 @@ def run(args):
                                         if eachTkn in remaining_tokens:
                                             remaining_tokens.remove(eachTkn)
                                     localTrigger = True
-                    if i == 1:
-                        for gram_chunk in get_gram_chunks(i):
+                        if i == 1:
                             grm = ' '.join(gram_chunk)
                             grmTokens = word_tokenize(grm.lower())
                             localTrigger = False
