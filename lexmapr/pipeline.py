@@ -848,17 +848,9 @@ def run(args):
                         # We return all num-character length substrings
                         # of cleaned_chunk.
                         return ngrams(cleaned_chunk, num)
-                # Dictionary to contain 1-5 grams of cleaned_chunk
-                cleaned_chunk_grams = {}
+
                 # Iterate through numbers 5 to 1
                 for i in range(5, 0, -1):
-                    # Add i-gram of cleaned_chunk to
-                    # cleaned_chunk_grams.
-                    # TODO: No need to keep a dictionary of
-                    #       cleaned_chunk grams in the future. Let's
-                    #       just call get_gram_chunks, and do the
-                    #       necessary work with it in this loop.
-                    cleaned_chunk_grams[i] = get_gram_chunks(i)
                     # TODO: Eliminate need for if statements through
                     #       abstraction.
                     if i == 5:
@@ -1170,10 +1162,8 @@ def run(args):
                                     if eachTkn in remaining_tokens:
                                         remaining_tokens.remove(eachTkn)
 
-                # Temporary return for refactoring purposes
-                return cleaned_chunk_grams
-
-            tmp = find_component_match()
+            # Find 1-5 gram component matches for cleaned_chunk
+            find_component_match()
 
             partialMatchedSet = set(partialMatchedList)  # Makes a set of all matched components from the above processing
             status = "GComponent Match"             #Note: GComponent instead of is used as tag to help sorting later in result file
