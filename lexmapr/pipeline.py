@@ -966,15 +966,15 @@ def run(args):
                                 for suff in range(len(suffixes)):
                                     suffixString = suffixes[suff]
                                     sampleRevisedWithSuffix = grm + " " + suffixString
-                                if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
-                                    # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
-                                    partialMatchedList.append(sampleRevisedWithSuffix)
-                                    status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
-                                    for eachTkn in grmTokens:
-                                        covered_tokens.append(eachTkn)
-                                        if eachTkn in remaining_tokens:
-                                            remaining_tokens.remove(eachTkn)
-                                    localTrigger = True
+                                    if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                                        # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
+                                        partialMatchedList.append(sampleRevisedWithSuffix)
+                                        status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
+                                        for eachTkn in grmTokens:
+                                            covered_tokens.append(eachTkn)
+                                            if eachTkn in remaining_tokens:
+                                                remaining_tokens.remove(eachTkn)
+                                        localTrigger = True
 
                                 # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
                                 if (grm in qualities_lower.keys() and not localTrigger):
