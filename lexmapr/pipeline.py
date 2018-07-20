@@ -850,8 +850,8 @@ def run(args):
                         return ngrams(cleaned_chunk, num)
                 # Dictionary to contain 1-5 grams of cleaned_chunk
                 cleaned_chunk_grams = {}
-                # Iterate through numbers 1 to 5
-                for i in range(1,6):
+                # Iterate through numbers 5 to 1
+                for i in range(5, 0, -1):
                     # Add i-gram of cleaned_chunk to
                     # cleaned_chunk_grams.
                     # TODO: No need to keep a dictionary of
@@ -1102,79 +1102,78 @@ def run(args):
                                         if eachTkn in remaining_tokens:
                                             remaining_tokens.remove(eachTkn)
                                     localTrigger = True
+                    if i == 1:
+                        for gram_chunk in get_gram_chunks(i):
+                            grm = ' '.join(gram_chunk)
+                            grmTokens = word_tokenize(grm.lower())
+                            localTrigger = False
+
+                            if (grm in abbreviations.keys()):  # rule for abbreviation
+                                grm = abbreviations[grm]
+                                status_addendum.append("Abbreviation-Acronym Treatment")
+                            if (grm in non_english_words.keys()):  # rule for abbreviation
+                                grm = non_english_words[grm]
+                                status_addendum.append("Non English Language Words Treatment")
+                            if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
+                                grm = synonyms[grm]
+                                status_addendum.append("Synonym Usage")
+
+                            # Matching Test for 1-gram chunk
+                            if ((grm in resource_terms.keys() ) and not localTrigger):
+                                partialMatchedList.append(grm)
+                                for eachTkn in grmTokens:
+                                    covered_tokens.append(eachTkn)
+                                    if eachTkn in remaining_tokens:
+                                        remaining_tokens.remove(eachTkn)
+                                localTrigger = True
+                            elif ((grm in resource_terms_revised.keys() ) and not localTrigger):
+                                partialMatchedList.append(grm)
+                                for eachTkn in grmTokens:
+                                    covered_tokens.append(eachTkn)
+                                    if eachTkn in remaining_tokens:
+                                        remaining_tokens.remove(eachTkn)
+                                localTrigger = True
+
+                            for suff in range(len(suffixes)):
+                                suffixString = suffixes[suff]
+                                sampleRevisedWithSuffix = grm + " " + suffixString
+                                if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                                    # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
+                                    partialMatchedList.append(sampleRevisedWithSuffix)
+                                    status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
+                                    for eachTkn in grmTokens:
+                                        covered_tokens.append(eachTkn)
+                                        if eachTkn in remaining_tokens:
+                                            remaining_tokens.remove(eachTkn)
+                                    localTrigger=True
+
+                            # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
+                            if (grm in qualities_lower.keys() and not localTrigger):
+                                quality = qualities_lower[grm]
+                                partialMatchedList.append(grm)
+                                status_addendum.append("Using Semantic Tagging Resources")
+                                localTrigger = True
+                                for eachTkn in grmTokens:
+                                    covered_tokens.append(eachTkn)
+                                    if eachTkn in remaining_tokens:
+                                        remaining_tokens.remove(eachTkn)
+
+
+                            # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
+                            if (grm in processes.keys() and not localTrigger):
+                                proc = processes[grm]
+                                partialMatchedList.append(grm)
+                                status_addendum.append("Using Candidate Processes")
+                                localTrigger = True
+                                for eachTkn in grmTokens:
+                                    covered_tokens.append(eachTkn)
+                                    if eachTkn in remaining_tokens:
+                                        remaining_tokens.remove(eachTkn)
+
                 # Temporary return for refactoring purposes
                 return cleaned_chunk_grams
 
             tmp = find_component_match()
-            cleaned_chunk_1_grams = tmp[1]
-
-            for nc in cleaned_chunk_1_grams:
-                grm = ' '.join(nc)
-                grmTokens = word_tokenize(grm.lower())
-                localTrigger = False
-
-                if (grm in abbreviations.keys()):  # rule for abbreviation
-                    grm = abbreviations[grm]
-                    status_addendum.append("Abbreviation-Acronym Treatment")
-                if (grm in non_english_words.keys()):  # rule for abbreviation
-                    grm = non_english_words[grm]
-                    status_addendum.append("Non English Language Words Treatment")
-                if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                    grm = synonyms[grm]
-                    status_addendum.append("Synonym Usage")
-
-                # Matching Test for 1-gram chunk
-                if ((grm in resource_terms.keys() ) and not localTrigger):
-                    partialMatchedList.append(grm)
-                    for eachTkn in grmTokens:
-                        covered_tokens.append(eachTkn)
-                        if eachTkn in remaining_tokens:
-                            remaining_tokens.remove(eachTkn)
-                    localTrigger = True
-                elif ((grm in resource_terms_revised.keys() ) and not localTrigger):
-                    partialMatchedList.append(grm)
-                    for eachTkn in grmTokens:
-                        covered_tokens.append(eachTkn)
-                        if eachTkn in remaining_tokens:
-                            remaining_tokens.remove(eachTkn)
-                    localTrigger = True
-
-                for suff in range(len(suffixes)):
-                    suffixString = suffixes[suff]
-                    sampleRevisedWithSuffix = grm + " " + suffixString
-                    if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
-                        # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
-                        partialMatchedList.append(sampleRevisedWithSuffix)
-                        status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
-                        for eachTkn in grmTokens:
-                            covered_tokens.append(eachTkn)
-                            if eachTkn in remaining_tokens:
-                                remaining_tokens.remove(eachTkn)
-                        localTrigger=True
-
-                # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                if (grm in qualities_lower.keys() and not localTrigger):
-                    quality = qualities_lower[grm]
-                    partialMatchedList.append(grm)
-                    status_addendum.append("Using Semantic Tagging Resources")
-                    localTrigger = True
-                    for eachTkn in grmTokens:
-                        covered_tokens.append(eachTkn)
-                        if eachTkn in remaining_tokens:
-                            remaining_tokens.remove(eachTkn)
-
-
-                # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                if (grm in processes.keys() and not localTrigger):
-                    proc = processes[grm]
-                    partialMatchedList.append(grm)
-                    status_addendum.append("Using Candidate Processes")
-                    localTrigger = True
-                    for eachTkn in grmTokens:
-                        covered_tokens.append(eachTkn)
-                        if eachTkn in remaining_tokens:
-                            remaining_tokens.remove(eachTkn)
-
 
             partialMatchedSet = set(partialMatchedList)  # Makes a set of all matched components from the above processing
             status = "GComponent Match"             #Note: GComponent instead of is used as tag to help sorting later in result file
