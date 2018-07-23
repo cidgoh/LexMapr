@@ -823,9 +823,7 @@ def run(args):
         if (not trigger):
             logger.debug("We will go further with other rules now targetting components of input data")
             # Some Declarations for component match cases
-            partialMatchedList = []
-            partialMatchedResourceList = []
-            partialMatchedSet = []
+            partial_matches = []
             cleaned_chunk = cleaned_sample.lower()
             cleaned_chunk_tokens = word_tokenize(cleaned_chunk.lower())
 
@@ -876,14 +874,14 @@ def run(args):
 
                                 # Matching Test for 3, 4 or 5-gram chunk
                                 if ((grm in resource_terms.keys() ) and not localTrigger):
-                                    partialMatchedList.append(grm)
+                                    partial_matches.append(grm)
                                     for eachTkn in grmTokens:
                                         covered_tokens.append(eachTkn)
                                         if eachTkn in remaining_tokens:
                                             remaining_tokens.remove(eachTkn)
                                     localTrigger = True
                                 elif ((grm in resource_terms_revised.keys() )and not localTrigger):
-                                    partialMatchedList.append(grm)
+                                    partial_matches.append(grm)
                                     for eachTkn in grmTokens:
                                         covered_tokens.append(eachTkn)
                                         if eachTkn in remaining_tokens:
@@ -891,7 +889,7 @@ def run(args):
                                     localTrigger = True
                                 elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger and i>1):
                                     resourceId = resource_bracketed_permutation_terms[grm]
-                                    partialMatchedList.append(grm)
+                                    partial_matches.append(grm)
                                     for eachTkn in grmTokens:
                                         covered_tokens.append(eachTkn)
                                         if eachTkn in remaining_tokens:
@@ -903,7 +901,7 @@ def run(args):
                                     sampleRevisedWithSuffix = grm + " " + suffixString
                                     if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
                                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
-                                        partialMatchedList.append(sampleRevisedWithSuffix)
+                                        partial_matches.append(sampleRevisedWithSuffix)
                                         status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
                                         for eachTkn in grmTokens:
                                             covered_tokens.append(eachTkn)
@@ -914,7 +912,7 @@ def run(args):
                                     # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
                                     if (grm in qualities_lower.keys() and not localTrigger):
                                         quality = qualities_lower[grm]
-                                        partialMatchedList.append(grm)
+                                        partial_matches.append(grm)
                                         status_addendum.append("Using Semantic Tagging Resources")
                                         localTrigger = True
                                         for eachTkn in grmTokens:
@@ -925,7 +923,7 @@ def run(args):
                                         # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
                                         if (grm in processes.keys() and i==1):
                                             proc = processes[grm]
-                                            partialMatchedList.append(grm)
+                                            partial_matches.append(grm)
                                             status_addendum.append("Using Candidate Processes")
                                             localTrigger = True
                                             for eachTkn in grmTokens:
@@ -936,7 +934,7 @@ def run(args):
             # Find 1-5 gram component matches for cleaned_chunk
             find_component_match()
 
-            partialMatchedSet = set(partialMatchedList)  # Makes a set of all matched components from the above processing
+            partial_matches_final = set(partial_matches)  # Makes a set of all matched components from the above processing
             status = "GComponent Match"             #Note: GComponent instead of is used as tag to help sorting later in result file
 
             remSetConv = set(remaining_tokens)
@@ -945,7 +943,7 @@ def run(args):
             # Checking of coverage of tokens for sample as well overall dataset
             coveredTSet = []
             remainingTSet = []
-            for tknstr in partialMatchedSet:
+            for tknstr in partial_matches_final:
                 strTokens = word_tokenize(tknstr.lower())
                 for eachTkn in strTokens:
                     if ("==" in eachTkn):
@@ -965,39 +963,41 @@ def run(args):
                 if (chktkn not in covered_tokens):
                     remainingTokenSet.append(chktkn)
 
+            # Matches in partial_matches, and their corresponding IDs
+            partial_matches_with_ids = []
             #Decoding the partial matched set to get back resource ids
-            for matchstring in partialMatchedSet:
+            for matchstring in partial_matches_final:
                 if (matchstring in resource_terms.keys()):
                     resourceId = resource_terms[matchstring]
-                    partialMatchedResourceList.append(matchstring + ":" + resourceId)
+                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
                 elif (matchstring in resource_terms_revised.keys()):
                     resourceId = resource_terms_revised[matchstring]
-                    partialMatchedResourceList.append(matchstring + ":" + resourceId)
+                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
                 elif (matchstring in resource_permutation_terms.keys()):
                     resourceId = resource_permutation_terms[matchstring]
                     resourceOriginalTerm = resource_terms_ID_based[resourceId]
-                    partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
+                    partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
                 elif (matchstring in resource_bracketed_permutation_terms.keys()):
                     resourceId = resource_bracketed_permutation_terms[matchstring]
                     resourceOriginalTerm = resource_terms_ID_based[resourceId]
                     resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
-                    partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
+                    partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
                 elif (matchstring in processes.keys()):
                     resourceId = processes[matchstring]
-                    partialMatchedResourceList.append(matchstring + ":" + resourceId)
+                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
                 elif (matchstring in qualities.keys()):
                     resourceId = qualities[matchstring]
-                    partialMatchedResourceList.append(matchstring + ":" + resourceId)
+                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
                 elif (matchstring in qualities_lower.keys()):
                     resourceId = qualities_lower[matchstring]
-                    partialMatchedResourceList.append(matchstring + ":" + resourceId)
+                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
                 elif ("==" in matchstring):
                     resList = matchstring.split("==")
                     entityPart = resList[0]
                     entityTag = resList[1]
-                    partialMatchedResourceList.append(entityPart + ":" + entityTag)
+                    partial_matches_with_ids.append(entityPart + ":" + entityTag)
 
-            partialMatchedResourceListSet = set(partialMatchedResourceList)   # Makes a set from list of all matched components with resource ids
+            partialMatchedResourceListSet = set(partial_matches_with_ids)   # Makes a set from list of all matched components with resource ids
             retainedSet = []
 
             # If size of set is more than one member, looks for the retained matched terms by defined criteria
@@ -1009,9 +1009,9 @@ def run(args):
             final_status = set(status_addendum)
 
             # In case it is for componet matching and we have at least one component matched
-            if (len(partialMatchedSet) > 0):
+            if (len(partial_matches_final) > 0):
                 if args.format == 'full':
-                    fw.write('\t' + str(list(partialMatchedSet)) + '\t' + str(list(partialMatchedResourceListSet)) + '\t' + str(list(retainedSet)) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(list(final_status)) + '\t' + str(list(remSetDiff)))
+                    fw.write('\t' + str(list(partial_matches_final)) + '\t' + str(list(partialMatchedResourceListSet)) + '\t' + str(list(retainedSet)) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(list(final_status)) + '\t' + str(list(remSetDiff)))
                 compctr = 0
                 if args.format == 'full':
                     fw.write("\t")
@@ -1030,7 +1030,7 @@ def run(args):
                     trigger = True
                 else:        # In case of no matching case
                     if args.format == 'full':
-                        fw.write('\t' + str(list(partialMatchedSet)) + '\t' + str(list(partialMatchedResourceList)) + '\t\t' + "\t" + "Sorry No Match" + "\t" + str(list(remaining_tokens)))
+                        fw.write('\t' + str(list(partial_matches_final)) + '\t' + str(list(partial_matches_with_ids)) + '\t\t' + "\t" + "Sorry No Match" + "\t" + str(list(remaining_tokens)))
 
     #Output files closed
     if fw is not sys.stdout:
