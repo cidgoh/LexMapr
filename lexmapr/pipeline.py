@@ -834,7 +834,7 @@ def run(args):
 
                 TODO:
                     * complete function docstring
-                    * implement function
+                    * adhere code to PEP style guidelines
                 """
                 def get_gram_chunks(num):
                     """Make num-gram chunks"""
