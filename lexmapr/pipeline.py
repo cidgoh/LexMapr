@@ -851,11 +851,13 @@ def run(args):
                 for i in range(5, 0, -1):
                     # Iterate through i-gram chunks of cleaned_chunk
                     for gram_chunk in get_gram_chunks(i):
-                        # 1 to 5-gram component matching
-                        grm1 = ' '.join(gram_chunk)
-                        grmTokens = word_tokenize(grm1.lower())
+                        # gram_chunk concatenated into a single string
+                        concatenated_gram_chunk = ' '.join(gram_chunk)
+                        # Tokenized list of concatenated_gram_chunk
+                        gram_tokens = word_tokenize(
+                            concatenated_gram_chunk.lower())
                         localTrigger = False
-                        setPerm = allPermutations(grm1)  # Gets the set of all possible permutations for this gram type chunks
+                        setPerm = allPermutations(concatenated_gram_chunk)  # Gets the set of all possible permutations for this gram type chunks
                         for perm in setPerm:
                             grm = ' '.join(perm)
                             if (grm in abbreviations.keys()):  # rule for abbreviation
@@ -871,14 +873,14 @@ def run(args):
                             # Matching Test for 3, 4 or 5-gram chunk
                             if ((grm in resource_terms.keys() ) and not localTrigger):
                                 partial_matches.append(grm)
-                                for eachTkn in grmTokens:
+                                for eachTkn in gram_tokens:
                                     covered_tokens.append(eachTkn)
                                     if eachTkn in remaining_tokens:
                                         remaining_tokens.remove(eachTkn)
                                 localTrigger = True
                             elif ((grm in resource_terms_revised.keys() )and not localTrigger):
                                 partial_matches.append(grm)
-                                for eachTkn in grmTokens:
+                                for eachTkn in gram_tokens:
                                     covered_tokens.append(eachTkn)
                                     if eachTkn in remaining_tokens:
                                         remaining_tokens.remove(eachTkn)
@@ -886,7 +888,7 @@ def run(args):
                             elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger and i>1):
                                 resourceId = resource_bracketed_permutation_terms[grm]
                                 partial_matches.append(grm)
-                                for eachTkn in grmTokens:
+                                for eachTkn in gram_tokens:
                                     covered_tokens.append(eachTkn)
                                     if eachTkn in remaining_tokens:
                                         remaining_tokens.remove(eachTkn)
@@ -899,7 +901,7 @@ def run(args):
                                     # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                                     partial_matches.append(sampleRevisedWithSuffix)
                                     status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
-                                    for eachTkn in grmTokens:
+                                    for eachTkn in gram_tokens:
                                         covered_tokens.append(eachTkn)
                                         if eachTkn in remaining_tokens:
                                             remaining_tokens.remove(eachTkn)
@@ -911,7 +913,7 @@ def run(args):
                                     partial_matches.append(grm)
                                     status_addendum.append("Using Semantic Tagging Resources")
                                     localTrigger = True
-                                    for eachTkn in grmTokens:
+                                    for eachTkn in gram_tokens:
                                         covered_tokens.append(eachTkn)
                                         if eachTkn in remaining_tokens:
                                             remaining_tokens.remove(eachTkn)
@@ -922,7 +924,7 @@ def run(args):
                                         partial_matches.append(grm)
                                         status_addendum.append("Using Candidate Processes")
                                         localTrigger = True
-                                        for eachTkn in grmTokens:
+                                        for eachTkn in gram_tokens:
                                             covered_tokens.append(eachTkn)
                                             if eachTkn in remaining_tokens:
                                                 remaining_tokens.remove(eachTkn)
