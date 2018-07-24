@@ -193,14 +193,14 @@ class TestPipelineMethods(unittest.TestCase):
     def test_allPermutations(self):
         """Tests allPermutations."""
         # Empty input string
-        self.assertSetEqual(pipeline.allPermutations(""), set([()]))
+        self.assertSetEqual(pipeline.all_permutations(""), set([()]))
         # 1-gram input string
-        self.assertSetEqual(pipeline.allPermutations("a"), set([("a",)]))
+        self.assertSetEqual(pipeline.all_permutations("a"), set([("a",)]))
         # 2-gram input string
-        self.assertSetEqual(pipeline.allPermutations("a b"),
+        self.assertSetEqual(pipeline.all_permutations("a b"),
             set([("a", "b"), ("b", "a")]))
         # 4-gram input string
-        self.assertEqual(len(pipeline.allPermutations("a b c d")), 24)
+        self.assertEqual(len(pipeline.all_permutations("a b c d")), 24)
     
     def test_combi(self):
         """Tests combi."""
