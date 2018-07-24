@@ -859,38 +859,58 @@ def run(args):
                         # Flag indicating successful component match
                         match_found = False
                         # Permutations of concatenated_gram_chunk
-                        permutations =\
-                            all_permutations(concatenated_gram_chunk)
-                        for perm in permutations:
-                            grm = ' '.join(perm)
-                            if (grm in abbreviations.keys()):  # rule for abbreviation
-                                grm = abbreviations[grm]
-                                status_addendum.append("Abbreviation-Acronym Treatment")
-                            if (grm in non_english_words.keys()):  # rule for abbreviation
-                                grm = non_english_words[grm]
-                                status_addendum.append("Non English Language Words Treatment")
-                            if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                                grm = synonyms[grm]
+                        permutations = all_permutations(
+                            concatenated_gram_chunk)
+                        # Iterate over all permutations
+                        for permutation in permutations:
+                            # Concatenate the elements of permutation
+                            # into a single string.
+                            concatenated_permutation = ' '.join(permutation)
+                            # concatenated_permutation is an
+                            # abbreviation or acronym.
+                            if concatenated_permutation in abbreviations:
+                                # Expand concatenated_permutation
+                                concatenated_permutation = abbreviations[
+                                    concatenated_permutation]
+                                # Adjust status_addendum accordingly
+                                status_addendum.append(
+                                    "Abbreviation-Acronym Treatment")
+                            # concatenated_permutation is a non-english
+                            # word.
+                            if concatenated_permutation in non_english_words:
+                                # Translate concatenated_permutation
+                                concatenated_permutation = non_english_words[
+                                    concatenated_permutation]
+                                # Adjust status_addendum accordingly
+                                status_addendum.append(
+                                    "Non English Language Words Treatment")
+                            # concatenated_permutation is a synonym
+                            if concatenated_permutation in synonyms:
+                                # Replace concatenated_permutation with
+                                # appropriate synonym.
+                                concatenated_permutation = synonyms[
+                                    concatenated_permutation]
+                                # Adjust status_addendum accordingly
                                 status_addendum.append("Synonym Usage")
 
                             # Matching Test for 3, 4 or 5-gram chunk
-                            if ((grm in resource_terms.keys() ) and not match_found):
-                                partial_matches.append(grm)
+                            if ((concatenated_permutation in resource_terms.keys() ) and not match_found):
+                                partial_matches.append(concatenated_permutation)
                                 for eachTkn in gram_tokens:
                                     covered_tokens.append(eachTkn)
                                     if eachTkn in remaining_tokens:
                                         remaining_tokens.remove(eachTkn)
                                 match_found = True
-                            elif ((grm in resource_terms_revised.keys() )and not match_found):
-                                partial_matches.append(grm)
+                            elif ((concatenated_permutation in resource_terms_revised.keys() )and not match_found):
+                                partial_matches.append(concatenated_permutation)
                                 for eachTkn in gram_tokens:
                                     covered_tokens.append(eachTkn)
                                     if eachTkn in remaining_tokens:
                                         remaining_tokens.remove(eachTkn)
                                 match_found = True
-                            elif (grm in resource_bracketed_permutation_terms.keys() and not match_found and i>1):
-                                resourceId = resource_bracketed_permutation_terms[grm]
-                                partial_matches.append(grm)
+                            elif (concatenated_permutation in resource_bracketed_permutation_terms.keys() and not match_found and i>1):
+                                resourceId = resource_bracketed_permutation_terms[concatenated_permutation]
+                                partial_matches.append(concatenated_permutation)
                                 for eachTkn in gram_tokens:
                                     covered_tokens.append(eachTkn)
                                     if eachTkn in remaining_tokens:
@@ -899,7 +919,7 @@ def run(args):
                                 match_found = True
                             for suff in range(len(suffixes)):
                                 suffixString = suffixes[suff]
-                                sampleRevisedWithSuffix = grm + " " + suffixString
+                                sampleRevisedWithSuffix = concatenated_permutation + " " + suffixString
                                 if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not match_found):  # Not trigger true is used here -reason
                                     # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                                     partial_matches.append(sampleRevisedWithSuffix)
@@ -911,9 +931,9 @@ def run(args):
                                     match_found = True
                             if i < 3:
                                 # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                                if (grm in qualities_lower.keys() and not match_found):
-                                    quality = qualities_lower[grm]
-                                    partial_matches.append(grm)
+                                if (concatenated_permutation in qualities_lower.keys() and not match_found):
+                                    quality = qualities_lower[concatenated_permutation]
+                                    partial_matches.append(concatenated_permutation)
                                     status_addendum.append("Using Semantic Tagging Resources")
                                     match_found = True
                                     for eachTkn in gram_tokens:
@@ -922,9 +942,9 @@ def run(args):
                                             remaining_tokens.remove(eachTkn)
                                     match_found = True
                                 # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                                if (grm in processes.keys() and not match_found and i==1):
-                                    proc = processes[grm]
-                                    partial_matches.append(grm)
+                                if (concatenated_permutation in processes.keys() and not match_found and i==1):
+                                    proc = processes[concatenated_permutation]
+                                    partial_matches.append(concatenated_permutation)
                                     status_addendum.append("Using Candidate Processes")
                                     match_found = True
                                     for eachTkn in gram_tokens:
