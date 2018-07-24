@@ -88,7 +88,7 @@ def find_left_r(s, first, last):
         return ""
 
 # 8-Method to get all permutations of input string          -has overhead so the size of the phrase has been limited to 4-grams
-def allPermutations(inputstring):
+def all_permutations(inputstring):
     listOfPermutations = inputstring.split()
     setPerm = set(itertools.permutations(listOfPermutations))
     return setPerm
@@ -320,7 +320,7 @@ def run(args):
                 if "NCBITaxon" in resourceid:
                     print("NCBITaxonNCBITaxonNCBITaxon=== ")
 
-                setPerm = allPermutations(resource)
+                setPerm = all_permutations(resource)
                 logger.debug("sssssssssssssss=== " + str(setPerm))
                 for perm in setPerm:
                     permString = ' '.join(perm)
@@ -341,7 +341,7 @@ def run(args):
 
                 if "," not in part2:
                     candidate = part2 + " " + part1
-                    setPerm = allPermutations(candidate)
+                    setPerm = all_permutations(candidate)
                     for perm in setPerm:
                         permString = ' '.join(perm)
                         resource_bracketed_permutation_terms[permString.strip()] = resourceid.strip()
@@ -354,7 +354,7 @@ def run(args):
                         else:
                             bracketedPart = bracketedPart + " " + x.strip()
                     candidate = bracketedPart + " " + part1
-                    setPerm = allPermutations(candidate)
+                    setPerm = all_permutations(candidate)
                     for perm in setPerm:
                         permString = ' '.join(perm)
                         resource_bracketed_permutation_terms[permString.strip()] = resourceid.strip()
@@ -858,8 +858,10 @@ def run(args):
                             concatenated_gram_chunk.lower())
                         # Flag indicating successful component match
                         match_found = False
-                        setPerm = allPermutations(concatenated_gram_chunk)  # Gets the set of all possible permutations for this gram type chunks
-                        for perm in setPerm:
+                        # Permutations of concatenated_gram_chunk
+                        permutations =\
+                            all_permutations(concatenated_gram_chunk)
+                        for perm in permutations:
                             grm = ' '.join(perm)
                             if (grm in abbreviations.keys()):  # rule for abbreviation
                                 grm = abbreviations[grm]
