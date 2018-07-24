@@ -893,69 +893,38 @@ def run(args):
                                 # Adjust status_addendum accordingly
                                 status_addendum.append("Synonym Usage")
 
+                            def handle_component_match():
+                                """Alter data after component match."""
+                                # Add concatenated_permutation to
+                                # partial_matches.
+                                partial_matches.append(
+                                    concatenated_permutation)
+                                # Iterate over gram_tokens
+                                for token in gram_tokens:
+                                    # Add token to covered_tokens
+                                    covered_tokens.append(token)
+                                    # Token in remaining_tokens
+                                    if token in remaining_tokens:
+                                        # Remove token from
+                                        # remaining_tokens.
+                                        remaining_tokens.remove(token)
+
                             # Component match not yet found
                             if not match_found:
-                                # TODO: similar code below--abstract it
-                                # There is a full-term match of
-                                # concatenated_permutation without any
-                                # treatment.
-                                if concatenated_permutation in resource_terms:
-                                    # Add concatenated_permutation to
-                                    # partial_matches.
-                                    partial_matches.append(
-                                        concatenated_permutation)
-                                    # Iterate over gram_tokens
-                                    for token in gram_tokens:
-                                        # Add token to covered_tokens
-                                        covered_tokens.append(token)
-                                        # Token in remaining_tokens
-                                        if token in remaining_tokens:
-                                            # Remove token from
-                                            # remaining_tokens.
-                                            remaining_tokens.remove(token)
+                                # There is a full-term component match
+                                # with no treatment or change-of-case
+                                # in resource term.
+                                if (concatenated_permutation in resource_terms
+                                    or concatenated_permutation in
+                                    resource_terms_revised):
+                                    # Adjust local variables as needed
+                                    handle_component_match()
                                     # Set match_found to True
                                     match_found = True
-                                # There is a full-term match of
-                                # concatenated_permutation with a
-                                # change-of-case in resource data.
-                                elif concatenated_permutation in\
-                                    resource_terms_revised:
-                                    # Add concatenated_permutation to
-                                    # partial_matches.
-                                    partial_matches.append(
-                                        concatenated_permutation)
-                                    # Iterate over gram_tokens
-                                    for token in gram_tokens:
-                                        # Add token to covered_tokens
-                                        covered_tokens.append(token)
-                                        # Token in remaining_tokens
-                                        if token in remaining_tokens:
-                                            # Remove token from
-                                            # remaining_tokens.
-                                            remaining_tokens.remove(token)
-                                    # Set match_found to True
-                                    match_found = True
-                                # There is a full-term match of
-                                # concatenated_permutation with a
-                                # permutation of bracketed resource
-                                # term, and we are doing a two- to
-                                # five-gram component match.
-                                elif concatenated_permutation in\
-                                    resource_bracketed_permutation_terms and\
-                                    i>1:
-                                    # Add concatenated_permutation to
-                                    # partial_matches.
-                                    partial_matches.append(
-                                        concatenated_permutation)
-                                    # Iterate over gram_tokens
-                                    for token in gram_tokens:
-                                        # Add token to covered_tokens
-                                        covered_tokens.append(token)
-                                        # Token in remaining_tokens
-                                        if token in remaining_tokens:
-                                            # Remove token from
-                                            # remaining_tokens.
-                                            remaining_tokens.remove(token)
+                                elif (concatenated_permutation in
+                                    resource_bracketed_permutation_terms):
+                                    # Adjust local variables as needed
+                                    handle_component_match()
                                     # Adjust status_addendum accordingly
                                     status_addendum.append(
                                         "Permutation of Tokens in Bracketed"
