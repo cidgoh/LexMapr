@@ -918,16 +918,16 @@ def run(args):
                                         if eachTkn in remaining_tokens:
                                             remaining_tokens.remove(eachTkn)
                                     localTrigger = True
-                                    # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                                    if (grm in processes.keys() and i==1):
-                                        proc = processes[grm]
-                                        partial_matches.append(grm)
-                                        status_addendum.append("Using Candidate Processes")
-                                        localTrigger = True
-                                        for eachTkn in gram_tokens:
-                                            covered_tokens.append(eachTkn)
-                                            if eachTkn in remaining_tokens:
-                                                remaining_tokens.remove(eachTkn)
+                                # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
+                                if (grm in processes.keys() and not localTrigger and i==1):
+                                    proc = processes[grm]
+                                    partial_matches.append(grm)
+                                    status_addendum.append("Using Candidate Processes")
+                                    localTrigger = True
+                                    for eachTkn in gram_tokens:
+                                        covered_tokens.append(eachTkn)
+                                        if eachTkn in remaining_tokens:
+                                            remaining_tokens.remove(eachTkn)
 
             # Find 1-5 gram component matches for cleaned_chunk
             find_component_match()
