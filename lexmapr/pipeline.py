@@ -922,6 +922,9 @@ def run(args):
                                         concatenated_permutation)
                                     # Set match_found to True
                                     match_found = True
+                                # There is a full-term component match
+                                # with permutation of bracketed
+                                # resource term.
                                 elif (concatenated_permutation in
                                     resource_bracketed_permutation_terms):
                                     # Adjust local variables as needed
@@ -960,29 +963,36 @@ def run(args):
                                             "Suffix Addition- " +
                                             matched_suffixes[0] +
                                             " to the Input")
+                                        # Set match_found to True
                                         match_found = True
-                                    if i < 3:
-                                        # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                                        if (concatenated_permutation in qualities_lower.keys() and not match_found):
-                                            quality = qualities_lower[concatenated_permutation]
-                                            partial_matches.append(concatenated_permutation)
-                                            status_addendum.append("Using Semantic Tagging Resources")
+                                    # 1- or 2-gram component match
+                                    elif i < 3:
+                                        # A full-term component match
+                                        # using semantic resources
+                                        # exists.
+                                        if (concatenated_permutation in
+                                            qualities_lower):
+                                            # Adjust local variables as
+                                            # needed.
+                                            handle_component_match(
+                                                concatenated_permutation)
+                                            # Adjust status_addendum
+                                            # accordingly.
+                                            status_addendum.append("Using " +
+                                                "Semantic Tagging Resources")
+                                            # Set match_found to True
                                             match_found = True
-                                            for token in gram_tokens:
-                                                covered_tokens.append(token)
-                                                if token in remaining_tokens:
-                                                    remaining_tokens.remove(token)
-                                            match_found = True
                                         # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                                        if (concatenated_permutation in processes.keys() and not match_found and i==1):
+                                        elif (i==1 and concatenated_permutation in processes):
                                             proc = processes[concatenated_permutation]
                                             partial_matches.append(concatenated_permutation)
                                             status_addendum.append("Using Candidate Processes")
-                                            match_found = True
                                             for token in gram_tokens:
                                                 covered_tokens.append(token)
                                                 if token in remaining_tokens:
                                                     remaining_tokens.remove(token)
+                                            # Set match_found to True
+                                            match_found = True
 
             # Find 1-5 gram component matches for cleaned_chunk
             find_component_match()
