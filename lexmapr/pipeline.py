@@ -893,12 +893,12 @@ def run(args):
                                 # Adjust status_addendum accordingly
                                 status_addendum.append("Synonym Usage")
 
-                            def handle_component_match():
+                            def handle_component_match(component_match):
                                 """Alter data after component match."""
                                 # Add concatenated_permutation to
                                 # partial_matches.
                                 partial_matches.append(
-                                    concatenated_permutation)
+                                    component_match)
                                 # Iterate over gram_tokens
                                 for token in gram_tokens:
                                     # Add token to covered_tokens
@@ -918,53 +918,71 @@ def run(args):
                                     or concatenated_permutation in
                                     resource_terms_revised):
                                     # Adjust local variables as needed
-                                    handle_component_match()
+                                    handle_component_match(
+                                        concatenated_permutation)
                                     # Set match_found to True
                                     match_found = True
                                 elif (concatenated_permutation in
                                     resource_bracketed_permutation_terms):
                                     # Adjust local variables as needed
-                                    handle_component_match()
+                                    handle_component_match(
+                                        concatenated_permutation)
                                     # Adjust status_addendum accordingly
                                     status_addendum.append(
                                         "Permutation of Tokens in Bracketed"
                                         + " Resource Term")
                                     # Set match_found to True
                                     match_found = True
-                            for suff in range(len(suffixes)):
-                                suffixString = suffixes[suff]
-                                sampleRevisedWithSuffix = concatenated_permutation + " " + suffixString
-                                if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not match_found):  # Not trigger true is used here -reason
-                                    # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
-                                    partial_matches.append(sampleRevisedWithSuffix)
-                                    status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
-                                    for token in gram_tokens:
-                                        covered_tokens.append(token)
-                                        if token in remaining_tokens:
-                                            remaining_tokens.remove(token)
-                                    match_found = True
-                            if i < 3:
-                                # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                                if (concatenated_permutation in qualities_lower.keys() and not match_found):
-                                    quality = qualities_lower[concatenated_permutation]
-                                    partial_matches.append(concatenated_permutation)
-                                    status_addendum.append("Using Semantic Tagging Resources")
-                                    match_found = True
-                                    for token in gram_tokens:
-                                        covered_tokens.append(token)
-                                        if token in remaining_tokens:
-                                            remaining_tokens.remove(token)
-                                    match_found = True
-                                # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                                if (concatenated_permutation in processes.keys() and not match_found and i==1):
-                                    proc = processes[concatenated_permutation]
-                                    partial_matches.append(concatenated_permutation)
-                                    status_addendum.append("Using Candidate Processes")
-                                    match_found = True
-                                    for token in gram_tokens:
-                                        covered_tokens.append(token)
-                                        if token in remaining_tokens:
-                                            remaining_tokens.remove(token)
+                                else:
+                                    # Find all suffixes that when appended to
+                                    # concatenated_permutation, are in
+                                    # resource_terms_revised.
+                                    matched_suffixes = [s for s in suffixes if
+                                        concatenated_permutation+" "+s in
+                                        resource_terms_revised]
+                                    # A full-term component match with
+                                    # change of resource and suffix
+                                    # addition exists.
+                                    if matched_suffixes:
+                                        # Component with first suffix
+                                        # in suffixes that provides a
+                                        # full-term match.
+                                        component_with_suffix = (
+                                            concatenated_permutation + " " +
+                                            matched_suffixes[0])
+                                        # Adjust local variables as
+                                        # needed.
+                                        handle_component_match(
+                                            component_with_suffix)
+                                        # Adjust status_addendum
+                                        # accordingly.
+                                        status_addendum.append(
+                                            "Suffix Addition- " +
+                                            matched_suffixes[0] +
+                                            " to the Input")
+                                        match_found = True
+                                    if i < 3:
+                                        # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
+                                        if (concatenated_permutation in qualities_lower.keys() and not match_found):
+                                            quality = qualities_lower[concatenated_permutation]
+                                            partial_matches.append(concatenated_permutation)
+                                            status_addendum.append("Using Semantic Tagging Resources")
+                                            match_found = True
+                                            for token in gram_tokens:
+                                                covered_tokens.append(token)
+                                                if token in remaining_tokens:
+                                                    remaining_tokens.remove(token)
+                                            match_found = True
+                                        # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
+                                        if (concatenated_permutation in processes.keys() and not match_found and i==1):
+                                            proc = processes[concatenated_permutation]
+                                            partial_matches.append(concatenated_permutation)
+                                            status_addendum.append("Using Candidate Processes")
+                                            match_found = True
+                                            for token in gram_tokens:
+                                                covered_tokens.append(token)
+                                                if token in remaining_tokens:
+                                                    remaining_tokens.remove(token)
 
             # Find 1-5 gram component matches for cleaned_chunk
             find_component_match()
