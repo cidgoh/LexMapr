@@ -819,7 +819,6 @@ def run(args):
             pass
 
         # Component Matches Section
-        # TODO: abstract similar code in this section
         if (not trigger):
             logger.debug("We will go further with other rules now targetting components of input data")
             # Some Declarations for component match cases
@@ -828,11 +827,22 @@ def run(args):
             cleaned_chunk_tokens = word_tokenize(cleaned_chunk.lower())
 
             def find_component_match():
-                """...WIP
+                """Finds 1-5 gram component matches of cleaned_chunk.
+
+                cleaned_chunk, along with multiple resource
+                collections, are local to run. Therefore, no parameters
+                are needed, and this function is restricted to being
+                contained within run.
+
+                All matches are appended to local variable
+                partial_matches.
+
+                Restrictions:
+                    * Must be called inside run
 
                 TODO:
-                    * complete function docstring
-                    * adhere code to PEP style guidelines
+                    * move this function out of run
+                        * see find_full_term_match TODO list for ideas
                 """
                 def get_gram_chunks(num):
                     """Make num-gram chunks"""
