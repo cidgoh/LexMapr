@@ -250,6 +250,17 @@ class MatchNotFoundError(Exception):
         """Return message when this class is raised as an exception."""
         return repr(self.message)
 
+def cache_resource_dict():
+    """...WIP
+
+    TODO:
+        * should go through each resource dictionary, and check if they are cached
+            * if not, call get_resource_dict for each missing dictionary
+        * implement function
+        * write function docstring
+    """
+    return
+
 def run(args):
     """
     Main text mining pipeline.
