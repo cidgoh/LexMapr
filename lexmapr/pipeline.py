@@ -982,15 +982,20 @@ def run(args):
                                                 "Semantic Tagging Resources")
                                             # Set match_found to True
                                             match_found = True
-                                        # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                                        elif (i==1 and concatenated_permutation in processes):
-                                            proc = processes[concatenated_permutation]
-                                            partial_matches.append(concatenated_permutation)
-                                            status_addendum.append("Using Candidate Processes")
-                                            for token in gram_tokens:
-                                                covered_tokens.append(token)
-                                                if token in remaining_tokens:
-                                                    remaining_tokens.remove(token)
+                                        # A full-term 1-gram component
+                                        # match using candidate
+                                        # processes exists.
+                                        elif (i==1 and
+                                            concatenated_permutation in
+                                            processes):
+                                            # Adjust local variables as
+                                            # needed.
+                                            handle_component_match(
+                                                concatenated_permutation)
+                                            # Adjust status_addendum
+                                            # accordingly.
+                                            status_addendum.append("Using " +
+                                                "Candidate Processes")
                                             # Set match_found to True
                                             match_found = True
 
