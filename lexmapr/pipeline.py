@@ -260,14 +260,17 @@ def update_lookup_table():
         * implement function
         * write function docstring
     """
-    # set lookup_table to empty dictionary
+    # Dictionary that will contain all resource dictionaries
+    lookup_table = {}
     # load each resource dictionary as seen in run, and add it to lookup_table
-    # save lookup_table as json file
+    # Open and write to lookup_table.json
+    with open("lookup_table.json", "w") as file:
+        json.dump(lookup_table, file)
     return
 
 def load_lookup_table():
     """...WIP
-e
+
     TODO:
         * should load global variable lookup_table from json file
             * dict containing all resource dicts
@@ -287,6 +290,9 @@ def run(args):
     """
     Main text mining pipeline.
     """
+    # TODO: remove this later
+    update_lookup_table()
+    sys.exit()
     punctuationsList = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuationsList for basic treatment
     covered_tokens = []
     remainingAllTokensSet = []
