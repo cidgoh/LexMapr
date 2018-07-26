@@ -293,7 +293,7 @@ def run(args):
     # TODO: remove this later
     update_lookup_table()
     sys.exit()
-    punctuationsList = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuationsList for basic treatment
+    punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuations for basic treatment
     covered_tokens = []
     remainingAllTokensSet = []
     remainingTokenSet = []
@@ -449,7 +449,7 @@ def run(args):
         #   sample_desc: sample
         fw.write('\n' + sampleid + '\t' + sample)
 
-        sample = punctuationTreatment(sample, punctuationsList)  # Sample gets simple punctuation treatment
+        sample = punctuationTreatment(sample, punctuations)  # Sample gets simple punctuation treatment
         sample = re.sub(' +', ' ', sample)  # Extra innner spaces are removed
         sampleTokens = word_tokenize(sample.lower())    #Sample is tokenized into tokenList
 
