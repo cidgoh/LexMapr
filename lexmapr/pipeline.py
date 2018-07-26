@@ -14,6 +14,7 @@ import sys
 from pkg_resources import resource_filename, resource_listdir
 import logging
 import collections
+import json
 
 logger = logging.getLogger("pipeline")
 logger.disabled = True
@@ -250,15 +251,36 @@ class MatchNotFoundError(Exception):
         """Return message when this class is raised as an exception."""
         return repr(self.message)
 
-def cache_resource_dict():
+def update_lookup_table():
     """...WIP
 
     TODO:
-        * should go through each resource dictionary, and check if they are cached
-            * if not, call get_resource_dict for each missing dictionary
+        * should compile and nest all resource dicts into one single dict
+        * load dict into lookup_table.json
         * implement function
         * write function docstring
     """
+    # set lookup_table to empty dictionary
+    # load each resource dictionary as seen in run, and add it to lookup_table
+    # save lookup_table as json file
+    return
+
+def load_lookup_table():
+    """...WIP
+e
+    TODO:
+        * should load global variable lookup_table from json file
+            * dict containing all resource dicts
+        * implement function
+        * write function docstring
+    """
+    # if lookup_table.json does not exist
+        # call update_lookup_table
+    # set lookup_table_modification_time to last modification time of lookup_table.json
+    # set resources_modification_time to last modification time of resources folder
+    # if resources_modification_time > lookup_modification_time
+        # call update_lookup_table
+    # load lookup_table.json as dict into global variable lookup_table
     return
 
 def run(args):
