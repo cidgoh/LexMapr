@@ -16,6 +16,9 @@ import logging
 import collections
 import json
 
+# Will contain all resource dictionaries
+lookup_table = {}
+
 logger = logging.getLogger("pipeline")
 logger.disabled = True
 
@@ -260,11 +263,14 @@ def update_lookup_table():
         * implement function
         * write function docstring
     """
-    # Dictionary that will contain all resource dictionaries
+    # Will contain all resource dictionaries locally
     lookup_table = {}
-    # load each resource dictionary as seen in run, and add it to lookup_table
+    # TODO: load each resource dictionary as seen in run, and add it to
+    #       lookup_table.
+    lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
+        # Write lookup_table in JSON format
         json.dump(lookup_table, file)
     return
 
@@ -283,7 +289,12 @@ def load_lookup_table():
     # set resources_modification_time to last modification time of resources folder
     # if resources_modification_time > lookup_modification_time
         # call update_lookup_table
-    # load lookup_table.json as dict into global variable lookup_table
+    # Allow global modifications to lookup_table
+    global lookup_table
+    # Open and read lookup_table.json
+    with open("lookup_table.json", "r") as file:
+        # Write contents to lookup_table
+        lookup_table = json.load(file)
     return
 
 def run(args):
@@ -292,6 +303,8 @@ def run(args):
     """
     # TODO: remove this later
     update_lookup_table()
+    load_lookup_table()
+    print(lookup_table)
     sys.exit()
     punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuations for basic treatment
     covered_tokens = []
