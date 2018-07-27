@@ -15,6 +15,7 @@ from pkg_resources import resource_filename, resource_listdir
 import logging
 import collections
 import json
+from os import path
 
 # Will contain all resource dictionaries
 lookup_table = {}
@@ -283,8 +284,10 @@ def load_lookup_table():
         * implement function
         * write function docstring
     """
-    # if lookup_table.json does not exist
-        # call update_lookup_table
+    # lookup_table.json does not exist
+    if not path.isfile("lookup_table.json"):
+        # update lookup_table
+        update_lookup_table()
     # set lookup_table_modification_time to last modification time of lookup_table.json
     # set resources_modification_time to last modification time of resources folder
     # if resources_modification_time > lookup_modification_time
@@ -302,10 +305,10 @@ def run(args):
     Main text mining pipeline.
     """
     # TODO: remove this later
-    update_lookup_table()
+    # update_lookup_table()
     load_lookup_table()
     # print(lookup_table)
-    # sys.exit()
+    sys.exit()
     punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuations for basic treatment
     covered_tokens = []
     remainingAllTokensSet = []
