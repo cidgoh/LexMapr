@@ -263,7 +263,7 @@ def update_lookup_table():
         * implement function
         * write function docstring
     """
-    # Will contain all resource dictionaries locally
+    # Will contain all resource dictionaries
     lookup_table = {}
     # TODO: load each resource dictionary as seen in run, and add it to
     #       lookup_table.
@@ -289,7 +289,7 @@ def load_lookup_table():
     # set resources_modification_time to last modification time of resources folder
     # if resources_modification_time > lookup_modification_time
         # call update_lookup_table
-    # Allow global modifications to lookup_table
+    # Allow modifications to global variable lookup_table
     global lookup_table
     # Open and read lookup_table.json
     with open("lookup_table.json", "r") as file:
@@ -304,8 +304,8 @@ def run(args):
     # TODO: remove this later
     update_lookup_table()
     load_lookup_table()
-    print(lookup_table)
-    sys.exit()
+    # print(lookup_table)
+    # sys.exit()
     punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuations for basic treatment
     covered_tokens = []
     remainingAllTokensSet = []
@@ -318,9 +318,6 @@ def run(args):
     resource_terms_revised = {}
     resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-
-    # 11-Get all synonyms from resource in CSV file format and put in a dictionary to be used further
-    synonyms = get_resource_dict("SynLex.csv")
 
     # 12-Get all abbreviation/acronyms from resource in CSV file format and put in a dictionary to be used further
     abbreviations = get_resource_dict("AbbLex.csv")
@@ -898,8 +895,8 @@ def run(args):
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
                         status_addendum.append("Non English Language Words Treatment")
-                    if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                        grm = synonyms[grm]
+                    if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
+                        grm = lookup_table["synonyms"][grm]
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 5-gram chunk
@@ -958,8 +955,8 @@ def run(args):
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
                         status_addendum.append("Non English Language Words Treatment")
-                    if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                        grm = synonyms[grm]
+                    if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
+                        grm = lookup_table["synonyms"][grm]
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 4-gram chunk
@@ -1019,8 +1016,8 @@ def run(args):
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
                         status_addendum.append("Non English Language Words Treatment")
-                    if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                        grm = synonyms[grm]
+                    if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
+                        grm = lookup_table["synonyms"][grm]
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 3-gram chunk
@@ -1090,8 +1087,8 @@ def run(args):
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
                         status_addendum.append("Non English Language Words Treatment")
-                    if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                        grm = synonyms[grm]
+                    if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
+                        grm = lookup_table["synonyms"][grm]
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 2-gram chunk
@@ -1160,8 +1157,8 @@ def run(args):
                 if (grm in non_english_words.keys()):  # rule for abbreviation
                     grm = non_english_words[grm]
                     status_addendum.append("Non English Language Words Treatment")
-                if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                    grm = synonyms[grm]
+                if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
+                    grm = lookup_table["synonyms"][grm]
                     status_addendum.append("Synonym Usage")
 
                 # Matching Test for 1-gram chunk
