@@ -259,10 +259,12 @@ def update_lookup_table():
     """...WIP
 
     TODO:
-        * should compile and nest all resource dicts into one single dict
+        * should compile and nest all resource dicts into one single
+            dict
         * load dict into lookup_table.json
         * implement function
         * write function docstring
+        * follow single responsibility principle more closely
     """
     # Will contain all resource dictionaries
     lookup_table = {}
@@ -280,30 +282,24 @@ def load_lookup_table():
 
     TODO:
         * write function docstring
+        * follow single responsibility principle more closely
     """
     # lookup_table.json exists
-    if os.path.isfile("lookup_table.json"):
+    if os.path.isfile(get_path("lookup_table.json")):
         # last modification time of lookup_table.json
-        lookup_table_modification_time = os.path.getmtime("lookup_table.json")
+        lookup_table_modification_time = os.path.getmtime(get_path("lookup_table.json"))
 
         # Path to resources folder
         resources_path = os.path.join(os.path.dirname(__file__), "resources")
         # list of all file names in resources folder
-        resource_file_names = [file_name for file_name in os.listdir(resources_path)]
-        # list of paths to files in resources folder
-        resource_file_paths = [
-            os.path.join(
-                os.path.dirname(__file__),
-                "resources/" + file_name)
-            for file_name
-            in resource_file_names]
-        # list of all modification times for files in resource_file_paths
-        resource_files_modification_times = [
-            os.path.getmtime(file_path)
-            for file_path
-            in resource_file_paths]
+        resource_names = [file_name for file_name in os.listdir(get_path("resources"))]
+        # list of paths to all files in resources folder
+        resource_paths = [get_path(file_name, "resources/") for file_name in resource_names]
+        # list of last modification times for files in resources folder
+        resources_files_modification_times = [os.path.getmtime(path) for path in resource_paths]
         # most recent modification time of a file in resources folder
-        resources_folder_modification_time = max(resource_files_modification_times)
+        resources_folder_modification_time = max(resources_files_modification_times)
+        print(resources_folder_modification_time)
 
         # resources modified more recently than lookup_table.json
         if resources_folder_modification_time > lookup_table_modification_time:
@@ -316,10 +312,18 @@ def load_lookup_table():
     # Allow modifications to global variable lookup_table
     global lookup_table
     # Open and read lookup_table.json
-    with open("lookup_table.json", "r") as file:
+    with open(get_path("lookup_table.json"), "r") as file:
         # Write contents to lookup_table
         lookup_table = json.load(file)
     return
+
+def get_path(file_name, prefix=""):
+    """...WIP
+
+    TODO:
+        * write function docstring
+    """
+    return os.path.join(os.path.dirname(__file__), prefix+file_name)
 
 def run(args):
     """
