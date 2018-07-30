@@ -15,7 +15,7 @@ from pkg_resources import resource_filename, resource_listdir
 import logging
 import collections
 import json
-from os import path
+import os
 
 # Will contain all resource dictionaries
 lookup_table = {}
@@ -284,14 +284,24 @@ def load_lookup_table():
         * implement function
         * write function docstring
     """
+    # lookup_table.json exists
+    if os.path.isfile("lookup_table.json"):
+        # last modification time of lookup_table.json
+        lookup_table_modification_time = os.path.getmtime("lookup_table.json")
+        # list of all files in resources folder
+        resource_files = ["resources/"+file_name for file_name in os.listdir("resources")]
+        # list of all modification times for files in resource_files
+        resource_files_modification_times = [os.path.getmtime(file) for file in resource_files]
+        # most recent modification time of a file in resources folder
+        resources_folder_modification_time = max(resource_files_modification_times)
+        # resources modified more recently than lookup_table.json
+        if resources_folder_modification_time > lookup_table_modification_time:
+            # update lookup_table
+            update_lookup_table()
     # lookup_table.json does not exist
-    if not path.isfile("lookup_table.json"):
+    else:
         # update lookup_table
         update_lookup_table()
-    # set lookup_table_modification_time to last modification time of lookup_table.json
-    # set resources_modification_time to last modification time of resources folder
-    # if resources_modification_time > lookup_modification_time
-        # call update_lookup_table
     # Allow modifications to global variable lookup_table
     global lookup_table
     # Open and read lookup_table.json
