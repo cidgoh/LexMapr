@@ -285,7 +285,7 @@ def load_lookup_table():
         * follow single responsibility principle more closely
     """
     # lookup_table.json exists
-    if os.path.isfile(get_path("lookup_table.json")):
+    if os.path.isfile("lookup_table.json"):
         # last modification time of lookup_table.json
         lookup_table_modification_time = os.path.getmtime(get_path("lookup_table.json"))
 
@@ -312,7 +312,7 @@ def load_lookup_table():
     # Allow modifications to global variable lookup_table
     global lookup_table
     # Open and read lookup_table.json
-    with open(get_path("lookup_table.json"), "r") as file:
+    with open("lookup_table.json", "r") as file:
         # Write contents to lookup_table
         lookup_table = json.load(file)
     return
