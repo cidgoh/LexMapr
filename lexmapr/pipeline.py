@@ -281,12 +281,14 @@ def load_lookup_table():
     TODO:
         * write function docstring
     """
+    # Path to resources folder
+    resources_path = os.path.join(os.path.dirname(__file__), "resources")
     # lookup_table.json exists
     if os.path.isfile("lookup_table.json"):
         # last modification time of lookup_table.json
         lookup_table_modification_time = os.path.getmtime("lookup_table.json")
         # list of all files in resources folder
-        resource_files = ["resources/"+file_name for file_name in os.listdir("resources")]
+        resource_files = ["resources/"+file_name for file_name in os.listdir(resources_path)]
         # list of all modification times for files in resource_files
         resource_files_modification_times = [os.path.getmtime(file) for file in resource_files]
         # most recent modification time of a file in resources folder
