@@ -279,9 +279,6 @@ def load_lookup_table():
     """...WIP
 
     TODO:
-        * should load global variable lookup_table from json file
-            * dict containing all resource dicts
-        * implement function
         * write function docstring
     """
     # lookup_table.json exists
@@ -317,8 +314,8 @@ def run(args):
     # TODO: remove this later
     # update_lookup_table()
     load_lookup_table()
-    # print(lookup_table)
-    sys.exit()
+    # # print(lookup_table)
+    # sys.exit()
     punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuations for basic treatment
     covered_tokens = []
     remainingAllTokensSet = []
