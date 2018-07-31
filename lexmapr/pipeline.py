@@ -232,6 +232,80 @@ def get_resource_dict(file_name, lower=False):
     # Return
     return ret
 
+def get_all_resource_dicts():
+    """...WIP"""
+    # return value
+    ret = {}
+    ret["synonyms"] = get_resource_dict("SynLex.csv")
+    ret["abbreviations"] = get_resource_dict("AbbLex.csv")
+    ret["abbreviation_lower"] = get_resource_dict("AbbLex.csv", True)
+    ret["non_english_words"] = get_resource_dict("NefLex.csv")
+    ret["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
+    ret["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
+    ret["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
+    ret["processes"] = get_resource_dict("candidateProcesses.csv")
+    ret["qualities"] = get_resource_dict("SemLex.csv")
+    ret["qualities_lower"] = get_resource_dict("SemLex.csv", True)
+    ret["collocations"] = get_resource_dict("wikipediaCollocations.csv")
+    ret["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
+    ret["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
+    ret["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
+    # TODO: reduce line length
+    ret["resource_terms"] = {v:k for k,v in ret["resource_terms_ID_based"].items()}
+    # TODO: reduce line length
+    ret["resource_terms_revised"] = {k.lower():v for k,v in ret["resource_terms"].items()}
+    # TODO: clean this up if you can
+    ret["resource_permutation_terms"] = {}
+    # Iterate
+    for k, v in ret["resource_terms_revised"].items():
+        resourceid = v
+        resource = k
+        if "(" not in resource:
+            sampleTokens = word_tokenize(resource.lower())
+            # for tkn in sampleTokens:
+            if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead fo:
+                if "NCBITaxon" in resourceid:
+                    print("NCBITaxonNCBITaxonNCBITaxon=== ")
+
+                setPerm = allPermutations(resource)
+                logger.debug("sssssssssssssss=== " + str(setPerm))
+                for perm in setPerm:
+                    permString = ' '.join(perm)
+                    ret["resource_permutation_terms"][permString.strip()] = resourceid.strip()
+    # TODO: clean this up if you can
+    ret["resource_bracketed_permutation_terms"]={}
+    # Iterate
+    for k, v in ret["resource_terms_revised"].items():
+        resourceid = v
+        resource1 = k
+        sampleTokens = word_tokenize(resource1.lower())
+        if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead for permutations
+            if "(" in resource1:
+                part1 = find_left_r(resource1, "(", ")")
+                part2 = find_between_r(resource1, "(", ")")
+                candidate = ""
+
+                if "," not in part2:
+                    candidate = part2 + " " + part1
+                    setPerm = allPermutations(candidate)
+                    for perm in setPerm:
+                        permString = ' '.join(perm)
+                        ret["resource_bracketed_permutation_terms"][permString.strip()] = resourceid.strip()
+                elif "," in part2:
+                    lst = part2.split(",")
+                    bracketedPart = ""
+                    for x in lst:
+                        if not bracketedPart:
+                            bracketedPart = x.strip()
+                        else:
+                            bracketedPart = bracketedPart + " " + x.strip()
+                    candidate = bracketedPart + " " + part1
+                    setPerm = allPermutations(candidate)
+                    for perm in setPerm:
+                        permString = ' '.join(perm)
+                        ret["resource_bracketed_permutation_terms"][permString.strip()] = resourceid.strip()
+    return ret
+
 class MatchNotFoundError(Exception):
     """Exception class for indicating failed full-term matches.
 
@@ -259,85 +333,11 @@ def update_lookup_table():
     """...WIP
 
     TODO:
-        * should compile and nest all resource dicts into one single
-            dict
-        * load dict into lookup_table.json
-        * implement function
         * write function docstring
         * follow single responsibility principle more closely
     """
     # Will contain all resource dictionaries
-    lookup_table = {}
-    # TODO: load each resource dictionary as seen in run, and add it to
-    #       lookup_table.
-    lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
-    lookup_table["abbreviations"] = get_resource_dict("AbbLex.csv")
-    lookup_table["abbreviation_lower"] = get_resource_dict("AbbLex.csv", True)
-    lookup_table["non_english_words"] = get_resource_dict("NefLex.csv")
-    lookup_table["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
-    lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
-    lookup_table["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
-    lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
-    lookup_table["qualities"] = get_resource_dict("SemLex.csv")
-    lookup_table["qualities_lower"] = get_resource_dict("SemLex.csv", True)
-    lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
-    lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
-    lookup_table["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
-    lookup_table["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
-    # TODO: reduce line length
-    lookup_table["resource_terms"] = {v:k for k,v in lookup_table["resource_terms_ID_based"].items()}
-    # TODO: reduce line length
-    lookup_table["resource_terms_revised"] = {k.lower():v for k,v in lookup_table["resource_terms"].items()}
-    # TODO: clean this up if you can
-    lookup_table["resource_permutation_terms"] = {}
-    # Iterate
-    for k, v in lookup_table["resource_terms_revised"].items():
-        resourceid = v
-        resource = k
-        if "(" not in resource:
-            sampleTokens = word_tokenize(resource.lower())
-            # for tkn in sampleTokens:
-            if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead fo:
-                if "NCBITaxon" in resourceid:
-                    print("NCBITaxonNCBITaxonNCBITaxon=== ")
-
-                setPerm = allPermutations(resource)
-                logger.debug("sssssssssssssss=== " + str(setPerm))
-                for perm in setPerm:
-                    permString = ' '.join(perm)
-                    lookup_table["resource_permutation_terms"][permString.strip()] = resourceid.strip()
-    # TODO: clean this up if you can
-    lookup_table["resource_bracketed_permutation_terms"]={}
-    # Iterate
-    for k, v in lookup_table["resource_terms_revised"].items():
-        resourceid = v
-        resource1 = k
-        sampleTokens = word_tokenize(resource1.lower())
-        if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead for permutations
-            if "(" in resource1:
-                part1 = find_left_r(resource1, "(", ")")
-                part2 = find_between_r(resource1, "(", ")")
-                candidate = ""
-
-                if "," not in part2:
-                    candidate = part2 + " " + part1
-                    setPerm = allPermutations(candidate)
-                    for perm in setPerm:
-                        permString = ' '.join(perm)
-                        lookup_table["resource_bracketed_permutation_terms"][permString.strip()] = resourceid.strip()
-                elif "," in part2:
-                    lst = part2.split(",")
-                    bracketedPart = ""
-                    for x in lst:
-                        if not bracketedPart:
-                            bracketedPart = x.strip()
-                        else:
-                            bracketedPart = bracketedPart + " " + x.strip()
-                    candidate = bracketedPart + " " + part1
-                    setPerm = allPermutations(candidate)
-                    for perm in setPerm:
-                        permString = ' '.join(perm)
-                        lookup_table["resource_bracketed_permutation_terms"][permString.strip()] = resourceid.strip()
+    lookup_table = get_all_resource_dicts()
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
