@@ -347,7 +347,7 @@ def is_lookup_table_outdated():
         * should only be called if lookup_table.json exists
     """
     # last modification time of lookup_table.json
-    lookup_table_modification_time = os.path.getmtime("lookup_table.json")
+    lookup_table_modification_time = os.path.getmtime(get_path("lookup_table.json"))
 
     # list of all file names in resources folder
     resource_names = [file_name for file_name in os.listdir(get_path("resources"))]
@@ -374,7 +374,7 @@ def add_lookup_table_to_cache():
     # Will contain all resource dictionaries
     lookup_table = get_all_resource_dicts()
     # Open and write to lookup_table.json
-    with open("lookup_table.json", "w") as file:
+    with open(get_path("lookup_table.json"), "w") as file:
         # Write lookup_table in JSON format
         json.dump(lookup_table, file)
     return
@@ -389,7 +389,7 @@ def get_lookup_table_from_cache():
             others
     """
     # lookup_table.json exists
-    if os.path.isfile("lookup_table.json"):
+    if os.path.isfile(get_path("lookup_table.json")):
         # lookup_table.json out of date
         if is_lookup_table_outdated():
             # add new lookup table to cache
@@ -399,7 +399,7 @@ def get_lookup_table_from_cache():
         # add lookup table to cache
         add_lookup_table_to_cache()
     # Open and read lookup_table.json
-    with open("lookup_table.json", "r") as file:
+    with open(get_path("lookup_table.json"), "r") as file:
         # Return lookup_table contents
         return json.load(file)
 
