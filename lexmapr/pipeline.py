@@ -329,7 +329,7 @@ class MatchNotFoundError(Exception):
         """Return message when this class is raised as an exception."""
         return repr(self.message)
 
-def update_lookup_table():
+def add_lookup_table_to_cache():
     """...WIP
 
     TODO:
@@ -357,11 +357,11 @@ def load_lookup_table():
     if os.path.isfile("lookup_table.json"):
         # lookup_table.json out of date
         if is_lookup_table_outdated():
-            update_lookup_table()
+            add_lookup_table_to_cache()
     # lookup_table.json does not exist
     else:
         # update lookup_table
-        update_lookup_table()
+        add_lookup_table_to_cache()
     # Allow modifications to global variable lookup_table
     global lookup_table
     # Open and read lookup_table.json
