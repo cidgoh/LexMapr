@@ -288,6 +288,24 @@ def update_lookup_table():
     lookup_table["resource_terms"] = {v:k for k,v in lookup_table["resource_terms_ID_based"].items()}
     # TODO: reduce line length
     lookup_table["resource_terms_revised"] = {k.lower():v for k,v in lookup_table["resource_terms"].items()}
+    # TODO: clean this up if you can
+    lookup_table["resource_permutation_terms"] = {}
+    # Iterate
+    for k, v in lookup_table["resource_terms_revised"].items():
+        resourceid = v
+        resource = k
+        if "(" not in resource:
+            sampleTokens = word_tokenize(resource.lower())
+            # for tkn in sampleTokens:
+            if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead fo:
+                if "NCBITaxon" in resourceid:
+                    print("NCBITaxonNCBITaxonNCBITaxon=== ")
+
+                setPerm = allPermutations(resource)
+                logger.debug("sssssssssssssss=== " + str(setPerm))
+                for perm in setPerm:
+                    permString = ' '.join(perm)
+                    lookup_table["resource_permutation_terms"][permString.strip()] = resourceid.strip()
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -359,25 +377,6 @@ def run(args):
     samplesList = []
     samplesSet = []
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-
-    # 23-Method for getting all the permutations of Resource Terms
-    resource_permutation_terms = {}
-    # Iterate
-    for k, v in lookup_table["resource_terms_revised"].items():
-        resourceid = v
-        resource = k
-        if "(" not in resource:
-            sampleTokens = word_tokenize(resource.lower())
-            # for tkn in sampleTokens:
-            if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead fo:
-                if "NCBITaxon" in resourceid:
-                    print("NCBITaxonNCBITaxonNCBITaxon=== ")
-
-                setPerm = allPermutations(resource)
-                logger.debug("sssssssssssssss=== " + str(setPerm))
-                for perm in setPerm:
-                    permString = ' '.join(perm)
-                    resource_permutation_terms[permString.strip()] = resourceid.strip()
 
     # 24-Method for getting all the permutations of Bracketed Resource Terms
     resource_bracketed_permutation_terms={}
@@ -673,11 +672,11 @@ def run(args):
                 # Update status_addendum
                 status_addendum.append("Change of Case in Resource Data")
             # Full-term match with permutation of resource term
-            elif sample.lower() in resource_permutation_terms:
+            elif sample.lower() in lookup_table["resource_permutation_terms"]:
                 # Term we found a permutation for
                 matched_term = sample.lower()
                 # Resource ID for matched_term's permutation
-                resource_id = resource_permutation_terms[matched_term]
+                resource_id = lookup_table["resource_permutation_terms"][matched_term]
                 # Permutation corresponding to matched_term
                 matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
@@ -724,11 +723,11 @@ def run(args):
                 status_addendum.append("Change of Case of Resource Terms")
             # Full-term cleaned sample match with permutation of
             # resource term.
-            elif cleaned_sample.lower() in resource_permutation_terms:
+            elif cleaned_sample.lower() in lookup_table["resource_permutation_terms"]:
                 # Term we found a permutation for
                 matched_term = cleaned_sample.lower()
                 # Resource ID for matched_term's permutation
-                resource_id = resource_permutation_terms[matched_term]
+                resource_id = lookup_table["resource_permutation_terms"][matched_term]
                 # Permutation corresponding to matched_term
                 matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
@@ -1256,8 +1255,8 @@ def run(args):
                 elif (matchstring in lookup_table["resource_terms_revised"].keys()):
                     resourceId = lookup_table["resource_terms_revised"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
-                elif (matchstring in resource_permutation_terms.keys()):
-                    resourceId = resource_permutation_terms[matchstring]
+                elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
+                    resourceId = lookup_table["resource_permutation_terms"][matchstring]
                     resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
                 elif (matchstring in resource_bracketed_permutation_terms.keys()):
