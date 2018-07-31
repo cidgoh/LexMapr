@@ -286,6 +286,8 @@ def update_lookup_table():
     lookup_table["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
     # TODO: reduce line length
     lookup_table["resource_terms"] = {v:k for k,v in lookup_table["resource_terms_ID_based"].items()}
+    # TODO: reduce line length
+    lookup_table["resource_terms_revised"] = {k.lower():v for k,v in lookup_table["resource_terms"].items()}
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -356,16 +358,12 @@ def run(args):
     samplesDict = collections.OrderedDict()
     samplesList = []
     samplesSet = []
-    resource_terms_revised = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-
-    # Convert keys in resource_terms to lowercase
-    resource_terms_revised = {k.lower():v for k,v in lookup_table["resource_terms"].items()}
 
     # 23-Method for getting all the permutations of Resource Terms
     resource_permutation_terms = {}
     # Iterate
-    for k, v in resource_terms_revised.items():
+    for k, v in lookup_table["resource_terms_revised"].items():
         resourceid = v
         resource = k
         if "(" not in resource:
@@ -384,7 +382,7 @@ def run(args):
     # 24-Method for getting all the permutations of Bracketed Resource Terms
     resource_bracketed_permutation_terms={}
     # Iterate
-    for k, v in resource_terms_revised.items():
+    for k, v in lookup_table["resource_terms_revised"].items():
         resourceid = v
         resource1 = k
         sampleTokens = word_tokenize(resource1.lower())
@@ -665,11 +663,11 @@ def run(args):
                 # Update status_addendum
                 status_addendum.append("Change of Case in Input Data")
             # Full-term match with change-of-case in resource data
-            elif sample.lower() in resource_terms_revised:
+            elif sample.lower() in lookup_table["resource_terms_revised"]:
                 # Term with we found a full-term match for
                 matched_term = sample.lower()
                 # Resource ID for matched_term
-                resource_id = resource_terms_revised[matched_term]
+                resource_id = lookup_table["resource_terms_revised"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
@@ -715,11 +713,11 @@ def run(args):
                 status_addendum.append("A Direct Match with Cleaned Sample")
             # Full-term cleaned sample match with change-of-case in
             # resource data.
-            elif cleaned_sample.lower() in resource_terms_revised:
+            elif cleaned_sample.lower() in lookup_table["resource_terms_revised"]:
                 # Term with we found a full-term match for
                 matched_term = cleaned_sample.lower()
                 # Resource ID for matched_term
-                resource_id = resource_terms_revised[matched_term]
+                resource_id = lookup_table["resource_terms_revised"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
@@ -776,12 +774,12 @@ def run(args):
                 # in resource_terms_revised.
                 matched_suffixes =\
                     [s for s in suffixes
-                        if sample+" "+s in resource_terms_revised]
+                        if sample+" "+s in lookup_table["resource_terms_revised"]]
                 # Find all suffixes that when appended to cleaned
                 # sample, are in resource_terms_revised.
                 matched_clean_suffixes =\
                     [s for s in suffixes
-                        if cleaned_sample+" "+s in resource_terms_revised]
+                        if cleaned_sample+" "+s in lookup_table["resource_terms_revised"]]
                 # A full-term match with change of resource and suffix
                 # addition exists.
                 if matched_suffixes:
@@ -791,7 +789,7 @@ def run(args):
                     # Term we add a suffix to
                     matched_term = sample.lower()
                     # Resource ID for matched_term
-                    resource_id = resource_terms_revised[term_with_suffix]
+                    resource_id = lookup_table["resource_terms_revised"][term_with_suffix]
                     # Update retained_tokens
                     retained_tokens.append(term_with_suffix + ":"
                         + resource_id)
@@ -810,7 +808,7 @@ def run(args):
                     # Term we cleaned and added a suffix to
                     matched_term = sample.lower()
                     # Resource ID for matched_term
-                    resource_id = resource_terms_revised[term_with_suffix]
+                    resource_id = lookup_table["resource_terms_revised"][term_with_suffix]
                     # Update retained_tokens
                     retained_tokens.append(term_with_suffix + ":"
                         + resource_id)
@@ -914,7 +912,7 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif ((grm in resource_terms_revised.keys() )and not localTrigger):
+                    elif ((grm in lookup_table["resource_terms_revised"].keys() )and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -933,7 +931,7 @@ def run(args):
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = grm + " " + suffixString
-                        if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                        if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                             partialMatchedList.append(sampleRevisedWithSuffix)
                             status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
@@ -974,7 +972,7 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif ((  grm in resource_terms_revised.keys() ) and not localTrigger):
+                    elif ((  grm in lookup_table["resource_terms_revised"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -993,7 +991,7 @@ def run(args):
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = grm + " " + suffixString
-                    if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                    if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
@@ -1035,7 +1033,7 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif ((grm in resource_terms_revised.keys() ) and not localTrigger):
+                    elif ((grm in lookup_table["resource_terms_revised"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1054,7 +1052,7 @@ def run(args):
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = grm + " " + suffixString
-                        if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                        if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                             partialMatchedList.append(sampleRevisedWithSuffix)
                             status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
@@ -1106,7 +1104,7 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (( grm in resource_terms_revised.keys() ) and not localTrigger):
+                    elif (( grm in lookup_table["resource_terms_revised"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1125,7 +1123,7 @@ def run(args):
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = grm + " " + suffixString
-                    if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                    if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
@@ -1176,7 +1174,7 @@ def run(args):
                         if eachTkn in remaining_tokens:
                             remaining_tokens.remove(eachTkn)
                     localTrigger = True
-                elif ((grm in resource_terms_revised.keys() ) and not localTrigger):
+                elif ((grm in lookup_table["resource_terms_revised"].keys() ) and not localTrigger):
                     partialMatchedList.append(grm)
                     for eachTkn in grmTokens:
                         covered_tokens.append(eachTkn)
@@ -1187,7 +1185,7 @@ def run(args):
                 for suff in range(len(suffixes)):
                     suffixString = suffixes[suff]
                     sampleRevisedWithSuffix = grm + " " + suffixString
-                    if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                    if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
@@ -1255,8 +1253,8 @@ def run(args):
                 if (matchstring in lookup_table["resource_terms"].keys()):
                     resourceId = lookup_table["resource_terms"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
-                elif (matchstring in resource_terms_revised.keys()):
-                    resourceId = resource_terms_revised[matchstring]
+                elif (matchstring in lookup_table["resource_terms_revised"].keys()):
+                    resourceId = lookup_table["resource_terms_revised"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
                 elif (matchstring in resource_permutation_terms.keys()):
                     resourceId = resource_permutation_terms[matchstring]
