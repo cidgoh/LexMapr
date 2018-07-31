@@ -271,6 +271,9 @@ def update_lookup_table():
     # TODO: load each resource dictionary as seen in run, and add it to
     #       lookup_table.
     lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
+    lookup_table["abbreviations"] = get_resource_dict("AbbLex.csv")
+    # TODO: this is not used
+    lookup_table["abbreviation_lower"] = get_resource_dict("AbbLex.csv", True)
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -346,10 +349,6 @@ def run(args):
     resource_terms_revised = {}
     resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-
-    # 12-Get all abbreviation/acronyms from resource in CSV file format and put in a dictionary to be used further
-    abbreviations = get_resource_dict("AbbLex.csv")
-    abbreviation_lower = get_resource_dict("AbbLex.csv", True)
 
     # 13-Get all Non English Language words mappings from resource in CSV file format and put in a dictionary to be used further
     non_english_words = get_resource_dict("NefLex.csv")
@@ -520,8 +519,8 @@ def run(args):
             elif (lemma.lower() in spelling_mistakes_lower.keys()):
                 lemma = spelling_mistakes_lower[lemma.lower()]
                 status_addendum.append("Change Case and Spelling Correction Treatment")
-            if (lemma in abbreviations.keys()):  # Abbreviations, acronyms, foreign language words taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
-                lemma = abbreviations[lemma]
+            if (lemma in lookup_table["abbreviations"].keys()):  # Abbreviations, acronyms, foreign language words taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
+                lemma = lookup_table["abbreviations"][lemma]
                 status_addendum.append("Abbreviation-Acronym Treatment")
             elif (lemma.lower() in abbreviation_lower.keys()):
                 lemma = abbreviation_lower[lemma.lower()]
@@ -544,8 +543,8 @@ def run(args):
 
             cleaned_sample = re.sub(' +', ' ', cleaned_sample)  # Extra innner spaces removed from cleaned sample
 
-            if (cleaned_sample in abbreviations.keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
-                cleaned_sample = abbreviations[cleaned_sample]
+            if (cleaned_sample in lookup_table["abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
+                cleaned_sample = lookup_table["abbreviations"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
             elif (cleaned_sample in abbreviation_lower.keys()):
                 cleaned_sample = abbreviation_lower[cleaned_sample]
@@ -917,8 +916,8 @@ def run(args):
                 setPerm = allPermutations(grm1)  # Gets the set of all possible permutations for this gram type chunks
                 for perm in setPerm:
                     grm = ' '.join(perm)
-                    if (grm in abbreviations.keys()):  # rule for abbreviation
-                        grm = abbreviations[grm]
+                    if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
+                        grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
@@ -977,8 +976,8 @@ def run(args):
                 setPerm = allPermutations(grm1)  # Gets the set of all possible permutations for this gram type chunks
                 for perm in setPerm:
                     grm = ' '.join(perm)
-                    if (grm in abbreviations.keys()):  # rule for abbreviation
-                        grm = abbreviations[grm]
+                    if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
+                        grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
@@ -1038,8 +1037,8 @@ def run(args):
                 for perm in setPerm:
                     grm = ' '.join(perm)
 
-                    if (grm in abbreviations.keys()):  # rule for abbreviation
-                        grm = abbreviations[grm]
+                    if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
+                        grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
@@ -1109,8 +1108,8 @@ def run(args):
                 setPerm = allPermutations(grm1)  # Gets the set of all possible permutations for this gram type chunks
                 for perm in setPerm:
                     grm = ' '.join(perm)
-                    if (grm in abbreviations.keys()):  # rule for abbreviation
-                        grm = abbreviations[grm]
+                    if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
+                        grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
                     if (grm in non_english_words.keys()):  # rule for abbreviation
                         grm = non_english_words[grm]
@@ -1179,8 +1178,8 @@ def run(args):
                 grmTokens = word_tokenize(grm.lower())
                 localTrigger = False
 
-                if (grm in abbreviations.keys()):  # rule for abbreviation
-                    grm = abbreviations[grm]
+                if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
+                    grm = lookup_table["abbreviations"][grm]
                     status_addendum.append("Abbreviation-Acronym Treatment")
                 if (grm in non_english_words.keys()):  # rule for abbreviation
                     grm = non_english_words[grm]
