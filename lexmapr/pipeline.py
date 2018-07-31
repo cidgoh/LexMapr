@@ -355,21 +355,8 @@ def load_lookup_table():
     """
     # lookup_table.json exists
     if os.path.isfile("lookup_table.json"):
-        # last modification time of lookup_table.json
-        lookup_table_modification_time = os.path.getmtime("lookup_table.json")
-
-        # list of all file names in resources folder
-        resource_names = [file_name for file_name in os.listdir(get_path("resources"))]
-        # list of paths to all files in resources folder
-        resource_paths = [get_path(file_name, "resources/") for file_name in resource_names]
-        # list of last modification times for files in resources folder
-        resources_files_modification_times = [os.path.getmtime(path) for path in resource_paths]
-        # most recent modification time of a file in resources folder
-        resources_folder_modification_time = max(resources_files_modification_times)
-
-        # resources modified more recently than lookup_table.json
-        if resources_folder_modification_time > lookup_table_modification_time:
-            # update lookup_table
+        # lookup_table.json out of date
+        if is_lookup_table_outdated():
             update_lookup_table()
     # lookup_table.json does not exist
     else:
@@ -391,15 +378,30 @@ def get_path(file_name, prefix=""):
     """
     return os.path.join(os.path.dirname(__file__), prefix+file_name)
 
+def is_lookup_table_outdated():
+    """...WIP"""
+    # last modification time of lookup_table.json
+    lookup_table_modification_time = os.path.getmtime("lookup_table.json")
+
+    # list of all file names in resources folder
+    resource_names = [file_name for file_name in os.listdir(get_path("resources"))]
+    # list of paths to all files in resources folder
+    resource_paths = [get_path(file_name, "resources/") for file_name in resource_names]
+    # list of last modification times for files in resources folder
+    resources_files_modification_times = [os.path.getmtime(path) for path in resource_paths]
+    # most recent modification time of a file in resources folder
+    resources_folder_modification_time = max(resources_files_modification_times)
+
+    # resources modified more recently than lookup_table.json
+    if resources_folder_modification_time > lookup_table_modification_time:
+        return True
+    else:
+        return False
+
 def run(args):
     """
     Main text mining pipeline.
     """
-    # TODO: remove this later
-    # update_lookup_table()
-    load_lookup_table()
-    # # print(lookup_table)
-    # sys.exit()
     punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuations for basic treatment
     covered_tokens = []
     remainingAllTokensSet = []
@@ -409,7 +411,10 @@ def run(args):
     samplesList = []
     samplesSet = []
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-                    
+
+    # Load global lookup_table variable from cache
+    load_lookup_table()
+
     # Output file Column Headings
     OUTPUT_FIELDS = [
         "Sample_Id",
