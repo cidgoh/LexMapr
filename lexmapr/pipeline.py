@@ -280,6 +280,7 @@ def update_lookup_table():
     lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
     lookup_table["qualities"] = get_resource_dict("SemLex.csv")
     lookup_table["qualities_lower"] = get_resource_dict("SemLex.csv", True)
+    lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -354,9 +355,6 @@ def run(args):
     resource_terms_revised = {}
     resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-
-    # 17-Get all collocations (Wikipedia) from resource in a CSV file format and put in a dictionary to be used further
-    collocations = get_resource_dict("wikipediaCollocations.csv")
 
     # 18-Method to get all inflection exception words from resource in CSV file format -Needed to supercede the general inflection treatment
     inflection_exceptions = get_resource_dict("inflection-exceptions.csv", True)
@@ -767,11 +765,11 @@ def run(args):
                     "Permutation of Tokens in Bracketed Resource Term")
             # A full-term cleaned sample match with multi-word
             # collocation from Wikipedia exists.
-            elif cleaned_sample.lower() in collocations:
+            elif cleaned_sample.lower() in lookup_table["collocations"]:
                 # Term we found a full-term match for
                 matched_term = cleaned_sample.lower()
                 # Resource ID for matched_term
-                resource_id = collocations[matched_term]
+                resource_id = lookup_table["collocations"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":"
                     + resource_id)
