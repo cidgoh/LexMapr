@@ -335,7 +335,17 @@ def get_path(file_name, prefix=""):
     return os.path.join(os.path.dirname(__file__), prefix+file_name)
 
 def is_lookup_table_outdated():
-    """...WIP"""
+    """Returns True if lookup_table.json is outdated.
+
+    lookup_table.json is considered outdated if it has an older last
+    modification time than any file in /resources.
+
+    Return values:
+        * <class "bool">: Indicates whether lookup_table.json is
+            outdated.
+    Restrictions:
+        * should only be called if lookup_table.json exists
+    """
     # last modification time of lookup_table.json
     lookup_table_modification_time = os.path.getmtime("lookup_table.json")
 
