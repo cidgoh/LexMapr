@@ -283,6 +283,7 @@ def update_lookup_table():
     lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
     lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
     lookup_table["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
+    lookup_table["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -355,13 +356,10 @@ def run(args):
     samplesSet = []
     resource_terms = {}
     resource_terms_revised = {}
-    resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-    
-    # 21- To get all terms from resources- right now in a CSV file extracted from ontologies using another external script
-    resource_terms_ID_based = get_resource_dict("CombinedResourceTerms.csv")
+
     # Swap keys and values in resource_terms_ID_based
-    resource_terms = {v:k for k,v in resource_terms_ID_based.items()}
+    resource_terms = {v:k for k,v in lookup_table["resource_terms_ID_based"].items()}
     # Convert keys in resource_terms to lowercase
     resource_terms_revised = {k.lower():v for k,v in resource_terms.items()}
 
@@ -684,7 +682,7 @@ def run(args):
                 # Resource ID for matched_term's permutation
                 resource_id = resource_permutation_terms[matched_term]
                 # Permutation corresponding to matched_term
-                matched_permutation = resource_terms_ID_based[resource_id]
+                matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
                 retained_tokens.append(matched_permutation + ":"
                     + resource_id)
@@ -699,7 +697,7 @@ def run(args):
                 resource_id =\
                     resource_bracketed_permutation_terms[matched_term]
                 # Permutation corresponding to matched_term
-                matched_permutation = resource_terms_ID_based[resource_id]
+                matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
                 retained_tokens.append(matched_permutation + ":"
                     + resource_id)
@@ -735,7 +733,7 @@ def run(args):
                 # Resource ID for matched_term's permutation
                 resource_id = resource_permutation_terms[matched_term]
                 # Permutation corresponding to matched_term
-                matched_permutation = resource_terms_ID_based[resource_id]
+                matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
                 retained_tokens.append(matched_permutation + ":"
                     + resource_id)
@@ -751,7 +749,7 @@ def run(args):
                 resource_id =\
                     resource_bracketed_permutation_terms[matched_term]
                 # Permutation corresponding to matched_term
-                matched_permutation = resource_terms_ID_based[resource_id]
+                matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
                 retained_tokens.append(matched_permutation + ":"
                     + resource_id)
@@ -1263,11 +1261,11 @@ def run(args):
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
                 elif (matchstring in resource_permutation_terms.keys()):
                     resourceId = resource_permutation_terms[matchstring]
-                    resourceOriginalTerm = resource_terms_ID_based[resourceId]
+                    resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
                 elif (matchstring in resource_bracketed_permutation_terms.keys()):
                     resourceId = resource_bracketed_permutation_terms[matchstring]
-                    resourceOriginalTerm = resource_terms_ID_based[resourceId]
+                    resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
                     resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
                 elif (matchstring in lookup_table["processes"].keys()):
