@@ -278,6 +278,8 @@ def update_lookup_table():
     lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
     lookup_table["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
     lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
+    lookup_table["qualities"] = get_resource_dict("SemLex.csv")
+    lookup_table["qualities_lower"] = get_resource_dict("SemLex.csv", True)
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -352,10 +354,6 @@ def run(args):
     resource_terms_revised = {}
     resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-    
-    # 16-Get all semantic tags (e.g.qualities) from resource in a CSV file format and put in a dictionary to be used further
-    qualities = get_resource_dict("SemLex.csv")
-    qualities_lower = get_resource_dict("SemLex.csv", True)
 
     # 17-Get all collocations (Wikipedia) from resource in a CSV file format and put in a dictionary to be used further
     collocations = get_resource_dict("wikipediaCollocations.csv")
@@ -1077,8 +1075,8 @@ def run(args):
                             localTrigger = True
 
                     # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                    if (grm in qualities_lower.keys() and not localTrigger):
-                        quality = qualities_lower[grm]
+                    if (grm in lookup_table["qualities_lower"].keys() and not localTrigger):
+                        quality = lookup_table["qualities_lower"][grm]
                         partialMatchedList.append(grm)
                         status_addendum.append("Using Semantic Tagging Resources")
                         localTrigger = True
@@ -1148,8 +1146,8 @@ def run(args):
                         localTrigger = True
 
                     # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                    if (grm in qualities_lower.keys() and not localTrigger):
-                        quality = qualities_lower[grm]
+                    if (grm in lookup_table["qualities_lower"].keys() and not localTrigger):
+                        quality = lookup_table["qualities_lower"][grm]
                         partialMatchedList.append(grm)
                         status_addendum.append("Using Semantic Tagging Resources")
                         localTrigger = True
@@ -1210,8 +1208,8 @@ def run(args):
                         localTrigger=True
 
                 # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                if (grm in qualities_lower.keys() and not localTrigger):
-                    quality = qualities_lower[grm]
+                if (grm in lookup_table["qualities_lower"].keys() and not localTrigger):
+                    quality = lookup_table["qualities_lower"][grm]
                     partialMatchedList.append(grm)
                     status_addendum.append("Using Semantic Tagging Resources")
                     localTrigger = True
@@ -1282,11 +1280,11 @@ def run(args):
                 elif (matchstring in lookup_table["processes"].keys()):
                     resourceId = lookup_table["processes"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
-                elif (matchstring in qualities.keys()):
-                    resourceId = qualities[matchstring]
+                elif (matchstring in lookup_table["qualities"].keys()):
+                    resourceId = lookup_table["qualities"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
-                elif (matchstring in qualities_lower.keys()):
-                    resourceId = qualities_lower[matchstring]
+                elif (matchstring in lookup_table["qualities_lower"].keys()):
+                    resourceId = lookup_table["qualities_lower"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
                 elif ("==" in matchstring):
                     resList = matchstring.split("==")
