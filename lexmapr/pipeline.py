@@ -544,8 +544,8 @@ def run(args):
                 cleaned_sample = lookup_table["abbreviation_lower"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
 
-            if (cleaned_sample in non_english_words.keys()):  # non English words taken care of
-                cleaned_sample = non_english_words[cleaned_sample]
+            if (cleaned_sample in lookup_table["non_english_words"].keys()):  # non English words taken care of
+                cleaned_sample = lookup_table["non_english_words"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
             elif (cleaned_sample in lookup_table["non_english_words_lower"].keys()):
                 cleaned_sample = lookup_table["non_english_words_lower"][cleaned_sample]
