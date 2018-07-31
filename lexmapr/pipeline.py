@@ -282,6 +282,7 @@ def update_lookup_table():
     lookup_table["qualities_lower"] = get_resource_dict("SemLex.csv", True)
     lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
     lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
+    lookup_table["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -356,10 +357,6 @@ def run(args):
     resource_terms_revised = {}
     resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-    
-    # 19-Method to Get all stop words from resource in CSV file format -A very constrained lists of stop words is
-    # used as other stop words are assumed to have some useful semantic meaning
-    stop_words = get_resource_dict("mining-stopwords.csv", True)
     
     # 21- To get all terms from resources- right now in a CSV file extracted from ontologies using another external script
     resource_terms_ID_based = get_resource_dict("CombinedResourceTerms.csv")
@@ -521,10 +518,10 @@ def run(args):
 
 
             # ===This will create a cleaned sample after above treatments [Here we are making new phrase now in lower case]
-            if (not cleaned_sample and lemma.lower() not in stop_words):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
+            if (not cleaned_sample and lemma.lower() not in lookup_table["stop_words"]):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
                 cleaned_sample = lemma.lower()
             elif (
-                lemma.lower() not in stop_words):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
+                lemma.lower() not in lookup_table["stop_words"]):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
                 cleaned_sample = cleaned_sample + " " + lemma.lower()
 
             cleaned_sample = re.sub(' +', ' ', cleaned_sample)  # Extra innner spaces removed from cleaned sample
