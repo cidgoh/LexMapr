@@ -306,6 +306,38 @@ def update_lookup_table():
                 for perm in setPerm:
                     permString = ' '.join(perm)
                     lookup_table["resource_permutation_terms"][permString.strip()] = resourceid.strip()
+    # TODO: clean this up if you can
+    lookup_table["resource_bracketed_permutation_terms"]={}
+    # Iterate
+    for k, v in lookup_table["resource_terms_revised"].items():
+        resourceid = v
+        resource1 = k
+        sampleTokens = word_tokenize(resource1.lower())
+        if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead for permutations
+            if "(" in resource1:
+                part1 = find_left_r(resource1, "(", ")")
+                part2 = find_between_r(resource1, "(", ")")
+                candidate = ""
+
+                if "," not in part2:
+                    candidate = part2 + " " + part1
+                    setPerm = allPermutations(candidate)
+                    for perm in setPerm:
+                        permString = ' '.join(perm)
+                        lookup_table["resource_bracketed_permutation_terms"][permString.strip()] = resourceid.strip()
+                elif "," in part2:
+                    lst = part2.split(",")
+                    bracketedPart = ""
+                    for x in lst:
+                        if not bracketedPart:
+                            bracketedPart = x.strip()
+                        else:
+                            bracketedPart = bracketedPart + " " + x.strip()
+                    candidate = bracketedPart + " " + part1
+                    setPerm = allPermutations(candidate)
+                    for perm in setPerm:
+                        permString = ' '.join(perm)
+                        lookup_table["resource_bracketed_permutation_terms"][permString.strip()] = resourceid.strip()
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -377,39 +409,6 @@ def run(args):
     samplesList = []
     samplesSet = []
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-
-    # 24-Method for getting all the permutations of Bracketed Resource Terms
-    resource_bracketed_permutation_terms={}
-    # Iterate
-    for k, v in lookup_table["resource_terms_revised"].items():
-        resourceid = v
-        resource1 = k
-        sampleTokens = word_tokenize(resource1.lower())
-        if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead for permutations
-            if "(" in resource1:
-                part1 = find_left_r(resource1, "(", ")")
-                part2 = find_between_r(resource1, "(", ")")
-                candidate = ""
-
-                if "," not in part2:
-                    candidate = part2 + " " + part1
-                    setPerm = allPermutations(candidate)
-                    for perm in setPerm:
-                        permString = ' '.join(perm)
-                        resource_bracketed_permutation_terms[permString.strip()] = resourceid.strip()
-                elif "," in part2:
-                    lst = part2.split(",")
-                    bracketedPart = ""
-                    for x in lst:
-                        if not bracketedPart:
-                            bracketedPart = x.strip()
-                        else:
-                            bracketedPart = bracketedPart + " " + x.strip()
-                    candidate = bracketedPart + " " + part1
-                    setPerm = allPermutations(candidate)
-                    for perm in setPerm:
-                        permString = ' '.join(perm)
-                        resource_bracketed_permutation_terms[permString.strip()] = resourceid.strip()
                     
     # Output file Column Headings
     OUTPUT_FIELDS = [
@@ -686,12 +685,12 @@ def run(args):
                 status_addendum.append(
                     "Permutation of Tokens in Resource Term")
             # Full-term match with permutation of bracketed resource term
-            elif sample.lower() in resource_bracketed_permutation_terms:
+            elif sample.lower() in lookup_table["resource_bracketed_permutation_terms"]:
                 # Term we found a permutation for
                 matched_term = sample.lower()
                 # Resource ID for matched_term's permutation
                 resource_id =\
-                    resource_bracketed_permutation_terms[matched_term]
+                    lookup_table["resource_bracketed_permutation_terms"][matched_term]
                 # Permutation corresponding to matched_term
                 matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
@@ -738,12 +737,12 @@ def run(args):
                     "Permutation of Tokens in Resource Term")
             # Full-term cleaned sample match with permutation of
             # bracketed resource term.
-            elif cleaned_sample.lower() in resource_bracketed_permutation_terms:
+            elif cleaned_sample.lower() in lookup_table["resource_bracketed_permutation_terms"]:
                 # Term we found a permutation for
                 matched_term = cleaned_sample.lower()
                 # Resource ID for matched_term's permutation
                 resource_id =\
-                    resource_bracketed_permutation_terms[matched_term]
+                    lookup_table["resource_bracketed_permutation_terms"][matched_term]
                 # Permutation corresponding to matched_term
                 matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
@@ -918,8 +917,8 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
-                        resourceId = resource_bracketed_permutation_terms[grm]
+                    elif (grm in lookup_table["resource_bracketed_permutation_terms"].keys() and not localTrigger):
+                        resourceId = lookup_table["resource_bracketed_permutation_terms"][grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -978,8 +977,8 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
-                        resourceId = resource_bracketed_permutation_terms[grm]
+                    elif (grm in lookup_table["resource_bracketed_permutation_terms"].keys() and not localTrigger):
+                        resourceId = lookup_table["resource_bracketed_permutation_terms"][grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1039,8 +1038,8 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
-                        resourceId = resource_bracketed_permutation_terms[grm]
+                    elif (grm in lookup_table["resource_bracketed_permutation_terms"].keys() and not localTrigger):
+                        resourceId = lookup_table["resource_bracketed_permutation_terms"][grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1110,8 +1109,8 @@ def run(args):
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
-                        resourceId = resource_bracketed_permutation_terms[grm]
+                    elif (grm in lookup_table["resource_bracketed_permutation_terms"].keys() and not localTrigger):
+                        resourceId = lookup_table["resource_bracketed_permutation_terms"][grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1259,8 +1258,8 @@ def run(args):
                     resourceId = lookup_table["resource_permutation_terms"][matchstring]
                     resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
-                elif (matchstring in resource_bracketed_permutation_terms.keys()):
-                    resourceId = resource_bracketed_permutation_terms[matchstring]
+                elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
+                    resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
                     resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
                     resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
