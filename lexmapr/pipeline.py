@@ -284,6 +284,8 @@ def update_lookup_table():
     lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
     lookup_table["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
     lookup_table["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
+    # TODO: reduce line length
+    lookup_table["resource_terms"] = {v:k for k,v in lookup_table["resource_terms_ID_based"].items()}
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -354,14 +356,11 @@ def run(args):
     samplesDict = collections.OrderedDict()
     samplesList = []
     samplesSet = []
-    resource_terms = {}
     resource_terms_revised = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
 
-    # Swap keys and values in resource_terms_ID_based
-    resource_terms = {v:k for k,v in lookup_table["resource_terms_ID_based"].items()}
     # Convert keys in resource_terms to lowercase
-    resource_terms_revised = {k.lower():v for k,v in resource_terms.items()}
+    resource_terms_revised = {k.lower():v for k,v in lookup_table["resource_terms"].items()}
 
     # 23-Method for getting all the permutations of Resource Terms
     resource_permutation_terms = {}
@@ -646,21 +645,21 @@ def run(args):
                 # Return
                 return ret
             # Full-term match without any treatment
-            elif sample in resource_terms:
+            elif sample in lookup_table["resource_terms"]:
                 # Term with we found a full-term match for
                 matched_term = sample
                 # Resource ID for matched_term
-                resource_id = resource_terms[matched_term]
+                resource_id = lookup_table["resource_terms"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("A Direct Match")
             # Full-term match with change-of-case in input data
-            elif sample.lower() in resource_terms:
+            elif sample.lower() in lookup_table["resource_terms"]:
                 # Term with we found a full-term match for
                 matched_term = sample.lower()
                 # Resource ID for matched_term
-                resource_id = resource_terms[matched_term]
+                resource_id = lookup_table["resource_terms"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
@@ -705,11 +704,11 @@ def run(args):
                 status_addendum.append(
                     "Permutation of Tokens in Bracketed Resource Term")
             # Full-term cleaned sample match without any treatment
-            elif cleaned_sample.lower() in resource_terms:
+            elif cleaned_sample.lower() in lookup_table["resource_terms"]:
                 # Term with we found a full-term match for
                 matched_term = cleaned_sample.lower()
                 # Resource ID for matched_term
-                resource_id = resource_terms[matched_term]
+                resource_id = lookup_table["resource_terms"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
@@ -908,7 +907,7 @@ def run(args):
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 5-gram chunk
-                    if ((grm in resource_terms.keys() ) and not localTrigger):
+                    if ((grm in lookup_table["resource_terms"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -968,7 +967,7 @@ def run(args):
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 4-gram chunk
-                    if ((grm in resource_terms.keys()) and not localTrigger):
+                    if ((grm in lookup_table["resource_terms"].keys()) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1029,7 +1028,7 @@ def run(args):
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 3-gram chunk
-                    if ((grm in resource_terms.keys() ) and not localTrigger):
+                    if ((grm in lookup_table["resource_terms"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1100,7 +1099,7 @@ def run(args):
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 2-gram chunk
-                    if ((grm in resource_terms.keys() ) and not localTrigger):
+                    if ((grm in lookup_table["resource_terms"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1170,7 +1169,7 @@ def run(args):
                     status_addendum.append("Synonym Usage")
 
                 # Matching Test for 1-gram chunk
-                if ((grm in resource_terms.keys() ) and not localTrigger):
+                if ((grm in lookup_table["resource_terms"].keys() ) and not localTrigger):
                     partialMatchedList.append(grm)
                     for eachTkn in grmTokens:
                         covered_tokens.append(eachTkn)
@@ -1253,8 +1252,8 @@ def run(args):
 
             #Decoding the partial matched set to get back resource ids
             for matchstring in partialMatchedSet:
-                if (matchstring in resource_terms.keys()):
-                    resourceId = resource_terms[matchstring]
+                if (matchstring in lookup_table["resource_terms"].keys()):
+                    resourceId = lookup_table["resource_terms"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
                 elif (matchstring in resource_terms_revised.keys()):
                     resourceId = resource_terms_revised[matchstring]
