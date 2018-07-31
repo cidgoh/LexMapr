@@ -273,6 +273,8 @@ def update_lookup_table():
     lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
     lookup_table["abbreviations"] = get_resource_dict("AbbLex.csv")
     lookup_table["abbreviation_lower"] = get_resource_dict("AbbLex.csv", True)
+    lookup_table["non_english_words"] = get_resource_dict("NefLex.csv")
+    lookup_table["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -347,10 +349,6 @@ def run(args):
     resource_terms_revised = {}
     resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-
-    # 13-Get all Non English Language words mappings from resource in CSV file format and put in a dictionary to be used further
-    non_english_words = get_resource_dict("NefLex.csv")
-    non_english_words_lower = get_resource_dict("NefLex.csv", True)
 
     # 14-Get all spelling mistake examples from resource in CSV file format and put in a dictionary to be used further
     spelling_mistakes = get_resource_dict("ScorLex.csv")
@@ -524,11 +522,11 @@ def run(args):
                 lemma = lookup_table["abbreviation_lower"][lemma.lower()]
                 status_addendum.append("Change Case and Abbreviation-Acronym Treatment")
 
-            if (lemma in non_english_words.keys()):  # Non English language words taken care of
-                lemma = non_english_words[lemma]
+            if (lemma in lookup_table["non_english_words"].keys()):  # Non English language words taken care of
+                lemma = lookup_table["non_english_words"][lemma]
                 status_addendum.append("Non English Language Words Treatment")
-            elif (lemma.lower() in non_english_words_lower.keys()):
-                lemma = non_english_words_lower[lemma.lower()]
+            elif (lemma.lower() in lookup_table["non_english_words_lower"].keys()):
+                lemma = lookup_table["non_english_words_lower"][lemma.lower()]
                 status_addendum.append("Change Case and Non English Language Words Treatment")
 
 
@@ -551,8 +549,8 @@ def run(args):
             if (cleaned_sample in non_english_words.keys()):  # non English words taken care of
                 cleaned_sample = non_english_words[cleaned_sample]
                 status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
-            elif (cleaned_sample in non_english_words_lower.keys()):
-                cleaned_sample = non_english_words_lower[cleaned_sample]
+            elif (cleaned_sample in lookup_table["non_english_words_lower"].keys()):
+                cleaned_sample = lookup_table["non_english_words_lower"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
 
         # Here we are making the tokens of cleaned sample phrase
@@ -917,8 +915,8 @@ def run(args):
                     if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
                         grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
-                    if (grm in non_english_words.keys()):  # rule for abbreviation
-                        grm = non_english_words[grm]
+                    if (grm in lookup_table["non_english_words"].keys()):  # rule for abbreviation
+                        grm = lookup_table["non_english_words"][grm]
                         status_addendum.append("Non English Language Words Treatment")
                     if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
                         grm = lookup_table["synonyms"][grm]
@@ -977,8 +975,8 @@ def run(args):
                     if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
                         grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
-                    if (grm in non_english_words.keys()):  # rule for abbreviation
-                        grm = non_english_words[grm]
+                    if (grm in lookup_table["non_english_words"].keys()):  # rule for abbreviation
+                        grm = lookup_table["non_english_words"][grm]
                         status_addendum.append("Non English Language Words Treatment")
                     if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
                         grm = lookup_table["synonyms"][grm]
@@ -1038,8 +1036,8 @@ def run(args):
                     if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
                         grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
-                    if (grm in non_english_words.keys()):  # rule for abbreviation
-                        grm = non_english_words[grm]
+                    if (grm in lookup_table["non_english_words"].keys()):  # rule for abbreviation
+                        grm = lookup_table["non_english_words"][grm]
                         status_addendum.append("Non English Language Words Treatment")
                     if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
                         grm = lookup_table["synonyms"][grm]
@@ -1109,8 +1107,8 @@ def run(args):
                     if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
                         grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
-                    if (grm in non_english_words.keys()):  # rule for abbreviation
-                        grm = non_english_words[grm]
+                    if (grm in lookup_table["non_english_words"].keys()):  # rule for abbreviation
+                        grm = lookup_table["non_english_words"][grm]
                         status_addendum.append("Non English Language Words Treatment")
                     if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
                         grm = lookup_table["synonyms"][grm]
@@ -1179,8 +1177,8 @@ def run(args):
                 if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
                     grm = lookup_table["abbreviations"][grm]
                     status_addendum.append("Abbreviation-Acronym Treatment")
-                if (grm in non_english_words.keys()):  # rule for abbreviation
-                    grm = non_english_words[grm]
+                if (grm in lookup_table["non_english_words"].keys()):  # rule for abbreviation
+                    grm = lookup_table["non_english_words"][grm]
                     status_addendum.append("Non English Language Words Treatment")
                 if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
                     grm = lookup_table["synonyms"][grm]
