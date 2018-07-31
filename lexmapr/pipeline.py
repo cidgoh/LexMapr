@@ -17,9 +17,6 @@ import collections
 import json
 import os
 
-# Will contain all resource dictionaries
-lookup_table = {}
-
 logger = logging.getLogger("pipeline")
 logger.disabled = True
 
@@ -344,7 +341,7 @@ def add_lookup_table_to_cache():
         json.dump(lookup_table, file)
     return
 
-def load_lookup_table():
+def get_lookup_table_from_cache():
     """...WIP
 
     TODO:
@@ -357,18 +354,16 @@ def load_lookup_table():
     if os.path.isfile("lookup_table.json"):
         # lookup_table.json out of date
         if is_lookup_table_outdated():
+            # add new lookup table to cache
             add_lookup_table_to_cache()
     # lookup_table.json does not exist
     else:
-        # update lookup_table
+        # add lookup table to cache
         add_lookup_table_to_cache()
-    # Allow modifications to global variable lookup_table
-    global lookup_table
     # Open and read lookup_table.json
     with open("lookup_table.json", "r") as file:
-        # Write contents to lookup_table
-        lookup_table = json.load(file)
-    return
+        # Return lookup_table contents
+        return json.load(file)
 
 def get_path(file_name, prefix=""):
     """...WIP
@@ -412,8 +407,10 @@ def run(args):
     samplesSet = []
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
 
-    # Load global lookup_table variable from cache
-    load_lookup_table()
+    # This is a nested dictionary of all resource dictionaries used by
+    # run. It is retrieved from cache if possible. See
+    # get_lookup_table_from_cache docstring for details.
+    lookup_table = get_lookup_table_from_cache()
 
     # Output file Column Headings
     OUTPUT_FIELDS = [
