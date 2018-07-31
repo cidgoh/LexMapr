@@ -326,6 +326,34 @@ class MatchNotFoundError(Exception):
         """Return message when this class is raised as an exception."""
         return repr(self.message)
 
+def get_path(file_name, prefix=""):
+    """...WIP
+
+    TODO:
+        * write function docstring
+    """
+    return os.path.join(os.path.dirname(__file__), prefix+file_name)
+
+def is_lookup_table_outdated():
+    """...WIP"""
+    # last modification time of lookup_table.json
+    lookup_table_modification_time = os.path.getmtime("lookup_table.json")
+
+    # list of all file names in resources folder
+    resource_names = [file_name for file_name in os.listdir(get_path("resources"))]
+    # list of paths to all files in resources folder
+    resource_paths = [get_path(file_name, "resources/") for file_name in resource_names]
+    # list of last modification times for files in resources folder
+    resources_files_modification_times = [os.path.getmtime(path) for path in resource_paths]
+    # most recent modification time of a file in resources folder
+    resources_folder_modification_time = max(resources_files_modification_times)
+
+    # resources modified more recently than lookup_table.json
+    if resources_folder_modification_time > lookup_table_modification_time:
+        return True
+    else:
+        return False
+
 def add_lookup_table_to_cache():
     """...WIP
 
@@ -364,34 +392,6 @@ def get_lookup_table_from_cache():
     with open("lookup_table.json", "r") as file:
         # Return lookup_table contents
         return json.load(file)
-
-def get_path(file_name, prefix=""):
-    """...WIP
-
-    TODO:
-        * write function docstring
-    """
-    return os.path.join(os.path.dirname(__file__), prefix+file_name)
-
-def is_lookup_table_outdated():
-    """...WIP"""
-    # last modification time of lookup_table.json
-    lookup_table_modification_time = os.path.getmtime("lookup_table.json")
-
-    # list of all file names in resources folder
-    resource_names = [file_name for file_name in os.listdir(get_path("resources"))]
-    # list of paths to all files in resources folder
-    resource_paths = [get_path(file_name, "resources/") for file_name in resource_names]
-    # list of last modification times for files in resources folder
-    resources_files_modification_times = [os.path.getmtime(path) for path in resource_paths]
-    # most recent modification time of a file in resources folder
-    resources_folder_modification_time = max(resources_files_modification_times)
-
-    # resources modified more recently than lookup_table.json
-    if resources_folder_modification_time > lookup_table_modification_time:
-        return True
-    else:
-        return False
 
 def run(args):
     """
