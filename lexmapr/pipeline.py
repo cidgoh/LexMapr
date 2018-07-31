@@ -277,6 +277,7 @@ def update_lookup_table():
     lookup_table["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
     lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
     lookup_table["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
+    lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -351,9 +352,6 @@ def run(args):
     resource_terms_revised = {}
     resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-
-    # 15-Get candidate processes from resource in a CSV file format and put in a dictionary to be used further
-    processes = get_resource_dict("candidateProcesses.csv")
     
     # 16-Get all semantic tags (e.g.qualities) from resource in a CSV file format and put in a dictionary to be used further
     qualities = get_resource_dict("SemLex.csv")
@@ -1224,8 +1222,8 @@ def run(args):
 
 
                 # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                if (grm in processes.keys() and not localTrigger):
-                    proc = processes[grm]
+                if (grm in lookup_table["processes"].keys() and not localTrigger):
+                    proc = lookup_table["processes"][grm]
                     partialMatchedList.append(grm)
                     status_addendum.append("Using Candidate Processes")
                     localTrigger = True
@@ -1281,8 +1279,8 @@ def run(args):
                     resourceOriginalTerm = resource_terms_ID_based[resourceId]
                     resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
-                elif (matchstring in processes.keys()):
-                    resourceId = processes[matchstring]
+                elif (matchstring in lookup_table["processes"].keys()):
+                    resourceId = lookup_table["processes"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
                 elif (matchstring in qualities.keys()):
                     resourceId = qualities[matchstring]
