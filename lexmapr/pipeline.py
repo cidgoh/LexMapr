@@ -327,11 +327,25 @@ class MatchNotFoundError(Exception):
         return repr(self.message)
 
 def get_path(file_name, prefix=""):
-    """...WIP
+    """Returns path of file_name relative to pipeline.py.
 
-    TODO:
-        * write function docstring
+    Specifically, returns a path with the following pattern:
+
+        {path to pipeline.py}/{prefix}file_name
+
+    The path does not need to currently exist.
+
+    Arguments:
+        * file_name <class "str">: Name of file we want the relative
+            path to from pipeline.py.
+    Return values:
+        * <class "str">: Path to file_name
+    Optional arguments:
+        * prefix <class "str">: characters desired directly before
+            file_name in returned path
     """
+    # Return file_name appended to prefix and absolute path to
+    # pipeline.py.
     return os.path.join(os.path.dirname(__file__), prefix+file_name)
 
 def is_lookup_table_outdated():
@@ -342,7 +356,7 @@ def is_lookup_table_outdated():
 
     Return values:
         * <class "bool">: Indicates whether lookup_table.json is
-            outdated.
+            outdated
     Restrictions:
         * should only be called if lookup_table.json exists
     """
