@@ -283,14 +283,14 @@ def load_lookup_table():
     TODO:
         * write function docstring
         * follow single responsibility principle more closely
+        * figure out why you need get_path in some cases, but not
+            others
     """
     # lookup_table.json exists
     if os.path.isfile("lookup_table.json"):
         # last modification time of lookup_table.json
-        lookup_table_modification_time = os.path.getmtime(get_path("lookup_table.json"))
+        lookup_table_modification_time = os.path.getmtime("lookup_table.json")
 
-        # Path to resources folder
-        resources_path = os.path.join(os.path.dirname(__file__), "resources")
         # list of all file names in resources folder
         resource_names = [file_name for file_name in os.listdir(get_path("resources"))]
         # list of paths to all files in resources folder
