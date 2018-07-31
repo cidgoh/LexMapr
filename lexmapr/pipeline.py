@@ -281,6 +281,7 @@ def update_lookup_table():
     lookup_table["qualities"] = get_resource_dict("SemLex.csv")
     lookup_table["qualities_lower"] = get_resource_dict("SemLex.csv", True)
     lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
+    lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -355,9 +356,6 @@ def run(args):
     resource_terms_revised = {}
     resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-
-    # 18-Method to get all inflection exception words from resource in CSV file format -Needed to supercede the general inflection treatment
-    inflection_exceptions = get_resource_dict("inflection-exceptions.csv", True)
     
     # 19-Method to Get all stop words from resource in CSV file format -A very constrained lists of stop words is
     # used as other stop words are assumed to have some useful semantic meaning
@@ -493,7 +491,7 @@ def run(args):
             # Plurals are converted to singulars with exceptions
             if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith("ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
                 lemma = tkn
-            elif (tkn not in inflection_exceptions):  # Further Inflection Exception list is taken into account
+            elif (tkn not in lookup_table["inflection_exceptions"]):  # Further Inflection Exception list is taken into account
                 lemma = inflection.singularize(tkn)
                 if (tkn != lemma):  #Only in case when inflection makes some changes in lemma
                     status_addendum.append("Inflection (Plural) Treatment")
