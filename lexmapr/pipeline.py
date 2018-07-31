@@ -272,7 +272,6 @@ def update_lookup_table():
     #       lookup_table.
     lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
     lookup_table["abbreviations"] = get_resource_dict("AbbLex.csv")
-    # TODO: this is not used
     lookup_table["abbreviation_lower"] = get_resource_dict("AbbLex.csv", True)
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
@@ -302,7 +301,6 @@ def load_lookup_table():
         resources_files_modification_times = [os.path.getmtime(path) for path in resource_paths]
         # most recent modification time of a file in resources folder
         resources_folder_modification_time = max(resources_files_modification_times)
-        print(resources_folder_modification_time)
 
         # resources modified more recently than lookup_table.json
         if resources_folder_modification_time > lookup_table_modification_time:
@@ -522,8 +520,8 @@ def run(args):
             if (lemma in lookup_table["abbreviations"].keys()):  # Abbreviations, acronyms, foreign language words taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
                 lemma = lookup_table["abbreviations"][lemma]
                 status_addendum.append("Abbreviation-Acronym Treatment")
-            elif (lemma.lower() in abbreviation_lower.keys()):
-                lemma = abbreviation_lower[lemma.lower()]
+            elif (lemma.lower() in lookup_table["abbreviation_lower"].keys()):
+                lemma = lookup_table["abbreviation_lower"][lemma.lower()]
                 status_addendum.append("Change Case and Abbreviation-Acronym Treatment")
 
             if (lemma in non_english_words.keys()):  # Non English language words taken care of
@@ -546,8 +544,8 @@ def run(args):
             if (cleaned_sample in lookup_table["abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
                 cleaned_sample = lookup_table["abbreviations"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
-            elif (cleaned_sample in abbreviation_lower.keys()):
-                cleaned_sample = abbreviation_lower[cleaned_sample]
+            elif (cleaned_sample in lookup_table["abbreviation_lower"].keys()):
+                cleaned_sample = lookup_table["abbreviation_lower"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
 
             if (cleaned_sample in non_english_words.keys()):  # non English words taken care of
