@@ -275,6 +275,8 @@ def update_lookup_table():
     lookup_table["abbreviation_lower"] = get_resource_dict("AbbLex.csv", True)
     lookup_table["non_english_words"] = get_resource_dict("NefLex.csv")
     lookup_table["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
+    lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
+    lookup_table["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
     # Open and write to lookup_table.json
     with open("lookup_table.json", "w") as file:
         # Write lookup_table in JSON format
@@ -349,10 +351,6 @@ def run(args):
     resource_terms_revised = {}
     resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
-
-    # 14-Get all spelling mistake examples from resource in CSV file format and put in a dictionary to be used further
-    spelling_mistakes = get_resource_dict("ScorLex.csv")
-    spelling_mistakes_lower = get_resource_dict("ScorLex.csv", True)
 
     # 15-Get candidate processes from resource in a CSV file format and put in a dictionary to be used further
     processes = get_resource_dict("candidateProcesses.csv")
@@ -509,11 +507,11 @@ def run(args):
                 lemma = tkn
 
             # Misspellings are dealt with  here
-            if (lemma in spelling_mistakes.keys()):  # spelling mistakes taken care of
-                lemma = spelling_mistakes[lemma]
+            if (lemma in lookup_table["spelling_mistakes"].keys()):  # spelling mistakes taken care of
+                lemma = lookup_table["spelling_mistakes"][lemma]
                 status_addendum.append("Spelling Correction Treatment")
-            elif (lemma.lower() in spelling_mistakes_lower.keys()):
-                lemma = spelling_mistakes_lower[lemma.lower()]
+            elif (lemma.lower() in lookup_table["spelling_mistakes_lower"].keys()):
+                lemma = lookup_table["spelling_mistakes_lower"][lemma.lower()]
                 status_addendum.append("Change Case and Spelling Correction Treatment")
             if (lemma in lookup_table["abbreviations"].keys()):  # Abbreviations, acronyms, foreign language words taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
                 lemma = lookup_table["abbreviations"][lemma]
