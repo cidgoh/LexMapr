@@ -234,7 +234,7 @@ def get_all_resource_dicts():
 
     Return values:
         * class <"dict">: Contains key-value pairs corresponding to
-            files in 'resources/'
+            files in "resources/"
             * key: class <"str">
             * val: class <"dict">
     """
@@ -387,24 +387,32 @@ def add_lookup_table_to_cache():
     """Saves nested dictionary of resources to a local file.
 
     The nested dictionary corresponds to the return value of
-    get_all_resource_dicts, and is saved as lookup_table.json.
+    get_all_resource_dicts, and is saved as lookup_table.json. If such
+    a file already exists, it will be overwritten.
     """
-    # Will contain all resource dictionaries
+    # Nested dictionary of all resource dictionaries used in run
     lookup_table = get_all_resource_dicts()
     # Open and write to lookup_table.json
     with open(get_path("lookup_table.json"), "w") as file:
         # Write lookup_table in JSON format
         json.dump(lookup_table, file)
-    return
 
 def get_lookup_table_from_cache():
-    """...WIP
+    """Return contents of lookup_table.json.
 
-    TODO:
-        * write function docstring
-        * follow single responsibility principle more closely
-        * figure out why you need get_path in some cases, but not
-            others
+    The contents of lookup_table.json correspond to the return value of
+    get_all_resource_dicts. Retrieving said contents from
+    lookup_table.json is faster than running get_all_resource_dicts.
+
+    If lookup_table.json does not exist, or is outdated (see
+    is_lookup_table_outdated for details), a new lookup_table.json file
+    is generated.
+
+    Return values:
+        * class <"dict">: Contains key-value pairs corresponding to
+            files in "resources/"
+            * key: class <"str">
+            * val: class <"dict">
     """
     # lookup_table.json exists
     if os.path.isfile(get_path("lookup_table.json")):
