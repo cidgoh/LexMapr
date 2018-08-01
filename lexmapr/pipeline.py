@@ -384,11 +384,10 @@ def is_lookup_table_outdated():
         return False
 
 def add_lookup_table_to_cache():
-    """...WIP
+    """Saves nested dictionary of resources to a local file.
 
-    TODO:
-        * write function docstring
-        * follow single responsibility principle more closely
+    The nested dictionary corresponds to the return value of
+    get_all_resource_dicts, and is saved as lookup_table.json.
     """
     # Will contain all resource dictionaries
     lookup_table = get_all_resource_dicts()
