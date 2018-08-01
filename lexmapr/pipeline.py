@@ -230,7 +230,14 @@ def get_resource_dict(file_name, lower=False):
     return ret
 
 def get_all_resource_dicts():
-    """...WIP"""
+    """Returns collection of all dictionaries used in pipeline.run.
+
+    Return values:
+        * class <"dict">: Contains key-value pairs corresponding to
+            files in 'resources/'
+            * key: class <"str">
+            * val: class <"dict">
+    """
     # return value
     ret = {}
     ret["synonyms"] = get_resource_dict("SynLex.csv")
@@ -247,9 +254,7 @@ def get_all_resource_dicts():
     ret["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
     ret["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
     ret["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
-    # TODO: reduce line length
     ret["resource_terms"] = {v:k for k,v in ret["resource_terms_ID_based"].items()}
-    # TODO: reduce line length
     ret["resource_terms_revised"] = {k.lower():v for k,v in ret["resource_terms"].items()}
     # TODO: clean this up if you can
     ret["resource_permutation_terms"] = {}
