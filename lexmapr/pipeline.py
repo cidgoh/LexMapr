@@ -240,21 +240,37 @@ def get_all_resource_dicts():
     """
     # return value
     ret = {}
+    # Synonyms of resource terms
     ret["synonyms"] = get_resource_dict("SynLex.csv")
+    # Abbreviations of resource terms
     ret["abbreviations"] = get_resource_dict("AbbLex.csv")
+    # Abbreviations of resource terms, all lowercase
     ret["abbreviation_lower"] = get_resource_dict("AbbLex.csv", True)
+    # Non-english translations of resource terms
     ret["non_english_words"] = get_resource_dict("NefLex.csv")
+    # Non-english translations of resource terms, all lowercase
     ret["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
+    # Common misspellings of resource terms
     ret["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
+    # Common misspellings of resource terms, all lowercase
     ret["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
+    # Terms corresponding to candidate processes
     ret["processes"] = get_resource_dict("candidateProcesses.csv")
+    # Terms corresponding to semantic taggings
     ret["qualities"] = get_resource_dict("SemLex.csv")
+    # Terms corresponding to semantic taggings, all lowercase
     ret["qualities_lower"] = get_resource_dict("SemLex.csv", True)
+    # Terms corresponding to wikipedia collocations
     ret["collocations"] = get_resource_dict("wikipediaCollocations.csv")
+    # Terms excluded from inflection treatment
     ret["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
+    # Constrained list of stop words considered to be meaningless
     ret["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
+    # ID-resource combinations
     ret["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
+    # Swap keys and values in resource_terms_ID_based
     ret["resource_terms"] = {v:k for k,v in ret["resource_terms_ID_based"].items()}
+    # Convert keys in resource_terms to lowercase
     ret["resource_terms_revised"] = {k.lower():v for k,v in ret["resource_terms"].items()}
     # TODO: clean this up if you can
     ret["resource_permutation_terms"] = {}
