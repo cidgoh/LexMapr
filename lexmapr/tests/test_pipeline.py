@@ -37,7 +37,6 @@ class TestPipelineMethods(unittest.TestCase):
         * test_preProcess
         * test_find_between_r()
         * test_find_left_r()
-        * test_addSuffix()
         * test_allPermutations()
         * test_combi()
         * test_punctuationTreatment()
