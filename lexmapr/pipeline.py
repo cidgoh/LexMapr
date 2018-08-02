@@ -272,56 +272,61 @@ def get_all_resource_dicts():
     ret["resource_terms"] = {v:k for k,v in ret["resource_terms_ID_based"].items()}
     # Convert keys in resource_terms to lowercase
     ret["resource_terms_revised"] = {k.lower():v for k,v in ret["resource_terms"].items()}
-    # TODO: clean this up if you can
+
+    # Will contain permutations of resource terms
     ret["resource_permutation_terms"] = {}
-    # Iterate
-    for k, v in ret["resource_terms_revised"].items():
-        resourceid = v
-        resource = k
-        if "(" not in resource:
-            sampleTokens = word_tokenize(resource.lower())
-            # for tkn in sampleTokens:
-            if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead fo:
-                if "NCBITaxon" in resourceid:
-                    print("NCBITaxonNCBITaxonNCBITaxon=== ")
-
-                setPerm = allPermutations(resource)
-                logger.debug("sssssssssssssss=== " + str(setPerm))
-                for perm in setPerm:
-                    permString = ' '.join(perm)
-                    ret["resource_permutation_terms"][permString.strip()] = resourceid.strip()
-    # TODO: clean this up if you can
-    ret["resource_bracketed_permutation_terms"]={}
-    # Iterate
-    for k, v in ret["resource_terms_revised"].items():
-        resourceid = v
-        resource1 = k
-        sampleTokens = word_tokenize(resource1.lower())
-        if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead for permutations
-            if "(" in resource1:
-                part1 = find_left_r(resource1, "(", ")")
-                part2 = find_between_r(resource1, "(", ")")
-                candidate = ""
-
-                if "," not in part2:
-                    candidate = part2 + " " + part1
-                    setPerm = allPermutations(candidate)
-                    for perm in setPerm:
-                        permString = ' '.join(perm)
-                        ret["resource_bracketed_permutation_terms"][permString.strip()] = resourceid.strip()
-                elif "," in part2:
-                    lst = part2.split(",")
-                    bracketedPart = ""
-                    for x in lst:
-                        if not bracketedPart:
-                            bracketedPart = x.strip()
-                        else:
-                            bracketedPart = bracketedPart + " " + x.strip()
-                    candidate = bracketedPart + " " + part1
-                    setPerm = allPermutations(candidate)
-                    for perm in setPerm:
-                        permString = ' '.join(perm)
-                        ret["resource_bracketed_permutation_terms"][permString.strip()] = resourceid.strip()
+    # Will contain permutations of resource terms with brackets
+    ret["resource_bracketed_permutation_terms"] = {}
+    # Iterate across resource_terms_revised
+    for resource_term in ret["resource_terms_revised"]:
+        # ID corresponding to resource_term
+        resource_id = ret["resource_terms_revised"][resource_term]
+        # List of tokens in resource_term
+        resource_tokens = word_tokenize(resource_term.lower())
+        # To limit performance overhead, we ignore resource_terms with
+        # more than 7 tokens, as permutating too many tokens can be
+        # costly. We also ignore NCBI taxon terms, as there are
+        # ~160000 such terms.
+        if len(resource_tokens)<7 and "NCBITaxon" not in resource_id:
+            # resource_term contains a bracket
+            if "(" in resource_term:
+                # This will contain the term we permutate, as resource
+                # terms with brackets cannot be permutated as is.
+                term_to_permutate = ""
+                # Portion of resource_term before brackets
+                unbracketed_component = find_left_r(resource_term, "(", ")")
+                # Portion of resource_term inside brackets
+                bracketed_component = find_between_r(resource_term, "(", ")")
+                # bracketed_component contains one or more commas
+                if "," in bracketed_component:
+                    # Parts of bracketed_component separated by commas
+                    bracketed_component_parts = bracketed_component.split(",")
+                    # bracketed_component_parts joined into one string
+                    new_bracketed_component = " ".join(bracketed_component_parts)
+                    # Adjust term_to_permutate accordingly
+                    term_to_permutate = new_bracketed_component + " " + unbracketed_component
+                # bracketed_component does not contain a comma
+                else:
+                    # Adjust term_to_permutate accordingly
+                    term_to_permutate = bracketed_component + " " + unbracketed_component
+                # All permutations of tokens in term_to_permutate
+                permutations = allPermutations(term_to_permutate)
+                # Iterate across permutated lists of tokens
+                for permutation_tokens in permutations:
+                    # permutation_tokens joined into string
+                    permutation = ' '.join(permutation_tokens)
+                    # Add permutation to appropriate dictionary
+                    ret["resource_bracketed_permutation_terms"][permutation] = resource_id
+            # resource_term does not contain a bracket
+            else:
+                # All permutations of tokens in resource_term
+                permutations = allPermutations(resource_term)
+                # Iterate across permutated lists of tokens
+                for permutation_tokens in permutations:
+                    # permutation_tokens joined into string
+                    permutation = ' '.join(permutation_tokens)
+                    # Add permutation to appropriate dictionary
+                    ret["resource_permutation_terms"][permutation] = resource_id
     return ret
 
 class MatchNotFoundError(Exception):
