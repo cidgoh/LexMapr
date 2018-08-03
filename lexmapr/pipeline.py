@@ -430,10 +430,10 @@ def get_lookup_table_from_cache():
     is generated.
 
     Return values:
-        * class <"dict">: Contains key-value pairs corresponding to
+        * <class "dict">: Contains key-value pairs corresponding to
             files in "resources/"
-            * key: class <"str">
-            * val: class <"dict">
+            * key: <class "str">
+            * val: <class "dict">
     """
     # lookup_table.json exists
     if os.path.isfile(get_path("lookup_table.json")):
@@ -454,20 +454,37 @@ def get_lookup_table_from_cache():
         # Python 2
         else:
             # Return lookup_table contents in utf-8
-            return json.load(file, object_pairs_hook=str_hook)
+            return json.load(file, object_pairs_hook=unicode_to_utf_8)
 
-def str_hook(obj):
-    """...WIP
+def unicode_to_utf_8(decoded_pairs):
+    """object_pairs_hook to load json files without unicode values.
 
-    TODO:
-        * allows json to load lookup_table in utf-8 instead of unicode
-        * this is copy-pasted from https://stackoverflow.com/a/42377964
-            * figure out how this function works, and then comment and
-                rewrite it as needed
+    Arguments:
+        * decoded_pairs <class "list"> of <class "tuple">: Each tuple
+            contains a key-value pair from a json file being loaded
+    Return values:
+        * <class "dict">: This corresponds to a value from the JSON
+            file. Any unicode strings have been converted to utf-8.
+    Restrictiond:
+        * Should be called as the object_pairs_hook inside json.load
+        * Should only be called in Python 2
     """
-    return {k.encode('utf-8') if isinstance(k,unicode) else k :
-            v.encode('utf-8') if isinstance(v, unicode) else v
-            for k,v in obj}
+    # Return value
+    ret = {}
+    # Iterate over tuples in decoded_pairs
+    for key, val in decoded_pairs:
+        # key is unicode
+        if isinstance(key, unicode):
+            # Convert key to utf-8
+            key = key.encode("utf-8")
+        # val is unicode
+        if isinstance(val, unicode):
+            # Convert val to utf-8
+            val = val.encode("utf-8")
+        # Add key-val pair to ret
+        ret[key] = val
+    # Return ret
+    return ret
 
 def run(args):
     """
