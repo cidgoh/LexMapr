@@ -447,8 +447,27 @@ def get_lookup_table_from_cache():
         add_lookup_table_to_cache()
     # Open and read lookup_table.json
     with open(get_path("lookup_table.json"), "r") as file:
-        # Return lookup_table contents
-        return json.load(file)
+        # Python 3
+        if sys.version_info[0] >= 3:
+            # Return lookup_table contents in unicode
+            return json.load(file)
+        # Python 2
+        else:
+            # Return lookup_table contents in utf-8
+            return json.load(file, object_pairs_hook=str_hook)
+
+def str_hook(obj):
+    """...WIP
+
+    TODO:
+        * allows json to load lookup_table in utf-8 instead of unicode
+        * this is copy-pasted from https://stackoverflow.com/a/42377964
+            * figure out how this function works, and then comment and
+                rewrite it as needed
+    """
+    return {k.encode('utf-8') if isinstance(k,unicode) else k :
+            v.encode('utf-8') if isinstance(v, unicode) else v
+            for k,v in obj}
 
 def run(args):
     """
