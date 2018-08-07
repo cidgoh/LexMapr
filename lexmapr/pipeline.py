@@ -55,7 +55,7 @@ def ngrams(input, n):
 
 
 # 4-Method to simply pre-process the string token on some pre-determined parts [\ , . ]
-def preProcess(stringToken):
+def preprocess(stringToken):
     if ('\'s' in stringToken):
         stringToken1 = stringToken.replace("\'s", "")  # for cow's to cow
         stringToken = stringToken1
@@ -424,7 +424,7 @@ def run(args):
         for tkn in sampleTokens:
 
             # Some preprocessing (only limited or controlled) Steps
-            tkn = preProcess(tkn)
+            tkn = preprocess(tkn)
 
             # Plurals are converted to singulars with exceptions
             if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith("ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
