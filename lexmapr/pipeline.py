@@ -463,7 +463,7 @@ def unicode_to_utf_8(decoded_pairs):
     # Return ret
     return ret
 
-def find_full_term_match():
+def find_full_term_match(lookup_table, suffixes, sample, cleaned_sample, status_addendum, covered_tokens, remaining_tokens):
     """Retrieve an annotated, full-term match for a sample.
 
     The sample matched, along with multiple resource
@@ -948,7 +948,7 @@ def run(args):
         #---------------------------STARTS APPLICATION OF RULES-----------------------------------------------
         try:
             # Find full-term match for sample
-            full_term_match = find_full_term_match()
+            full_term_match = find_full_term_match(lookup_table, suffixes, sample, cleaned_sample, status_addendum, covered_tokens, remaining_tokens)
             # Write to all headers
             if args.format == "full":
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
