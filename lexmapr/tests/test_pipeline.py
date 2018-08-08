@@ -107,29 +107,29 @@ class TestPipelineMethods(unittest.TestCase):
                     preProcess)
         """
         # No special characters
-        self.assertEqual(pipeline.preProcess("cow"), "cow")
+        self.assertEqual(pipeline.preprocess("cow"), "cow")
         # One "'s"
-        self.assertEqual(pipeline.preProcess("cow's"), "cow")
+        self.assertEqual(pipeline.preprocess("cow's"), "cow")
         # Two "'s"
-        self.assertEqual(pipeline.preProcess("cow's and chicken's"),
+        self.assertEqual(pipeline.preprocess("cow's and chicken's"),
             "cow and chicken")
         # One ", "
-        self.assertEqual(pipeline.preProcess("cow, "), "cow")
+        self.assertEqual(pipeline.preprocess("cow, "), "cow")
         # Two ", "
         # self.assertEqual(pipeline.preProcess("cow, horse, and goat"),
         #     "cow horse and goat")
-        self.assertEqual(pipeline.preProcess("cow, horse, and goat"),
+        self.assertEqual(pipeline.preprocess("cow, horse, and goat"),
             "cow, horse, and goat")
         # One "."
-        self.assertEqual(pipeline.preProcess("cow. "), "cow")
+        self.assertEqual(pipeline.preprocess("cow. "), "cow")
         # Two "."
-        self.assertEqual(pipeline.preProcess("cow. horse. "), "cow. horse")
+        self.assertEqual(pipeline.preprocess("cow. horse. "), "cow. horse")
         # "'s" and ","
-        self.assertEqual(pipeline.preProcess("cow's, "), "cow")
+        self.assertEqual(pipeline.preprocess("cow's, "), "cow")
         # "'", "." and ","
-        self.assertEqual(pipeline.preProcess("cow's. , "), "cow")
+        self.assertEqual(pipeline.preprocess("cow's. , "), "cow")
         # "'", "," and "."
-        self.assertEqual(pipeline.preProcess("cow's, . "), "cow,")
+        self.assertEqual(pipeline.preprocess("cow's, . "), "cow,")
 
     def test_find_between_r(self):
         """Tests find_between_r."""

@@ -53,20 +53,20 @@ def ngrams(input, n):
         output.append(input[i:i + n])
     return output
 
+def preprocess(token):
+    """Removes characters in token that are irrelevant to run.
 
-# 4-Method to simply pre-process the string token on some pre-determined parts [\ , . ]
-def preProcess(stringToken):
-    if ('\'s' in stringToken):
-        stringToken1 = stringToken.replace("\'s", "")  # for cow's to cow
-        stringToken = stringToken1
-    if (',' in stringToken):  # comma concatenated in token is get rid of
-        stringToken1 = stringToken.rstrip(', ')
-        stringToken = stringToken1
-    if ('.' in stringToken):  # dot concatenated in token is get rid of
-        stringToken1 = stringToken.rstrip('. ')
-        stringToken = stringToken1
-    return stringToken
+    The characters removed are possessives, rightmost comma and
+    rightmost period.
 
+    Arguments:
+        * token <class "str">: Token from string being processed in
+            run
+    Return values:
+        * <class "str">: token with irrelevant characters removed
+    """
+    # drop possessives, rightmost comma and rightmost period and return
+    return token.replace("\'s", "").rstrip("', ").rstrip(". ")
 
 # 5-Method to find the string between two characters  first and last
 def find_between_r( s, first, last ):
@@ -424,7 +424,7 @@ def run(args):
         for tkn in sampleTokens:
 
             # Some preprocessing (only limited or controlled) Steps
-            tkn = preProcess(tkn)
+            tkn = preprocess(tkn)
 
             # Plurals are converted to singulars with exceptions
             if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith("ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
