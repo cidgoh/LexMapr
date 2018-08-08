@@ -750,6 +750,11 @@ class MatchNotFoundError(Exception):
 
     Instance variables:
         * message <class "str">
+
+    TODO:
+        * do we need this class?
+            * perhaps the try clause that relied on this exception
+                could instead use KeyError
     """
 
     def __init__(self, message):
