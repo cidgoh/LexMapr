@@ -14,6 +14,8 @@ import sys
 from pkg_resources import resource_filename, resource_listdir
 import logging
 import collections
+import json
+import os
 
 logger = logging.getLogger("pipeline")
 logger.disabled = True
@@ -227,6 +229,106 @@ def get_resource_dict(file_name, lower=False):
     # Return
     return ret
 
+def get_all_resource_dicts():
+    """Returns collection of all dictionaries used in pipeline.run.
+
+    Return values:
+        * class <"dict">: Contains key-value pairs corresponding to
+            files in "resources/"
+            * key: class <"str">
+            * val: class <"dict">
+    """
+    # return value
+    ret = {}
+    # Synonyms of resource terms
+    ret["synonyms"] = get_resource_dict("SynLex.csv")
+    # Abbreviations of resource terms
+    ret["abbreviations"] = get_resource_dict("AbbLex.csv")
+    # Abbreviations of resource terms, all lowercase
+    ret["abbreviation_lower"] = get_resource_dict("AbbLex.csv", True)
+    # Non-english translations of resource terms
+    ret["non_english_words"] = get_resource_dict("NefLex.csv")
+    # Non-english translations of resource terms, all lowercase
+    ret["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
+    # Common misspellings of resource terms
+    ret["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
+    # Common misspellings of resource terms, all lowercase
+    ret["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
+    # Terms corresponding to candidate processes
+    ret["processes"] = get_resource_dict("candidateProcesses.csv")
+    # Terms corresponding to semantic taggings
+    ret["qualities"] = get_resource_dict("SemLex.csv")
+    # Terms corresponding to semantic taggings, all lowercase
+    ret["qualities_lower"] = get_resource_dict("SemLex.csv", True)
+    # Terms corresponding to wikipedia collocations
+    ret["collocations"] = get_resource_dict("wikipediaCollocations.csv")
+    # Terms excluded from inflection treatment
+    ret["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
+    # Constrained list of stop words considered to be meaningless
+    ret["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
+    # ID-resource combinations
+    ret["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
+    # Swap keys and values in resource_terms_ID_based
+    ret["resource_terms"] = {v:k for k,v in ret["resource_terms_ID_based"].items()}
+    # Convert keys in resource_terms to lowercase
+    ret["resource_terms_revised"] = {k.lower():v for k,v in ret["resource_terms"].items()}
+
+    # Will contain permutations of resource terms
+    ret["resource_permutation_terms"] = {}
+    # Will contain permutations of resource terms with brackets
+    ret["resource_bracketed_permutation_terms"] = {}
+    # Iterate across resource_terms_revised
+    for resource_term in ret["resource_terms_revised"]:
+        # ID corresponding to resource_term
+        resource_id = ret["resource_terms_revised"][resource_term]
+        # List of tokens in resource_term
+        resource_tokens = word_tokenize(resource_term.lower())
+        # To limit performance overhead, we ignore resource_terms with
+        # more than 7 tokens, as permutating too many tokens can be
+        # costly. We also ignore NCBI taxon terms, as there are
+        # ~160000 such terms.
+        if len(resource_tokens)<7 and "NCBITaxon" not in resource_id:
+            # resource_term contains a bracket
+            if "(" in resource_term:
+                # This will contain the term we permutate, as resource
+                # terms with brackets cannot be permutated as is.
+                term_to_permutate = ""
+                # Portion of resource_term before brackets
+                unbracketed_component = find_left_r(resource_term, "(", ")")
+                # Portion of resource_term inside brackets
+                bracketed_component = find_between_r(resource_term, "(", ")")
+                # bracketed_component contains one or more commas
+                if "," in bracketed_component:
+                    # Parts of bracketed_component separated by commas
+                    bracketed_component_parts = bracketed_component.split(",")
+                    # bracketed_component_parts joined into one string
+                    new_bracketed_component = " ".join(bracketed_component_parts)
+                    # Adjust term_to_permutate accordingly
+                    term_to_permutate = new_bracketed_component + " " + unbracketed_component
+                # bracketed_component does not contain a comma
+                else:
+                    # Adjust term_to_permutate accordingly
+                    term_to_permutate = bracketed_component + " " + unbracketed_component
+                # All permutations of tokens in term_to_permutate
+                permutations = allPermutations(term_to_permutate)
+                # Iterate across permutated lists of tokens
+                for permutation_tokens in permutations:
+                    # permutation_tokens joined into string
+                    permutation = ' '.join(permutation_tokens)
+                    # Add permutation to appropriate dictionary
+                    ret["resource_bracketed_permutation_terms"][permutation] = resource_id
+            # resource_term does not contain a bracket
+            else:
+                # All permutations of tokens in resource_term
+                permutations = allPermutations(resource_term)
+                # Iterate across permutated lists of tokens
+                for permutation_tokens in permutations:
+                    # permutation_tokens joined into string
+                    permutation = ' '.join(permutation_tokens)
+                    # Add permutation to appropriate dictionary
+                    ret["resource_permutation_terms"][permutation] = resource_id
+    return ret
+
 class MatchNotFoundError(Exception):
     """Exception class for indicating failed full-term matches.
 
@@ -250,11 +352,145 @@ class MatchNotFoundError(Exception):
         """Return message when this class is raised as an exception."""
         return repr(self.message)
 
+def get_path(file_name, prefix=""):
+    """Returns path of file_name relative to pipeline.py.
+
+    Specifically, returns a path with the following pattern:
+
+        {path to pipeline.py}/{prefix}file_name
+
+    The path does not need to currently exist.
+
+    Arguments:
+        * file_name <class "str">: Name of file we want the relative
+            path to from pipeline.py.
+    Return values:
+        * <class "str">: Path to file_name
+    Optional arguments:
+        * prefix <class "str">: characters desired directly before
+            file_name in returned path
+    """
+    # Return file_name appended to prefix and absolute path to
+    # pipeline.py.
+    return os.path.join(os.path.dirname(__file__), prefix+file_name)
+
+def is_lookup_table_outdated():
+    """Returns True if lookup_table.json is outdated.
+
+    lookup_table.json is considered outdated if it has an older last
+    modification time than any file in /resources.
+
+    Return values:
+        * <class "bool">: Indicates whether lookup_table.json is
+            outdated
+    Restrictions:
+        * should only be called if lookup_table.json exists
+    """
+    # last modification time of lookup_table.json
+    lookup_table_modification_time = os.path.getmtime(get_path("lookup_table.json"))
+
+    # list of all file names in resources folder
+    resource_names = [file_name for file_name in os.listdir(get_path("resources"))]
+    # list of paths to all files in resources folder
+    resource_paths = [get_path(file_name, "resources/") for file_name in resource_names]
+    # list of last modification times for files in resources folder
+    resources_files_modification_times = [os.path.getmtime(path) for path in resource_paths]
+    # most recent modification time of a file in resources folder
+    resources_folder_modification_time = max(resources_files_modification_times)
+
+    # resources modified more recently than lookup_table.json
+    if resources_folder_modification_time > lookup_table_modification_time:
+        return True
+    else:
+        return False
+
+def add_lookup_table_to_cache():
+    """Saves nested dictionary of resources to a local file.
+
+    The nested dictionary corresponds to the return value of
+    get_all_resource_dicts, and is saved as lookup_table.json. If such
+    a file already exists, it will be overwritten.
+    """
+    # Nested dictionary of all resource dictionaries used in run
+    lookup_table = get_all_resource_dicts()
+    # Open and write to lookup_table.json
+    with open(get_path("lookup_table.json"), "w") as file:
+        # Write lookup_table in JSON format
+        json.dump(lookup_table, file)
+
+def get_lookup_table_from_cache():
+    """Return contents of lookup_table.json.
+
+    The contents of lookup_table.json correspond to the return value of
+    get_all_resource_dicts. Retrieving said contents from
+    lookup_table.json is faster than running get_all_resource_dicts.
+
+    If lookup_table.json does not exist, or is outdated (see
+    is_lookup_table_outdated for details), a new lookup_table.json file
+    is generated.
+
+    Return values:
+        * <class "dict">: Contains key-value pairs corresponding to
+            files in "resources/"
+            * key: <class "str">
+            * val: <class "dict">
+    """
+    # lookup_table.json exists
+    if os.path.isfile(get_path("lookup_table.json")):
+        # lookup_table.json out of date
+        if is_lookup_table_outdated():
+            # add new lookup table to cache
+            add_lookup_table_to_cache()
+    # lookup_table.json does not exist
+    else:
+        # add lookup table to cache
+        add_lookup_table_to_cache()
+    # Open and read lookup_table.json
+    with open(get_path("lookup_table.json"), "r") as file:
+        # Python 3
+        if sys.version_info[0] >= 3:
+            # Return lookup_table contents in unicode
+            return json.load(file)
+        # Python 2
+        else:
+            # Return lookup_table contents in utf-8
+            return json.load(file, object_pairs_hook=unicode_to_utf_8)
+
+def unicode_to_utf_8(decoded_pairs):
+    """object_pairs_hook to load json files without unicode values.
+
+    Arguments:
+        * decoded_pairs <class "list"> of <class "tuple">: Each tuple
+            contains a key-value pair from a json file being loaded
+    Return values:
+        * <class "dict">: This corresponds to a value from the JSON
+            file. Any unicode strings have been converted to utf-8.
+    Restrictiond:
+        * Should be called as the object_pairs_hook inside json.load
+        * Should only be called in Python 2
+    """
+    # Return value
+    ret = {}
+    # Iterate over tuples in decoded_pairs
+    for key, val in decoded_pairs:
+        # key is unicode
+        if isinstance(key, unicode):
+            # Convert key to utf-8
+            key = key.encode("utf-8")
+        # val is unicode
+        if isinstance(val, unicode):
+            # Convert val to utf-8
+            val = val.encode("utf-8")
+        # Add key-val pair to ret
+        ret[key] = val
+    # Return ret
+    return ret
+
 def run(args):
     """
     Main text mining pipeline.
     """
-    punctuationsList = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuationsList for basic treatment
+    punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuations for basic treatment
     covered_tokens = []
     remainingAllTokensSet = []
     remainingTokenSet = []
@@ -262,102 +498,13 @@ def run(args):
     samplesDict = collections.OrderedDict()
     samplesList = []
     samplesSet = []
-    resource_terms = {}
-    resource_terms_revised = {}
-    resource_terms_ID_based = {}
     suffixes = ["(food source)","(vegetable) food product","vegetable food product", "nut food product","fruit food product","seafood product","meat food product", "plant fruit food product","plant food product", "(food product)","food product","plant (food source)","product","(whole)","(deprecated)"]
 
-    # 11-Get all synonyms from resource in CSV file format and put in a dictionary to be used further
-    synonyms = get_resource_dict("SynLex.csv")
+    # This is a nested dictionary of all resource dictionaries used by
+    # run. It is retrieved from cache if possible. See
+    # get_lookup_table_from_cache docstring for details.
+    lookup_table = get_lookup_table_from_cache()
 
-    # 12-Get all abbreviation/acronyms from resource in CSV file format and put in a dictionary to be used further
-    abbreviations = get_resource_dict("AbbLex.csv")
-    abbreviation_lower = get_resource_dict("AbbLex.csv", True)
-
-    # 13-Get all Non English Language words mappings from resource in CSV file format and put in a dictionary to be used further
-    non_english_words = get_resource_dict("NefLex.csv")
-    non_english_words_lower = get_resource_dict("NefLex.csv", True)
-
-    # 14-Get all spelling mistake examples from resource in CSV file format and put in a dictionary to be used further
-    spelling_mistakes = get_resource_dict("ScorLex.csv")
-    spelling_mistakes_lower = get_resource_dict("ScorLex.csv", True)
-
-    # 15-Get candidate processes from resource in a CSV file format and put in a dictionary to be used further
-    processes = get_resource_dict("candidateProcesses.csv")
-    
-    # 16-Get all semantic tags (e.g.qualities) from resource in a CSV file format and put in a dictionary to be used further
-    qualities = get_resource_dict("SemLex.csv")
-    qualities_lower = get_resource_dict("SemLex.csv", True)
-
-    # 17-Get all collocations (Wikipedia) from resource in a CSV file format and put in a dictionary to be used further
-    collocations = get_resource_dict("wikipediaCollocations.csv")
-
-    # 18-Method to get all inflection exception words from resource in CSV file format -Needed to supercede the general inflection treatment
-    inflection_exceptions = get_resource_dict("inflection-exceptions.csv", True)
-    
-    # 19-Method to Get all stop words from resource in CSV file format -A very constrained lists of stop words is
-    # used as other stop words are assumed to have some useful semantic meaning
-    stop_words = get_resource_dict("mining-stopwords.csv", True)
-    
-    # 21- To get all terms from resources- right now in a CSV file extracted from ontologies using another external script
-    resource_terms_ID_based = get_resource_dict("CombinedResourceTerms.csv")
-    # Swap keys and values in resource_terms_ID_based
-    resource_terms = {v:k for k,v in resource_terms_ID_based.items()}
-    # Convert keys in resource_terms to lowercase
-    resource_terms_revised = {k.lower():v for k,v in resource_terms.items()}
-
-    # 23-Method for getting all the permutations of Resource Terms
-    resource_permutation_terms = {}
-    # Iterate
-    for k, v in resource_terms_revised.items():
-        resourceid = v
-        resource = k
-        if "(" not in resource:
-            sampleTokens = word_tokenize(resource.lower())
-            # for tkn in sampleTokens:
-            if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead fo:
-                if "NCBITaxon" in resourceid:
-                    print("NCBITaxonNCBITaxonNCBITaxon=== ")
-
-                setPerm = allPermutations(resource)
-                logger.debug("sssssssssssssss=== " + str(setPerm))
-                for perm in setPerm:
-                    permString = ' '.join(perm)
-                    resource_permutation_terms[permString.strip()] = resourceid.strip()
-
-    # 24-Method for getting all the permutations of Bracketed Resource Terms
-    resource_bracketed_permutation_terms={}
-    # Iterate
-    for k, v in resource_terms_revised.items():
-        resourceid = v
-        resource1 = k
-        sampleTokens = word_tokenize(resource1.lower())
-        if len(sampleTokens) < 7 and "NCBITaxon" not in resourceid :  # NCBI Taxon has 160000 terms - great overhead for permutations
-            if "(" in resource1:
-                part1 = find_left_r(resource1, "(", ")")
-                part2 = find_between_r(resource1, "(", ")")
-                candidate = ""
-
-                if "," not in part2:
-                    candidate = part2 + " " + part1
-                    setPerm = allPermutations(candidate)
-                    for perm in setPerm:
-                        permString = ' '.join(perm)
-                        resource_bracketed_permutation_terms[permString.strip()] = resourceid.strip()
-                elif "," in part2:
-                    lst = part2.split(",")
-                    bracketedPart = ""
-                    for x in lst:
-                        if not bracketedPart:
-                            bracketedPart = x.strip()
-                        else:
-                            bracketedPart = bracketedPart + " " + x.strip()
-                    candidate = bracketedPart + " " + part1
-                    setPerm = allPermutations(candidate)
-                    for perm in setPerm:
-                        permString = ' '.join(perm)
-                        resource_bracketed_permutation_terms[permString.strip()] = resourceid.strip()
-                    
     # Output file Column Headings
     OUTPUT_FIELDS = [
         "Sample_Id",
@@ -410,7 +557,7 @@ def run(args):
         #   sample_desc: sample
         fw.write('\n' + sampleid + '\t' + sample)
 
-        sample = punctuationTreatment(sample, punctuationsList)  # Sample gets simple punctuation treatment
+        sample = punctuationTreatment(sample, punctuations)  # Sample gets simple punctuation treatment
         sample = re.sub(' +', ' ', sample)  # Extra innner spaces are removed
         sampleTokens = word_tokenize(sample.lower())    #Sample is tokenized into tokenList
 
@@ -429,7 +576,7 @@ def run(args):
             # Plurals are converted to singulars with exceptions
             if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith("ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
                 lemma = tkn
-            elif (tkn not in inflection_exceptions):  # Further Inflection Exception list is taken into account
+            elif (tkn not in lookup_table["inflection_exceptions"]):  # Further Inflection Exception list is taken into account
                 lemma = inflection.singularize(tkn)
                 if (tkn != lemma):  #Only in case when inflection makes some changes in lemma
                     status_addendum.append("Inflection (Plural) Treatment")
@@ -437,48 +584,48 @@ def run(args):
                 lemma = tkn
 
             # Misspellings are dealt with  here
-            if (lemma in spelling_mistakes.keys()):  # spelling mistakes taken care of
-                lemma = spelling_mistakes[lemma]
+            if (lemma in lookup_table["spelling_mistakes"].keys()):  # spelling mistakes taken care of
+                lemma = lookup_table["spelling_mistakes"][lemma]
                 status_addendum.append("Spelling Correction Treatment")
-            elif (lemma.lower() in spelling_mistakes_lower.keys()):
-                lemma = spelling_mistakes_lower[lemma.lower()]
+            elif (lemma.lower() in lookup_table["spelling_mistakes_lower"].keys()):
+                lemma = lookup_table["spelling_mistakes_lower"][lemma.lower()]
                 status_addendum.append("Change Case and Spelling Correction Treatment")
-            if (lemma in abbreviations.keys()):  # Abbreviations, acronyms, foreign language words taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
-                lemma = abbreviations[lemma]
+            if (lemma in lookup_table["abbreviations"].keys()):  # Abbreviations, acronyms, foreign language words taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
+                lemma = lookup_table["abbreviations"][lemma]
                 status_addendum.append("Abbreviation-Acronym Treatment")
-            elif (lemma.lower() in abbreviation_lower.keys()):
-                lemma = abbreviation_lower[lemma.lower()]
+            elif (lemma.lower() in lookup_table["abbreviation_lower"].keys()):
+                lemma = lookup_table["abbreviation_lower"][lemma.lower()]
                 status_addendum.append("Change Case and Abbreviation-Acronym Treatment")
 
-            if (lemma in non_english_words.keys()):  # Non English language words taken care of
-                lemma = non_english_words[lemma]
+            if (lemma in lookup_table["non_english_words"].keys()):  # Non English language words taken care of
+                lemma = lookup_table["non_english_words"][lemma]
                 status_addendum.append("Non English Language Words Treatment")
-            elif (lemma.lower() in non_english_words_lower.keys()):
-                lemma = non_english_words_lower[lemma.lower()]
+            elif (lemma.lower() in lookup_table["non_english_words_lower"].keys()):
+                lemma = lookup_table["non_english_words_lower"][lemma.lower()]
                 status_addendum.append("Change Case and Non English Language Words Treatment")
 
 
             # ===This will create a cleaned sample after above treatments [Here we are making new phrase now in lower case]
-            if (not cleaned_sample and lemma.lower() not in stop_words):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
+            if (not cleaned_sample and lemma.lower() not in lookup_table["stop_words"]):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
                 cleaned_sample = lemma.lower()
             elif (
-                lemma.lower() not in stop_words):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
+                lemma.lower() not in lookup_table["stop_words"]):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
                 cleaned_sample = cleaned_sample + " " + lemma.lower()
 
             cleaned_sample = re.sub(' +', ' ', cleaned_sample)  # Extra innner spaces removed from cleaned sample
 
-            if (cleaned_sample in abbreviations.keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
-                cleaned_sample = abbreviations[cleaned_sample]
+            if (cleaned_sample in lookup_table["abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
+                cleaned_sample = lookup_table["abbreviations"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
-            elif (cleaned_sample in abbreviation_lower.keys()):
-                cleaned_sample = abbreviation_lower[cleaned_sample]
+            elif (cleaned_sample in lookup_table["abbreviation_lower"].keys()):
+                cleaned_sample = lookup_table["abbreviation_lower"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
 
-            if (cleaned_sample in non_english_words.keys()):  # non English words taken care of
-                cleaned_sample = non_english_words[cleaned_sample]
+            if (cleaned_sample in lookup_table["non_english_words"].keys()):  # non English words taken care of
+                cleaned_sample = lookup_table["non_english_words"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
-            elif (cleaned_sample in non_english_words_lower.keys()):
-                cleaned_sample = non_english_words_lower[cleaned_sample]
+            elif (cleaned_sample in lookup_table["non_english_words_lower"].keys()):
+                cleaned_sample = lookup_table["non_english_words_lower"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
 
         # Here we are making the tokens of cleaned sample phrase
@@ -589,43 +736,43 @@ def run(args):
                 # Return
                 return ret
             # Full-term match without any treatment
-            elif sample in resource_terms:
+            elif sample in lookup_table["resource_terms"]:
                 # Term with we found a full-term match for
                 matched_term = sample
                 # Resource ID for matched_term
-                resource_id = resource_terms[matched_term]
+                resource_id = lookup_table["resource_terms"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("A Direct Match")
             # Full-term match with change-of-case in input data
-            elif sample.lower() in resource_terms:
+            elif sample.lower() in lookup_table["resource_terms"]:
                 # Term with we found a full-term match for
                 matched_term = sample.lower()
                 # Resource ID for matched_term
-                resource_id = resource_terms[matched_term]
+                resource_id = lookup_table["resource_terms"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("Change of Case in Input Data")
             # Full-term match with change-of-case in resource data
-            elif sample.lower() in resource_terms_revised:
+            elif sample.lower() in lookup_table["resource_terms_revised"]:
                 # Term with we found a full-term match for
                 matched_term = sample.lower()
                 # Resource ID for matched_term
-                resource_id = resource_terms_revised[matched_term]
+                resource_id = lookup_table["resource_terms_revised"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("Change of Case in Resource Data")
             # Full-term match with permutation of resource term
-            elif sample.lower() in resource_permutation_terms:
+            elif sample.lower() in lookup_table["resource_permutation_terms"]:
                 # Term we found a permutation for
                 matched_term = sample.lower()
                 # Resource ID for matched_term's permutation
-                resource_id = resource_permutation_terms[matched_term]
+                resource_id = lookup_table["resource_permutation_terms"][matched_term]
                 # Permutation corresponding to matched_term
-                matched_permutation = resource_terms_ID_based[resource_id]
+                matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
                 retained_tokens.append(matched_permutation + ":"
                     + resource_id)
@@ -633,14 +780,14 @@ def run(args):
                 status_addendum.append(
                     "Permutation of Tokens in Resource Term")
             # Full-term match with permutation of bracketed resource term
-            elif sample.lower() in resource_bracketed_permutation_terms:
+            elif sample.lower() in lookup_table["resource_bracketed_permutation_terms"]:
                 # Term we found a permutation for
                 matched_term = sample.lower()
                 # Resource ID for matched_term's permutation
                 resource_id =\
-                    resource_bracketed_permutation_terms[matched_term]
+                    lookup_table["resource_bracketed_permutation_terms"][matched_term]
                 # Permutation corresponding to matched_term
-                matched_permutation = resource_terms_ID_based[resource_id]
+                matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
                 retained_tokens.append(matched_permutation + ":"
                     + resource_id)
@@ -648,35 +795,35 @@ def run(args):
                 status_addendum.append(
                     "Permutation of Tokens in Bracketed Resource Term")
             # Full-term cleaned sample match without any treatment
-            elif cleaned_sample.lower() in resource_terms:
+            elif cleaned_sample.lower() in lookup_table["resource_terms"]:
                 # Term with we found a full-term match for
                 matched_term = cleaned_sample.lower()
                 # Resource ID for matched_term
-                resource_id = resource_terms[matched_term]
+                resource_id = lookup_table["resource_terms"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("A Direct Match with Cleaned Sample")
             # Full-term cleaned sample match with change-of-case in
             # resource data.
-            elif cleaned_sample.lower() in resource_terms_revised:
+            elif cleaned_sample.lower() in lookup_table["resource_terms_revised"]:
                 # Term with we found a full-term match for
                 matched_term = cleaned_sample.lower()
                 # Resource ID for matched_term
-                resource_id = resource_terms_revised[matched_term]
+                resource_id = lookup_table["resource_terms_revised"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":" + resource_id)
                 # Update status_addendum
                 status_addendum.append("Change of Case of Resource Terms")
             # Full-term cleaned sample match with permutation of
             # resource term.
-            elif cleaned_sample.lower() in resource_permutation_terms:
+            elif cleaned_sample.lower() in lookup_table["resource_permutation_terms"]:
                 # Term we found a permutation for
                 matched_term = cleaned_sample.lower()
                 # Resource ID for matched_term's permutation
-                resource_id = resource_permutation_terms[matched_term]
+                resource_id = lookup_table["resource_permutation_terms"][matched_term]
                 # Permutation corresponding to matched_term
-                matched_permutation = resource_terms_ID_based[resource_id]
+                matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
                 retained_tokens.append(matched_permutation + ":"
                     + resource_id)
@@ -685,14 +832,14 @@ def run(args):
                     "Permutation of Tokens in Resource Term")
             # Full-term cleaned sample match with permutation of
             # bracketed resource term.
-            elif cleaned_sample.lower() in resource_bracketed_permutation_terms:
+            elif cleaned_sample.lower() in lookup_table["resource_bracketed_permutation_terms"]:
                 # Term we found a permutation for
                 matched_term = cleaned_sample.lower()
                 # Resource ID for matched_term's permutation
                 resource_id =\
-                    resource_bracketed_permutation_terms[matched_term]
+                    lookup_table["resource_bracketed_permutation_terms"][matched_term]
                 # Permutation corresponding to matched_term
-                matched_permutation = resource_terms_ID_based[resource_id]
+                matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
                 # Update retained_tokens
                 retained_tokens.append(matched_permutation + ":"
                     + resource_id)
@@ -701,11 +848,11 @@ def run(args):
                     "Permutation of Tokens in Bracketed Resource Term")
             # A full-term cleaned sample match with multi-word
             # collocation from Wikipedia exists.
-            elif cleaned_sample.lower() in collocations:
+            elif cleaned_sample.lower() in lookup_table["collocations"]:
                 # Term we found a full-term match for
                 matched_term = cleaned_sample.lower()
                 # Resource ID for matched_term
-                resource_id = collocations[matched_term]
+                resource_id = lookup_table["collocations"][matched_term]
                 # Update retained_tokens
                 retained_tokens.append(matched_term + ":"
                     + resource_id)
@@ -720,12 +867,12 @@ def run(args):
                 # in resource_terms_revised.
                 matched_suffixes =\
                     [s for s in suffixes
-                        if sample+" "+s in resource_terms_revised]
+                        if sample+" "+s in lookup_table["resource_terms_revised"]]
                 # Find all suffixes that when appended to cleaned
                 # sample, are in resource_terms_revised.
                 matched_clean_suffixes =\
                     [s for s in suffixes
-                        if cleaned_sample+" "+s in resource_terms_revised]
+                        if cleaned_sample+" "+s in lookup_table["resource_terms_revised"]]
                 # A full-term match with change of resource and suffix
                 # addition exists.
                 if matched_suffixes:
@@ -735,7 +882,7 @@ def run(args):
                     # Term we add a suffix to
                     matched_term = sample.lower()
                     # Resource ID for matched_term
-                    resource_id = resource_terms_revised[term_with_suffix]
+                    resource_id = lookup_table["resource_terms_revised"][term_with_suffix]
                     # Update retained_tokens
                     retained_tokens.append(term_with_suffix + ":"
                         + resource_id)
@@ -754,7 +901,7 @@ def run(args):
                     # Term we cleaned and added a suffix to
                     matched_term = sample.lower()
                     # Resource ID for matched_term
-                    resource_id = resource_terms_revised[term_with_suffix]
+                    resource_id = lookup_table["resource_terms_revised"][term_with_suffix]
                     # Update retained_tokens
                     retained_tokens.append(term_with_suffix + ":"
                         + resource_id)
@@ -840,33 +987,33 @@ def run(args):
                 setPerm = allPermutations(grm1)  # Gets the set of all possible permutations for this gram type chunks
                 for perm in setPerm:
                     grm = ' '.join(perm)
-                    if (grm in abbreviations.keys()):  # rule for abbreviation
-                        grm = abbreviations[grm]
+                    if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
+                        grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
-                    if (grm in non_english_words.keys()):  # rule for abbreviation
-                        grm = non_english_words[grm]
+                    if (grm in lookup_table["non_english_words"].keys()):  # rule for abbreviation
+                        grm = lookup_table["non_english_words"][grm]
                         status_addendum.append("Non English Language Words Treatment")
-                    if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                        grm = synonyms[grm]
+                    if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
+                        grm = lookup_table["synonyms"][grm]
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 5-gram chunk
-                    if ((grm in resource_terms.keys() ) and not localTrigger):
+                    if ((grm in lookup_table["resource_terms"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif ((grm in resource_terms_revised.keys() )and not localTrigger):
+                    elif ((grm in lookup_table["resource_terms_revised"].keys() )and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
-                        resourceId = resource_bracketed_permutation_terms[grm]
+                    elif (grm in lookup_table["resource_bracketed_permutation_terms"].keys() and not localTrigger):
+                        resourceId = lookup_table["resource_bracketed_permutation_terms"][grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -877,7 +1024,7 @@ def run(args):
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = grm + " " + suffixString
-                        if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                        if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                             partialMatchedList.append(sampleRevisedWithSuffix)
                             status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
@@ -900,33 +1047,33 @@ def run(args):
                 setPerm = allPermutations(grm1)  # Gets the set of all possible permutations for this gram type chunks
                 for perm in setPerm:
                     grm = ' '.join(perm)
-                    if (grm in abbreviations.keys()):  # rule for abbreviation
-                        grm = abbreviations[grm]
+                    if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
+                        grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
-                    if (grm in non_english_words.keys()):  # rule for abbreviation
-                        grm = non_english_words[grm]
+                    if (grm in lookup_table["non_english_words"].keys()):  # rule for abbreviation
+                        grm = lookup_table["non_english_words"][grm]
                         status_addendum.append("Non English Language Words Treatment")
-                    if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                        grm = synonyms[grm]
+                    if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
+                        grm = lookup_table["synonyms"][grm]
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 4-gram chunk
-                    if ((grm in resource_terms.keys()) and not localTrigger):
+                    if ((grm in lookup_table["resource_terms"].keys()) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif ((  grm in resource_terms_revised.keys() ) and not localTrigger):
+                    elif ((  grm in lookup_table["resource_terms_revised"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
-                        resourceId = resource_bracketed_permutation_terms[grm]
+                    elif (grm in lookup_table["resource_bracketed_permutation_terms"].keys() and not localTrigger):
+                        resourceId = lookup_table["resource_bracketed_permutation_terms"][grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -937,7 +1084,7 @@ def run(args):
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = grm + " " + suffixString
-                    if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                    if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
@@ -961,33 +1108,33 @@ def run(args):
                 for perm in setPerm:
                     grm = ' '.join(perm)
 
-                    if (grm in abbreviations.keys()):  # rule for abbreviation
-                        grm = abbreviations[grm]
+                    if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
+                        grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
-                    if (grm in non_english_words.keys()):  # rule for abbreviation
-                        grm = non_english_words[grm]
+                    if (grm in lookup_table["non_english_words"].keys()):  # rule for abbreviation
+                        grm = lookup_table["non_english_words"][grm]
                         status_addendum.append("Non English Language Words Treatment")
-                    if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                        grm = synonyms[grm]
+                    if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
+                        grm = lookup_table["synonyms"][grm]
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 3-gram chunk
-                    if ((grm in resource_terms.keys() ) and not localTrigger):
+                    if ((grm in lookup_table["resource_terms"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif ((grm in resource_terms_revised.keys() ) and not localTrigger):
+                    elif ((grm in lookup_table["resource_terms_revised"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
-                        resourceId = resource_bracketed_permutation_terms[grm]
+                    elif (grm in lookup_table["resource_bracketed_permutation_terms"].keys() and not localTrigger):
+                        resourceId = lookup_table["resource_bracketed_permutation_terms"][grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -998,7 +1145,7 @@ def run(args):
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = grm + " " + suffixString
-                        if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                        if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                             partialMatchedList.append(sampleRevisedWithSuffix)
                             status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
@@ -1009,8 +1156,8 @@ def run(args):
                             localTrigger = True
 
                     # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                    if (grm in qualities_lower.keys() and not localTrigger):
-                        quality = qualities_lower[grm]
+                    if (grm in lookup_table["qualities_lower"].keys() and not localTrigger):
+                        quality = lookup_table["qualities_lower"][grm]
                         partialMatchedList.append(grm)
                         status_addendum.append("Using Semantic Tagging Resources")
                         localTrigger = True
@@ -1032,33 +1179,33 @@ def run(args):
                 setPerm = allPermutations(grm1)  # Gets the set of all possible permutations for this gram type chunks
                 for perm in setPerm:
                     grm = ' '.join(perm)
-                    if (grm in abbreviations.keys()):  # rule for abbreviation
-                        grm = abbreviations[grm]
+                    if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
+                        grm = lookup_table["abbreviations"][grm]
                         status_addendum.append("Abbreviation-Acronym Treatment")
-                    if (grm in non_english_words.keys()):  # rule for abbreviation
-                        grm = non_english_words[grm]
+                    if (grm in lookup_table["non_english_words"].keys()):  # rule for abbreviation
+                        grm = lookup_table["non_english_words"][grm]
                         status_addendum.append("Non English Language Words Treatment")
-                    if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                        grm = synonyms[grm]
+                    if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
+                        grm = lookup_table["synonyms"][grm]
                         status_addendum.append("Synonym Usage")
 
                     # Matching Test for 2-gram chunk
-                    if ((grm in resource_terms.keys() ) and not localTrigger):
+                    if ((grm in lookup_table["resource_terms"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (( grm in resource_terms_revised.keys() ) and not localTrigger):
+                    elif (( grm in lookup_table["resource_terms_revised"].keys() ) and not localTrigger):
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
                                 remaining_tokens.remove(eachTkn)
                         localTrigger = True
-                    elif (grm in resource_bracketed_permutation_terms.keys() and not localTrigger):
-                        resourceId = resource_bracketed_permutation_terms[grm]
+                    elif (grm in lookup_table["resource_bracketed_permutation_terms"].keys() and not localTrigger):
+                        resourceId = lookup_table["resource_bracketed_permutation_terms"][grm]
                         partialMatchedList.append(grm)
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
@@ -1069,7 +1216,7 @@ def run(args):
                     for suff in range(len(suffixes)):
                         suffixString = suffixes[suff]
                         sampleRevisedWithSuffix = grm + " " + suffixString
-                    if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                    if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
@@ -1080,8 +1227,8 @@ def run(args):
                         localTrigger = True
 
                     # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                    if (grm in qualities_lower.keys() and not localTrigger):
-                        quality = qualities_lower[grm]
+                    if (grm in lookup_table["qualities_lower"].keys() and not localTrigger):
+                        quality = lookup_table["qualities_lower"][grm]
                         partialMatchedList.append(grm)
                         status_addendum.append("Using Semantic Tagging Resources")
                         localTrigger = True
@@ -1102,25 +1249,25 @@ def run(args):
                 grmTokens = word_tokenize(grm.lower())
                 localTrigger = False
 
-                if (grm in abbreviations.keys()):  # rule for abbreviation
-                    grm = abbreviations[grm]
+                if (grm in lookup_table["abbreviations"].keys()):  # rule for abbreviation
+                    grm = lookup_table["abbreviations"][grm]
                     status_addendum.append("Abbreviation-Acronym Treatment")
-                if (grm in non_english_words.keys()):  # rule for abbreviation
-                    grm = non_english_words[grm]
+                if (grm in lookup_table["non_english_words"].keys()):  # rule for abbreviation
+                    grm = lookup_table["non_english_words"][grm]
                     status_addendum.append("Non English Language Words Treatment")
-                if (grm in synonyms.keys()):  ## Synonyms taken care of- need more synonyms
-                    grm = synonyms[grm]
+                if (grm in lookup_table["synonyms"].keys()):  ## Synonyms taken care of- need more synonyms
+                    grm = lookup_table["synonyms"][grm]
                     status_addendum.append("Synonym Usage")
 
                 # Matching Test for 1-gram chunk
-                if ((grm in resource_terms.keys() ) and not localTrigger):
+                if ((grm in lookup_table["resource_terms"].keys() ) and not localTrigger):
                     partialMatchedList.append(grm)
                     for eachTkn in grmTokens:
                         covered_tokens.append(eachTkn)
                         if eachTkn in remaining_tokens:
                             remaining_tokens.remove(eachTkn)
                     localTrigger = True
-                elif ((grm in resource_terms_revised.keys() ) and not localTrigger):
+                elif ((grm in lookup_table["resource_terms_revised"].keys() ) and not localTrigger):
                     partialMatchedList.append(grm)
                     for eachTkn in grmTokens:
                         covered_tokens.append(eachTkn)
@@ -1131,7 +1278,7 @@ def run(args):
                 for suff in range(len(suffixes)):
                     suffixString = suffixes[suff]
                     sampleRevisedWithSuffix = grm + " " + suffixString
-                    if (sampleRevisedWithSuffix in resource_terms_revised.keys() and not localTrigger):  # Not trigger true is used here -reason
+                    if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
                         status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
@@ -1142,8 +1289,8 @@ def run(args):
                         localTrigger=True
 
                 # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                if (grm in qualities_lower.keys() and not localTrigger):
-                    quality = qualities_lower[grm]
+                if (grm in lookup_table["qualities_lower"].keys() and not localTrigger):
+                    quality = lookup_table["qualities_lower"][grm]
                     partialMatchedList.append(grm)
                     status_addendum.append("Using Semantic Tagging Resources")
                     localTrigger = True
@@ -1154,8 +1301,8 @@ def run(args):
 
 
                 # Here the qualities are used for semantic taggings --- change elif to if for qualities in addition to
-                if (grm in processes.keys() and not localTrigger):
-                    proc = processes[grm]
+                if (grm in lookup_table["processes"].keys() and not localTrigger):
+                    proc = lookup_table["processes"][grm]
                     partialMatchedList.append(grm)
                     status_addendum.append("Using Candidate Processes")
                     localTrigger = True
@@ -1196,29 +1343,29 @@ def run(args):
 
             #Decoding the partial matched set to get back resource ids
             for matchstring in partialMatchedSet:
-                if (matchstring in resource_terms.keys()):
-                    resourceId = resource_terms[matchstring]
+                if (matchstring in lookup_table["resource_terms"].keys()):
+                    resourceId = lookup_table["resource_terms"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
-                elif (matchstring in resource_terms_revised.keys()):
-                    resourceId = resource_terms_revised[matchstring]
+                elif (matchstring in lookup_table["resource_terms_revised"].keys()):
+                    resourceId = lookup_table["resource_terms_revised"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
-                elif (matchstring in resource_permutation_terms.keys()):
-                    resourceId = resource_permutation_terms[matchstring]
-                    resourceOriginalTerm = resource_terms_ID_based[resourceId]
+                elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
+                    resourceId = lookup_table["resource_permutation_terms"][matchstring]
+                    resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
-                elif (matchstring in resource_bracketed_permutation_terms.keys()):
-                    resourceId = resource_bracketed_permutation_terms[matchstring]
-                    resourceOriginalTerm = resource_terms_ID_based[resourceId]
+                elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
+                    resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
+                    resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
                     resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
                     partialMatchedResourceList.append(resourceOriginalTerm.lower() + ":" + resourceId)
-                elif (matchstring in processes.keys()):
-                    resourceId = processes[matchstring]
+                elif (matchstring in lookup_table["processes"].keys()):
+                    resourceId = lookup_table["processes"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
-                elif (matchstring in qualities.keys()):
-                    resourceId = qualities[matchstring]
+                elif (matchstring in lookup_table["qualities"].keys()):
+                    resourceId = lookup_table["qualities"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
-                elif (matchstring in qualities_lower.keys()):
-                    resourceId = qualities_lower[matchstring]
+                elif (matchstring in lookup_table["qualities_lower"].keys()):
+                    resourceId = lookup_table["qualities_lower"][matchstring]
                     partialMatchedResourceList.append(matchstring + ":" + resourceId)
                 elif ("==" in matchstring):
                     resList = matchstring.split("==")
