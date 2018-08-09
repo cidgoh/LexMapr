@@ -517,6 +517,8 @@ def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_
                 * suffixes
                     * maybe we can stick this and punctuations in
                         lookup_table?
+                    * suffixes and punctuations could also be global
+                        variables
                 * cleaned_sample
                     * if we can make a helper function that generates
                         cleaned_sample, we can simply call it
@@ -530,7 +532,11 @@ def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_
                             "cleaned sample" to the beginning of
                             cleaned_sample output annotations
                 * status_addendum
-                    * ...
+                    * Call to some sort of a preprocessing method to
+                        get changes to status_addendum that occur
+                        before find_full_term_match
+                        * A function for component matching could have
+                            the same call
     """
     # Tokens to retain for all_match_terms_with_resource_ids
     retained_tokens = []
