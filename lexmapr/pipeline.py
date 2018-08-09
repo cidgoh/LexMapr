@@ -967,12 +967,10 @@ def run(args):
                     + full_term_match["all_match_terms_with_resource_ids"])
             # Tokenize sample
             sample_tokens = word_tokenize(sample.lower())
-            # Iterate over tokens
-            for token in sample_tokens:
-                # Add token to covered_tokens
-                covered_tokens.append(token)
-                # Remove token from remaining_tokens
-                remaining_tokens.remove(token)
+            # Add all tokens to covered_tokens
+            [covered_tokens.append(token) for token in sample_tokens]
+            # Remove all tokens from remaining_tokens
+            [remaining_tokens.remove(token) for token in sample_tokens]
             # Set trigger to True
             trigger = True
         # Full-term match not found
