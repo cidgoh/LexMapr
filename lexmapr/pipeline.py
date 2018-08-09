@@ -463,7 +463,7 @@ def unicode_to_utf_8(decoded_pairs):
     # Return ret
     return ret
 
-def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_addendum, covered_tokens, remaining_tokens):
+def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_addendum):
     """Retrieve an annotated, full-term match for a sample.
 
     The sample matched, along with multiple resource
@@ -520,14 +520,6 @@ def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_
                             cleaned_sample output annotations
                 * status_addendum
                     * ...
-                * covered_tokens
-                    * covered_tokens is not relevant to output in
-                        full-term matches
-                    * eliminate from code
-                * remaining_tokens
-                    * remaining_tokens is not relevant to output in
-                        full-term matches
-                    * eliminate from code
     """
     # Tokens to retain for all_match_terms_with_resource_ids
     retained_tokens = []
@@ -732,14 +724,6 @@ def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_
         "match_status_macro_level": "Full Term Match",
         "match_status_micro_level": str(list(final_status)),
     })
-    # Tokenize sample
-    sample_tokens = word_tokenize(sample.lower())
-    # Iterate over tokens
-    for token in sample_tokens:
-        # Add token to covered_tokens
-        covered_tokens.append(token)
-        # Remove token from remaining_tokens
-        remaining_tokens.remove(token)
     # Return
     return ret
 
@@ -967,7 +951,7 @@ def run(args):
         #---------------------------STARTS APPLICATION OF RULES-----------------------------------------------
         try:
             # Find full-term match for sample
-            full_term_match = find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_addendum, covered_tokens, remaining_tokens)
+            full_term_match = find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_addendum)
             # Write to all headers
             if args.format == "full":
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
@@ -981,6 +965,14 @@ def run(args):
             else:
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
                     + full_term_match["all_match_terms_with_resource_ids"])
+            # Tokenize sample
+            sample_tokens = word_tokenize(sample.lower())
+            # Iterate over tokens
+            for token in sample_tokens:
+                # Add token to covered_tokens
+                covered_tokens.append(token)
+                # Remove token from remaining_tokens
+                remaining_tokens.remove(token)
             # Set trigger to True
             trigger = True
         # Full-term match not found
