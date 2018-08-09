@@ -489,27 +489,6 @@ def find_full_term_match(suffixes, sample, cleaned_sample, status_addendum, cove
         * Must be called inside run
 
     TODO:
-        * move this function out of run
-            * The reason it is currently in run is because we
-                need access to several variables that are local
-                to run
-            * There are two potential solutions:
-                * Pass all local variables to this function
-                    * Unreasonable, there are too many
-                * Create a class with the following:
-                    * Constructer with all variables relevant
-                        to application rules
-                    * get_resource_dict
-                        * Likely called in constructer
-                    * find_full_term_match
-                    * MatchNotFoundError
-                    * This is the most reasonable solution
-                    * Before beginning the design and
-                        construction of a class, we may want to
-                        do the following:
-                            * Get find_full_term_match working
-                            * Abstract component matching
-                                * May fit in new class
         * simplify change-of-case treatments as follows:
             * resource dictionaries only contain lower-case
                 words
@@ -518,6 +497,8 @@ def find_full_term_match(suffixes, sample, cleaned_sample, status_addendum, cove
             * check if sample != sample.lower()
                 * if true, add change-of-case treatment to
                     status addendum
+        * reduce number of parameters
+            * create a helper function to generate cleaned sample
     """
     # Tokens to retain for all_match_terms_with_resource_ids
     retained_tokens = []
@@ -579,26 +560,21 @@ def find_full_term_match(suffixes, sample, cleaned_sample, status_addendum, cove
         # Permutation corresponding to matched_term
         matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
         # Update retained_tokens
-        retained_tokens.append(matched_permutation + ":"
-            + resource_id)
+        retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
-        status_addendum.append(
-            "Permutation of Tokens in Resource Term")
+        status_addendum.append("Permutation of Tokens in Resource Term")
     # Full-term match with permutation of bracketed resource term
     elif sample.lower() in lookup_table["resource_bracketed_permutation_terms"]:
         # Term we found a permutation for
         matched_term = sample.lower()
         # Resource ID for matched_term's permutation
-        resource_id =\
-            lookup_table["resource_bracketed_permutation_terms"][matched_term]
+        resource_id = lookup_table["resource_bracketed_permutation_terms"][matched_term]
         # Permutation corresponding to matched_term
         matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
         # Update retained_tokens
-        retained_tokens.append(matched_permutation + ":"
-            + resource_id)
+        retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
-        status_addendum.append(
-            "Permutation of Tokens in Bracketed Resource Term")
+        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
     # Full-term cleaned sample match without any treatment
     elif cleaned_sample.lower() in lookup_table["resource_terms"]:
         # Term with we found a full-term match for
@@ -630,27 +606,22 @@ def find_full_term_match(suffixes, sample, cleaned_sample, status_addendum, cove
         # Permutation corresponding to matched_term
         matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
         # Update retained_tokens
-        retained_tokens.append(matched_permutation + ":"
-            + resource_id)
+        retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
-        status_addendum.append(
-            "Permutation of Tokens in Resource Term")
+        status_addendum.append("Permutation of Tokens in Resource Term")
     # Full-term cleaned sample match with permutation of
     # bracketed resource term.
     elif cleaned_sample.lower() in lookup_table["resource_bracketed_permutation_terms"]:
         # Term we found a permutation for
         matched_term = cleaned_sample.lower()
         # Resource ID for matched_term's permutation
-        resource_id =\
-            lookup_table["resource_bracketed_permutation_terms"][matched_term]
+        resource_id = lookup_table["resource_bracketed_permutation_terms"][matched_term]
         # Permutation corresponding to matched_term
         matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
         # Update retained_tokens
-        retained_tokens.append(matched_permutation + ":"
-            + resource_id)
+        retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
-        status_addendum.append(
-            "Permutation of Tokens in Bracketed Resource Term")
+        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
     # A full-term cleaned sample match with multi-word
     # collocation from Wikipedia exists.
     elif cleaned_sample.lower() in lookup_table["collocations"]:
@@ -659,25 +630,24 @@ def find_full_term_match(suffixes, sample, cleaned_sample, status_addendum, cove
         # Resource ID for matched_term
         resource_id = lookup_table["collocations"][matched_term]
         # Update retained_tokens
-        retained_tokens.append(matched_term + ":"
-            + resource_id)
+        retained_tokens.append(matched_term + ":" + resource_id)
         # Update status_addendum
         status_addendum.append(
-            "New Candidadte Terms -"
-            + "validated with Wikipedia Based Collocation Resource"
+            "New Candidadte Terms -validated with Wikipedia Based Collocation Resource"
         )
     # Full-term match not found
     else:
+        resource_terms_revised = lookup_table["resource_terms_revised"]
         # Find all suffixes that when appended to sample, are
         # in resource_terms_revised.
-        matched_suffixes =\
-            [s for s in suffixes
-                if sample+" "+s in lookup_table["resource_terms_revised"]]
+        matched_suffixes = (
+            [s for s in suffixes if sample+" "+s in resource_terms_revised]
+        )
         # Find all suffixes that when appended to cleaned
         # sample, are in resource_terms_revised.
-        matched_clean_suffixes =\
-            [s for s in suffixes
-                if cleaned_sample+" "+s in lookup_table["resource_terms_revised"]]
+        matched_clean_suffixes = (
+            [s for s in suffixes if cleaned_sample+" "+s in resource_terms_revised]
+        )
         # A full-term match with change of resource and suffix
         # addition exists.
         if matched_suffixes:
@@ -687,42 +657,40 @@ def find_full_term_match(suffixes, sample, cleaned_sample, status_addendum, cove
             # Term we add a suffix to
             matched_term = sample.lower()
             # Resource ID for matched_term
-            resource_id = lookup_table["resource_terms_revised"][term_with_suffix]
+            resource_id = resource_terms_revised[term_with_suffix]
             # Update retained_tokens
-            retained_tokens.append(term_with_suffix + ":"
-                + resource_id)
+            retained_tokens.append(term_with_suffix + ":" + resource_id)
             # Update status_addendum
             status_addendum.append(
                 "[Change of Case of Resource and Suffix Addition- "
                 + matched_suffixes[0]
-                + " to the Input]")
+                + " to the Input]"
+            )
         # A full-term cleaned sample match with change of resource and
         # suffix addition exists.
         elif matched_clean_suffixes:
             # Term with first suffix in suffixes that provides
             # a full-term match.
-            term_with_suffix = cleaned_sample.lower() + " "\
-                + matched_clean_suffixes[0]
+            term_with_suffix = cleaned_sample.lower() + " " + matched_clean_suffixes[0]
             # Term we cleaned and added a suffix to
             matched_term = sample.lower()
             # Resource ID for matched_term
-            resource_id = lookup_table["resource_terms_revised"][term_with_suffix]
+            resource_id = resource_terms_revised[term_with_suffix]
             # Update retained_tokens
-            retained_tokens.append(term_with_suffix + ":"
-                + resource_id)
+            retained_tokens.append(term_with_suffix + ":" + resource_id)
             # Update status_addendum
             status_addendum.append(
-                "[CleanedSample-"
-                + "Change of Case of Resource and Suffix Addition- "
+                "[CleanedSample-Change of Case of Resource and Suffix Addition- "
                 + matched_clean_suffixes[0]
-                + " to the Input]")
+                + " to the Input]"
+            )
         # No full-term match possible with suffixes either
         else:
-            raise MatchNotFoundError("Full-term match not found for: "
-                + sample)
+            raise MatchNotFoundError("Full-term match not found for: " + sample)
 
     # If we reach here, we had a full-term match with a
     # non-empty sample.
+
     # status_addendum without duplicates
     final_status = set(status_addendum)
     # Update ret
