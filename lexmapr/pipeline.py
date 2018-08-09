@@ -473,15 +473,26 @@ def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_
 
     Also returns relevant information for empty samples.
 
+    Arguments:
+        * sample <"str">: Name of sample we want to find a full-term
+            match for.
+        * lookup_table <"dict">: Nested dictionary containing resources
+            needed to find a full_term_match. See
+            get_lookup_table_from_cache for details.
+        * suffixes <"list"> of <"str">: Suffixes to append to sample we
+            want to consider when looking for a full_term_match.
+        * cleaned_sample <"str">: Vleaned version of sample we will
+            use to look for a full-term match, if one for sample does
+            not exist.
+        * status_addendum <"list"> of <"str">: Modifications made to
+            sample in preprocessing.
     Return values:
-        * class <"dict">: Contains all relevant annotations for
+        * <"dict">: Contains all relevant annotations for
             output headers.
-            * key: class <"str">
-            * val: class <"str">
+            * key <"str">
+            * val <"str">
     Exceptions raised:
         * MatchNotFoundError: Full-term match not found
-    Restrictions:
-        * Must be called inside run
 
     TODO:
         * simplify change-of-case treatments as follows:
