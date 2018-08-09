@@ -493,7 +493,41 @@ def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_
                 * if true, add change-of-case treatment to
                     status addendum
         * reduce number of parameters
-            * create a helper function to generate cleaned sample
+            * what we need, and makes sense as a parameter for this
+                type of function
+                * sample
+                * lookup_table
+                    * Rather than make lookup_table into a global
+                        variable, we should pass it as a parameter
+                        * It will allow us to more easily separate
+                            pipeline.py functions into different files
+                            in the future (if we choose to do so)
+            * what does not look good as a parameter
+                * suffixes
+                    * maybe we can stick this and punctuations in
+                        lookup_table?
+                * cleaned_sample
+                    * if we can make a helper function that generates
+                        cleaned_sample, we can simply call it
+                    * we can also call find_full_term_match in run with
+                        sample, and then if nothing is found, with
+                        cleaned_sample
+                        * this would involve adjusting the outputted
+                            annotations of run, so sample and
+                            cleaned_sample outputs are more similar,
+                            and we just have to add something like
+                            "cleaned sample" to the beginning of
+                            cleaned_sample output annotations
+                * status_addendum
+                    * ...
+                * covered_tokens
+                    * covered_tokens is not relevant to output in
+                        full-term matches
+                    * eliminate from code
+                * remaining_tokens
+                    * remaining_tokens is not relevant to output in
+                        full-term matches
+                    * eliminate from code
     """
     # Tokens to retain for all_match_terms_with_resource_ids
     retained_tokens = []
