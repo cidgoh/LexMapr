@@ -1223,7 +1223,7 @@ def run(args):
                     if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
-                        status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
+                        status_addendum.append("Suffix Addition- " + suffix + " to the Input")
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
