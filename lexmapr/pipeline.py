@@ -266,6 +266,8 @@ def get_all_resource_dicts():
     ret["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
     # Constrained list of stop words considered to be meaningless
     ret["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
+    # Suffixes to consider appending to terms when mining ontologies
+    ret["suffixes"] = get_resource_dict("suffixes.csv")
     # ID-resource combinations
     ret["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
     # Swap keys and values in resource_terms_ID_based
@@ -463,7 +465,7 @@ def unicode_to_utf_8(decoded_pairs):
     # Return ret
     return ret
 
-def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_addendum):
+def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     """Retrieve an annotated, full-term match for a sample.
 
     The sample matched, along with multiple resource
@@ -479,8 +481,6 @@ def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_
         * lookup_table <"dict">: Nested dictionary containing resources
             needed to find a full_term_match. See
             get_lookup_table_from_cache for details.
-        * suffixes <"list"> of <"str">: Suffixes to append to sample we
-            want to consider when looking for a full_term_match.
         * cleaned_sample <"str">: Vleaned version of sample we will
             use to look for a full-term match, if one for sample does
             not exist.
@@ -514,11 +514,6 @@ def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_
                             pipeline.py functions into different files
                             in the future (if we choose to do so)
             * what does not look good as a parameter
-                * suffixes
-                    * maybe we can stick this and punctuations in
-                        lookup_table?
-                    * suffixes and punctuations could also be global
-                        variables
                 * cleaned_sample
                     * if we can make a helper function that generates
                         cleaned_sample, we can simply call it
@@ -678,14 +673,14 @@ def find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_
         resource_terms_revised = lookup_table["resource_terms_revised"]
         # Find all suffixes that when appended to sample, are
         # in resource_terms_revised.
-        matched_suffixes = (
-            [s for s in suffixes if sample+" "+s in resource_terms_revised]
-        )
+        matched_suffixes = [
+            s for s in lookup_table["suffixes"] if sample+" "+s in resource_terms_revised
+        ]
         # Find all suffixes that when appended to cleaned
         # sample, are in resource_terms_revised.
-        matched_clean_suffixes = (
-            [s for s in suffixes if cleaned_sample+" "+s in resource_terms_revised]
-        )
+        matched_clean_suffixes = [
+            s for s in lookup_table["suffixes"] if cleaned_sample+" "+s in resource_terms_revised
+        ]
         # A full-term match with change of resource and suffix
         # addition exists.
         if matched_suffixes:
@@ -777,24 +772,6 @@ def run(args):
     Main text mining pipeline.
     """
     punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuations for basic treatment
-    # Suffixes used in FoodOn
-    suffixes = [
-        "(food source)",
-        "(vegetable) food product",
-        "vegetable food product",
-        "nut food product",
-        "fruit food product",
-        "seafood product",
-        "meat food product",
-        "plant fruit food product",
-        "plant food product",
-        "(food product)",
-        "food product",
-        "plant (food source)",
-        "product",
-        "(whole)",
-        "(deprecated)"
-        ]
     covered_tokens = []
     remainingAllTokensSet = []
     remainingTokenSet = []
@@ -968,7 +945,7 @@ def run(args):
         #---------------------------STARTS APPLICATION OF RULES-----------------------------------------------
         try:
             # Find full-term match for sample
-            full_term_match = find_full_term_match(sample, lookup_table, suffixes, cleaned_sample, status_addendum)
+            full_term_match = find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum)
             # Write to all headers
             if args.format == "full":
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
@@ -1052,13 +1029,12 @@ def run(args):
                                 remaining_tokens.remove(eachTkn)
                         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
-                    for suff in range(len(suffixes)):
-                        suffixString = suffixes[suff]
-                        sampleRevisedWithSuffix = grm + " " + suffixString
+                    for suffix in lookup_table["suffixes"]:
+                        sampleRevisedWithSuffix = grm + " " + suffix
                         if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                             partialMatchedList.append(sampleRevisedWithSuffix)
-                            status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
+                            status_addendum.append("Suffix Addition- " + suffix + " to the Input")
                             for eachTkn in grmTokens:
                                 covered_tokens.append(eachTkn)
                                 if eachTkn in remaining_tokens:
@@ -1112,13 +1088,12 @@ def run(args):
                                 remaining_tokens.remove(eachTkn)
                         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
-                    for suff in range(len(suffixes)):
-                        suffixString = suffixes[suff]
-                        sampleRevisedWithSuffix = grm + " " + suffixString
+                    for suffix in lookup_table["suffixes"]:
+                        sampleRevisedWithSuffix = grm + " " + suffix
                     if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
-                        status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
+                        status_addendum.append("Suffix Addition- " + suffix + " to the Input")
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
@@ -1173,13 +1148,12 @@ def run(args):
                                 remaining_tokens.remove(eachTkn)
                         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
-                    for suff in range(len(suffixes)):
-                        suffixString = suffixes[suff]
-                        sampleRevisedWithSuffix = grm + " " + suffixString
+                    for suffix in lookup_table["suffixes"]:
+                        sampleRevisedWithSuffix = grm + " " + suffix
                         if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                             # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                             partialMatchedList.append(sampleRevisedWithSuffix)
-                            status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
+                            status_addendum.append("Suffix Addition- " + suffix + " to the Input")
                             for eachTkn in grmTokens:
                                 covered_tokens.append(eachTkn)
                                 if eachTkn in remaining_tokens:
@@ -1244,9 +1218,8 @@ def run(args):
                                 remaining_tokens.remove(eachTkn)
                         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         localTrigger = True
-                    for suff in range(len(suffixes)):
-                        suffixString = suffixes[suff]
-                        sampleRevisedWithSuffix = grm + " " + suffixString
+                    for suffix in lookup_table["suffixes"]:
+                        sampleRevisedWithSuffix = grm + " " + suffix
                     if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
@@ -1306,13 +1279,12 @@ def run(args):
                             remaining_tokens.remove(eachTkn)
                     localTrigger = True
 
-                for suff in range(len(suffixes)):
-                    suffixString = suffixes[suff]
-                    sampleRevisedWithSuffix = grm + " " + suffixString
+                for suffix in lookup_table["suffixes"]:
+                    sampleRevisedWithSuffix = grm + " " + suffix
                     if (sampleRevisedWithSuffix in lookup_table["resource_terms_revised"].keys() and not localTrigger):  # Not trigger true is used here -reason
                         # resourceId = resourceRevisedTermsDict[sampleRevisedWithSuffix]
                         partialMatchedList.append(sampleRevisedWithSuffix)
-                        status_addendum.append("Suffix Addition- " + suffixString + " to the Input")
+                        status_addendum.append("Suffix Addition- " + suffix + " to the Input")
                         for eachTkn in grmTokens:
                             covered_tokens.append(eachTkn)
                             if eachTkn in remaining_tokens:
