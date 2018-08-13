@@ -16,6 +16,12 @@ import logging
 import collections
 import json
 import os
+# TODO: We should figure out a way ontofetch can be imported remotely,
+#       as opposed to simply copying and pasting the ontofetch.py and
+#       its dependencies.
+# Source:
+# https://github.com/GenEpiO/geem/blob/master/scripts/ontofetch.py
+from lexmapr import ontofetch
 
 logger = logging.getLogger("pipeline")
 logger.disabled = True
