@@ -157,7 +157,7 @@ class Ontology(object):
 		(options, args) = self.get_command_line()
 
 		if options.code_version:
-			print self.CODE_VERSION
+			print(self.CODE_VERSION)
 			return self.CODE_VERSION
 
 		if not len(args):
@@ -166,7 +166,7 @@ class Ontology(object):
 		(main_ontology_file, output_file_basename) = self.onto_helper.check_ont_file(args[0], options)
 
 		# Load main ontology file into RDF graph
-		print "Fetching and parsing " + main_ontology_file + " ..."
+		print("Fetching and parsing " + main_ontology_file + " ...")
 
 		try:
 			# ISSUE: ontology file taken in as ascii; rdflib doesn't accept
@@ -183,17 +183,17 @@ class Ontology(object):
 
 		# Load self.struct with ontology metadata
 		self.onto_helper.set_ontology_metadata(self.onto_helper.queries['ontology_metadata'])
-		print "Metadata:", json.dumps(self.onto_helper.struct['metadata'],  sort_keys=False, indent=4, separators=(',', ': '))
+		print("Metadata:", json.dumps(self.onto_helper.struct['metadata'],  sort_keys=False, indent=4, separators=(',', ': ')))
 
 		# Retrieve all subclasses of 'owl:Thing' in given ontology
 		# and place in self.onto_helper.struct.specifications
 		# To retrieve just a given term like BFO:entity
 		# specBinding = {'root': rdflib.URIRef(self.get_expanded_id('BFO:0000001'))}  
-		print 'Doing term hierarchy query'
+		print('Doing term hierarchy query')
 		specBinding = {'root': rdflib.URIRef(self.onto_helper.get_expanded_id('owl:Thing'))} 
 		entities = self.onto_helper.do_query_table(self.queries['tree'], specBinding )
 
-		print 'Doing terms', len(entities)
+		print('Doing terms', len(entities))
 		self.do_entities(entities)
 		
 		self.onto_helper.do_output_json(self.struct, output_file_basename)
