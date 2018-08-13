@@ -33,7 +33,7 @@ import json
 import sys
 import os
 import optparse
-import python.ontohelper as oh
+from lexmapr import ontohelper as oh
 
 import rdflib
 import rdfextras; rdfextras.registerplugins() # so we can Graph.query()
