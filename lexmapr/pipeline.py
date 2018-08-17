@@ -55,6 +55,23 @@ def ngrams(input, n):
         output.append(input[i:i + n])
     return output
 
+def get_gram_chunks(input, num):
+    """Make num-gram chunks from input.
+
+    TODO:
+        * finish docstring
+    """
+    # TODO: ...descriptor
+    input_tokens = word_tokenize(input)
+    # input_tokens has less than 7 tokens
+    if len(input_tokens) < 7:
+        # Return all num-token combinations of input_tokens
+        return combi(input_tokens, num)
+    # input_tokens has 7 or more tokens
+    else:
+        # Return all num-length substrings of input
+        return ngrams(input, num)
+
 def preprocess(token):
     """Removes characters in token that are irrelevant to run.
 
@@ -754,25 +771,28 @@ def find_component_match(cleaned_sample, lookup_table, partial_matches, covered_
     TODO:
         * update docstring
         * eliminate unneccessary parameters
+            * what we should keep
+                * cleaned_sample
+                * lookup_table
+            * what we should try to get rid of
+                * partial_matches
+                    * ...ideas?
+                * covered_tokens
+                    * ...ideas?
+                * remaining_tokens
+                    * ...ideas?
+                * status_addendum
+                    * Suggest in find_full_term_match to call some sort
+                        of preprocessing method to get changes to
+                        status_addendum prior to find_full_term_match
+                        * Could do something similar in
+                            find_component_match
     """
-    cleaned_sample_tokens = word_tokenize(cleaned_sample)
-
-    def get_gram_chunks(num):
-        """Make num-gram chunks"""
-        # cleaned_sample_tokens has less than 7 tokens
-        if len(cleaned_sample_tokens) < 7:
-            # Return all num-token combinations of
-            # cleaned_sample_tokens.
-            return combi(cleaned_sample_tokens, num)
-        # cleaned_sample_tokens has 7 or more tokens
-        else:
-            # Return all num-length substrings of cleaned_sample
-            return ngrams(cleaned_sample, num)
 
     # Iterate through numbers 5 to 1
     for i in range(5, 0, -1):
         # Iterate through i-gram chunks of cleaned_chunk
-        for gram_chunk in get_gram_chunks(i):
+        for gram_chunk in get_gram_chunks(cleaned_sample, i):
             # gram_chunk concatenated into a single string
             concatenated_gram_chunk = ' '.join(gram_chunk)
             # Tokenized list of concatenated_gram_chunk
