@@ -759,13 +759,11 @@ def find_component_match(cleaned_chunk, cleaned_chunk_tokens, lookup_table, part
         """Make num-gram chunks"""
         # cleaned_chunk_tokens has less than 7 tokens
         if len(cleaned_chunk_tokens) < 7:
-            # We return all num-token combinations of
-            # cleaned_chunk_tokens.
+            # Return all num-token combinations of cleaned_chunk_tokens
             return combi(cleaned_chunk_tokens, num)
         # cleaned_chunk_tokens has 7 or more tokens
         else:
-            # We return all num-character length substrings
-            # of cleaned_chunk.
+            # Return all num-length substrings of cleaned_chunk
             return ngrams(cleaned_chunk, num)
 
     # Iterate through numbers 5 to 1
@@ -775,148 +773,108 @@ def find_component_match(cleaned_chunk, cleaned_chunk_tokens, lookup_table, part
             # gram_chunk concatenated into a single string
             concatenated_gram_chunk = ' '.join(gram_chunk)
             # Tokenized list of concatenated_gram_chunk
-            gram_tokens = word_tokenize(
-                concatenated_gram_chunk.lower())
+            gram_tokens = word_tokenize(concatenated_gram_chunk.lower())
             # Flag indicating successful component match
             match_found = False
             # Permutations of concatenated_gram_chunk
-            permutations = all_permutations(
-                concatenated_gram_chunk)
+            permutations = all_permutations(concatenated_gram_chunk)
             # Iterate over all permutations
             for permutation in permutations:
-                # Concatenate the elements of permutation
-                # into a single string.
-                concatenated_permutation = ' '.join(permutation)
-                # concatenated_permutation is an
-                # abbreviation or acronym.
-                if concatenated_permutation in lookup_table["abbreviations"]:
-                    # Expand concatenated_permutation
-                    concatenated_permutation = lookup_table["abbreviations"][
-                        concatenated_permutation]
+                # Join elements of permutation into a single string
+                joined_permutation = ' '.join(permutation)
+                # joined_permutation is an abbreviation or acronym
+                if joined_permutation in lookup_table["abbreviations"]:
+                    # Expand joined_permutation
+                    joined_permutation = lookup_table["abbreviations"][joined_permutation]
                     # Adjust status_addendum accordingly
-                    status_addendum.append(
-                        "Abbreviation-Acronym Treatment")
-                # concatenated_permutation is a non-english
-                # word.
-                if concatenated_permutation in lookup_table["non_english_words"]:
-                    # Translate concatenated_permutation
-                    concatenated_permutation = lookup_table["non_english_words"][
-                        concatenated_permutation]
+                    status_addendum.append("Abbreviation-Acronym Treatment")
+                # joined_permutation is a non-english word
+                if joined_permutation in lookup_table["non_english_words"]:
+                    # Translate joined_permutation
+                    joined_permutation = lookup_table["non_english_words"][joined_permutation]
                     # Adjust status_addendum accordingly
-                    status_addendum.append(
-                        "Non English Language Words Treatment")
-                # concatenated_permutation is a synonym
-                if concatenated_permutation in lookup_table["synonyms"]:
-                    # Replace concatenated_permutation with
-                    # appropriate synonym.
-                    concatenated_permutation = lookup_table["synonyms"][
-                        concatenated_permutation]
+                    status_addendum.append("Non English Language Words Treatment")
+                # joined_permutation is a synonym
+                if joined_permutation in lookup_table["synonyms"]:
+                    # Translate joined_permutation to synonym
+                    joined_permutation = lookup_table["synonyms"][joined_permutation]
                     # Adjust status_addendum accordingly
                     status_addendum.append("Synonym Usage")
 
                 def handle_component_match(component_match):
                     """Alter data after component match."""
-                    # Add concatenated_permutation to
-                    # partial_matches.
-                    partial_matches.append(
-                        component_match)
+                    # Add joined_permutation to partial_matches
+                    partial_matches.append(component_match)
                     # Iterate over gram_tokens
                     for token in gram_tokens:
                         # Add token to covered_tokens
                         covered_tokens.append(token)
                         # Token in remaining_tokens
                         if token in remaining_tokens:
-                            # Remove token from
-                            # remaining_tokens.
+                            # Remove token from remaining_tokens
                             remaining_tokens.remove(token)
 
                 # Component match not yet found
                 if not match_found:
-                    # There is a full-term component match
-                    # with no treatment or change-of-case
-                    # in resource term.
-                    if (concatenated_permutation in lookup_table["resource_terms"]
-                        or concatenated_permutation in
-                        lookup_table["resource_terms_revised"]):
+                    # There is a full-term component match with no
+                    # treatment or change-of-case in resource term.
+                    if (joined_permutation in lookup_table["resource_terms"]
+                        or joined_permutation in lookup_table["resource_terms_revised"]):
                         # Adjust local variables as needed
-                        handle_component_match(
-                            concatenated_permutation)
+                        handle_component_match(joined_permutation)
                         # Set match_found to True
                         match_found = True
-                    # There is a full-term component match
-                    # with permutation of bracketed
-                    # resource term.
-                    elif (concatenated_permutation in
+                    # There is a full-term component match with
+                    # permutation of bracketed resource term.
+                    elif (joined_permutation in
                         lookup_table["resource_bracketed_permutation_terms"]):
+
                         # Adjust local variables as needed
-                        handle_component_match(
-                            concatenated_permutation)
+                        handle_component_match(joined_permutation)
                         # Adjust status_addendum accordingly
-                        status_addendum.append(
-                            "Permutation of Tokens in Bracketed"
-                            + " Resource Term")
+                        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
                         # Set match_found to True
                         match_found = True
                     else:
                         # Find all suffixes that when appended to
-                        # concatenated_permutation, are in
+                        # joined_permutation, are in
                         # resource_terms_revised.
-                        matched_suffixes = [s for s in lookup_table["suffixes"] if
-                            concatenated_permutation+" "+s in
-                            lookup_table["resource_terms_revised"]]
-                        # A full-term component match with
-                        # change of resource and suffix
-                        # addition exists.
+                        matched_suffixes = [
+                            s for s in lookup_table["suffixes"]
+                            if joined_permutation+" "+s in lookup_table["resource_terms_revised"]
+                            ]
+                        # A full-term component match with change of
+                        # resource and suffix addition exists.
                         if matched_suffixes:
-                            # Component with first suffix
-                            # in suffixes that provides a
-                            # full-term match.
-                            component_with_suffix = (
-                                concatenated_permutation + " " +
-                                matched_suffixes[0])
-                            # Adjust local variables as
-                            # needed.
-                            handle_component_match(
-                                component_with_suffix)
-                            # Adjust status_addendum
-                            # accordingly.
+                            # Component with first suffix in suffixes
+                            # that provides a full-term match.
+                            component_with_suffix = joined_permutation + " " + matched_suffixes[0]
+                            # Adjust local variables as needed
+                            handle_component_match(component_with_suffix)
+                            # Adjust status_addendum accordingly
                             status_addendum.append(
-                                "Suffix Addition- " +
-                                matched_suffixes[0] +
-                                " to the Input")
+                                "Suffix Addition- " + matched_suffixes[0] + " to the Input"
+                            )
                             # Set match_found to True
                             match_found = True
                         # 1- or 2-gram component match
                         elif i < 3:
-                            # A full-term component match
-                            # using semantic resources
-                            # exists.
-                            if (concatenated_permutation in
-                                lookup_table["qualities_lower"]):
-                                # Adjust local variables as
-                                # needed.
-                                handle_component_match(
-                                    concatenated_permutation)
-                                # Adjust status_addendum
-                                # accordingly.
-                                status_addendum.append("Using " +
-                                    "Semantic Tagging Resources")
+                            # A full-term component match using
+                            # semantic resources exists.
+                            if (joined_permutation in lookup_table["qualities_lower"]):
+                                # Adjust local variables as needed
+                                handle_component_match(joined_permutation)
+                                # Adjust status_addendum accordingly
+                                status_addendum.append("Using Semantic Tagging Resources")
                                 # Set match_found to True
                                 match_found = True
-                            # A full-term 1-gram component
-                            # match using candidate
-                            # processes exists.
-                            elif (i==1 and
-                                concatenated_permutation in
-                                lookup_table["processes"]):
-                                # Adjust local variables as
-                                # needed.
-                                handle_component_match(
-                                    concatenated_permutation)
-                                # Adjust status_addendum
-                                # accordingly.
-                                status_addendum.append("Using " +
-                                    "Candidate Processes")
+                            # A full-term 1-gram component match using
+                            # candidate processes exists.
+                            elif i==1 and joined_permutation in lookup_table["processes"]:
+                                # Adjust local variables as needed
+                                handle_component_match(joined_permutation)
+                                # Adjust status_addendum accordingly
+                                status_addendum.append("Using Candidate Processes")
                                 # Set match_found to True
                                 match_found = True
 
