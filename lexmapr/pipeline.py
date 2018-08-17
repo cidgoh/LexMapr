@@ -755,20 +755,19 @@ def find_component_match(cleaned_sample, lookup_table, partial_matches, covered_
         * update docstring
         * eliminate unneccessary parameters
     """
-    # TODO: is cleaned_chunk needed? Is cleaned_sample not already lowercase
-    cleaned_chunk = cleaned_sample
-    cleaned_chunk_tokens = word_tokenize(cleaned_chunk)
+    cleaned_sample_tokens = word_tokenize(cleaned_sample)
 
     def get_gram_chunks(num):
         """Make num-gram chunks"""
-        # cleaned_chunk_tokens has less than 7 tokens
-        if len(cleaned_chunk_tokens) < 7:
-            # Return all num-token combinations of cleaned_chunk_tokens
-            return combi(cleaned_chunk_tokens, num)
-        # cleaned_chunk_tokens has 7 or more tokens
+        # cleaned_sample_tokens has less than 7 tokens
+        if len(cleaned_sample_tokens) < 7:
+            # Return all num-token combinations of
+            # cleaned_sample_tokens.
+            return combi(cleaned_sample_tokens, num)
+        # cleaned_sample_tokens has 7 or more tokens
         else:
-            # Return all num-length substrings of cleaned_chunk
-            return ngrams(cleaned_chunk, num)
+            # Return all num-length substrings of cleaned_sample
+            return ngrams(cleaned_sample, num)
 
     # Iterate through numbers 5 to 1
     for i in range(5, 0, -1):
