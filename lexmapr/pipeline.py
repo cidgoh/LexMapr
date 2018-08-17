@@ -740,7 +740,7 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     # Return
     return ret
 
-def find_component_match(cleaned_chunk, cleaned_chunk_tokens, lookup_table, partial_matches, covered_tokens, remaining_tokens, status_addendum):
+def find_component_match(cleaned_sample, lookup_table, partial_matches, covered_tokens, remaining_tokens, status_addendum):
     """Finds 1-5 gram component matches of cleaned_chunk.
 
     cleaned_chunk, along with multiple resource
@@ -755,6 +755,10 @@ def find_component_match(cleaned_chunk, cleaned_chunk_tokens, lookup_table, part
         * update docstring
         * eliminate unneccessary parameters
     """
+    # TODO: is cleaned_chunk needed? Is cleaned_sample not already lowercase
+    cleaned_chunk = cleaned_sample
+    cleaned_chunk_tokens = word_tokenize(cleaned_chunk)
+
     def get_gram_chunks(num):
         """Make num-gram chunks"""
         # cleaned_chunk_tokens has less than 7 tokens
@@ -1116,12 +1120,9 @@ def run(args):
             logger.debug("We will go further with other rules now targetting components of input data")
             # Some Declarations for component match cases
             partial_matches = []
-            # TODO: is cleaned_chunk needed? Is cleaned_sample not already lowercase
-            cleaned_chunk = cleaned_sample.lower()
-            cleaned_chunk_tokens = word_tokenize(cleaned_chunk.lower())
 
             # Find 1-5 gram component matches for cleaned_chunk
-            find_component_match(cleaned_chunk, cleaned_chunk_tokens, lookup_table, partial_matches, covered_tokens, remaining_tokens, status_addendum)
+            find_component_match(cleaned_sample, lookup_table, partial_matches, covered_tokens, remaining_tokens, status_addendum)
 
             partial_matches_final = set(partial_matches)  # Makes a set of all matched components from the above processing
             status = "GComponent Match"             #Note: GComponent instead of is used as tag to help sorting later in result file
