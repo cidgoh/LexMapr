@@ -494,11 +494,6 @@ def unicode_to_utf_8(decoded_pairs):
 def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     """Retrieve an annotated, full-term match for a sample.
 
-    The sample matched, along with multiple resource
-    collections, are local to run. Therefore, no parameters are
-    needed, and this function is restricted to being contained
-    within run.
-
     Also returns relevant information for empty samples.
 
     Arguments:
@@ -517,6 +512,10 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
             output headers.
             * key <"str">
             * val <"str">
+    Restrictions:
+        * cleaned_sample and status_addendum makes this function
+            dependent on being called where it is called inside of run
+            right now
     Exceptions raised:
         * MatchNotFoundError: Full-term match not found
 
@@ -766,44 +765,46 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     return ret
 
 def find_component_match(cleaned_sample, lookup_table, status_addendum):
-    """Finds 1-5 gram component matches of cleaned_chunk.
+    """Finds 1-5 gram component matches of cleaned_sample.
 
-    cleaned_chunk, along with multiple resource
-    collections, are local to run. Therefore, no parameters
-    are needed, and this function is restricted to being
-    contained within run.
-
-    All matches are appended to local variable
-    partial_matches.
+    Arguments:
+        * cleaned_sample <"str">: Sample that has been cleaned up in
+            run
+            * See TODO list about eventually using sample instead
+        * lookup_table <"dict">: Nested dictionary containing resources
+            needed to find a component match. See
+            get_lookup_table_from_cache for details.
+        * status_addendum <"list"> of <"str">: Modifications made to
+            sample in preprocessing.
+    Return values:
+        * <"dict">: Contains a list of 1-5 gram component matches, and
+            tokens covered by said matches.
+            * key <"str">
+            * val <"list" of "str">
+    Restrictions:
+        * cleaned_sample and status_addendum makes this function
+            dependent on being called where it is called inside of run
+            right now
 
     TODO:
-        * update docstring
         * discuss whether we should allow updating of status_addendum
             when the permutatation does not get added as a component
             match
         * eliminate unneccessary parameters
             * what we should keep
                 * cleaned_sample
+                    * this should really be sample, for greater
+                        function independence
                 * lookup_table
             * what we should try to get rid of
-                * partial_matches
-                    * return value could contain a list of component
-                        matches, which we add to partial_matches after
-                        the function call
-                * covered_tokens
-                    * return value could contain a list of tokens that
-                        are matched, which we add to cover_tokens after
-                        the function call
-                * remaining_tokens
-                    * return value could contain a list of tokens that
-                        are matched, which we remove from
-                        remaining_tokens after the function call
                 * status_addendum
                     * Suggest in find_full_term_match to call some sort
                         of preprocessing method to get changes to
                         status_addendum prior to find_full_term_match
                         * Could do something similar in
                             find_component_match
+                            * Would also allow use of sample instead of
+                                cleaned_sample as parameter
     """
     # Return value
     ret = {
