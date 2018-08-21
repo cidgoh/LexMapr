@@ -33,10 +33,10 @@ import json
 import sys
 import os
 import optparse
-from lexmapr import ontohelper as oh
+import python.ontohelper as oh
 
 import rdflib
-import rdfextras; rdfextras.registerplugins() # so we can Graph.query()
+from rdflib.plugins.sparql import prepareQuery
 
 # Do this, otherwise a warning appears on stdout: No handlers could be 
 #found for logger "rdflib.term"
@@ -64,7 +64,7 @@ class Ontology(object):
 
 	"""
 
-	CODE_VERSION = '0.0.2'
+	CODE_VERSION = '0.0.3'
 
 	def __init__(self):
 
@@ -84,8 +84,8 @@ class Ontology(object):
 			##################################################################
 			# Generic TREE "is a" hierarchy from given root.
 			#
-			'tree': rdflib.plugins.sparql.prepareQuery("""
-				SELECT DISTINCT ?id ?label ?parent_id ?deprecated ?replaced_by
+			'tree': prepareQuery("""
+				SELECT DISTINCT ?id ?label ?parent_id ?deprecated ?replaced_by 
 				WHERE {	
 					?parent_id rdfs:subClassOf* ?root.
 					?id rdfs:subClassOf ?parent_id.
@@ -108,7 +108,7 @@ class Ontology(object):
 			# that ui_label and ui_definition should really operate. Every entity
 			# in OWL file is retrieved for their rdfs:label, IAO definition etc.
 			# FUTURE: ADD SORTING OPTIONS, CUSTOM ORDER.
-			'entity_text': rdflib.plugins.sparql.prepareQuery("""
+			'entity_text': prepareQuery("""
 
 				SELECT DISTINCT ?label ?definition ?ui_label ?ui_definition
 				WHERE {  
@@ -132,7 +132,7 @@ class Ontology(object):
 			# OUTPUT
 			#   ?Synonym ?ExactSynonym ?NarrowSynonym
 			#
-			'entity_synonyms': rdflib.plugins.sparql.prepareQuery("""
+			'entity_synonyms': prepareQuery("""
 
 				SELECT DISTINCT ?datum ?Synonym ?ExactSynonym ?NarrowSynonym ?AlternativeTerm
 				WHERE {  
@@ -141,6 +141,23 @@ class Ontology(object):
 					UNION {?datum oboInOwl:hasExactSynonym ?ExactSynonym.}
 					UNION {?datum oboInOwl:hasNarrowSynonym ?NarrowSynonym.}
 					UNION {?datum IAO:0000118 ?AlternativeTerm.}
+				}
+			""", initNs = self.onto_helper.namespace),
+
+			# ################################################################
+			# Fetch parent IDs of given entity. with respect to class-subclass
+			# relations.
+			# STATUS: UNTESTED, UNUSED
+			# INPUT
+			# 	?datum_id : id of term to get parents for
+			# OUTPUT
+			#   ?parent_ids
+			#
+			'entity_parents': prepareQuery("""
+				SELECT DISTINCT ?datum_id (group_concat(distinct ?parent_id;separator=",") as ?parent_ids)
+				WHERE {
+					?datum_id rdfs:subClassOf ?parent_id.
+					?parent_id rdfs:label ?label # to ensure parent_id entity is in graph as well.
 				}
 			""", initNs = self.onto_helper.namespace),
 		}
@@ -157,7 +174,7 @@ class Ontology(object):
 		(options, args) = self.get_command_line()
 
 		if options.code_version:
-			print(self.CODE_VERSION)
+			print self.CODE_VERSION
 			return self.CODE_VERSION
 
 		if not len(args):
@@ -166,7 +183,7 @@ class Ontology(object):
 		(main_ontology_file, output_file_basename) = self.onto_helper.check_ont_file(args[0], options)
 
 		# Load main ontology file into RDF graph
-		print("Fetching and parsing " + main_ontology_file + " ...")
+		print "Fetching and parsing " + main_ontology_file + " ..."
 
 		try:
 			# ISSUE: ontology file taken in as ascii; rdflib doesn't accept
@@ -183,21 +200,21 @@ class Ontology(object):
 
 		# Load self.struct with ontology metadata
 		self.onto_helper.set_ontology_metadata(self.onto_helper.queries['ontology_metadata'])
-		print("Metadata:", json.dumps(self.onto_helper.struct['metadata'],  sort_keys=False, indent=4, separators=(',', ': ')))
+		print "Metadata:", json.dumps(self.onto_helper.struct['metadata'],  sort_keys=False, indent=4, separators=(',', ': '))
 
 		# Retrieve all subclasses of 'owl:Thing' in given ontology
 		# and place in self.onto_helper.struct.specifications
 		# To retrieve just a given term like BFO:entity
 		# specBinding = {'root': rdflib.URIRef(self.get_expanded_id('BFO:0000001'))}  
-		print('Doing term hierarchy query')
+		print 'Doing term hierarchy query'
 		specBinding = {'root': rdflib.URIRef(self.onto_helper.get_expanded_id('owl:Thing'))} 
 		entities = self.onto_helper.do_query_table(self.queries['tree'], specBinding )
 
-		print('Doing terms', len(entities))
+		print 'Doing terms', len(entities)
 		self.do_entities(entities)
 		
-		self.onto_helper.do_output_json(self.struct, output_file_basename)
-		self.onto_helper.do_output_tsv(self.struct, output_file_basename, self.fields)
+		self.onto_helper.do_output_json(self.onto_helper.struct, output_file_basename)
+		self.onto_helper.do_output_tsv(self.onto_helper.struct, output_file_basename, self.fields)
 
 
 	def do_entities(self, table):
@@ -208,8 +225,6 @@ class Ontology(object):
 			so that they are primarily filled in on first pass if already
 			mentioned in hierarchy, but barebones record is created for
 			them if not.
-
-			FUTURE: add "other_parents" column?
 
 			Example output of one term conversion:
 				"GENEPIO:0001677": {
@@ -229,8 +244,9 @@ class Ontology(object):
 			self.do_entity(myDict)
 
 			parent_id = self.onto_helper.get_parent_id(myDict) 
-			if not parent_id in parents:
-				parents.append(parent_id)
+			if parent_id:
+				if not parent_id in parents:
+					parents.append(parent_id)
 
 		# 2nd pass does parents:
 		# Parent gets entry in structure too, though maybe not a label.
@@ -250,8 +266,10 @@ class Ontology(object):
 		self.struct['specifications']
 		
 		INPUT
-			myDict:dict (erow from table)
+			myDict:dict (row from table)
 			prefix:string indicates source ontology for term
+		OUTPUT
+			myDict:dict modified entity
 		"""
 
 		id = str(myDict['id'])
@@ -266,9 +284,16 @@ class Ontology(object):
 		if 'replaced_by' in myDict:
 			myDict['replaced_by'] = self.onto_helper.get_entity_id(myDict['replaced_by'])
 
-	# Addresses case where a term is in query more than once, as
-	# a result of being positioned in different places in hierarchy.
-	# self.struct[struct][id]['other_parent'].append(parentId)
+		# Addresses case where a term is in query more than once, as
+		# a result of being positioned in different places in hierarchy.
+		if id in self.onto_helper.struct['specifications']:
+			existing = self.onto_helper.struct['specifications'][id]
+			parent_id = myDict['parent_id']
+			existing_p_id = existing['parent_id']
+			if parent_id and existing_p_id and parent_id != existing_p_id:
+				if not 'other_parents' in existing:
+					existing['other_parents'] = []
+				existing['other_parents'].append(parent_id)
 
 		self.onto_helper.set_entity_default(self.onto_helper.struct, 'specifications', id, myDict)
 

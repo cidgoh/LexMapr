@@ -9,7 +9,8 @@ import os
 import json
 import sys
 import rdflib
-import rdfextras; rdfextras.registerplugins() # so we can Graph.query()
+from rdflib.plugins.sparql import prepareQuery
+
 # Do this, otherwise a warning appears on stdout: No handlers could be 
 #found for logger "rdflib.term"
 import logging; logging.basicConfig(level=logging.ERROR) 
@@ -26,7 +27,7 @@ def stop_err(msg, exit_code = 1):
 
 class OntoHelper(object):
 
-	CODE_VERSION = '0.0.2'
+	CODE_VERSION = '0.0.3'
 
 	def __init__(self):
 
@@ -61,6 +62,7 @@ class OntoHelper(object):
 		# Holds term details or other derived datastructures
 		self.struct['specifications'] = {}
 
+		# Namespace is for rdflib sparql querries
 		self.namespace = { 
 			'owl': rdflib.URIRef('http://www.w3.org/2002/07/owl#'),
 			'rdfs': rdflib.URIRef('http://www.w3.org/2000/01/rdf-schema#'),
@@ -90,7 +92,7 @@ class OntoHelper(object):
 		    #		<dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
 		    #		<dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2018-02-28</dc:date>
 
-			'ontology_metadata': rdflib.plugins.sparql.prepareQuery("""
+			'ontology_metadata': prepareQuery("""
 			SELECT DISTINCT ?resource ?title ?description ?versionIRI ?prefix ?license ?date 
 			WHERE {
 				?resource rdf:type owl:Ontology.
@@ -140,7 +142,7 @@ class OntoHelper(object):
 			for arg in args:
 				focus = focus[arg]
 		except:
-			print("ERROR: in get_struct(), couldn't find '%s' key or struct in %s" % (str(arg), str(args) ))
+			print "ERROR: in get_struct(), couldn't find '%s' key or struct in %s" % (str(arg), str(args) )
 			return None
 		return focus
 
@@ -158,7 +160,7 @@ class OntoHelper(object):
 		path.
 		"""
 		if not focus:
-			print( "ERROR: in set_entity_default(), no focus for setting: %s" % str(args[0:-1]) )
+			print ( "ERROR: in set_entity_default(), no focus for setting: %s" % str(args[0:-1]) )
 			return None
 
 		value = args[-1]
@@ -171,7 +173,7 @@ class OntoHelper(object):
 				return focus[arg]
 
 			elif not arg in focus: 
-				print( "ERROR: in set_entity_default(), couldn't find %s" % str(args[0:-1]) )
+				print ( "ERROR: in set_entity_default(), couldn't find %s" % str(args[0:-1]) )
 				return False
 			else:
 				focus = focus[arg]
@@ -284,7 +286,7 @@ class OntoHelper(object):
 				try:
 					self.graph.parse(import_file)	
 				except rdflib.exceptions.ParserError as e:
-					print('WARNING:' + import_file + " could not be loaded!\n")
+					print ('WARNING:' + import_file + " could not be loaded!\n")		
 
 			# Ontology given as file path, so only check its ./imports/ folder
 			# since, as a local resource, its imports should be local too.
@@ -296,10 +298,10 @@ class OntoHelper(object):
 				if os.path.isfile( file_path):
 					self.graph.parse(file_path)	
 				else:
-					print('WARNING:' + file_path + " could not be loaded!  Does its ontology include purl have a corresponding local file? \n")
+					print ('WARNING:' + file_path + " could not be loaded!  Does its ontology include purl have a corresponding local file? \n")
 
 			except rdflib.exceptions.ParserError as e:
-				print(file_path + " needs to be in RDF OWL format!")
+				print (file_path + " needs to be in RDF OWL format!")			
 
 
 	def set_ontology_metadata(self, query):
@@ -349,7 +351,7 @@ class OntoHelper(object):
 		try:
 			result = self.graph.query(query, initBindings=initBinds)
 		except Exception as e:
-			print("\nSparql query [%s] parsing problem: %s \n" % (query_name, str(e) ))
+			print ("\nSparql query [%s] parsing problem: %s \n" % (query_name, str(e) ))
 			return None
 
 		# Can't get columns by row.asdict().keys() because columns with null results won't be included in a row.
@@ -485,7 +487,9 @@ class OntoHelper(object):
 			row = []
 			for field in fields:
 				value = entity[field] if field in entity else ''
-				row.append(value.replace('\t',' ').encode('utf-8'))  #
+				if isinstance(value, list): # Constructed parent_id list.
+					value = ','.join(value)
+				row.append(value.replace('\t',' ').encode('utf-8'))  # str() handles other_parents array
 
 			output.append('\t'.join(row))
 
