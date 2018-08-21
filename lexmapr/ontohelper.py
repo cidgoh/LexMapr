@@ -142,7 +142,7 @@ class OntoHelper(object):
 			for arg in args:
 				focus = focus[arg]
 		except:
-			print "ERROR: in get_struct(), couldn't find '%s' key or struct in %s" % (str(arg), str(args) )
+			print("ERROR: in get_struct(), couldn't find '%s' key or struct in %s" % (str(arg), str(args) ))
 			return None
 		return focus
 
@@ -160,7 +160,7 @@ class OntoHelper(object):
 		path.
 		"""
 		if not focus:
-			print ( "ERROR: in set_entity_default(), no focus for setting: %s" % str(args[0:-1]) )
+			print( "ERROR: in set_entity_default(), no focus for setting: %s" % str(args[0:-1]) )
 			return None
 
 		value = args[-1]
@@ -173,7 +173,7 @@ class OntoHelper(object):
 				return focus[arg]
 
 			elif not arg in focus: 
-				print ( "ERROR: in set_entity_default(), couldn't find %s" % str(args[0:-1]) )
+				print( "ERROR: in set_entity_default(), couldn't find %s" % str(args[0:-1]) )
 				return False
 			else:
 				focus = focus[arg]
@@ -286,7 +286,7 @@ class OntoHelper(object):
 				try:
 					self.graph.parse(import_file)	
 				except rdflib.exceptions.ParserError as e:
-					print ('WARNING:' + import_file + " could not be loaded!\n")		
+					print('WARNING:' + import_file + " could not be loaded!\n")		
 
 			# Ontology given as file path, so only check its ./imports/ folder
 			# since, as a local resource, its imports should be local too.
@@ -298,10 +298,10 @@ class OntoHelper(object):
 				if os.path.isfile( file_path):
 					self.graph.parse(file_path)	
 				else:
-					print ('WARNING:' + file_path + " could not be loaded!  Does its ontology include purl have a corresponding local file? \n")
+					print('WARNING:' + file_path + " could not be loaded!  Does its ontology include purl have a corresponding local file? \n")
 
 			except rdflib.exceptions.ParserError as e:
-				print (file_path + " needs to be in RDF OWL format!")			
+				print(file_path + " needs to be in RDF OWL format!")			
 
 
 	def set_ontology_metadata(self, query):
@@ -351,7 +351,7 @@ class OntoHelper(object):
 		try:
 			result = self.graph.query(query, initBindings=initBinds)
 		except Exception as e:
-			print ("\nSparql query [%s] parsing problem: %s \n" % (query_name, str(e) ))
+			print("\nSparql query [%s] parsing problem: %s \n" % (query_name, str(e) ))
 			return None
 
 		# Can't get columns by row.asdict().keys() because columns with null results won't be included in a row.
