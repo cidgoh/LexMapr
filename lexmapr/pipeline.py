@@ -757,7 +757,7 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     # Return
     return ret
 
-def find_component_match(cleaned_sample, lookup_table, partial_matches, covered_tokens, remaining_tokens, status_addendum):
+def find_component_match(cleaned_sample, lookup_table, status_addendum):
     """Finds 1-5 gram component matches of cleaned_chunk.
 
     cleaned_chunk, along with multiple resource
@@ -794,7 +794,13 @@ def find_component_match(cleaned_sample, lookup_table, partial_matches, covered_
                         * Could do something similar in
                             find_component_match
     """
-
+    # Return value
+    ret = {
+        # Component matches made from cleaned_sample
+        "component_matches": [],
+        # Tokens covered in component matches
+        "token_matches": [],
+    }
     # Iterate through numbers 5 to 1
     for i in range(5, 0, -1):
         # Iterate through i-gram chunks of cleaned_chunk
@@ -831,17 +837,14 @@ def find_component_match(cleaned_sample, lookup_table, partial_matches, covered_
                     status_addendum.append("Synonym Usage")
 
                 def handle_component_match(component_match):
-                    """Alter data after component match."""
-                    # Add joined_permutation to partial_matches
-                    partial_matches.append(component_match)
-                    # Iterate over gram_tokens
-                    for token in gram_tokens:
-                        # Add token to covered_tokens
-                        covered_tokens.append(token)
-                        # Token in remaining_tokens
-                        if token in remaining_tokens:
-                            # Remove token from remaining_tokens
-                            remaining_tokens.remove(token)
+                    """Alter data after component match.
+
+                    TODO:
+                        * rename function
+                        * update function docstring
+                    """
+                    ret["component_matches"].append(component_match)
+                    ret["token_matches"] += gram_tokens
 
                 # Component match not yet found
                 if not match_found:
@@ -906,6 +909,7 @@ def find_component_match(cleaned_sample, lookup_table, partial_matches, covered_
                                 status_addendum.append("Using Candidate Processes")
                                 # Set match_found to True
                                 match_found = True
+    return ret
 
 class MatchNotFoundError(Exception):
     """Exception class for indicating failed full-term matches.
@@ -1146,11 +1150,22 @@ def run(args):
             # Some Declarations for component match cases
             partial_matches = []
 
-            # Find 1-5 gram component matches for cleaned_chunk
-            find_component_match(cleaned_sample, lookup_table, partial_matches, covered_tokens, remaining_tokens, status_addendum)
+            # 1-5 gram component matches for cleaned_sample, and
+            # tokens covered by said matches. See find_component_match
+            # docstring for details.
+            component_and_token_matches = find_component_match(cleaned_sample, lookup_table, status_addendum)
 
-            partial_matches_final = set(partial_matches)  # Makes a set of all matched components from the above processing
+            partial_matches_final = set(component_and_token_matches["component_matches"])  # Makes a set of all matched components from the above processing
             status = "GComponent Match"             #Note: GComponent instead of is used as tag to help sorting later in result file
+
+            # Iterate over token_matches in component_and_token_matches
+            for token in component_and_token_matches["token_matches"]:
+                # Add token to covered_tokens
+                covered_tokens.append(token)
+                # Token is in remaining_tokens
+                if token in remaining_tokens:
+                    # Remove token from remaining_tokens
+                    remaining_tokens.remove(token)
 
             remSetConv = set(remaining_tokens)
             coveredAllTokensSetConv=set(covered_tokens)
