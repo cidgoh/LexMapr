@@ -1159,15 +1159,14 @@ def run(args):
         # Component Matches Section
         if (not trigger):
             logger.debug("We will go further with other rules now targetting components of input data")
-            # Some Declarations for component match cases
-            partial_matches = []
 
             # 1-5 gram component matches for cleaned_sample, and
             # tokens covered by said matches. See find_component_match
             # docstring for details.
-            component_and_token_matches = find_component_match(cleaned_sample, lookup_table, status_addendum)
+            component_and_token_matches = find_component_match(cleaned_sample, lookup_table,
+                                               status_addendum)
 
-            partial_matches_final = set(component_and_token_matches["component_matches"])  # Makes a set of all matched components from the above processing
+            partial_matches = set(component_and_token_matches["component_matches"])  # Makes a set of all matched components from the above processing
             status = "GComponent Match"             #Note: GComponent instead of is used as tag to help sorting later in result file
 
             # Iterate over token_matches in component_and_token_matches
@@ -1185,7 +1184,7 @@ def run(args):
             # Checking of coverage of tokens for sample as well overall dataset
             coveredTSet = []
             remainingTSet = []
-            for tknstr in partial_matches_final:
+            for tknstr in partial_matches:
                 strTokens = word_tokenize(tknstr.lower())
                 for eachTkn in strTokens:
                     if ("==" in eachTkn):
@@ -1208,7 +1207,7 @@ def run(args):
             # Matches in partial_matches, and their corresponding IDs
             partial_matches_with_ids = []
             #Decoding the partial matched set to get back resource ids
-            for matchstring in partial_matches_final:
+            for matchstring in partial_matches:
                 if (matchstring in lookup_table["resource_terms"].keys()):
                     resourceId = lookup_table["resource_terms"][matchstring]
                     partial_matches_with_ids.append(matchstring + ":" + resourceId)
@@ -1251,9 +1250,9 @@ def run(args):
             final_status = set(status_addendum)
 
             # In case it is for componet matching and we have at least one component matched
-            if (len(partial_matches_final) > 0):
+            if (len(partial_matches) > 0):
                 if args.format == 'full':
-                    fw.write('\t' + str(list(partial_matches_final)) + '\t' + str(list(partialMatchedResourceListSet)) + '\t' + str(list(retainedSet)) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(list(final_status)) + '\t' + str(list(remSetDiff)))
+                    fw.write('\t' + str(list(partial_matches)) + '\t' + str(list(partialMatchedResourceListSet)) + '\t' + str(list(retainedSet)) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(list(final_status)) + '\t' + str(list(remSetDiff)))
                 compctr = 0
                 if args.format == 'full':
                     fw.write("\t")
@@ -1272,7 +1271,7 @@ def run(args):
                     trigger = True
                 else:        # In case of no matching case
                     if args.format == 'full':
-                        fw.write('\t' + str(list(partial_matches_final)) + '\t' + str(list(partial_matches_with_ids)) + '\t\t' + "\t" + "Sorry No Match" + "\t" + str(list(remaining_tokens)))
+                        fw.write('\t' + str(list(partial_matches)) + '\t' + str(list(partial_matches_with_ids)) + '\t\t' + "\t" + "Sorry No Match" + "\t" + str(list(remaining_tokens)))
 
     #Output files closed
     if fw is not sys.stdout:
