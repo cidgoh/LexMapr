@@ -778,6 +778,9 @@ def find_component_match(cleaned_sample, lookup_table, status_addendum):
 
     TODO:
         * update docstring
+        * discuss whether we should allow updating of status_addendum
+            when the permutatation does not get added as a component
+            match
         * eliminate unneccessary parameters
             * what we should keep
                 * cleaned_sample
@@ -814,10 +817,10 @@ def find_component_match(cleaned_sample, lookup_table, status_addendum):
         # Iterate through i-gram chunks of cleaned_chunk
         for gram_chunk in get_gram_chunks(cleaned_sample, i):
             # gram_chunk concatenated into a single string
-            concatenated_gram_chunk = ' '.join(gram_chunk)
+            concatenated_gram_chunk = " ".join(gram_chunk)
             # Tokenized list of concatenated_gram_chunk
-            gram_tokens = word_tokenize(concatenated_gram_chunk.lower())
-            # Flag indicating successful component match
+            gram_tokens = word_tokenize(concatenated_gram_chunk)
+            # Flag indicating successful component match for i
             match_found = False
             # Permutations of concatenated_gram_chunk
             permutations = all_permutations(concatenated_gram_chunk)
@@ -845,11 +848,7 @@ def find_component_match(cleaned_sample, lookup_table, status_addendum):
                     status_addendum.append("Synonym Usage")
 
                 def handle_component_match(component_match):
-                    """Alter data after component match.
-
-                    TODO:
-                        * rename function
-                        * update function docstring
+                    """Changes local variables upon component match.
                     """
                     ret["component_matches"].append(component_match)
                     ret["token_matches"] += gram_tokens
@@ -917,6 +916,10 @@ def find_component_match(cleaned_sample, lookup_table, status_addendum):
                                 status_addendum.append("Using Candidate Processes")
                                 # Set match_found to True
                                 match_found = True
+                            # No component match for permutation
+                            else:
+                                # Move to next permutation
+                                continue
     return ret
 
 class MatchNotFoundError(Exception):
