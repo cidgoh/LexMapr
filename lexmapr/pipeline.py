@@ -776,11 +776,17 @@ def find_component_match(cleaned_sample, lookup_table, partial_matches, covered_
                 * lookup_table
             * what we should try to get rid of
                 * partial_matches
-                    * ...ideas?
+                    * return value could contain a list of component
+                        matches, which we add to partial_matches after
+                        the function call
                 * covered_tokens
-                    * ...ideas?
+                    * return value could contain a list of tokens that
+                        are matched, which we add to cover_tokens after
+                        the function call
                 * remaining_tokens
-                    * ...ideas?
+                    * return value could contain a list of tokens that
+                        are matched, which we remove from
+                        remaining_tokens after the function call
                 * status_addendum
                     * Suggest in find_full_term_match to call some sort
                         of preprocessing method to get changes to
