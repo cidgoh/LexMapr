@@ -58,15 +58,23 @@ def ngrams(input, n):
 def get_gram_chunks(input, num):
     """Make num-gram chunks from input.
 
-    TODO:
-        * finish docstring
+    If input contains less than seven tokens, this function returns all
+    num-length token combinations of input. Otherwise, this function
+    returns all num-length token combinations that form a substring of
+    input.
+
+    Arguments:
+        * input <"str">: String used to retrieve num-gram chunks
+        * num <"int">: Number of grams per returned chunks
+    Return values;
+        * <"list">: Contains num-gram chunks as described above
     """
-    # TODO: ...descriptor
+    # List of tokens from input
     input_tokens = word_tokenize(input)
     # input_tokens has less than 7 tokens
     if len(input_tokens) < 7:
         # Return all num-token combinations of input_tokens
-        return combi(input_tokens, num)
+        return list(combi(input_tokens, num))
     # input_tokens has 7 or more tokens
     else:
         # Return all num-length substrings of input
@@ -82,7 +90,7 @@ def preprocess(token):
         * token <class "str">: Token from string being processed in
             run
     Return values:
-        * <class "str">: token with irrelevant characters removed
+        * <class "str">: Token with irrelevant characters removed
     """
     # drop possessives, rightmost comma and rightmost period and return
     return token.replace("\'s", "").rstrip("', ").rstrip(". ")
