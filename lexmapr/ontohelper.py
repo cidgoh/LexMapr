@@ -374,8 +374,13 @@ class OntoHelper(object):
 					newrowdict[column] = self.get_entity_id(value)  # a plain string
 
 				elif valType is rdflib.term.Literal :
-					# Text may include carriage returns; escape to json
-					literal = {'value': value.replace('\n', r'\n').encode('utf-8') } 
+					# Python 3
+					if sys.version_info[0] >= 3:
+						# Text may include carriage returns; escape to json
+						literal = {'value': value.replace('\n', r'\n')}
+					# Python 2
+					else:
+						literal = {'value': value.replace('\n', r'\n').encode('utf-8') }
 					#_invalid_uri_chars = '<>" {}|\\^`'
 
 					if hasattr(value, 'datatype'): #rdf:datatype
@@ -489,7 +494,12 @@ class OntoHelper(object):
 				value = entity[field] if field in entity else ''
 				if isinstance(value, list): # Constructed parent_id list.
 					value = ','.join(value)
-				row.append(value.replace('\t',' ').encode('utf-8'))  # str() handles other_parents array
+				# Python 3
+				if sys.version_info[0] >= 3:
+					row.append(value.replace('\t',' '))  # str() handles other_parents array
+				# Python 2
+				else:
+					row.append(value.replace('\t',' ').encode('utf-8'))  # str() handles other_parents array
 
 			output.append('\t'.join(row))
 
