@@ -215,7 +215,7 @@ class OntoHelper(object):
 			
 			full_path = path + separator
 
-			for prefix, context_prefix in self.struct['@context'].iteritems():
+			for prefix, context_prefix in self.struct['@context'].items():
 				# Snips last separation character 
 				if full_path == context_prefix: 
 					return prefix + ":" + fragment
@@ -241,7 +241,7 @@ class OntoHelper(object):
 		# If a URI has a recognized prefix, create full version
 		if ':' in myURI: 
 			(prefix, myid) = myURI.rsplit(':',1)
-			for key, value in self.struct['@context'].iteritems():
+			for key, value in self.struct['@context'].items():
 				if key == prefix: return value + myid
 			
 		return myURI 
