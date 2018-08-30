@@ -21,7 +21,7 @@ import os
 #       its dependencies.
 # Source:
 # https://github.com/GenEpiO/geem/blob/master/scripts/ontofetch.py
-from lexmapr import ontofetch
+from lexmapr.ontofetch import Ontology
 
 logger = logging.getLogger("pipeline")
 logger.disabled = True
@@ -68,10 +68,10 @@ def preprocess(token):
     rightmost period.
 
     Arguments:
-        * token <class "str">: Token from string being processed in
+        * token <"str">: Token from string being processed in
             run
     Return values:
-        * <class "str">: token with irrelevant characters removed
+        * <"str">: token with irrelevant characters removed
     """
     # drop possessives, rightmost comma and rightmost period and return
     return token.replace("\'s", "").rstrip("', ").rstrip(". ")
@@ -416,6 +416,9 @@ def add_lookup_table_to_cache():
     The nested dictionary corresponds to the return value of
     get_all_resource_dicts, and is saved as lookup_table.json. If such
     a file already exists, it will be overwritten.
+
+    Side effects:
+        * Adds or modifies lookup_table.json
     """
     # Nested dictionary of all resource dictionaries used in run
     lookup_table = get_all_resource_dicts()
@@ -462,6 +465,177 @@ def get_lookup_table_from_cache():
             # Return lookup_table contents in utf-8
             return json.load(file, object_pairs_hook=unicode_to_utf_8)
 
+def fetch_ontology(ontology_url):
+    """Adds JSON with data on ontology to fetched_ontologies/.
+
+    For details on fetched data, see ontofetch.py.
+
+    Arguments:
+        * <"str">: URL for ontology .owl file
+    Side effects:
+        * Adds or modifies {id}.json to lexmapr/fetched_ontologies/,
+            where {id} is the id of the fetched ontology
+        * Runs ontofetch.py
+    """
+    # Arguments for ontofetch.py
+    sys.argv = [
+        "",
+        ontology_url,
+        "-o",
+        "fetched_ontologies/",
+    ]
+    # Run ontofetch.py
+    Ontology().__main__()
+
+def get_ontology_terms():
+    """Returns ontology terms and synonyms from specified ontologies.
+
+    Fetches ontology data for all URLs listed in
+    lexmapr/resources/WebOntologies.csv, if it is not fetched already.
+    See fetch_ontology docstring for more details.
+
+    Returns a nested dictionary with the following format:
+
+        {
+            ontology_id1:
+                {
+                    resource_terms_ID_based: {
+                        term_ID: term_label,
+                    }
+                },
+                {
+                    synonyms: {
+                        synonym: term_label,
+                    }
+                },
+            ontology_id2: { ... },
+            ...
+        }
+
+    Returns:
+        * <"dict">: Nested dictionary of resource terms and synonyms
+            from fetched ontologies
+    Restrictions:
+        * Ontologies to fetch must be listed in
+            lexmapr/resources/WebOntologies.csv
+
+    TODO:
+        * How do we check if a specific ontology is out of date?
+    """
+    # Return value
+    ret = {}
+    # Dictionary of listed ontologies in resources/WebOntologies.csv
+    web_ontologies = get_resource_dict("WebOntologies.csv")
+    # Iterate over ontology id's in web_ontologies
+    for ontology_id in web_ontologies:
+        # Add id and nested dictionaries to ret
+        ret[ontology_id] = {
+            # TODO: We have to get resource_terms,
+            #       resource_terms_revised, etc. too
+            "resource_terms_ID_based": {},
+            "synonyms": {},
+        }
+
+        # URL corresponding to id in web_ontologies
+        url = web_ontologies[ontology_id]
+        # Ontology with id not stored in fetched_ontologies/
+        if not os.path.isfile(get_path(ontology_id+".json", "fetched_ontologies/")):
+            # Add ontology to fetched_ontologies/
+            fetch_ontology(url)
+        # Open and read saved ontology with id
+        with open(get_path(ontology_id+".json", "fetched_ontologies/"), "r") as file:
+            # Python 3
+            if sys.version_info[0] >= 3:
+                # JSON Content in unicode
+                ontology_content = json.load(file)
+            # Python 2
+            else:
+                # JSON Content in utf-8
+                ontology_content = json.load(file, object_pairs_hook=unicode_to_utf_8)
+        # Content specifications
+        specifications = ontology_content["specifications"]
+
+        # Iterate over entity ids in specifications
+        for entity_id in specifications:
+            # Information on label, synonym, etc. for id
+            entity_content = specifications[entity_id]
+            # TODO: Why do we replace ":" with "_"?
+            new_entity_id = entity_id.replace(":", "_", 1)
+            # Label in entity_content
+            # TODO: Do we consider entities lacking a label?
+            if "label" in entity_content:
+                # Add new_entity_id-label key-value pair to ret
+                ret[ontology_id]["resource_terms_ID_based"][new_entity_id] = entity_content["label"]
+            # Synonyms in entity_content
+            if "synonyms" in entity_content:
+                # Iterate over synonyms in entity_content
+                for synonym in entity_content["synonyms"].split(";"):
+                    # Add synonym-label key-value pair to ret
+                    ret[ontology_id]["synonyms"][synonym] = entity_content["label"]
+    return ret
+
+def add_ontology_table_to_cache():
+    """Saves nested dictionary of ontology_terms to a local file.
+
+    The nested dictionary corresponds to the return value of
+    get_ontology_terms, and is saved as ontology_table.json. If such
+    a file already exists, it will be overwritten.
+
+    Side effects:
+        * Adds or modifies ontology_table.json
+    """
+    # Table containing terms from ontologies in fetched_ontologies/
+    ontology_table = get_ontology_terms()
+    # Open and write to ontology_table.json
+    with open(get_path("ontology_table.json"), "w") as file:
+        # Write ontology_table in JSON format
+        json.dump(ontology_table, file)
+
+def get_ontology_table_from_cache():
+    """Return contents of ontology_table.json.
+
+    The contents of ontology_table.json correspond to the return value
+    of get_ontology_terms.
+
+    If ontology_table.json does not exist, or is outdated, a new
+    ontology_table.json file is generated.
+
+    Return values:
+        * "dict": Contains key-value pairs corresponding to
+            terms in "fetched_ontologies/" JSON files
+
+    TODO:
+        * How do we check if a specific ontology is out of date?
+        * Should we cache ontology_table?
+            * If the terms are already cached in the files belonging to
+                the fetched_ontologies folder, seems unnecessary to
+                cache the return value too
+                * But in the future, we will be doing additional
+                    operations to the terms in those fetch_ontologies
+                    folder files, so we do benefit by caching the
+                    ret value under that circumstance
+    """
+    # ontology_table.json exists
+    if os.path.isfile(get_path("ontology_table.json")):
+        # TODO: check if ontology_table.json is out of date here
+        if False:
+            # add new ontology table to cache
+            add_ontology_table_to_cache()
+    # ontology_table.json does not exist
+    else:
+        # add ontology table to cache
+        add_ontology_table_to_cache()
+    # Open and read ontology_table.json
+    with open(get_path("ontology_table.json"), "r") as file:
+        # Python 3
+        if sys.version_info[0] >= 3:
+            # Return ontology_table contents in unicode
+            return json.load(file)
+        # Python 2
+        else:
+            # Return ontology_table contents in utf-8
+            return json.load(file, object_pairs_hook=unicode_to_utf_8)
+
 def unicode_to_utf_8(decoded_pairs):
     """object_pairs_hook to load json files without unicode values.
 
@@ -471,7 +645,7 @@ def unicode_to_utf_8(decoded_pairs):
     Return values:
         * <class "dict">: This corresponds to a value from the JSON
             file. Any unicode strings have been converted to utf-8.
-    Restrictiond:
+    Restrictions:
         * Should be called as the object_pairs_hook inside json.load
         * Should only be called in Python 2
     """
@@ -510,6 +684,15 @@ def run(args):
     # run. It is retrieved from cache if possible. See
     # get_lookup_table_from_cache docstring for details.
     lookup_table = get_lookup_table_from_cache()
+
+    # This is a nested dictionary of resource terms and synonyms
+    # fetched from web ontologies. See get_ontology_table_from_cache
+    # docstring for detail.
+    # TODO: pipeline.run does not used these terms to map samples yet,
+    #       but will so in the future. For now, we will develop the
+    #       architecture to retrieve and store terms from web
+    #       ontologies.
+    ontology_table = get_ontology_table_from_cache()
 
     # Output file Column Headings
     OUTPUT_FIELDS = [
