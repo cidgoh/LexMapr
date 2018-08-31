@@ -504,7 +504,7 @@ class OntoHelper(object):
 
 			output.append('\t'.join(row))
 
-		with (open(output_file_basename + '.tsv', 'w')) as output_handle:
+		with (open(lexmapr.pipeline.get_path(output_file_basename + '.tsv'), 'w')) as output_handle:
 			output_handle.write('\n'.join(output))
 
 
