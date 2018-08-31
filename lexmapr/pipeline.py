@@ -473,10 +473,15 @@ def fetch_ontology(ontology_url):
     Arguments:
         * <"str">: URL for ontology .owl file
     Side effects:
+        * Creates lexmapr/fetched_ontologies if it does not exist
         * Adds or modifies {id}.json to lexmapr/fetched_ontologies/,
             where {id} is the id of the fetched ontology
         * Runs ontofetch.py
     """
+    # lexmapr/fetched_ontologies/ does not exist
+    if not os.path.isdir(get_path("fetched_ontologies")):
+        # Create lexmapr/fetched_ontologies/
+        os.makedirs(get_path("fetched_ontologies"))
     # Arguments for ontofetch.py
     sys.argv = [
         "",
