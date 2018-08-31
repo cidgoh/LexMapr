@@ -483,6 +483,7 @@ def fetch_ontology(ontology_url):
         # Create lexmapr/fetched_ontologies/
         os.makedirs(get_path("fetched_ontologies"))
         print("Made fetched_ontologies")
+        print(get_path("fetched_ontologies"))
     # Arguments for ontofetch.py
     sys.argv = [
         "",
