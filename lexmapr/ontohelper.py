@@ -474,7 +474,7 @@ class OntoHelper(object):
 			# DO NOT USE sort_keys=True on piclists etc. because this overrides
 			# OrderedDict() sort order.
 			output_handle.write(json.dumps(struct, sort_keys = False, indent = 4, separators = (',', ': ')))
-			print(os.listdir(lexmapr.pipeline.get_path("fetched_ontologies")))
+			print(os.listdir(lexmapr.pipeline.get_path("lexmapr")))
 
 
 	def do_output_tsv(self, struct, output_file_basename, fields):
