@@ -470,11 +470,11 @@ class OntoHelper(object):
 
 
 	def do_output_json(self, struct, output_file_basename):
+		print(os.listdir(lexmapr.pipeline.get_path("lexmapr")))
 		with (open(output_file_basename + '.json', 'w')) as output_handle:
 			# DO NOT USE sort_keys=True on piclists etc. because this overrides
 			# OrderedDict() sort order.
 			output_handle.write(json.dumps(struct, sort_keys = False, indent = 4, separators = (',', ': ')))
-			print(os.listdir(lexmapr.pipeline.get_path("lexmapr")))
 
 
 	def do_output_tsv(self, struct, output_file_basename, fields):
