@@ -554,7 +554,7 @@ def get_ontology_terms():
             # TODO: Do we consider entities lacking a label?
             if "label" in entity_content:
                 # Add new_entity_id-label key-value pair to ret
-                ret[ontology_id]["resource_terms_ID_based"][new_entity_id] = entity_content["label"]
+                ret[ontology_id]["resource_terms_ID_based"][new_entity_id]=entity_content["label"]
             # Synonyms in entity_content
             if "synonyms" in entity_content:
                 # Iterate over synonyms in entity_content
