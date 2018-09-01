@@ -496,8 +496,8 @@ def get_ontology_terms():
     """Returns ontology terms and synonyms from specified ontologies.
 
     Fetches ontology data for all URLs listed in
-    lexmapr/resources/WebOntologies.csv, if it is not fetched already.
-    See fetch_ontology docstring for more details.
+    lexmapr/resources/WebOntologies.csv. See fetch_ontology docstring
+    for more details.
 
     Returns a nested dictionary with the following format:
 
@@ -543,10 +543,8 @@ def get_ontology_terms():
 
         # URL corresponding to id in web_ontologies
         url = web_ontologies[ontology_id]
-        # Ontology with id not stored in fetched_ontologies/
-        if not os.path.isfile(get_path(ontology_id+".json", "fetched_ontologies/")):
-            # Add ontology to fetched_ontologies/
-            fetch_ontology(url)
+        # Add ontology to fetched_ontologies/
+        fetch_ontology(url)
         # Open and read saved ontology with id
         with open(get_path(ontology_id+".json", "fetched_ontologies/"), "r") as file:
             # Python 3
@@ -579,6 +577,34 @@ def get_ontology_terms():
                     ret[ontology_id]["synonyms"][synonym] = entity_content["label"]
     return ret
 
+def is_ontology_table_outdated():
+    """Returns True if ontology_table.json is outdated.
+
+    ontology_table.json is considered outdated if it has an older last
+    modification time than lexmapr/resources/WebOntologies.csv.
+
+    Return values:
+        * <class "bool">: Indicates whether ontology_table.json is
+            outdated
+    Restrictions:
+        * should only be called if ontology_table.json exists
+
+    TODO:
+        * We must also consider when a single fetched ontology is no
+            longer up to date with the web ontology
+            * How do we do this?
+    """
+    # last modification time of ontology_table.json
+    ontology_table_modification_time = os.path.getmtime(get_path("ontology_table.json"))
+    # last modification time for lexmapr/resources/WebOntologies.csv
+    WebOntologies_modification_time = os.path.getmtime(get_path("WebOntologies.csv","resources/"))
+
+    # resources modified more recently than lookup_table.json
+    if WebOntologies_modification_time > ontology_table_modification_time:
+        return True
+    else:
+        return False
+
 def add_ontology_table_to_cache():
     """Saves nested dictionary of ontology_terms to a local file.
 
@@ -610,7 +636,6 @@ def get_ontology_table_from_cache():
             terms in "fetched_ontologies/" JSON files
 
     TODO:
-        * How do we check if a specific ontology is out of date?
         * Should we cache ontology_table?
             * If the terms are already cached in the files belonging to
                 the fetched_ontologies folder, seems unnecessary to
@@ -622,8 +647,8 @@ def get_ontology_table_from_cache():
     """
     # ontology_table.json exists
     if os.path.isfile(get_path("ontology_table.json")):
-        # TODO: check if ontology_table.json is out of date here
-        if False:
+        # ontology_table.json is not up to date
+        if is_ontology_table_outdated():
             # add new ontology table to cache
             add_ontology_table_to_cache()
     # ontology_table.json does not exist
