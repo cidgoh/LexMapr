@@ -454,16 +454,8 @@ def get_lookup_table_from_cache():
     else:
         # add lookup table to cache
         add_lookup_table_to_cache()
-    # Open and read lookup_table.json
-    with open(get_path("lookup_table.json"), "r") as file:
-        # Python 3
-        if sys.version_info[0] >= 3:
-            # Return lookup_table contents in unicode
-            return json.load(file)
-        # Python 2
-        else:
-            # Return lookup_table contents in utf-8
-            return json.load(file, object_pairs_hook=unicode_to_utf_8)
+    # Read and return lookup_table.json
+    return read_json(get_path("lookup_table.json"))
 
 def fetch_ontology(ontology_url):
     """Adds JSON with data on ontology to fetched_ontologies/.
@@ -545,16 +537,8 @@ def get_ontology_terms():
         url = web_ontologies[ontology_id]
         # Add ontology to fetched_ontologies/
         fetch_ontology(url)
-        # Open and read saved ontology with id
-        with open(get_path(ontology_id+".json", "fetched_ontologies/"), "r") as file:
-            # Python 3
-            if sys.version_info[0] >= 3:
-                # JSON Content in unicode
-                ontology_content = json.load(file)
-            # Python 2
-            else:
-                # JSON Content in utf-8
-                ontology_content = json.load(file, object_pairs_hook=unicode_to_utf_8)
+        # Read saved ontology with id
+        ontology_content = read_json(get_path(ontology_id+".json", "fetched_ontologies/"))
         # Content specifications
         specifications = ontology_content["specifications"]
 
@@ -655,8 +639,19 @@ def get_ontology_table_from_cache():
     else:
         # add ontology table to cache
         add_ontology_table_to_cache()
+    # Read and return ontology_table.json
+    return read_json(get_path("ontology_table.json"))
+
+def read_json(path):
+    """Returns JSON contents in string format for both Python 2 and 3.
+
+    Arguments:
+        * path <"str">: Path to JSON file
+    Return values:
+        * <"dict"> or <"list">: Corresponds to JSON dictionary or array
+    """
     # Open and read ontology_table.json
-    with open(get_path("ontology_table.json"), "r") as file:
+    with open(path, "r") as file:
         # Python 3
         if sys.version_info[0] >= 3:
             # Return ontology_table contents in unicode
