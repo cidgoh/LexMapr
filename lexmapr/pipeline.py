@@ -498,11 +498,13 @@ def get_ontology_terms():
                 {
                     resource_terms_ID_based: {
                         term_ID: term_label,
+                        ...
                     }
                 },
                 {
                     synonyms: {
-                        synonym: term_label,
+                        synonym: [term_label1, ...],
+                        ...
                     }
                 },
             ontology_id2: { ... },
@@ -557,8 +559,12 @@ def get_ontology_terms():
             if "synonyms" in entity_content:
                 # Iterate over synonyms in entity_content
                 for synonym in entity_content["synonyms"].split(";"):
-                    # Add synonym-label key-value pair to ret
-                    ret[ontology_id]["synonyms"][synonym] = entity_content["label"]
+                    # synonym not in ret
+                    if synonym not in ret:
+                        # Add synonym-empty list key-value pair to ret
+                        ret[ontology_id]["synonyms"][synonym] = []
+                    # Append label to synonym value
+                    ret[ontology_id]["synonyms"][synonym].append(entity_content["label"])
     return ret
 
 def is_ontology_table_outdated():
