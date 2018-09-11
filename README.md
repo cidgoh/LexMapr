@@ -15,6 +15,7 @@ The main script file for processing is `bin/lexmapr`
 - [inflection](https://pypi.org/project/inflection/)
 - [wikipedia](https://pypi.org/project/wikipedia/)
 - [python-dateutil](https://pypi.org/project/python-dateutil/)
+- [rdflib](https://pypi.org/project/rdflib/)
 
 ## Usage
 
