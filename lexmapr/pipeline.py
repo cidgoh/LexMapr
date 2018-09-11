@@ -1286,6 +1286,7 @@ def run(args):
                 status_addendum.append("Non English Language Words Treatment")
             elif (lemma.lower() in lookup_table["non_english_words_lower"].keys()):
                 lemma = lookup_table["non_english_words_lower"][lemma.lower()]
+
                 status_addendum.append("Change Case and Non English Language Words Treatment")
 
 
@@ -1294,6 +1295,7 @@ def run(args):
                 cleaned_sample = lemma.lower()
             elif (
                 lemma.lower() not in lookup_table["stop_words"]):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
+
                 cleaned_sample = cleaned_sample + " " + lemma.lower()
 
             cleaned_sample = re.sub(' +', ' ', cleaned_sample)  # Extra innner spaces removed from cleaned sample
@@ -1350,6 +1352,7 @@ def run(args):
         try:
             # Find full-term match for sample
             full_term_match = find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum)
+
             # Write to all headers
             if args.format == "full":
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
@@ -1369,6 +1372,7 @@ def run(args):
             [covered_tokens.append(token) for token in sample_tokens]
             # Remove all tokens from remaining_tokens
             [remaining_tokens.remove(token) for token in sample_tokens]
+
             # Set trigger to True
             trigger = True
         # Full-term match not found
@@ -1397,6 +1401,7 @@ def run(args):
                 if token in remaining_tokens:
                     # Remove token from remaining_tokens
                     remaining_tokens.remove(token)
+
 
             remSetConv = set(remaining_tokens)
             coveredAllTokensSetConv=set(covered_tokens)
@@ -1473,6 +1478,7 @@ def run(args):
             if (len(partial_matches) > 0):
                 if args.format == 'full':
                     fw.write('\t' + str(list(partial_matches)) + '\t' + str(list(partialMatchedResourceListSet)) + '\t' + str(list(retainedSet)) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(list(final_status)) + '\t' + str(list(remSetDiff)))
+
                 compctr = 0
                 if args.format == 'full':
                     fw.write("\t")
@@ -1492,6 +1498,7 @@ def run(args):
                 else:        # In case of no matching case
                     if args.format == 'full':
                         fw.write('\t' + str(list(partial_matches)) + '\t' + str(list(partial_matches_with_ids)) + '\t\t' + "\t" + "Sorry No Match" + "\t" + str(list(remaining_tokens)))
+
 
     #Output files closed
     if fw is not sys.stdout:
