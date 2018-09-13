@@ -166,12 +166,8 @@ def retainedPhrase(termList):
     wordList = []
     retainedSet = []
     returnedSet = []
-    termList = termList.replace("{", "")
-    termList = termList.replace("}", "")
-    #termList = termList.replace("'", "")
-    lst = termList.split("',")
-    # print("ddddddddddddddddeeeee   " + str(lst))
-    for x in lst:
+    for x in termList:
+        x.replace("'", "")
         lst2 = x.split(":")
         a = lst2[0]
         a = a.replace("=", ",")
@@ -1468,7 +1464,7 @@ def run(args):
 
             # If size of set is more than one member, looks for the retained matched terms by defined criteria
             if (len(partialMatchedResourceListSet) > 0):
-                retainedSet = retainedPhrase(str(partialMatchedResourceListSet))
+                retainedSet = retainedPhrase(list(partialMatchedResourceListSet))
                 logger.debug("retainedSet " + str(retainedSet))
                 # HERE SHOULD HAVE ANOTHER RETAING SET
 
