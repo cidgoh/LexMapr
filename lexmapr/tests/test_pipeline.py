@@ -295,43 +295,43 @@ class TestPipelineMethods(unittest.TestCase):
         """
         # Single-term list
         self.assertSetEqual(
-            pipeline.retainedPhrase("{'foo:bar'}"),
-            set(["foo:bar'"]))
+            pipeline.retainedPhrase(['foo:bar']),
+            set(["foo:bar"]))
         # Multi-term list
         self.assertSetEqual(
-            pipeline.retainedPhrase("{'foo:bar', 'hello:world'}"),
-            set(["foo:bar", "hello:world'"]))
+            pipeline.retainedPhrase(['foo:bar', 'hello:world']),
+            set(["foo:bar", "hello:world"]))
         # Multi-term list with "="
         self.assertSetEqual(
-            pipeline.retainedPhrase("{'foo:b=ar', 'he=llo:world'}"),
-            set(["foo:b=ar", "he,llo:world'"]))
+            pipeline.retainedPhrase(['foo:b=ar', 'he=llo:world']),
+            set(["foo:b=ar", "he,llo:world"]))
         # Key substring of a key
         self.assertSetEqual(
-            pipeline.retainedPhrase("{'foo:bar', 'foofoo:bar'}"),
-            set(["foofoo:bar'"]))
+            pipeline.retainedPhrase(['foo:bar', 'foofoo:bar']),
+            set(["foofoo:bar"]))
         # Key substring of a compound key (multi-word)
         self.assertSetEqual(
-            pipeline.retainedPhrase("{'foo:bar', 'foo bar:bar'}"),
-            set(["foo bar:bar'"]))
+            pipeline.retainedPhrase(['foo:bar', 'foo bar:bar']),
+            set(["foo bar:bar"]))
         # Compound key substring of a compound key
         self.assertSetEqual(
-            pipeline.retainedPhrase("{'foo bar hello:world', 'foo bar:bar'}"),
+            pipeline.retainedPhrase(['foo bar hello:world', 'foo bar:bar']),
             set(["foo bar hello:world"]))
         # Compound key overlapping, but not substring of a compound key
         self.assertSetEqual(
-            pipeline.retainedPhrase("{'foo hello:world', 'foo bar:bar'}"),
-            set(["foo hello:world", "foo bar:bar'"]))
+            pipeline.retainedPhrase(['foo hello:world', 'foo bar:bar']),
+            set(["foo hello:world", "foo bar:bar"]))
         # Compound key substring of a compound key (no differing words)
         self.assertEqual(
-            pipeline.retainedPhrase("{'foo bar:bar', 'foo bar bar:bar'}"),
+            pipeline.retainedPhrase(['foo bar:bar', 'foo bar bar:bar']),
             [])
         # Identical keys, but different values
         self.assertEqual(
-            pipeline.retainedPhrase("{'foo:bar', 'foo:foo'}"),
-            set(["foo:bar", "foo:foo'"]))
+            pipeline.retainedPhrase(['foo:bar', 'foo:foo']),
+            set(["foo:bar", "foo:foo"]))
         self.assertEqual(
-            pipeline.retainedPhrase("{'foo bar:bar', 'foo bar:foo'}"),
-            set(["foo bar:bar", "foo bar:foo'"]))
+            pipeline.retainedPhrase(['foo bar:bar', 'foo bar:foo']),
+            set(["foo bar:bar", "foo bar:foo"]))
 
 class TestPipeline(unittest.TestCase):
     """Unit test suite for pipeline.run.
