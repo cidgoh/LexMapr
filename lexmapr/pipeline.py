@@ -962,11 +962,11 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     ret.update({
         "matched_term": matched_term,
         "all_match_terms_with_resource_ids":
-            str(list(retained_tokens)),
+            str(sorted(list(retained_tokens))),
         "retained_terms_with_resource_ids":
-            str(list(retained_tokens)),
+            str(sorted(list(retained_tokens))),
         "match_status_macro_level": "Full Term Match",
-        "match_status_micro_level": str(list(final_status)),
+        "match_status_micro_level": str(sorted(list(final_status))),
     })
     # Return
     return ret
@@ -1351,7 +1351,7 @@ def run(args):
 
             # Write to all headers
             if args.format == "full":
-                fw.write("\t" + full_term_match["matched_term"] + "\t"
+                fw.write("\t" + str([full_term_match["matched_term"]]) + "\t"
                     + full_term_match["all_match_terms_with_resource_ids"]
                     + "\t"
                     + full_term_match["retained_terms_with_resource_ids"]
@@ -1387,7 +1387,7 @@ def run(args):
                                                status_addendum)
 
             partial_matches = set(component_and_token_matches["component_matches"])  # Makes a set of all matched components from the above processing
-            status = "GComponent Match"             #Note: GComponent instead of is used as tag to help sorting later in result file
+            status = "Component Match"
 
             # Iterate over token_matches in component_and_token_matches
             for token in component_and_token_matches["token_matches"]:
@@ -1473,7 +1473,7 @@ def run(args):
             # In case it is for componet matching and we have at least one component matched
             if (len(partial_matches) > 0):
                 if args.format == 'full':
-                    fw.write('\t' + str(list(partial_matches)) + '\t' + str(list(partialMatchedResourceListSet)) + '\t' + str(list(retainedSet)) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(list(final_status)) + '\t' + str(list(remSetDiff)))
+                    fw.write('\t' + str(sorted(list(partial_matches))) + '\t' + str(sorted(list(partialMatchedResourceListSet))) + '\t' + str(sorted(list(retainedSet))) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(sorted(list(final_status))) + '\t' + str(sorted(list(remSetDiff))))
 
                 compctr = 0
                 if args.format == 'full':
@@ -1484,7 +1484,7 @@ def run(args):
                         fw.write("\t" + str(memb))
 
                 if args.format == 'full':
-                    for comp in retainedSet:
+                    for comp in sorted(list(retainedSet)):
                         compctr += 1
                         if (compctr == 1):
                             fw.write("Component" + str(compctr) + "-> " + str(comp))
@@ -1493,9 +1493,9 @@ def run(args):
                     trigger = True
                 else:        # In case of no matching case
                     if args.format == 'full':
-                        fw.write('\t' + str(list(partial_matches)) + '\t' + str(list(partial_matches_with_ids)) + '\t\t' + "\t" + "Sorry No Match" + "\t" + str(list(remaining_tokens)))
+                        fw.write('\t' + str(sorted(list(partial_matches))) + '\t' + str(sorted(list(partial_matches_with_ids))) + '\t\t' + "\t" + "Sorry No Match" + "\t" + str(sorted(list(remaining_tokens))))
 
-
+    fw.write('\n')
     #Output files closed
     if fw is not sys.stdout:
         fw.close()
