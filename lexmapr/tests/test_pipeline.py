@@ -23,10 +23,8 @@ TODO:
 import os
 import tempfile
 import unittest
-import pprint
 from lexmapr import pipeline
 
-pp = pprint.PrettyPrinter(indent=2)
 
 class TestPipelineMethods(unittest.TestCase):
     """Unit test suite for pipeline methods outside pipeline.run.
