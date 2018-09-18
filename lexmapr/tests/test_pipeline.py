@@ -23,7 +23,10 @@ TODO:
 import os
 import tempfile
 import unittest
+import pprint
 from lexmapr import pipeline
+
+pp = pprint.PrettyPrinter(indent=2)
 
 class TestPipelineMethods(unittest.TestCase):
     """Unit test suite for pipeline methods outside pipeline.run.
@@ -390,6 +393,8 @@ class TestPipeline(unittest.TestCase):
                         resourceRevisedTermsDict: straight-chain
                         saturated fatty acid
     """
+    
+    maxDiff = None
 
     # Dictionary containing the names of input and expected output
     # file test cases without extensions. The keys are expected
@@ -458,7 +463,7 @@ class TestPipeline(unittest.TestCase):
         """
         # This will be a multi-line string containing all expected
         # outputs that are not equal to their actual outputs.
-        failed_files = ""
+        failures = []
         # Iterate over all expected outputs
         for expected_output in self.test_files:
             # Path of expected output file
@@ -481,20 +486,17 @@ class TestPipeline(unittest.TestCase):
             # Get expected_output_path contents
             with open(expected_output_path, "r") as expected_output_file:
                 expected_output_contents = expected_output_file.read()
-            # TODO: remove these print statements later
-            # print(expected_output_contents)
-            # print(actual_output_contents)
             try:
                 # Compare expected output with actual output
-                self.assertMultiLineEqual(expected_output_contents,
-                    actual_output_contents)
+                self.assertMultiLineEqual(expected_output_contents, actual_output_contents)
             except AssertionError as e:
-                # Add to string listing all failed comparisons
-                failed_files += "\n" + expected_output
-        # Raise AssertionError with info on failed comparisons
-        if (failed_files != ""):
-            raise AssertionError("Expected outputs != actual outputs"
-                + failed_files)
-
+                print(e)
+                failures += [expected_output]
+        if failures:
+            print("Failed files:")
+            for failure in failures:
+                print(failure)
+            raise AssertionError
+                
 if __name__ == '__main__':
     unittest.main()
