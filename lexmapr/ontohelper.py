@@ -276,7 +276,7 @@ class OntoHelper(object):
 			ORDER BY (?import_file)
 		""")		
 
-		print("It has %s import files ..." % len(imports))
+		print("It has %s import files ..." % len(imports), file=sys.stderr)
 
 		for result_row in imports:
 
