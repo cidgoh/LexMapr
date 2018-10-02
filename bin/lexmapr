@@ -19,7 +19,7 @@ if __name__ == '__main__':
                         help='Output file')
     parser.add_argument('log_file', nargs='?', default=sys.stderr,
                         help='Log file')
-    parser.add_argument('-f', '--format', default='full',
+    parser.add_argument('-f', '--format', default='basic',
                         help='Output format')
     parser.add_argument('--version', action='store_true', dest='version',
                         help='Prints version information.', required=False)
