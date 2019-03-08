@@ -20,6 +20,7 @@ TODO:
             end-result of pipeline.py
 """
 
+import argparse
 import os
 import tempfile
 import unittest
@@ -477,7 +478,7 @@ class TestPipeline(unittest.TestCase):
             actual_output_path = tempfile.mkstemp()[1]
             # Run pipeline.run using input_path and actual_output_path
             pipeline.run(type("",(object,),{"input_file": input_path,
-                "output": actual_output_path, "format": format})())
+                "output": actual_output_path, "format": format, "web": None})())
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
@@ -495,6 +496,47 @@ class TestPipeline(unittest.TestCase):
             for failure in failures:
                 print(failure)
             raise AssertionError
-                
+
+
+class TestOntologyMapping(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        # Change directory to same as pipeline
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+        os.chdir(os.path.abspath(".."))
+        # Pizza ontology url
+        cls.pizza_url = "https://protege.stanford.edu/ontologies/pizza/pizza.owl"
+
+    def setUp(self):
+        # Un-cache pizza ontology if it exists
+        if os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")):
+            os.remove(os.path.abspath("fetched_ontologies/pizza.json"))
+            os.remove(os.path.abspath("fetched_ontologies/pizza.tsv"))
+
+    def tearDown(self):
+        # Un-cache pizza ontology
+        os.remove(os.path.abspath("fetched_ontologies/pizza.json"))
+        os.remove(os.path.abspath("fetched_ontologies/pizza.tsv"))
+
+    def test_fetch_ontology(self):
+        pipeline.run(argparse.Namespace(input_file="tests/input/small_simple.csv",
+                                        web=None,
+                                        format="basic",
+                                        output=None,
+                                        version=False))
+        self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+
+        pipeline.run(argparse.Namespace(input_file="tests/input/small_simple.csv",
+                                        web=self.pizza_url,
+                                        format="basic",
+                                        output=None,
+                                        version=False))
+        self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+
+    def test_fetch_ontology_specify_root(self):
+        self.assertTrue(False)
+
+
 if __name__ == '__main__':
     unittest.main()

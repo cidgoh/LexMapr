@@ -1183,7 +1183,18 @@ def run(args):
     #       but will so in the future. For now, we will develop the
     #       architecture to retrieve and store terms from web
     #       ontologies.
-    ontology_table = get_ontology_table_from_cache()
+    # ontology_table = get_ontology_table_from_cache()
+
+    # Fetch ontology if specified
+    if args.web is not None:
+        # Make fetched_ontologies folder if it does not already exist
+        if not os.path.isdir(os.path.abspath("fetched_ontologies")):
+            os.makedirs("fetched_ontologies")
+        # Arguments for ontofetch.py
+        sys.argv = ["", args.web, "-o", "fetched_ontologies",]
+        # Call ontofetch.py
+        ontofetch = Ontology()
+        ontofetch.__main__()
 
     # Output file Column Headings
     OUTPUT_FIELDS = [
