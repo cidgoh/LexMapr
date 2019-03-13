@@ -501,13 +501,23 @@ class TestPipeline(unittest.TestCase):
 
 
 class TestOntologyMapping(unittest.TestCase):
+    """...
+
+    **TODO:**
+
+    * convert each fetched json file into an "ontology table" json
+      * done whenever web ontology is fetched
+    * wrap ontology fetching mechanism in method
+    * eliminate fetched_ontologies folder
+    """
 
     @classmethod
     def setUpClass(cls):
         # Change directory to same as pipeline
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
         os.chdir(os.path.abspath(".."))
-        # Pizza ontology specifics
+        # Commonly used values
+        cls.small_simple_path = "tests/input/small_simple.csv"
         cls.pizza_url = "https://protege.stanford.edu/ontologies/pizza/pizza.owl"
         cls.pizza_DomainThing_iri = "http://www.co-ode.org/ontologies/pizza/pizza.owl#DomainConcept"
 
@@ -521,44 +531,44 @@ class TestOntologyMapping(unittest.TestCase):
         # Un-cache pizza ontology
         os.remove(os.path.abspath("fetched_ontologies/pizza.json"))
         os.remove(os.path.abspath("fetched_ontologies/pizza.tsv"))
+        os.remove(os.path.abspath("ontology_lookup_tables/pizza.json"))
+
+    @staticmethod
+    def run_pipeline_with_args(input_file, web=None, root=None):
+        """Run pipeline with some default arguments.
+
+        input_file must be specified. web and root can be specified,
+        but otherwise are ``None`` by default.
+        """
+        pipeline.run(argparse.Namespace(input_file=input_file,web=web, root=root,
+                                        format="basic", output=None, version=False))
 
     def test_fetch_ontology(self):
-        pipeline.run(argparse.Namespace(input_file="tests/input/small_simple.csv",
-                                        web=None,
-                                        root=None,
-                                        format="basic",
-                                        output=None,
-                                        version=False))
+        self.run_pipeline_with_args(input_file=self.small_simple_path)
         self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
 
-        pipeline.run(argparse.Namespace(input_file="tests/input/small_simple.csv",
-                                        web=self.pizza_url,
-                                        root=None,
-                                        format="basic",
-                                        output=None,
-                                        version=False))
+        self.run_pipeline_with_args(input_file=self.small_simple_path, web=self.pizza_url)
         self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
 
     def test_fetch_ontology_specify_root(self):
-        pipeline.run(argparse.Namespace(input_file="tests/input/small_simple.csv",
-                                        web=self.pizza_url,
-                                        root=None,
-                                        format="basic",
-                                        output=None,
-                                        version=False))
-        with open(os.path.abspath("fetched_ontologies/pizza.json")) as f:
-            pizza_json = json.load(f)
+        self.run_pipeline_with_args(input_file=self.small_simple_path, web=self.pizza_url)
+        with open(os.path.abspath("fetched_ontologies/pizza.json")) as file:
+            pizza_json = json.load(file)
         self.assertFalse(pizza_json["specifications"])
 
-        pipeline.run(argparse.Namespace(input_file="tests/input/small_simple.csv",
-                                        web=self.pizza_url,
-                                        root=self.pizza_DomainThing_iri,
-                                        format="basic",
-                                        output=None,
-                                        version=False,))
-        with open(os.path.abspath("fetched_ontologies/pizza.json")) as f:
-            pizza_json = json.load(f)
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.pizza_url,
+                                    root=self.pizza_DomainThing_iri)
+        with open(os.path.abspath("fetched_ontologies/pizza.json")) as file:
+            pizza_json = json.load(file)
         self.assertTrue(pizza_json["specifications"])
+
+    def test_ontology_table_creation(self):
+        self.assertFalse(os.path.exists(os.path.abspath("ontology_lookup_tables/pizza.json")))
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.pizza_url,
+                                    root=self.pizza_DomainThing_iri)
+        self.assertTrue(os.path.exists(os.path.abspath("ontology_lookup_tables/pizza.json")))
 
 
 if __name__ == '__main__':

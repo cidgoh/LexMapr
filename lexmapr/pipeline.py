@@ -698,6 +698,10 @@ def unicode_to_utf_8(decoded_pairs):
     # Return ret
     return ret
 
+def create_ontology_lookup_table():
+    """TODO..."""
+    return {}
+
 def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     """Retrieve an annotated, full-term match for a sample.
 
@@ -1198,6 +1202,17 @@ def run(args):
         # Call ontofetch.py
         ontofetch = Ontology()
         ontofetch.__main__()
+        # Make ontology_lookup_tables folder if it does not already exist
+        if not os.path.isdir(os.path.abspath("ontology_lookup_tables")):
+            os.makedirs("ontology_lookup_tables")
+        # Create ontology lookup table
+        ontology_lookup_table = create_ontology_lookup_table()
+        # Add ontology_lookup_table to cache
+        ontology_filename = os.path.basename(args.web).rsplit('.', 1)[0]
+        ontology_lookup_table_path = os.path.abspath("ontology_lookup_tables/%s.json")
+        ontology_lookup_table_path = ontology_lookup_table_path % ontology_filename
+        with open(ontology_lookup_table_path, "w") as file:
+            json.dump(ontology_lookup_table, file)
 
     # Output file Column Headings
     OUTPUT_FIELDS = [

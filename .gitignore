@@ -105,3 +105,8 @@ venv.bak/
 
 # PyCharm
 .idea
+
+# Cached resources
+fetched_ontologies/
+ontology_lookup_tables/
+lookup_table.json
