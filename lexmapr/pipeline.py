@@ -273,7 +273,7 @@ def get_all_resource_dicts():
     # Abbreviations of resource terms
     ret["abbreviations"] = get_resource_dict("AbbLex.csv")
     # Abbreviations of resource terms, all lowercase
-    ret["abbreviation_lower"] = get_resource_dict("AbbLex.csv", True)
+    ret["abbreviations_lower"] = get_resource_dict("AbbLex.csv", True)
     # Non-english translations of resource terms
     ret["non_english_words"] = get_resource_dict("NefLex.csv")
     # Non-english translations of resource terms, all lowercase
@@ -698,9 +698,29 @@ def unicode_to_utf_8(decoded_pairs):
     # Return ret
     return ret
 
-def create_ontology_lookup_table():
+def create_ontology_lookup_table(ontology_file_name):
     """TODO..."""
-    return {}
+    lookup_table = {}
+    lookup_table["synonyms"] = {}
+    lookup_table["abbreviations"] = {}
+    lookup_table["abbreviations_lower"] = {}
+    lookup_table["non_english_words"] = {}
+    lookup_table["non_english_words_lower"] = {}
+    lookup_table["spelling_mistakes"] = {}
+    lookup_table["spelling_mistakes_lower"] = {}
+    lookup_table["processes"] = {}
+    lookup_table["qualities"] = {}
+    lookup_table["qualities_lower"] = {}
+    lookup_table["collocations"] = {}
+    lookup_table["inflection_exceptions"] = {}
+    lookup_table["stop_words"] = {}
+    lookup_table["suffixes"] = {}
+    lookup_table["resource_terms_ID_based"] = {}
+    lookup_table["resource_terms"] = {}
+    lookup_table["resource_terms_revised"] = {}
+    lookup_table["resource_permutation_terms"] = {}
+    lookup_table["resource_bracketed_permutation_terms"] = {}
+    return lookup_table
 
 def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     """Retrieve an annotated, full-term match for a sample.
@@ -1206,9 +1226,9 @@ def run(args):
         if not os.path.isdir(os.path.abspath("ontology_lookup_tables")):
             os.makedirs("ontology_lookup_tables")
         # Create ontology lookup table
-        ontology_lookup_table = create_ontology_lookup_table()
-        # Add ontology_lookup_table to cache
         ontology_filename = os.path.basename(args.web).rsplit('.', 1)[0]
+        ontology_lookup_table = create_ontology_lookup_table(ontology_filename)
+        # Add ontology_lookup_table to cache
         ontology_lookup_table_path = os.path.abspath("ontology_lookup_tables/%s.json")
         ontology_lookup_table_path = ontology_lookup_table_path % ontology_filename
         with open(ontology_lookup_table_path, "w") as file:
@@ -1302,8 +1322,8 @@ def run(args):
             if (lemma in lookup_table["abbreviations"].keys()):  # Abbreviations, acronyms, foreign language words taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
                 lemma = lookup_table["abbreviations"][lemma]
                 status_addendum.append("Abbreviation-Acronym Treatment")
-            elif (lemma.lower() in lookup_table["abbreviation_lower"].keys()):
-                lemma = lookup_table["abbreviation_lower"][lemma.lower()]
+            elif (lemma.lower() in lookup_table["abbreviations_lower"].keys()):
+                lemma = lookup_table["abbreviations_lower"][lemma.lower()]
                 status_addendum.append("Change Case and Abbreviation-Acronym Treatment")
 
             if (lemma in lookup_table["non_english_words"].keys()):  # Non English language words taken care of
@@ -1328,8 +1348,8 @@ def run(args):
             if (cleaned_sample in lookup_table["abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
                 cleaned_sample = lookup_table["abbreviations"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
-            elif (cleaned_sample in lookup_table["abbreviation_lower"].keys()):
-                cleaned_sample = lookup_table["abbreviation_lower"][cleaned_sample]
+            elif (cleaned_sample in lookup_table["abbreviations_lower"].keys()):
+                cleaned_sample = lookup_table["abbreviations_lower"][cleaned_sample]
                 status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
 
             if (cleaned_sample in lookup_table["non_english_words"].keys()):  # non English words taken care of

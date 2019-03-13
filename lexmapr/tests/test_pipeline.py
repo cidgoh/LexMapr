@@ -570,6 +570,25 @@ class TestOntologyMapping(unittest.TestCase):
                                     root=self.pizza_DomainThing_iri)
         self.assertTrue(os.path.exists(os.path.abspath("ontology_lookup_tables/pizza.json")))
 
+    def test_ontology_table_keys(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.pizza_url,
+                                    root=self.pizza_DomainThing_iri)
+        with open(os.path.abspath("ontology_lookup_tables/pizza.json")) as file:
+            pizza_table_json = json.load(file)
+
+        expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
+                         "non_english_words_lower","spelling_mistakes", "spelling_mistakes_lower",
+                         "processes", "qualities", "qualities_lower", "collocations",
+                         "inflection_exceptions", "stop_words", "suffixes",
+                         "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms"]
+        for expected_key in expected_keys:
+            try:
+                self.assertTrue(expected_key in pizza_table_json)
+            except AssertionError:
+                raise AssertionError(expected_key + " is not in pizza_table_json")
+
 
 if __name__ == '__main__':
     unittest.main()
