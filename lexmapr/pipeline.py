@@ -1191,7 +1191,10 @@ def run(args):
         if not os.path.isdir(os.path.abspath("fetched_ontologies")):
             os.makedirs("fetched_ontologies")
         # Arguments for ontofetch.py
-        sys.argv = ["", args.web, "-o", "fetched_ontologies",]
+        if args.root is None:
+            sys.argv = ["", args.web, "-o", "fetched_ontologies"]
+        else:
+            sys.argv = ["", args.web, "-o", "fetched_ontologies", "-r", args.root]
         # Call ontofetch.py
         ontofetch = Ontology()
         ontofetch.__main__()
