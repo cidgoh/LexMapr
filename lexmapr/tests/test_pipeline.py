@@ -506,8 +506,11 @@ class TestOntologyMapping(unittest.TestCase):
     **TODO:**
 
     * convert each fetched json file into an "ontology table" json
+
       * done whenever web ontology is fetched
+
     * wrap ontology fetching mechanism in method
+
     * eliminate fetched_ontologies folder
     """
 
@@ -516,22 +519,25 @@ class TestOntologyMapping(unittest.TestCase):
         # Change directory to same as pipeline
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
         os.chdir(os.path.abspath(".."))
-        # Commonly used values
+        # Pipeline arguments used during testing
         cls.small_simple_path = "tests/input/small_simple.csv"
-        cls.pizza_url = "https://protege.stanford.edu/ontologies/pizza/pizza.owl"
-        cls.pizza_DomainThing_iri = "http://www.co-ode.org/ontologies/pizza/pizza.owl#DomainConcept"
+        cls.test_ontologies = {
+            "pizza": "https://protege.stanford.edu/ontologies/pizza/pizza.owl",
+            "pizza_DomainThing": "http://www.co-ode.org/ontologies/pizza/pizza.owl#DomainConcept",
+            "bfo": "http://purl.obolibrary.org/obo/bfo.owl",
+            "bfo_material_entity": "http://purl.obolibrary.org/obo/BFO_0000040"
+        }
 
     def setUp(self):
-        # Un-cache pizza ontology if it exists
-        if os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")):
-            os.remove(os.path.abspath("fetched_ontologies/pizza.json"))
-            os.remove(os.path.abspath("fetched_ontologies/pizza.tsv"))
+        # Un-cache any ontologies cached during testing
+        for test_ontology in self.test_ontologies:
+            if os.path.exists(os.path.abspath("fetched_ontologies/%s.json" % test_ontology)):
+                os.remove(os.path.abspath("fetched_ontologies/%s.json" % test_ontology))
+                os.remove(os.path.abspath("fetched_ontologies/%s.tsv" % test_ontology))
+                os.remove(os.path.abspath("ontology_lookup_tables/%s.json" % test_ontology))
 
     def tearDown(self):
-        # Un-cache pizza ontology
-        os.remove(os.path.abspath("fetched_ontologies/pizza.json"))
-        os.remove(os.path.abspath("fetched_ontologies/pizza.tsv"))
-        os.remove(os.path.abspath("ontology_lookup_tables/pizza.json"))
+        self.setUp()
 
     @staticmethod
     def run_pipeline_with_args(input_file, web=None, root=None):
@@ -540,45 +546,54 @@ class TestOntologyMapping(unittest.TestCase):
         input_file must be specified. web and root can be specified,
         but otherwise are ``None`` by default.
         """
-        pipeline.run(argparse.Namespace(input_file=input_file,web=web, root=root,
+        pipeline.run(argparse.Namespace(input_file=input_file, web=web, root=root,
                                         format="basic", output=None, version=False))
+
+    @staticmethod
+    def get_fetched_ontology(file_name):
+        with open(os.path.abspath("fetched_ontologies/%s.json" % file_name)) as file:
+            return json.load(file)
+
+    @staticmethod
+    def get_ontology_lookup_table(file_name):
+        with open(os.path.abspath("ontology_lookup_tables/%s.json" % file_name)) as file:
+            return json.load(file)
 
     def test_fetch_ontology(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path)
         self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
 
-        self.run_pipeline_with_args(input_file=self.small_simple_path, web=self.pizza_url)
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.test_ontologies["pizza"])
         self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
 
     def test_fetch_ontology_specify_root(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path, web=self.pizza_url)
-        with open(os.path.abspath("fetched_ontologies/pizza.json")) as file:
-            pizza_json = json.load(file)
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.test_ontologies["pizza"])
+        pizza_json = self.get_fetched_ontology("pizza")
         self.assertFalse(pizza_json["specifications"])
 
         self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    web=self.pizza_url,
-                                    root=self.pizza_DomainThing_iri)
-        with open(os.path.abspath("fetched_ontologies/pizza.json")) as file:
-            pizza_json = json.load(file)
+                                    web=self.test_ontologies["pizza"],
+                                    root=self.test_ontologies["pizza_DomainThing"])
+        pizza_json = self.get_fetched_ontology("pizza")
         self.assertTrue(pizza_json["specifications"])
 
     def test_ontology_table_creation(self):
         self.assertFalse(os.path.exists(os.path.abspath("ontology_lookup_tables/pizza.json")))
         self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    web=self.pizza_url,
-                                    root=self.pizza_DomainThing_iri)
+                                    web=self.test_ontologies["pizza"],
+                                    root=self.test_ontologies["pizza_DomainThing"])
         self.assertTrue(os.path.exists(os.path.abspath("ontology_lookup_tables/pizza.json")))
 
     def test_ontology_table_keys(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    web=self.pizza_url,
-                                    root=self.pizza_DomainThing_iri)
-        with open(os.path.abspath("ontology_lookup_tables/pizza.json")) as file:
-            pizza_table_json = json.load(file)
+                                    web=self.test_ontologies["pizza"],
+                                    root=self.test_ontologies["pizza_DomainThing"])
+        pizza_table_json = self.get_ontology_lookup_table("pizza")
 
         expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
-                         "non_english_words_lower","spelling_mistakes", "spelling_mistakes_lower",
+                         "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
                          "processes", "qualities", "qualities_lower", "collocations",
                          "inflection_exceptions", "stop_words", "suffixes",
                          "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
@@ -588,6 +603,20 @@ class TestOntologyMapping(unittest.TestCase):
                 self.assertTrue(expected_key in pizza_table_json)
             except AssertionError:
                 raise AssertionError(expected_key + " is not in pizza_table_json")
+
+    def test_ontology_table_resource_terms_ID_based(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.test_ontologies["bfo"],
+                                    root=self.test_ontologies["bfo_material_entity"])
+        obi_table_json = self.get_ontology_lookup_table("bfo")
+
+        actual_resource_terms_id_based = obi_table_json["resource_terms_ID_based"]
+        expected_resource_terms_id_based = {
+            "BFO:0000024": "fiat object part",
+            "BFO:0000027": "object aggregate",
+            "BFO:0000030": "object"
+        }
+        self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
 
 
 if __name__ == '__main__':

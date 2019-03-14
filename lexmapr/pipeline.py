@@ -698,29 +698,47 @@ def unicode_to_utf_8(decoded_pairs):
     # Return ret
     return ret
 
+
+def create_ontology_lookup_table_skeleton():
+    """TODO..."""
+    return {"synonyms": {},
+            "abbreviations": {},
+            "abbreviations_lower": {},
+            "non_english_words": {},
+            "non_english_words_lower": {},
+            "spelling_mistakes": {},
+            "spelling_mistakes_lower": {},
+            "processes": {},
+            "qualities": {},
+            "qualities_lower": {},
+            "collocations": {},
+            "inflection_exceptions": {},
+            "stop_words": {},
+            "suffixes": {},
+            "resource_terms_ID_based": {},
+            "resource_terms": {},
+            "resource_terms_revised": {},
+            "resource_permutation_terms": {},
+            "resource_bracketed_permutation_terms": {}}
+
+
 def create_ontology_lookup_table(ontology_file_name):
     """TODO..."""
-    lookup_table = {}
-    lookup_table["synonyms"] = {}
-    lookup_table["abbreviations"] = {}
-    lookup_table["abbreviations_lower"] = {}
-    lookup_table["non_english_words"] = {}
-    lookup_table["non_english_words_lower"] = {}
-    lookup_table["spelling_mistakes"] = {}
-    lookup_table["spelling_mistakes_lower"] = {}
-    lookup_table["processes"] = {}
-    lookup_table["qualities"] = {}
-    lookup_table["qualities_lower"] = {}
-    lookup_table["collocations"] = {}
-    lookup_table["inflection_exceptions"] = {}
-    lookup_table["stop_words"] = {}
-    lookup_table["suffixes"] = {}
-    lookup_table["resource_terms_ID_based"] = {}
-    lookup_table["resource_terms"] = {}
-    lookup_table["resource_terms_revised"] = {}
-    lookup_table["resource_permutation_terms"] = {}
-    lookup_table["resource_bracketed_permutation_terms"] = {}
+    # Get empty lookup table
+    lookup_table = create_ontology_lookup_table_skeleton()
+
+    # Parse content from fetched_ontologies and add it to the table
+    # TODO: WIP
+    with open(os.path.abspath("fetched_ontologies/%s.json" % ontology_file_name)) as file:
+        fetched_ontology = json.load(file)
+    for resource in fetched_ontology["specifications"].values():
+        if "id" in resource and "label" in resource:
+            id = resource["id"]
+            label = resource["label"]
+            lookup_table["resource_terms_ID_based"][id] = label
+
     return lookup_table
+
 
 def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     """Retrieve an annotated, full-term match for a sample.
