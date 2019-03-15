@@ -519,12 +519,18 @@ class TestOntologyMapping(unittest.TestCase):
         # Change directory to same as pipeline
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
         os.chdir(os.path.abspath(".."))
-        # Pipeline arguments used during testing
+
+        # Set some pipeline arguments used during testing as class
+        # attributes.
         cls.small_simple_path = "tests/input/small_simple.csv"
+        # TODO: we will have to change github_iri when it is on the
+        #       master branch of LexMapr
+        github_iri = "https://raw.githubusercontent.com/" \
+                     "ivansg44/LexMapr/fetch_web_ontologies/lexmapr/tests/ontologies/%s.owl"
         cls.test_ontologies = {
-            "pizza": "https://protege.stanford.edu/ontologies/pizza/pizza.owl",
+            "pizza": github_iri % "pizza",
             "pizza_DomainThing": "http://www.co-ode.org/ontologies/pizza/pizza.owl#DomainConcept",
-            "bfo": "http://purl.obolibrary.org/obo/bfo.owl",
+            "bfo": github_iri % "bfo",
             "bfo_material_entity": "http://purl.obolibrary.org/obo/BFO_0000040"
         }
 
