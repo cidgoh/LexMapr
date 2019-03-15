@@ -530,6 +530,7 @@ class TestOntologyMapping(unittest.TestCase):
         cls.test_ontologies = {
             "pizza": github_iri % "pizza",
             "pizza_DomainThing": "http://www.co-ode.org/ontologies/pizza/pizza.owl#DomainConcept",
+            "pizza_Spiciness": "http://www.co-ode.org/ontologies/pizza/pizza.owl#Spiciness",
             "bfo": github_iri % "bfo",
             "bfo_material_entity": "http://purl.obolibrary.org/obo/BFO_0000040"
         }
@@ -614,13 +615,55 @@ class TestOntologyMapping(unittest.TestCase):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     web=self.test_ontologies["bfo"],
                                     root=self.test_ontologies["bfo_material_entity"])
-        obi_table_json = self.get_ontology_lookup_table("bfo")
+        bfo_table_json = self.get_ontology_lookup_table("bfo")
 
-        actual_resource_terms_id_based = obi_table_json["resource_terms_ID_based"]
+        actual_resource_terms_id_based = bfo_table_json["resource_terms_ID_based"]
         expected_resource_terms_id_based = {
             "BFO:0000024": "fiat object part",
             "BFO:0000027": "object aggregate",
             "BFO:0000030": "object"
+        }
+        self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
+
+    def test_ontology_table_resource_terms(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.test_ontologies["bfo"],
+                                    root=self.test_ontologies["bfo_material_entity"])
+        bfo_table_json = self.get_ontology_lookup_table("bfo")
+
+        actual_resource_terms_id_based = bfo_table_json["resource_terms"]
+        expected_resource_terms_id_based = {
+            "fiat object part": "BFO:0000024",
+            "object aggregate": "BFO:0000027",
+            "object": "BFO:0000030"
+        }
+        self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
+
+    def test_ontology_table_resource_terms_revised_where_terms_do_not_change(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.test_ontologies["bfo"],
+                                    root=self.test_ontologies["bfo_material_entity"])
+        bfo_table_json = self.get_ontology_lookup_table("bfo")
+
+        actual_resource_terms_id_based = bfo_table_json["resource_terms_revised"]
+        expected_resource_terms_id_based = {
+            "fiat object part": "BFO:0000024",
+            "object aggregate": "BFO:0000027",
+            "object": "BFO:0000030"
+        }
+        self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
+
+    def test_ontology_table_resource_terms_revised_where_terms_change(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.test_ontologies["pizza"],
+                                    root=self.test_ontologies["pizza_Spiciness"])
+        pizza_table_json = self.get_ontology_lookup_table("pizza")
+
+        actual_resource_terms_id_based = pizza_table_json["resource_terms_revised"]
+        expected_resource_terms_id_based = {
+            "naopicante": "pizza.owl:Mild",
+            "media": "pizza.owl:Medium",
+            "picante": "pizza.owl:Hot"
         }
         self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
 

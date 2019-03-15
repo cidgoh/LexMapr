@@ -736,6 +736,8 @@ def create_ontology_lookup_table(ontology_file_name):
             id = resource["id"]
             label = resource["label"]
             lookup_table["resource_terms_ID_based"][id] = label
+            lookup_table["resource_terms"][label] = id
+            lookup_table["resource_terms_revised"][label.lower()] = id
 
     return lookup_table
 
