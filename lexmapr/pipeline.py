@@ -738,6 +738,9 @@ def create_ontology_lookup_table(ontology_file_name):
             lookup_table["resource_terms_ID_based"][id] = label
             lookup_table["resource_terms"][label] = id
             lookup_table["resource_terms_revised"][label.lower()] = id
+            if "synonyms" in resource:
+                synonym = resource["synonyms"]
+                lookup_table["synonyms"][synonym] = label
 
     return lookup_table
 

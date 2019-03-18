@@ -540,7 +540,9 @@ class TestOntologyMapping(unittest.TestCase):
         for test_ontology in self.test_ontologies:
             if os.path.exists(os.path.abspath("fetched_ontologies/%s.json" % test_ontology)):
                 os.remove(os.path.abspath("fetched_ontologies/%s.json" % test_ontology))
+            if os.path.exists(os.path.abspath("fetched_ontologies/%s.tsv" % test_ontology)):
                 os.remove(os.path.abspath("fetched_ontologies/%s.tsv" % test_ontology))
+            if os.path.exists(os.path.abspath("ontology_lookup_tables/%s.json" % test_ontology)):
                 os.remove(os.path.abspath("ontology_lookup_tables/%s.json" % test_ontology))
 
     def tearDown(self):
@@ -664,6 +666,23 @@ class TestOntologyMapping(unittest.TestCase):
             "naopicante": "pizza.owl:Mild",
             "media": "pizza.owl:Medium",
             "picante": "pizza.owl:Hot"
+        }
+        self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
+
+    def test_ontology_table_synonyms(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.test_ontologies["bfo"])
+        bfo_table_json = self.get_ontology_lookup_table("bfo")
+
+        actual_resource_terms_id_based = bfo_table_json["synonyms"]
+        expected_resource_terms_id_based = {
+            "temporal instant.": "zero-dimensional temporal region",
+            "lonely-dimensional continuant fiat boundary.":
+                "two-dimensional continuant fiat boundary",
+            "lonelier-dimensional continuant fiat boundary.":
+                "one-dimensional continuant fiat boundary",
+            "loneliest-dimensional continuant fiat boundary.":
+                "zero-dimensional continuant fiat boundary",
         }
         self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
 
