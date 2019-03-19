@@ -154,14 +154,11 @@ class TestPipelineMethods(unittest.TestCase):
         self.assertCountEqual(pipeline.get_resource_permutation_terms("a (b)"), ["a (b)", "(b) a"])
 
     def test_get_resource_bracketed_permutation_terms(self):
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms(""), [""])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a"), ["a"])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a b"),
-                              ["a b", "b a"])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b"),
-                              ["a (b", "(b a"])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a b)"),
-                              ["a b)", "b) a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms(""), [])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a"), [])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a b"), [])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b"), [])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a b)"), [])
 
         self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b)"),
                               ["a b", "b a"])

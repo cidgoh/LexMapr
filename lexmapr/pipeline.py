@@ -299,20 +299,16 @@ def get_all_resource_dicts():
         # costly. We also ignore NCBI taxon terms, as there are
         # ~160000 such terms.
         if len(resource_tokens)<7 and "NCBITaxon" not in resource_id:
-            # resource_term contains a bracket
-            if "(" in resource_term:
-                # Add all bracketed permutations of resource_term to
-                # appropriate dictionary.
-                bracketed_permutations = get_resource_bracketed_permutation_terms(resource_term)
-                for bracketed_permutation in bracketed_permutations:
-                    ret["resource_bracketed_permutation_terms"][bracketed_permutation] = resource_id
-            # resource_term does not contain a bracket
-            else:
-                # Add all permutations of resource_term to appropriate
-                # dictionary.
-                permutations = get_resource_permutation_terms(resource_term)
-                for permutation in permutations:
-                    ret["resource_permutation_terms"][permutation] = resource_id
+            # Add all bracketed permutations of resource_term to
+            # appropriate dictionary.
+            bracketed_permutations = get_resource_bracketed_permutation_terms(resource_term)
+            for bracketed_permutation in bracketed_permutations:
+                ret["resource_bracketed_permutation_terms"][bracketed_permutation] = resource_id
+            # Add all permutations of resource_term to appropriate
+            # dictionary.
+            permutations = get_resource_permutation_terms(resource_term)
+            for permutation in permutations:
+                ret["resource_permutation_terms"][permutation] = resource_id
     return ret
 
 def get_path(file_name, prefix=""):
@@ -655,11 +651,11 @@ def unicode_to_utf_8(decoded_pairs):
     return ret
 
 
-def get_resource_permutation_terms(label):
+def get_resource_permutation_terms(resource_label):
     """TODO:..."""
     # Set of tuples, where each tuple is a different permutation of
     # tokens from label
-    permutations_set = all_permutations(label)
+    permutations_set = all_permutations(resource_label)
     # Return value
     ret = []
     # Generate a string from each tuple, and add it to ret
@@ -670,15 +666,15 @@ def get_resource_permutation_terms(label):
     return ret
 
 
-def get_resource_bracketed_permutation_terms(label):
+def get_resource_bracketed_permutation_terms(resource_label):
     """TODO:..."""
-    if "(" not in label or ")" not in label:
-        return get_resource_permutation_terms(label)
+    if "(" not in resource_label or ")" not in resource_label:
+        return []
 
     # Portion of label before brackets
-    unbracketed_component = label.split("(")[0]
+    unbracketed_component = resource_label.split("(")[0]
     # Portion of label inside brackets
-    bracketed_component = label.split("(")[1]
+    bracketed_component = resource_label.split("(")[1]
     bracketed_component = bracketed_component.split(")")[0]
     # Replace any commas in bracketed_component with spaces
     bracketed_component = bracketed_component.replace(",", " ")
@@ -720,20 +716,20 @@ def create_ontology_lookup_table(ontology_file_name):
         fetched_ontology = json.load(file)
     for resource in fetched_ontology["specifications"].values():
         if "id" in resource and "label" in resource:
-            id = resource["id"]
-            label = resource["label"]
-            lookup_table["resource_terms_ID_based"][id] = label
-            lookup_table["resource_terms"][label] = id
-            lookup_table["resource_terms_revised"][label.lower()] = id
+            resource_id = resource["id"]
+            resource_label = resource["label"]
+            lookup_table["resource_terms_ID_based"][resource_id] = resource_label
+            lookup_table["resource_terms"][resource_label] = resource_id
+            lookup_table["resource_terms_revised"][resource_label.lower()] = resource_id
 
-            permutations = get_resource_permutation_terms(label)
+            permutations = get_resource_permutation_terms(resource_label)
             for permutation in permutations:
-                lookup_table["resource_permutation_terms"][permutation] = id
+                lookup_table["resource_permutation_terms"][permutation] = resource_id
 
             if "synonyms" in resource:
                 synonyms = resource["synonyms"].split(";")
                 for synonym in synonyms:
-                    lookup_table["synonyms"][synonym] = label
+                    lookup_table["synonyms"][synonym] = resource_label
 
     return lookup_table
 
