@@ -28,6 +28,7 @@ logger.disabled = True
 
 # DIFFERENT METHODS USED (Will be organized in Modular arrangement later on)
 
+
 # 1-Method to determine  whether a string is a number (Used for Cardinal-Ordinal Tagging)
 def is_number(inputstring):
     try:
@@ -61,6 +62,7 @@ def ngrams(input, n):
         output.append(input[i:i + n])
     return output
 
+
 def get_gram_chunks(input, num):
     """Make num-gram chunks from input.
 
@@ -86,6 +88,7 @@ def get_gram_chunks(input, num):
         # Return all num-length substrings of input
         return ngrams(input, num)
 
+
 def preprocess(token):
     """Removes characters in token that are irrelevant to run.
 
@@ -100,6 +103,7 @@ def preprocess(token):
     """
     # drop possessives, rightmost comma and rightmost period and return
     return token.replace("\'s", "").rstrip("', ").rstrip(". ")
+
 
 # 8-Method to get all permutations of input string          -has overhead so the size of the phrase has been limited to 4-grams
 def all_permutations(inputstring):
@@ -191,6 +195,7 @@ def retainedPhrase(termList):
         returnedSetFinal = set(returnedSet)
     return returnedSetFinal
 
+
 def get_resource_dict(file_name, lower=False):
     """Return dictionary containing resource data from a CSV file.
 
@@ -237,6 +242,7 @@ def get_resource_dict(file_name, lower=False):
             ret[key] = val
     # Return
     return ret
+
 
 def get_all_resource_dicts():
     """Returns collection of all dictionaries used in pipeline.run.
@@ -311,6 +317,7 @@ def get_all_resource_dicts():
                 ret["resource_permutation_terms"][permutation] = resource_id
     return ret
 
+
 def get_path(file_name, prefix=""):
     """Returns path of file_name relative to pipeline.py.
 
@@ -332,6 +339,7 @@ def get_path(file_name, prefix=""):
     # Return file_name appended to prefix and absolute path to
     # pipeline.py.
     return os.path.join(os.path.dirname(__file__), prefix+file_name)
+
 
 def is_lookup_table_outdated():
     """Returns True if lookup_table.json is outdated.
@@ -363,6 +371,7 @@ def is_lookup_table_outdated():
     else:
         return False
 
+
 def add_lookup_table_to_cache():
     """Saves nested dictionary of resources to a local file.
 
@@ -379,6 +388,7 @@ def add_lookup_table_to_cache():
     with open(get_path("lookup_table.json"), "w") as file:
         # Write lookup_table in JSON format
         json.dump(lookup_table, file)
+
 
 def get_lookup_table_from_cache():
     """Return contents of lookup_table.json.
@@ -410,196 +420,6 @@ def get_lookup_table_from_cache():
     # Read and return lookup_table.json
     return read_json(get_path("lookup_table.json"))
 
-def fetch_ontology(ontology_url):
-    """Adds JSON with data on ontology to fetched_ontologies/.
-
-    For details on fetched data, see ontofetch.py.
-
-    Arguments:
-        * <"str">: URL for ontology .owl file
-    Side effects:
-        * Creates lexmapr/fetched_ontologies if it does not exist
-        * Adds or modifies {id}.json to lexmapr/fetched_ontologies/,
-            where {id} is the id of the fetched ontology
-        * Runs ontofetch.py
-    """
-    # lexmapr/fetched_ontologies/ does not exist
-    if not os.path.isdir(get_path("fetched_ontologies")):
-        # Create lexmapr/fetched_ontologies/
-        os.makedirs(get_path("fetched_ontologies"))
-    # Arguments for ontofetch.py
-    sys.argv = [
-        "",
-        ontology_url,
-        "-o",
-        "fetched_ontologies/",
-    ]
-    # Run ontofetch.py
-    Ontology().__main__()
-
-def get_ontology_terms():
-    """Returns ontology terms and synonyms from specified ontologies.
-
-    Fetches ontology data for all URLs listed in
-    lexmapr/resources/WebOntologies.csv. See fetch_ontology docstring
-    for more details.
-
-    Returns a nested dictionary with the following format:
-
-        {
-            ontology_id1:
-                {
-                    resource_terms_ID_based: {
-                        term_ID: term_label,
-                        ...
-                    }
-                },
-                {
-                    synonyms: {
-                        synonym: [term_label1, ...],
-                        ...
-                    }
-                },
-            ontology_id2: { ... },
-            ...
-        }
-
-    Returns:
-        * <"dict">: Nested dictionary of resource terms and synonyms
-            from fetched ontologies
-    Restrictions:
-        * Ontologies to fetch must be listed in
-            lexmapr/resources/WebOntologies.csv
-
-    TODO:
-        * How do we check if a specific ontology is out of date?
-    """
-    # Return value
-    ret = {}
-    # Dictionary of listed ontologies in resources/WebOntologies.csv
-    web_ontologies = get_resource_dict("WebOntologies.csv")
-    # Iterate over ontology id's in web_ontologies
-    for ontology_id in web_ontologies:
-        # Add id and nested dictionaries to ret
-        ret[ontology_id] = {
-            # TODO: We have to get resource_terms,
-            #       resource_terms_revised, etc. too
-            "resource_terms_ID_based": {},
-            "synonyms": {},
-        }
-
-        # URL corresponding to id in web_ontologies
-        url = web_ontologies[ontology_id]
-        # Add ontology to fetched_ontologies/
-        fetch_ontology(url)
-        # Read saved ontology with id
-        ontology_content = read_json(get_path(ontology_id+".json", "fetched_ontologies/"))
-        # Content specifications
-        specifications = ontology_content["specifications"]
-
-        # Iterate over entity ids in specifications
-        for entity_id in specifications:
-            # Information on label, synonym, etc. for id
-            entity_content = specifications[entity_id]
-            # TODO: Why do we replace ":" with "_"?
-            new_entity_id = entity_id.replace(":", "_", 1)
-            # Label in entity_content
-            # TODO: Do we consider entities lacking a label?
-            if "label" in entity_content:
-                # Add new_entity_id-label key-value pair to ret
-                ret[ontology_id]["resource_terms_ID_based"][new_entity_id]=entity_content["label"]
-            # Synonyms in entity_content
-            if "synonyms" in entity_content:
-                # Iterate over synonyms in entity_content
-                for synonym in entity_content["synonyms"].split(";"):
-                    # synonym not in ret
-                    if synonym not in ret:
-                        # Add synonym-empty list key-value pair to ret
-                        ret[ontology_id]["synonyms"][synonym] = []
-                    # Append label to synonym value
-                    ret[ontology_id]["synonyms"][synonym].append(entity_content["label"])
-    return ret
-
-def is_ontology_table_outdated():
-    """Returns True if ontology_table.json is outdated.
-
-    ontology_table.json is considered outdated if it has an older last
-    modification time than lexmapr/resources/WebOntologies.csv.
-
-    Return values:
-        * <class "bool">: Indicates whether ontology_table.json is
-            outdated
-    Restrictions:
-        * should only be called if ontology_table.json exists
-
-    TODO:
-        * We must also consider when a single fetched ontology is no
-            longer up to date with the web ontology
-            * How do we do this?
-    """
-    # last modification time of ontology_table.json
-    ontology_table_modification_time = os.path.getmtime(get_path("ontology_table.json"))
-    # last modification time for lexmapr/resources/WebOntologies.csv
-    WebOntologies_modification_time = os.path.getmtime(get_path("WebOntologies.csv","resources/"))
-
-    # resources modified more recently than lookup_table.json
-    if WebOntologies_modification_time > ontology_table_modification_time:
-        return True
-    else:
-        return False
-
-def add_ontology_table_to_cache():
-    """Saves nested dictionary of ontology_terms to a local file.
-
-    The nested dictionary corresponds to the return value of
-    get_ontology_terms, and is saved as ontology_table.json. If such
-    a file already exists, it will be overwritten.
-
-    Side effects:
-        * Adds or modifies ontology_table.json
-    """
-    # Table containing terms from ontologies in fetched_ontologies/
-    ontology_table = get_ontology_terms()
-    # Open and write to ontology_table.json
-    with open(get_path("ontology_table.json"), "w") as file:
-        # Write ontology_table in JSON format
-        json.dump(ontology_table, file)
-
-def get_ontology_table_from_cache():
-    """Return contents of ontology_table.json.
-
-    The contents of ontology_table.json correspond to the return value
-    of get_ontology_terms.
-
-    If ontology_table.json does not exist, or is outdated, a new
-    ontology_table.json file is generated.
-
-    Return values:
-        * "dict": Contains key-value pairs corresponding to
-            terms in "fetched_ontologies/" JSON files
-
-    TODO:
-        * Should we cache ontology_table?
-            * If the terms are already cached in the files belonging to
-                the fetched_ontologies folder, seems unnecessary to
-                cache the return value too
-                * But in the future, we will be doing additional
-                    operations to the terms in those fetch_ontologies
-                    folder files, so we do benefit by caching the
-                    ret value under that circumstance
-    """
-    # ontology_table.json exists
-    if os.path.isfile(get_path("ontology_table.json")):
-        # ontology_table.json is not up to date
-        if is_ontology_table_outdated():
-            # add new ontology table to cache
-            add_ontology_table_to_cache()
-    # ontology_table.json does not exist
-    else:
-        # add ontology table to cache
-        add_ontology_table_to_cache()
-    # Read and return ontology_table.json
-    return read_json(get_path("ontology_table.json"))
 
 def read_json(path):
     """Returns JSON contents in string format for both Python 2 and 3.
@@ -619,6 +439,7 @@ def read_json(path):
         else:
             # Return ontology_table contents in utf-8
             return json.load(file, object_pairs_hook=unicode_to_utf_8)
+
 
 def unicode_to_utf_8(decoded_pairs):
     """object_pairs_hook to load json files without unicode values.
@@ -652,7 +473,13 @@ def unicode_to_utf_8(decoded_pairs):
 
 
 def get_resource_permutation_terms(resource_label):
-    """TODO:..."""
+    """Get permutations of some term.
+
+    :param resource_label: Name of some resource
+    :type resource_label: str
+    :return: All permutations of resource_label
+    :rtype: list
+    """
     # Set of tuples, where each tuple is a different permutation of
     # tokens from label
     permutations_set = all_permutations(resource_label)
@@ -667,7 +494,21 @@ def get_resource_permutation_terms(resource_label):
 
 
 def get_resource_bracketed_permutation_terms(resource_label):
-    """TODO:..."""
+    """Get bracketed permutations of some term.
+
+    Bracketed permutations follows the following definition:
+
+    * If a term has no bracketed content, it returns has no bracketed
+      permutations
+    * If a term has bracketed content, the bracketed permutations are
+      comprised of all permutations of the term with the bracket
+      characters removed
+
+    :param resource_label: Name of some resource
+    :type resource_label: str
+    :return: All bracketed permutations of resource_label
+    :rtype: list
+    """
     if "(" not in resource_label or ")" not in resource_label:
         return []
 
@@ -683,7 +524,14 @@ def get_resource_bracketed_permutation_terms(resource_label):
 
 
 def create_ontology_lookup_table_skeleton():
-    """TODO..."""
+    """Generate an empty lookup table.
+
+    This means it has all necessary keys, but the values are empty
+    dictionaries.
+
+    :return: Empty lookup table
+    :rtype: dict
+    """
     return {"synonyms": {},
             "abbreviations": {},
             "abbreviations_lower": {},
@@ -706,12 +554,53 @@ def create_ontology_lookup_table_skeleton():
 
 
 def create_ontology_lookup_table(ontology_file_name):
-    """TODO..."""
+    """Create lookup table from online ontology.
+
+    This lookup table can be used to map terms in run.
+
+    :param ontology_file_name: Name of ontology in
+                               fetched_ontologies folder to
+                               construct lookup table from
+    :type ontology_file_name: str
+    :return: Lookup table
+    :rtype: dict
+
+    |
+
+    **TODO:**
+
+    * the following fields are missing:
+
+      * abbreviations
+
+      * abbreviations_lower
+
+      * non_english_words
+
+      * non_english_words_lower
+
+      * spelling_mistakes
+
+      * spelling_mistakes_lower
+
+      * processes
+
+      * qualities
+
+      * qualities_lower
+
+      * collocations
+
+      * inflection_exceptions
+
+      * stop_words
+
+      * suffixes
+    """
     # Get empty lookup table
     lookup_table = create_ontology_lookup_table_skeleton()
 
     # Parse content from fetched_ontologies and add it to the table
-    # TODO: WIP
     with open(os.path.abspath("fetched_ontologies/%s.json" % ontology_file_name)) as file:
         fetched_ontology = json.load(file)
     for resource in fetched_ontology["specifications"].values():
@@ -1017,6 +906,7 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     # Return
     return ret
 
+
 def find_component_match(cleaned_sample, lookup_table, status_addendum):
     """Finds 1-5 gram component matches of cleaned_sample.
 
@@ -1176,6 +1066,7 @@ def find_component_match(cleaned_sample, lookup_table, status_addendum):
                                 continue
     return ret
 
+
 class MatchNotFoundError(Exception):
     """Exception class for indicating failed full-term matches.
 
@@ -1204,6 +1095,7 @@ class MatchNotFoundError(Exception):
         """Return message when this class is raised as an exception."""
         return repr(self.message)
 
+
 def run(args):
     """
     Main text mining pipeline.
@@ -1221,15 +1113,6 @@ def run(args):
     # run. It is retrieved from cache if possible. See
     # get_lookup_table_from_cache docstring for details.
     lookup_table = get_lookup_table_from_cache()
-
-    # This is a nested dictionary of resource terms and synonyms
-    # fetched from web ontologies. See get_ontology_table_from_cache
-    # docstring for detail.
-    # TODO: pipeline.run does not used these terms to map samples yet,
-    #       but will so in the future. For now, we will develop the
-    #       architecture to retrieve and store terms from web
-    #       ontologies.
-    # ontology_table = get_ontology_table_from_cache()
 
     # Fetch ontology if specified
     if args.web is not None:

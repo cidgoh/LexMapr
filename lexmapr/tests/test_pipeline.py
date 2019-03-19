@@ -468,18 +468,7 @@ class TestPipeline(unittest.TestCase):
 
 
 class TestOntologyMapping(unittest.TestCase):
-    """...
-
-    **TODO:**
-
-    * convert each fetched json file into an "ontology table" json
-
-      * done whenever web ontology is fetched
-
-    * wrap ontology fetching mechanism in method
-
-    * eliminate fetched_ontologies folder
-    """
+    """Test generation and use of lookup tables from online ontologies."""
 
     @classmethod
     def setUpClass(cls):
