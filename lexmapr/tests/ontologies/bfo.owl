@@ -621,7 +621,7 @@
         <obo:IAO_0000600 xml:lang="en">A two-dimensional spatial region is a spatial region that is of two dimensions. (axiom label in BFO2 Reference: [039-001])</obo:IAO_0000600>
         <obo:IAO_0000602>(forall (x) (if (TwoDimensionalSpatialRegion x) (SpatialRegion x))) // axiom label in BFO2 CLIF: [039-001] </obo:IAO_0000602>
         <rdfs:isDefinedBy rdf:resource="http://purl.obolibrary.org/obo/bfo.owl"/>
-        <rdfs:label xml:lang="en">two-dimensional spatial region</rdfs:label>
+        <rdfs:label xml:lang="en">two-dimensional (spatial region)</rdfs:label>
     </owl:Class>
     <owl:Axiom>
         <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/BFO_0000009"/>
@@ -1048,7 +1048,7 @@
         <obo:IAO_0000600 xml:lang="en">A one-dimensional spatial region is a line or aggregate of lines stretching from one point in space to another. (axiom label in BFO2 Reference: [038-001])</obo:IAO_0000600>
         <obo:IAO_0000602>(forall (x) (if (OneDimensionalSpatialRegion x) (SpatialRegion x))) // axiom label in BFO2 CLIF: [038-001] </obo:IAO_0000602>
         <rdfs:isDefinedBy rdf:resource="http://purl.obolibrary.org/obo/bfo.owl"/>
-        <rdfs:label xml:lang="en">one-dimensional spatial region</rdfs:label>
+        <rdfs:label xml:lang="en">one-dimensional spatial (region)</rdfs:label>
     </owl:Class>
     <owl:Axiom>
         <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/BFO_0000026"/>
@@ -1136,7 +1136,7 @@
         <obo:IAO_0000600 xml:lang="en">A three-dimensional spatial region is a spatial region that is of three dimensions. (axiom label in BFO2 Reference: [040-001])</obo:IAO_0000600>
         <obo:IAO_0000602>(forall (x) (if (ThreeDimensionalSpatialRegion x) (SpatialRegion x))) // axiom label in BFO2 CLIF: [040-001] </obo:IAO_0000602>
         <rdfs:isDefinedBy rdf:resource="http://purl.obolibrary.org/obo/bfo.owl"/>
-        <rdfs:label xml:lang="en">three-dimensional spatial region</rdfs:label>
+        <rdfs:label xml:lang="en">(three-dimensional spatial region)</rdfs:label>
     </owl:Class>
     <owl:Axiom>
         <owl:annotatedSource rdf:resource="http://purl.obolibrary.org/obo/BFO_0000028"/>

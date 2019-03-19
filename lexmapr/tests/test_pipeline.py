@@ -499,7 +499,8 @@ class TestOntologyMapping(unittest.TestCase):
             "pizza_DomainThing": "http://www.co-ode.org/ontologies/pizza/pizza.owl#DomainConcept",
             "pizza_Spiciness": "http://www.co-ode.org/ontologies/pizza/pizza.owl#Spiciness",
             "bfo": github_iri % "bfo",
-            "bfo_material_entity": "http://purl.obolibrary.org/obo/BFO_0000040"
+            "bfo_material_entity": "http://purl.obolibrary.org/obo/BFO_0000040",
+            "bfo_spatial_region": "http://purl.obolibrary.org/obo/BFO_0000006"
         }
 
     def setUp(self):
