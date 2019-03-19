@@ -603,13 +603,13 @@ class TestOntologyMapping(unittest.TestCase):
                                     root=self.test_ontologies["bfo_material_entity"])
         bfo_table_json = self.get_ontology_lookup_table("bfo")
 
-        actual_resource_terms_id_based = bfo_table_json["resource_terms"]
-        expected_resource_terms_id_based = {
+        actual_resource_terms = bfo_table_json["resource_terms"]
+        expected_resource_terms = {
             "fiat object part": "BFO:0000024",
             "object aggregate": "BFO:0000027",
             "object": "BFO:0000030"
         }
-        self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
+        self.assertDictEqual(actual_resource_terms, expected_resource_terms)
 
     def test_ontology_table_resource_terms_revised_where_terms_do_not_change(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
@@ -617,13 +617,13 @@ class TestOntologyMapping(unittest.TestCase):
                                     root=self.test_ontologies["bfo_material_entity"])
         bfo_table_json = self.get_ontology_lookup_table("bfo")
 
-        actual_resource_terms_id_based = bfo_table_json["resource_terms_revised"]
-        expected_resource_terms_id_based = {
+        actual_resource_terms_revised = bfo_table_json["resource_terms_revised"]
+        expected_resource_terms_revised = {
             "fiat object part": "BFO:0000024",
             "object aggregate": "BFO:0000027",
             "object": "BFO:0000030"
         }
-        self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
+        self.assertDictEqual(actual_resource_terms_revised, expected_resource_terms_revised)
 
     def test_ontology_table_resource_terms_revised_where_terms_change(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
@@ -631,21 +631,22 @@ class TestOntologyMapping(unittest.TestCase):
                                     root=self.test_ontologies["pizza_Spiciness"])
         pizza_table_json = self.get_ontology_lookup_table("pizza")
 
-        actual_resource_terms_id_based = pizza_table_json["resource_terms_revised"]
-        expected_resource_terms_id_based = {
+        actual_resource_terms_revised = pizza_table_json["resource_terms_revised"]
+        expected_resource_terms_revised = {
             "naopicante": "pizza.owl:Mild",
             "media": "pizza.owl:Medium",
             "picante": "pizza.owl:Hot"
         }
-        self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
+        self.assertDictEqual(actual_resource_terms_revised, expected_resource_terms_revised)
 
     def test_ontology_table_synonyms(self):
+        # TODO: multiple synonyms
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     web=self.test_ontologies["bfo"])
         bfo_table_json = self.get_ontology_lookup_table("bfo")
 
-        actual_resource_terms_id_based = bfo_table_json["synonyms"]
-        expected_resource_terms_id_based = {
+        actual_synonyms = bfo_table_json["synonyms"]
+        expected_synonyms = {
             "temporal instant.": "zero-dimensional temporal region",
             "lonely-dimensional continuant fiat boundary.":
                 "two-dimensional continuant fiat boundary",
@@ -654,7 +655,27 @@ class TestOntologyMapping(unittest.TestCase):
             "loneliest-dimensional continuant fiat boundary.":
                 "zero-dimensional continuant fiat boundary",
         }
-        self.assertDictEqual(actual_resource_terms_id_based, expected_resource_terms_id_based)
+        self.assertDictEqual(actual_synonyms, expected_synonyms)
+
+    def test_ontology_table_resource_permutation_terms(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.test_ontologies["bfo"],
+                                    root=self.test_ontologies["bfo_material_entity"])
+        bfo_table_json = self.get_ontology_lookup_table("bfo")
+
+        actual_resource_permutation_terms = bfo_table_json["resource_permutation_terms"]
+        expected_resource_permutation_terms = {
+            "fiat object part": "BFO:0000024",
+            "fiat part object": "BFO:0000024",
+            "object fiat part": "BFO:0000024",
+            "object part fiat": "BFO:0000024",
+            "part fiat object": "BFO:0000024",
+            "part object fiat": "BFO:0000024",
+            "object aggregate": "BFO:0000027",
+            "aggregate object": "BFO:0000027",
+            "object": "BFO:0000030"
+        }
+        self.assertDictEqual(actual_resource_permutation_terms, expected_resource_permutation_terms)
 
 
 if __name__ == '__main__':

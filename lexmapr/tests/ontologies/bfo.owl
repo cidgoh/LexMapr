@@ -1621,6 +1621,7 @@
         <obo:IAO_0000112 xml:lang="en">the quadripoint where the boundaries of Colorado, Utah, New Mexico, and Arizona meet</obo:IAO_0000112>
         <obo:IAO_0000116 xml:lang="en">zero dimension continuant fiat boundaries are not spatial points. Considering the example &apos;the quadripoint where the boundaries of Colorado, Utah, New Mexico, and Arizona meet&apos; : There are many frames in which that point is zooming through many points in space. Whereas, no matter what the frame, the quadripoint is always in the same relation to the boundaries of Colorado, Utah, New Mexico, and Arizona.</obo:IAO_0000116>
         <obo:IAO_0000118 xml:lang="en">loneliest-dimensional continuant fiat boundary.</obo:IAO_0000118>
+        <obo:IAO_0000118 xml:lang="en">loneliestest-dimensional continuant fiat boundary.</obo:IAO_0000118>
         <obo:IAO_0000600 xml:lang="en">a zero-dimensional continuant fiat boundary is a fiat point whose location is defined in relation to some material entity. (axiom label in BFO2 Reference: [031-001])</obo:IAO_0000600>
         <obo:IAO_0000602>(iff (ZeroDimensionalContinuantFiatBoundary a) (and (ContinuantFiatBoundary a) (exists (b) (and (ZeroDimensionalSpatialRegion b) (forall (t) (locatedInAt a b t)))))) // axiom label in BFO2 CLIF: [031-001] </obo:IAO_0000602>
         <rdfs:isDefinedBy rdf:resource="http://purl.obolibrary.org/obo/bfo.owl"/>

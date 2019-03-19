@@ -725,6 +725,11 @@ def create_ontology_lookup_table(ontology_file_name):
             lookup_table["resource_terms_ID_based"][id] = label
             lookup_table["resource_terms"][label] = id
             lookup_table["resource_terms_revised"][label.lower()] = id
+
+            permutations = get_resource_permutation_terms(label)
+            for permutation in permutations:
+                lookup_table["resource_permutation_terms"][permutation] = id
+
             if "synonyms" in resource:
                 synonym = resource["synonyms"]
                 lookup_table["synonyms"][synonym] = label
