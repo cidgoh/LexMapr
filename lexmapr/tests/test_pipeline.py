@@ -640,7 +640,6 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(actual_resource_terms_revised, expected_resource_terms_revised)
 
     def test_ontology_table_synonyms(self):
-        # TODO: multiple synonyms
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     web=self.test_ontologies["bfo"])
         bfo_table_json = self.get_ontology_lookup_table("bfo")
@@ -653,6 +652,8 @@ class TestOntologyMapping(unittest.TestCase):
             "lonelier-dimensional continuant fiat boundary.":
                 "one-dimensional continuant fiat boundary",
             "loneliest-dimensional continuant fiat boundary.":
+                "zero-dimensional continuant fiat boundary",
+            "loneliestest-dimensional continuant fiat boundary.":
                 "zero-dimensional continuant fiat boundary",
         }
         self.assertDictEqual(actual_synonyms, expected_synonyms)
