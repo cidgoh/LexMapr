@@ -696,6 +696,23 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(actual_resource_bracketed_permutation_terms,
                              expected_resource_bracketed_permutation_terms)
 
+    def test_ontology_table_other_fields(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.test_ontologies["bfo"])
+        bfo_table_json = self.get_ontology_lookup_table("bfo")
+
+        expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
+                         "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
+                         "processes", "qualities", "qualities_lower", "collocations",
+                         "inflection_exceptions", "stop_words", "suffixes",
+                         "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms"]
+        for expected_key in expected_keys:
+            try:
+                self.assertTrue(bfo_table_json[expected_key])
+            except AssertionError:
+                raise AssertionError("pizza_table_json[%s] is empty" % expected_key)
+
 
 if __name__ == '__main__':
     unittest.main()

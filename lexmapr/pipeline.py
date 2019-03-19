@@ -564,38 +564,6 @@ def create_ontology_lookup_table(ontology_file_name):
     :type ontology_file_name: str
     :return: Lookup table
     :rtype: dict
-
-    |
-
-    **TODO:**
-
-    * the following fields are missing:
-
-      * abbreviations
-
-      * abbreviations_lower
-
-      * non_english_words
-
-      * non_english_words_lower
-
-      * spelling_mistakes
-
-      * spelling_mistakes_lower
-
-      * processes
-
-      * qualities
-
-      * qualities_lower
-
-      * collocations
-
-      * inflection_exceptions
-
-      * stop_words
-
-      * suffixes
     """
     # Get empty lookup table
     lookup_table = create_ontology_lookup_table_skeleton()
@@ -629,6 +597,21 @@ def create_ontology_lookup_table(ontology_file_name):
                 synonyms = resource["synonyms"].split(";")
                 for synonym in synonyms:
                     lookup_table["synonyms"][synonym] = resource_label
+
+    # # We will use the pre-defined resources for the following fields
+    lookup_table["abbreviations"] = get_resource_dict("AbbLex.csv")
+    lookup_table["abbreviations_lower"] = get_resource_dict("AbbLex.csv", True)
+    lookup_table["non_english_words"] = get_resource_dict("NefLex.csv")
+    lookup_table["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
+    lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
+    lookup_table["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
+    lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
+    lookup_table["qualities"] = get_resource_dict("SemLex.csv")
+    lookup_table["qualities_lower"] = get_resource_dict("SemLex.csv", True)
+    lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
+    lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
+    lookup_table["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
+    lookup_table["suffixes"] = get_resource_dict("suffixes.csv")
 
     return lookup_table
 
