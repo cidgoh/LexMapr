@@ -134,65 +134,6 @@ class TestPipelineMethods(unittest.TestCase):
         # "'", "," and "."
         self.assertEqual(pipeline.preprocess("cow's, . "), "cow,")
 
-    def test_find_between_r(self):
-        """Tests find_between_r."""
-        # Between first and last indices
-        self.assertEqual(pipeline.find_between_r("^string$", "^", "$"),
-            "string")
-        # Between non-first and last indices
-        self.assertEqual(pipeline.find_between_r("^string$", "s", "$"),
-            "tring")
-        # Between first and non-last indices
-        self.assertEqual(pipeline.find_between_r("^string$", "^", "g"),
-            "strin")
-        # Between non-first and non-last indices
-        self.assertEqual(pipeline.find_between_r("^string$", "s", "g"),
-            "trin")
-        # Same character for first and last parameters
-        self.assertEqual(pipeline.find_between_r("^string$", "r", "r"),
-            "")
-        # Invalid first parameter
-        self.assertEqual(pipeline.find_between_r("^string$", "e", "g"),
-            "")
-        # Invalid last parameter
-        self.assertEqual(pipeline.find_between_r("^string$", "^", "q"),
-            "")
-        # Invalid first and last parameters
-        self.assertEqual(pipeline.find_between_r("^string$", "e", "q"),
-            "")
-
-    def test_find_left_r(self):
-        """Tests find_left_r.
-
-        TODO:
-            * The commented-out tests fail due to an error with
-                find_left_r. Based on the specifiction of find_left_r,
-                the commented-out tests should pass, and the
-                uncommented-out tests should fail. For the purposes of
-                refactoring, where we must retain original
-                functionality of pipeline.py, this is currently
-                sufficient.
-            * Problems with find_left_r:
-                * Incorrect calculation of start
-                    * 1 is added to index
-                * Unnecessary calculation of end
-                    * Incorrect calculation of start sometimes causes
-                        ValueError to be thrown
-                * Incorrect range is returned
-                    * Partly due to incorrect calculation of start, but
-                        also due to us returning a substring between
-                        the 0 and start-2 indices
-        """
-        # Left of first index
-        # self.assertEqual(pipeline.find_left_r("foo", "f", "o"), "")
-        self.assertEqual(pipeline.find_left_r("foo", "f", "o"), "fo")
-        # Left of last index
-        # self.assertEqual(pipeline.find_left_r("bar", "r", "r"), "ba")
-        self.assertEqual(pipeline.find_left_r("bar", "r", "r"), "")
-        # Left of non-first and non-last index
-        # self.assertEqual(pipeline.find_left_r("bar", "a", "r"), "b")
-        self.assertEqual(pipeline.find_left_r("bar", "a", "r"), "")
-
     def test_allPermutations(self):
         """Tests allPermutations."""
         # Empty input string
@@ -204,7 +145,35 @@ class TestPipelineMethods(unittest.TestCase):
             set([("a", "b"), ("b", "a")]))
         # 4-gram input string
         self.assertEqual(len(pipeline.all_permutations("a b c d")), 24)
-    
+
+    def test_get_resource_permutation_terms(self):
+        self.assertCountEqual(pipeline.get_resource_permutation_terms(""), [""])
+        self.assertCountEqual(pipeline.get_resource_permutation_terms("a"), ["a"])
+        self.assertCountEqual(pipeline.get_resource_permutation_terms("a b"), ["a b", "b a"])
+
+        self.assertCountEqual(pipeline.get_resource_permutation_terms("a (b)"), ["a (b)", "(b) a"])
+
+    def test_get_resource_bracketed_permutation_terms(self):
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms(""), [""])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a"), ["a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a b"),
+                              ["a b", "b a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b"),
+                              ["a (b", "(b a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a b)"),
+                              ["a b)", "b) a"])
+
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b)"),
+                              ["a b", "b a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("(a) b"),
+                              ["a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("(a b)"),
+                              ["a b", "b a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b c)"),
+                              ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b,c)"),
+                              ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
+
     def test_combi(self):
         """Tests combi."""
         # Empty input string and n=1
@@ -336,6 +305,7 @@ class TestPipelineMethods(unittest.TestCase):
         self.assertEqual(
             pipeline.retainedPhrase(['foo bar:bar', 'foo bar:foo']),
             set(["foo bar:bar", "foo bar:foo"]))
+
 
 class TestPipeline(unittest.TestCase):
     """Unit test suite for pipeline.run.

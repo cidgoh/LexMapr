@@ -101,25 +101,6 @@ def preprocess(token):
     # drop possessives, rightmost comma and rightmost period and return
     return token.replace("\'s", "").rstrip("', ").rstrip(". ")
 
-# 5-Method to find the string between two characters  first and last
-def find_between_r( s, first, last ):
-    try:
-        start = s.rindex( first ) + len( first )
-        end = s.rindex( last, start )
-        return s[start:end]
-    except ValueError:
-        return ""
-
-
-# 6-Method to find the string left to  the character  first
-def find_left_r(s, first, last):
-    try:
-        start = s.rindex(first) + len(first)
-        end = s.rindex(last, start)
-        return s[0:start - 2]
-    except ValueError:
-        return ""
-
 # 8-Method to get all permutations of input string          -has overhead so the size of the phrase has been limited to 4-grams
 def all_permutations(inputstring):
     listOfPermutations = inputstring.split()
@@ -320,42 +301,17 @@ def get_all_resource_dicts():
         if len(resource_tokens)<7 and "NCBITaxon" not in resource_id:
             # resource_term contains a bracket
             if "(" in resource_term:
-                # This will contain the term we permutate, as resource
-                # terms with brackets cannot be permutated as is.
-                term_to_permutate = ""
-                # Portion of resource_term before brackets
-                unbracketed_component = find_left_r(resource_term, "(", ")")
-                # Portion of resource_term inside brackets
-                bracketed_component = find_between_r(resource_term, "(", ")")
-                # bracketed_component contains one or more commas
-                if "," in bracketed_component:
-                    # Parts of bracketed_component separated by commas
-                    bracketed_component_parts = bracketed_component.split(",")
-                    # bracketed_component_parts joined into one string
-                    new_bracketed_component = " ".join(bracketed_component_parts)
-                    # Adjust term_to_permutate accordingly
-                    term_to_permutate = new_bracketed_component + " " + unbracketed_component
-                # bracketed_component does not contain a comma
-                else:
-                    # Adjust term_to_permutate accordingly
-                    term_to_permutate = bracketed_component + " " + unbracketed_component
-                # All permutations of tokens in term_to_permutate
-                permutations = all_permutations(term_to_permutate)
-                # Iterate across permutated lists of tokens
-                for permutation_tokens in permutations:
-                    # permutation_tokens joined into string
-                    permutation = ' '.join(permutation_tokens)
-                    # Add permutation to appropriate dictionary
-                    ret["resource_bracketed_permutation_terms"][permutation] = resource_id
+                # Add all bracketed permutations of resource_term to
+                # appropriate dictionary.
+                bracketed_permutations = get_resource_bracketed_permutation_terms(resource_term)
+                for bracketed_permutation in bracketed_permutations:
+                    ret["resource_bracketed_permutation_terms"][bracketed_permutation] = resource_id
             # resource_term does not contain a bracket
             else:
-                # All permutations of tokens in resource_term
-                permutations = all_permutations(resource_term)
-                # Iterate across permutated lists of tokens
-                for permutation_tokens in permutations:
-                    # permutation_tokens joined into string
-                    permutation = ' '.join(permutation_tokens)
-                    # Add permutation to appropriate dictionary
+                # Add all permutations of resource_term to appropriate
+                # dictionary.
+                permutations = get_resource_permutation_terms(resource_term)
+                for permutation in permutations:
                     ret["resource_permutation_terms"][permutation] = resource_id
     return ret
 
@@ -697,6 +653,37 @@ def unicode_to_utf_8(decoded_pairs):
         ret[key] = val
     # Return ret
     return ret
+
+
+def get_resource_permutation_terms(label):
+    """TODO:..."""
+    # Set of tuples, where each tuple is a different permutation of
+    # tokens from label
+    permutations_set = all_permutations(label)
+    # Return value
+    ret = []
+    # Generate a string from each tuple, and add it to ret
+    for permutation_tuple in permutations_set:
+        permutation_string = " ".join(permutation_tuple)
+        ret = ret + [permutation_string]
+
+    return ret
+
+
+def get_resource_bracketed_permutation_terms(label):
+    """TODO:..."""
+    if "(" not in label or ")" not in label:
+        return get_resource_permutation_terms(label)
+
+    # Portion of label before brackets
+    unbracketed_component = label.split("(")[0]
+    # Portion of label inside brackets
+    bracketed_component = label.split("(")[1]
+    bracketed_component = bracketed_component.split(")")[0]
+    # Replace any commas in bracketed_component with spaces
+    bracketed_component = bracketed_component.replace(",", " ")
+
+    return get_resource_permutation_terms(bracketed_component + " " + unbracketed_component)
 
 
 def create_ontology_lookup_table_skeleton():
