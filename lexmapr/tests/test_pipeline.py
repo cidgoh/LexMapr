@@ -676,6 +676,37 @@ class TestOntologyMapping(unittest.TestCase):
         }
         self.assertDictEqual(actual_resource_permutation_terms, expected_resource_permutation_terms)
 
+    def test_ontology_table_resource_bracketed_permutation_terms(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    web=self.test_ontologies["bfo"],
+                                    root=self.test_ontologies["bfo_spatial_region"])
+        bfo_table_json = self.get_ontology_lookup_table("bfo")
+
+        actual_resource_bracketed_permutation_terms =\
+            bfo_table_json["resource_bracketed_permutation_terms"]
+        expected_resource_bracketed_permutation_terms = {
+            "one-dimensional region spatial": "BFO:0000026",
+            "one-dimensional spatial region": "BFO:0000026",
+            "region one-dimensional spatial": "BFO:0000026",
+            "region spatial one-dimensional": "BFO:0000026",
+            "spatial one-dimensional region": "BFO:0000026",
+            "spatial region one-dimensional": "BFO:0000026",
+            "two-dimensional region spatial": "BFO:0000009",
+            "two-dimensional spatial region": "BFO:0000009",
+            "region two-dimensional spatial": "BFO:0000009",
+            "region spatial two-dimensional": "BFO:0000009",
+            "spatial two-dimensional region": "BFO:0000009",
+            "spatial region two-dimensional": "BFO:0000009",
+            "three-dimensional region spatial": "BFO:0000028",
+            "three-dimensional spatial region": "BFO:0000028",
+            "region three-dimensional spatial": "BFO:0000028",
+            "region spatial three-dimensional": "BFO:0000028",
+            "spatial three-dimensional region": "BFO:0000028",
+            "spatial region three-dimensional": "BFO:0000028"
+        }
+        self.assertDictEqual(actual_resource_bracketed_permutation_terms,
+                             expected_resource_bracketed_permutation_terms)
+
 
 if __name__ == '__main__':
     unittest.main()

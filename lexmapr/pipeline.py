@@ -722,9 +722,19 @@ def create_ontology_lookup_table(ontology_file_name):
             lookup_table["resource_terms"][resource_label] = resource_id
             lookup_table["resource_terms_revised"][resource_label.lower()] = resource_id
 
-            permutations = get_resource_permutation_terms(resource_label)
-            for permutation in permutations:
-                lookup_table["resource_permutation_terms"][permutation] = resource_id
+            # List of tokens in resource_label
+            resource_tokens = word_tokenize(resource_label.lower())
+            # Add permutations if there are less than seven tokens.
+            # Permutating more tokens than this can lead to performance
+            # issues.
+            if len(resource_tokens) < 7:
+                permutations = get_resource_permutation_terms(resource_label)
+                for permutation in permutations:
+                    lookup_table["resource_permutation_terms"][permutation] = resource_id
+
+                bracketed_permutations = get_resource_bracketed_permutation_terms(resource_label)
+                for permutation in bracketed_permutations:
+                    lookup_table["resource_bracketed_permutation_terms"][permutation] = resource_id
 
             if "synonyms" in resource:
                 synonyms = resource["synonyms"].split(";")
