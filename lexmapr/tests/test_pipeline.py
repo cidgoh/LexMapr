@@ -533,12 +533,13 @@ class TestOntologyMapping(unittest.TestCase):
                                     web=self.test_ontologies["pizza"])
         self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
 
-    def test_fetch_ontology_specify_root(self):
+    def test_fetch_ontology_specify_no_root(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     web=self.test_ontologies["pizza"])
         pizza_json = self.get_fetched_ontology("pizza")
         self.assertFalse(pizza_json["specifications"])
 
+    def test_fetch_ontology_specify_with_root(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     web=self.test_ontologies["pizza"],
                                     root=self.test_ontologies["pizza_DomainThing"])
