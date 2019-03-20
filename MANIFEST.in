@@ -9,3 +9,4 @@ include lexmapr/resources/inflection-exceptions.csv
 include lexmapr/resources/mining-stopwords.csv
 include lexmapr/resources/qualities.csv
 include lexmapr/resources/wikipediaCollocations.csv
+include lexmapr/resources/suffixes.csv
