@@ -1093,7 +1093,7 @@ def run(args):
     samplesSet = []
 
     # Lookup table will consist of pre-defined resources from csv fields
-    if args.web is None:
+    if args.config is None:
         # This will be a nested dictionary of all resource dictionaries used by
         # run. It is retrieved from cache if possible. See
         # get_lookup_table_from_cache docstring for details.
@@ -1105,32 +1105,39 @@ def run(args):
         if not os.path.isdir(os.path.abspath("fetched_ontologies")):
             os.makedirs("fetched_ontologies")
 
-        ontology_filename = os.path.basename(args.web).rsplit('.', 1)[0]
-        ontology_lookup_table_path = os.path.abspath("ontology_lookup_tables/%s.json")
-        ontology_lookup_table_path = ontology_lookup_table_path % ontology_filename
+        # Load user-specified config file
+        with open(os.path.abspath(args.config)) as file:
+            config_json = json.load(file)
 
-        # Retrieve lookup table for fetched ontology from cache
-        try:
-            with open(ontology_lookup_table_path) as file:
-                lookup_table = json.load(file)
-        # Generate new ontology lookup table
-        except FileNotFoundError:
-            # Arguments for ontofetch.py
-            if args.root is None:
-                sys.argv = ["", args.web, "-o", "fetched_ontologies"]
-            else:
-                sys.argv = ["", args.web, "-o", "fetched_ontologies", "-r", args.root]
-            # Call ontofetch.py
-            ontofetch = Ontology()
-            ontofetch.__main__()
-            # Make ontology_lookup_tables folder if it does not already exist
-            if not os.path.isdir(os.path.abspath("ontology_lookup_tables")):
-                os.makedirs("ontology_lookup_tables")
-            # Create ontology lookup table
-            lookup_table = create_ontology_lookup_table(ontology_filename)
-            # Add ontology_lookup_table to cache
-            with open(ontology_lookup_table_path, "w") as file:
-                json.dump(lookup_table, file)
+        # Iterate over user-specified ontologies
+        for ontology_iri in config_json:
+            ontology_filename = os.path.basename(ontology_iri).rsplit('.', 1)[0]
+            ontology_lookup_table_path = os.path.abspath("ontology_lookup_tables/%s.json")
+            ontology_lookup_table_path = ontology_lookup_table_path % ontology_filename
+
+            # Retrieve lookup table for fetched ontology from cache
+            try:
+                with open(ontology_lookup_table_path) as file:
+                    lookup_table = json.load(file)
+            # Generate new ontology lookup table
+            except FileNotFoundError:
+                # Arguments for ontofetch.py
+                if config_json[ontology_iri] == "":
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies"]
+                else:
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies", "-r",
+                                config_json[ontology_iri]]
+                # Call ontofetch.py
+                ontofetch = Ontology()
+                ontofetch.__main__()
+                # Make ontology_lookup_tables folder if it does not already exist
+                if not os.path.isdir(os.path.abspath("ontology_lookup_tables")):
+                    os.makedirs("ontology_lookup_tables")
+                # Create ontology lookup table
+                lookup_table = create_ontology_lookup_table(ontology_filename)
+                # Add ontology_lookup_table to cache
+                with open(ontology_lookup_table_path, "w") as file:
+                    json.dump(lookup_table, file)
 
     # Output file Column Headings
     OUTPUT_FIELDS = [

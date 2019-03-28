@@ -23,15 +23,10 @@ if __name__ == '__main__':
                         help='Output format')
     parser.add_argument('--version', action='store_true', dest='version',
                         help='Prints version information.', required=False)
-    parser.add_argument('-w', '--web',
-                        help="Fetch terms from this online ontology to map input file to.")
-    parser.add_argument('-r', '--root',
-                        help='Full IRI of root term to fetch underlying terms from. Requires '
-                             '-w/--web to be specified.')
+    parser.add_argument('-c', '--config',
+                        help="Path to JSON file containing the IRI of ontologies to fetch terms "
+                             "from")
     args = parser.parse_args()
-
-    if args.web is None and args.root is not None:
-        parser.error('-r/--root can only be set when -w/--web is')
     
     if args.version:
         print(script_name + ' ' + __version__)
