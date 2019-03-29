@@ -523,7 +523,7 @@ def get_resource_bracketed_permutation_terms(resource_label):
     return get_resource_permutation_terms(bracketed_component + " " + unbracketed_component)
 
 
-def create_ontology_lookup_table_skeleton():
+def create_online_ontology_lookup_table_skeleton():
     """Generate an empty lookup table.
 
     This means it has all necessary keys, but the values are empty
@@ -553,24 +553,24 @@ def create_ontology_lookup_table_skeleton():
             "resource_bracketed_permutation_terms": {}}
 
 
-def create_ontology_lookup_table(ontology_file_name):
-    """Create lookup table from online ontology.
+def add_to_online_ontology_lookup_table(lookup_table, fetched_ontology):
+    """Add terms from fetched_ontology to lookup_table.
 
-    This lookup table can be used to map terms in run.
+    lookup_table can be used to map terms in run. See
+    create_online_ontology_lookup_table_skeleton for the expected
+    format of lookup_table.
 
-    :param ontology_file_name: Name of ontology in
-                               fetched_ontologies folder to
-                               construct lookup table from
-    :type ontology_file_name: str
-    :return: Lookup table
+    :param lookup_table: See
+                         create_online_ontology_lookup_table_skeleton
+                         for the expected format of this parameter
+    :param fetched_ontology: See JSON output of ontofetch.py for the
+                             expected format of this parameter
+    :type lookup_table: dict
+    :type fetched_ontology: dict
+    :return: Modified lookup_table
     :rtype: dict
     """
-    # Get empty lookup table
-    lookup_table = create_ontology_lookup_table_skeleton()
-
-    # Parse content from fetched_ontologies and add it to the table
-    with open(os.path.abspath("fetched_ontologies/%s.json" % ontology_file_name)) as file:
-        fetched_ontology = json.load(file)
+    # Parse content from fetched_ontology and add it to lookup_table
     for resource in fetched_ontology["specifications"].values():
         if "id" in resource and "label" in resource:
             resource_id = resource["id"]
@@ -1104,23 +1104,29 @@ def run(args):
         # Make fetched_ontologies folder if it does not already exist
         if not os.path.isdir(os.path.abspath("fetched_ontologies")):
             os.makedirs("fetched_ontologies")
+        # Make ontology_lookup_tables folder if it does not already exist
+        if not os.path.isdir(os.path.abspath("ontology_lookup_tables")):
+            os.makedirs("ontology_lookup_tables")
 
-        # Load user-specified config file
-        with open(os.path.abspath(args.config)) as file:
-            config_json = json.load(file)
+        config_file_name = os.path.basename(args.config).rsplit('.', 1)[0]
+        lookup_table_abs_path = os.path.abspath("ontology_lookup_tables/%s.json")
+        lookup_table_abs_path = lookup_table_abs_path % config_file_name
 
-        # Iterate over user-specified ontologies
-        for ontology_iri in config_json:
-            ontology_filename = os.path.basename(ontology_iri).rsplit('.', 1)[0]
-            ontology_lookup_table_path = os.path.abspath("ontology_lookup_tables/%s.json")
-            ontology_lookup_table_path = ontology_lookup_table_path % ontology_filename
+        # Retrieve lookup table for fetched ontology from cache
+        try:
+            with open(lookup_table_abs_path) as file:
+                lookup_table = json.load(file)
+        # Generate new ontology lookup table
+        except FileNotFoundError:
+            # Load user-specified config file
+            with open(os.path.abspath(args.config)) as file:
+                config_json = json.load(file)
 
-            # Retrieve lookup table for fetched ontology from cache
-            try:
-                with open(ontology_lookup_table_path) as file:
-                    lookup_table = json.load(file)
-            # Generate new ontology lookup table
-            except FileNotFoundError:
+            # Create empty ontology lookup table
+            lookup_table = create_online_ontology_lookup_table_skeleton()
+
+            # Iterate over user-specified ontologies
+            for ontology_iri in config_json:
                 # Arguments for ontofetch.py
                 if config_json[ontology_iri] == "":
                     sys.argv = ["", ontology_iri, "-o", "fetched_ontologies"]
@@ -1130,14 +1136,17 @@ def run(args):
                 # Call ontofetch.py
                 ontofetch = Ontology()
                 ontofetch.__main__()
-                # Make ontology_lookup_tables folder if it does not already exist
-                if not os.path.isdir(os.path.abspath("ontology_lookup_tables")):
-                    os.makedirs("ontology_lookup_tables")
-                # Create ontology lookup table
-                lookup_table = create_ontology_lookup_table(ontology_filename)
-                # Add ontology_lookup_table to cache
-                with open(ontology_lookup_table_path, "w") as file:
-                    json.dump(lookup_table, file)
+                # Load fetched_ontology from JSON, and add the
+                # appropriate terms to lookup_table.
+                ontology_file_name = os.path.basename(ontology_iri).rsplit('.', 1)[0]
+                fetched_ontology_rel_path = "fetched_ontologies/%s.json" % ontology_file_name
+                with open(os.path.abspath(fetched_ontology_rel_path)) as file:
+                    fetched_ontology = json.load(file)
+                lookup_table = add_to_online_ontology_lookup_table(lookup_table, fetched_ontology)
+
+            # Add ontology_lookup_table to cache
+            with open(lookup_table_abs_path, "w") as file:
+                json.dump(lookup_table, file)
 
     # Output file Column Headings
     OUTPUT_FIELDS = [
