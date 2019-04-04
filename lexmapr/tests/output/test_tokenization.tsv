@@ -3,4 +3,4 @@ small_simple1	Raw Chicken Breast	raw chicken breast	[('raw', 'JJ'), ('chicken', 
 small_simple2	Baked Potato	baked potato	[('baked', 'VBN'), ('potato', 'NN')]	potato	['baked potato']	['potato (baked):FOODON_03302196']	['potato (baked):FOODON_03302196']		Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
 small_simple3	Corn	corn	[('corn', 'NN')]	corn	['corn']	['corn (vegetable) food product:FOODON_00001765']	['corn (vegetable) food product:FOODON_00001765']		Full Term Match	['[CleanedSample-Change of Case of Resource and Suffix Addition- (vegetable) food product to the Input]']
 small_simple4	Frozen Yogurt	frozen yogurt	[('frozen', 'JJ'), ('yogurt', 'NN')]	yogurt	['frozen yogurt']	['frozen yogurt:FOODON_03307445']	['frozen yogurt:FOODON_03307445']		Full Term Match	['Change of Case in Input Data']
-small_simple5	Pie	pie	[('pie', 'NN')]	pie	['pie']	['pie:CandidateTerm_FoodOn_839']	['pie:CandidateTerm_FoodOn_839']		Full Term Match	['Change of Case in Input Data']
+small_simple5	Pie	pie	[('pie', 'NN')]	pie	['pie']	['pie:CandidateTerm_FoodOn_1074']	['pie:CandidateTerm_FoodOn_1074']		Full Term Match	['Change of Case in Input Data']
