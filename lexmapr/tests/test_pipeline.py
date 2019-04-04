@@ -488,8 +488,9 @@ class TestOntologyMapping(unittest.TestCase):
         # Un-cache any files from ontology_lookup_tables that we create
         # during testing. i.e., everything from tests/config
         for test_config_file in os.listdir(os.path.abspath("tests/config")):
-            if os.path.exists(os.path.abspath("ontology_lookup_tables/%s" % test_config_file)):
-                os.remove(os.path.abspath("ontology_lookup_tables/%s" % test_config_file))
+            lookup_table_path = "ontology_lookup_tables/lookup_%s" % test_config_file
+            if os.path.exists(os.path.abspath(lookup_table_path)):
+                os.remove(os.path.abspath(lookup_table_path))
 
     def tearDown(self):
         self.setUp()
@@ -545,13 +546,13 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertEqual(3, len(bfo_process_fetched_ontology["specifications"]))
 
     def test_ontology_table_creation(self):
-        self.assertFalse(os.path.exists(os.path.abspath("ontology_lookup_tables/bfo.json")))
+        self.assertFalse(os.path.exists(os.path.abspath("ontology_lookup_tables/lookup_bfo.json")))
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo.json"))
-        self.assertTrue(os.path.exists(os.path.abspath("ontology_lookup_tables/bfo.json")))
+        self.assertTrue(os.path.exists(os.path.abspath("ontology_lookup_tables/lookup_bfo.json")))
 
     def test_ontology_table_creation_with_multiple_ontologies(self):
-        expected_lookup_table_rel_path = "ontology_lookup_tables/bfo_and_pizza.json"
+        expected_lookup_table_rel_path = "ontology_lookup_tables/lookup_bfo_and_pizza.json"
         self.assertFalse(os.path.exists(os.path.abspath(expected_lookup_table_rel_path)))
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo_and_pizza.json"))
@@ -560,7 +561,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_keys(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo.json"))
-        fetched_ontology = self.get_ontology_lookup_table("bfo")
+        fetched_ontology = self.get_ontology_lookup_table("lookup_bfo")
 
         expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
                          "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
@@ -577,7 +578,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_keys_with_multiple_ontologies(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo_and_pizza.json"))
-        lookup_table = self.get_ontology_lookup_table("bfo_and_pizza")
+        lookup_table = self.get_ontology_lookup_table("lookup_bfo_and_pizza")
 
         expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
                          "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
@@ -594,7 +595,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_resource_terms_ID_based(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo_material_entity.json"))
-        lookup_table = self.get_ontology_lookup_table("bfo_material_entity")
+        lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
 
         expected_resource_terms_id_based = {
             "BFO:0000024": "fiat object part",
@@ -605,8 +606,9 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
 
     def test_ontology_table_resource_terms_ID_based_with_multiple_ontologies(self):
-        expected_lookup_table_name = "bfo_material_entity_and_pizza_spiciness"
-        test_config_file_rel_path = "tests/config/%s.json" % expected_lookup_table_name
+        config_file_name = "bfo_material_entity_and_pizza_spiciness"
+        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        expected_lookup_table_name = "lookup_" + config_file_name
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath(test_config_file_rel_path))
         lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
@@ -625,7 +627,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_resource_terms(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo_material_entity.json"))
-        lookup_table = self.get_ontology_lookup_table("bfo_material_entity")
+        lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
 
         expected_resource_terms = {
             "fiat object part": "BFO:0000024",
@@ -636,8 +638,9 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)
 
     def test_ontology_table_resource_terms_with_multiple_ontologies(self):
-        expected_lookup_table_name = "bfo_material_entity_and_pizza_spiciness"
-        test_config_file_rel_path = "tests/config/%s.json" % expected_lookup_table_name
+        config_file_name = "bfo_material_entity_and_pizza_spiciness"
+        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        expected_lookup_table_name = "lookup_" + config_file_name
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath(test_config_file_rel_path))
         lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
@@ -656,7 +659,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_resource_terms_revised_where_terms_do_not_change(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo_material_entity.json"))
-        lookup_table = self.get_ontology_lookup_table("bfo_material_entity")
+        lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
 
         expected_resource_terms_revised = {
             "fiat object part": "BFO:0000024",
@@ -669,7 +672,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_resource_terms_revised_where_terms_change(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/pizza_spiciness.json"))
-        lookup_table = self.get_ontology_lookup_table("pizza_spiciness")
+        lookup_table = self.get_ontology_lookup_table("lookup_pizza_spiciness")
 
         expected_resource_terms_revised = {
             "naopicante": "pizza.owl:Mild",
@@ -680,8 +683,9 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms_revised, actual_resource_terms_revised)
 
     def test_ontology_table_resource_terms_revised_with_multiple_ontologies(self):
-        expected_lookup_table_name = "bfo_material_entity_and_pizza_spiciness"
-        test_config_file_rel_path = "tests/config/%s.json" % expected_lookup_table_name
+        config_file_name = "bfo_material_entity_and_pizza_spiciness"
+        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        expected_lookup_table_name = "lookup_" + config_file_name
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath(test_config_file_rel_path))
         lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
@@ -700,7 +704,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_synonyms(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo.json"))
-        lookup_table = self.get_ontology_lookup_table("bfo")
+        lookup_table = self.get_ontology_lookup_table("lookup_bfo")
 
         expected_synonyms = {
             "temporal instant.": "zero-dimensional temporal region",
@@ -719,7 +723,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_resource_permutation_terms(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo_material_entity.json"))
-        lookup_table = self.get_ontology_lookup_table("bfo_material_entity")
+        lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
 
         expected_resource_permutation_terms = {
             "fiat object part": "BFO:0000024",
@@ -738,7 +742,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_resource_bracketed_permutation_terms(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo_spatial_region.json"))
-        lookup_table = self.get_ontology_lookup_table("bfo_spatial_region")
+        lookup_table = self.get_ontology_lookup_table("lookup_bfo_spatial_region")
 
         expected_resource_bracketed_permutation_terms = {
             "one-dimensional region spatial": "BFO:0000026",
@@ -768,7 +772,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_other_fields(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo.json"))
-        lookup_table = self.get_ontology_lookup_table("bfo")
+        lookup_table = self.get_ontology_lookup_table("lookup_bfo")
 
         expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
                          "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",

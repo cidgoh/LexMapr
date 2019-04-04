@@ -1109,7 +1109,7 @@ def run(args):
             os.makedirs("ontology_lookup_tables")
 
         config_file_name = os.path.basename(args.config).rsplit('.', 1)[0]
-        lookup_table_abs_path = os.path.abspath("ontology_lookup_tables/%s.json")
+        lookup_table_abs_path = os.path.abspath("ontology_lookup_tables/lookup_%s.json")
         lookup_table_abs_path = lookup_table_abs_path % config_file_name
 
         # Retrieve lookup table for fetched ontology from cache
