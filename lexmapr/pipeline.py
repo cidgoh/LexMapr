@@ -598,22 +598,47 @@ def add_to_online_ontology_lookup_table(lookup_table, fetched_ontology):
                 for synonym in synonyms:
                     lookup_table["synonyms"][synonym] = resource_label
 
-    # # We will use the pre-defined resources for the following fields
-    lookup_table["abbreviations"] = get_resource_dict("AbbLex.csv")
-    lookup_table["abbreviations_lower"] = get_resource_dict("AbbLex.csv", True)
-    lookup_table["non_english_words"] = get_resource_dict("NefLex.csv")
-    lookup_table["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
-    lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
-    lookup_table["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
-    lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
-    lookup_table["qualities"] = get_resource_dict("SemLex.csv")
-    lookup_table["qualities_lower"] = get_resource_dict("SemLex.csv", True)
-    lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
-    lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
-    lookup_table["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
-    lookup_table["suffixes"] = get_resource_dict("suffixes.csv")
-
     return lookup_table
+
+
+def merge_lookup_tables(lookup_table_one, lookup_table_two):
+    """Merges lookup tables.
+
+    Lookup tables, in the context of this pipeline, are dictionaries.
+    They have the same keys, but can have different values. The values
+    are also dictionaries.
+
+    If their is a conflict between identical keys during merging,
+    priority is given to lookup_table_two.
+
+    :param dict lookup_table_one: lookup table
+    :param dict lookup_table_two: lookup table
+    :return: lookup table with the combined values for each key from
+             lookup_table_one and lookup_table_two
+    :rtype: dict
+    :raises ValueError: if the definition of lookup table is not
+                        adhered to by the parameters
+    """
+    if lookup_table_one.keys() != lookup_table_two.keys():
+        raise ValueError("lookup_table_one and lookup_table_two do not have the same keys")
+
+    # Set of keys from lookup_table_one, which are identical to the
+    # keys from lookup_table_two. So these are just the common set of
+    # lookup table keys.
+    lookup_table_keys = lookup_table_one.keys()
+
+    for key in lookup_table_keys:
+        if type(lookup_table_one[key]) is not dict:
+            raise ValueError("lookup_table_one values are not all dictionaries")
+        if type(lookup_table_two[key]) is not dict:
+            raise ValueError("lookup_table_two values are not all dictionaries")
+
+    # Merge values from lookup_table_two into lookup_table_one
+    for key in lookup_table_keys:
+        for nested_key in lookup_table_two[key]:
+            lookup_table_one[key][nested_key] = lookup_table_two[key][nested_key]
+
+    return lookup_table_one
 
 
 def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
@@ -1092,15 +1117,14 @@ def run(args):
     samplesList = []
     samplesSet = []
 
-    # Lookup table will consist of pre-defined resources from csv fields
-    if args.config is None:
-        # This will be a nested dictionary of all resource dictionaries used by
-        # run. It is retrieved from cache if possible. See
-        # get_lookup_table_from_cache docstring for details.
-        lookup_table = get_lookup_table_from_cache()
-    # Lookup table will consist of terms fetched from an online
+    # This will be a nested dictionary of all resource dictionaries used by
+    # run. It is retrieved from cache if possible. See
+    # get_lookup_table_from_cache docstring for details.
+    lookup_table = get_lookup_table_from_cache()
+
+    # Lookup table will also consist of terms fetched from an online
     # ontology.
-    else:
+    if args.config is not None:
         # Make fetched_ontologies folder if it does not already exist
         if not os.path.isdir(os.path.abspath("fetched_ontologies")):
             os.makedirs("fetched_ontologies")
@@ -1109,13 +1133,13 @@ def run(args):
             os.makedirs("ontology_lookup_tables")
 
         config_file_name = os.path.basename(args.config).rsplit('.', 1)[0]
-        lookup_table_abs_path = os.path.abspath("ontology_lookup_tables/lookup_%s.json")
-        lookup_table_abs_path = lookup_table_abs_path % config_file_name
+        ontology_lookup_table_abs_path = os.path.abspath("ontology_lookup_tables/lookup_%s.json")
+        ontology_lookup_table_abs_path = ontology_lookup_table_abs_path % config_file_name
 
         # Retrieve lookup table for fetched ontology from cache
         try:
-            with open(lookup_table_abs_path) as file:
-                lookup_table = json.load(file)
+            with open(ontology_lookup_table_abs_path) as file:
+                ontology_lookup_table = json.load(file)
         # Generate new ontology lookup table
         except FileNotFoundError:
             # Load user-specified config file
@@ -1123,7 +1147,7 @@ def run(args):
                 config_json = json.load(file)
 
             # Create empty ontology lookup table
-            lookup_table = create_online_ontology_lookup_table_skeleton()
+            ontology_lookup_table = create_online_ontology_lookup_table_skeleton()
 
             # Iterate over user-specified ontologies
             for ontology_iri in config_json:
@@ -1142,11 +1166,15 @@ def run(args):
                 fetched_ontology_rel_path = "fetched_ontologies/%s.json" % ontology_file_name
                 with open(os.path.abspath(fetched_ontology_rel_path)) as file:
                     fetched_ontology = json.load(file)
-                lookup_table = add_to_online_ontology_lookup_table(lookup_table, fetched_ontology)
+                ontology_lookup_table = add_to_online_ontology_lookup_table(ontology_lookup_table,
+                                                                            fetched_ontology)
 
             # Add ontology_lookup_table to cache
-            with open(lookup_table_abs_path, "w") as file:
-                json.dump(lookup_table, file)
+            with open(ontology_lookup_table_abs_path, "w") as file:
+                json.dump(ontology_lookup_table, file)
+
+        # Merge ontology_lookup_table into lookup_table
+        lookup_table = merge_lookup_tables(lookup_table, ontology_lookup_table)
 
     # Output file Column Headings
     OUTPUT_FIELDS = [
