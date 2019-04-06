@@ -5,6 +5,7 @@ import nltk
 import re
 import inflection
 from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize.moses import MosesDetokenizer as detokenizer
 from nltk import pos_tag, ne_chunk
 import wikipedia
 import itertools
@@ -25,6 +26,197 @@ from lexmapr.ontofetch import Ontology
 
 logger = logging.getLogger("pipeline")
 logger.disabled = True
+
+
+def assign_confidence_level(match_status, match_status_addendum):
+    confidence_level = "Unassigned"
+    if "Full Term Match" in match_status:
+        if "[A Direct Match With Original Sample]" in match_status_addendum:
+            confidence_level="Highest"
+        if "[Change of Case in Input Data]" in match_status_addendum:
+            confidence_level="Highest"
+        if "[Change of Case in Resource Data]" in match_status_addendum:
+            confidence_level = "Highest"
+        if "[Permutation of Tokens in Resource Term]" in match_status_addendum:
+            confidence_level = "High"
+        if "[Permutation of Tokens in Bracketed Resource Term]" in match_status_addendum:
+            confidence_level = "High"
+        if "[Change of Case of Resource and Suffix Addition" in match_status_addendum:
+            confidence_level = "High"
+        if "[A Direct Match with Cleaned and Normalized Input]" in match_status_addendum:
+            confidence_level = "High"
+        if "[New Candidadte Terms -" in match_status_addendum:
+            confidence_level = "Highest But Subject to Inclusion of Candidate Term in Resources"
+        if "Inflection (Singularization) Treatment" in match_status_addendum:
+            confidence_level = "High"
+        if "Spelling Correction Treatment" in match_status_addendum:
+            confidence_level = "High"
+        if "Abbreviation-Acronym Treatment" in match_status_addendum:
+            confidence_level = "Moderate"
+        if "Non English Language Words Treatment" in match_status_addendum:
+            confidence_level = "Moderate"
+    if "Component Match" in match_status:
+        if "None" in match_status_addendum:
+            confidence_level = "High"
+        if "Inflection (Singularization) Treatment" in match_status_addendum:
+            confidence_level = "High"
+        if "Spelling Correction Treatment" in match_status_addendum:
+            confidence_level = "High"
+        if "Abbreviation-Acronym Treatment" in match_status_addendum:
+            confidence_level = "Moderate"
+        if "Non English Language Words Treatment" in match_status_addendum:
+            confidence_level = "Moderate"
+        if "Suffix Addition-" in match_status_addendum:
+            confidence_level = "High"
+        if "Synonym Usage" in match_status_addendum:
+            confidence_level = "High"
+        if "Using Semantic Tagging Resources" in match_status_addendum:
+            confidence_level = "Low"
+    return confidence_level
+
+
+def singularize_token(tkn, lookup_table, status_addendum):
+    lemma=tkn
+    if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith(
+            "ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
+        lemma = tkn
+    elif (tkn not in lookup_table[
+        "inflection_exceptions"]):  # Further Inflection Exception list is taken into account
+        lemma = inflection.singularize(tkn)
+    if (tkn != lemma):  # Only in case when inflection makes some changes in lemma
+        status_addendum.append("Inflection (Plural) Treatment")
+
+    return lemma
+
+
+def spelling_correction(lemma, lookup_table, status_addendum):
+    if (lemma in lookup_table["spelling_mistakes"].keys()):  # spelling mistakes taken care of
+        lemma = lookup_table["spelling_mistakes"][lemma]
+        status_addendum.append("Spelling Correction Treatment")
+    elif (lemma.lower() in lookup_table["spelling_mistakes_lower"].keys()):
+        lemma = lookup_table["spelling_mistakes_lower"][lemma.lower()]
+        status_addendum.append("Change Case and Spelling Correction Treatment")
+    return lemma
+
+
+def abbreviation_normalization_token(lemma, lookup_table, status_addendum):
+    if (lemma in lookup_table[
+        "abbreviations"].keys()):
+        lemma = lookup_table["abbreviations"][lemma]
+        status_addendum.append("Abbreviation-Acronym Treatment")
+    elif (lemma.lower() in lookup_table["abbreviations_lower"].keys()):
+        lemma = lookup_table["abbreviations_lower"][lemma.lower()]
+        status_addendum.append("Change Case and Abbreviation-Acronym Treatment")
+    return lemma
+
+
+def abbreviation_normalization_phrase(phrase, lookup_table, status_addendum):
+    if (phrase in lookup_table[
+        "abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
+        cleaned_sample = lookup_table["abbreviations"][phrase]
+        status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
+    elif (phrase in lookup_table["abbreviations_lower"].keys()):
+        cleaned_sample = lookup_table["abbreviations_lower"][phrase]
+        status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
+    return phrase
+
+
+def non_English_normalization_token(lemma, lookup_table, status_addendum):
+    if (lemma in lookup_table["non_english_words"].keys()):  # Non English language words taken care of
+        lemma = lookup_table["non_english_words"][lemma]
+        status_addendum.append("Non English Language Words Treatment")
+    elif (lemma.lower() in lookup_table["non_english_words_lower"].keys()):
+        lemma = lookup_table["non_english_words_lower"][lemma.lower()]
+        status_addendum.append("Change Case and Non English Language Words Treatment")
+    return lemma
+
+
+def non_English_normalization_phrase(phrase, lookup_table, status_addendum):
+    if (phrase in lookup_table["non_english_words"].keys()):  # non English words taken care of
+        phrase = lookup_table["non_english_words"][phrase]
+        status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
+    elif (phrase in lookup_table["non_english_words_lower"].keys()):
+        phrase = lookup_table["non_english_words_lower"][phrase]
+        status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
+    return phrase
+
+
+def get_cleaned_sample(cleaned_sample,lemma, lookup_table):
+    if (not cleaned_sample and lemma.lower() not in lookup_table[
+        "stop_words"]):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
+        cleaned_sample = lemma.lower()
+    elif (
+                lemma.lower() not in lookup_table[
+                "stop_words"]):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
+
+        cleaned_sample = cleaned_sample + " " + lemma.lower()
+    return cleaned_sample
+
+
+def get_component_match_withids(partial_matches, lookup_table):
+    # Matches in partial_matches, and their corresponding IDs
+    partial_matches_with_ids = []
+    # Decoding the partial matched set to get back resource ids
+    for matchstring in partial_matches:
+        if (matchstring in lookup_table["resource_terms"].keys()):
+            resourceId = lookup_table["resource_terms"][matchstring]
+            partial_matches_with_ids.append(matchstring + ":" + resourceId)
+        elif (matchstring in lookup_table["resource_terms_revised"].keys()):
+            resourceId = lookup_table["resource_terms_revised"][matchstring]
+            partial_matches_with_ids.append(matchstring + ":" + resourceId)
+        elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
+            resourceId = lookup_table["resource_permutation_terms"][matchstring]
+            resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
+            partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
+        elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
+            resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
+            resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
+            resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
+            partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
+        elif (matchstring in lookup_table["processes"].keys()):
+            resourceId = lookup_table["processes"][matchstring]
+            partial_matches_with_ids.append(matchstring + ":" + resourceId)
+        elif (matchstring in lookup_table["qualities"].keys()):
+            resourceId = lookup_table["qualities"][matchstring]
+            partial_matches_with_ids.append(matchstring + ":" + resourceId)
+        elif (matchstring in lookup_table["qualities_lower"].keys()):
+            resourceId = lookup_table["qualities_lower"][matchstring]
+            partial_matches_with_ids.append(matchstring + ":" + resourceId)
+        elif ("==" in matchstring):
+            resList = matchstring.split("==")
+            entityPart = resList[0]
+            entityTag = resList[1]
+            partial_matches_with_ids.append(entityPart + ":" + entityTag)
+    return partial_matches_with_ids
+
+
+def remove_duplicate_tokens(input_string):
+    refined_string=""
+    new_phrase_set = []
+    string_tokens = word_tokenize(input_string.lower())
+    for tkn in string_tokens:
+        new_phrase_set.append(tkn)
+    refined_string = detokenizer().detokenize(new_phrase_set, return_str=True)
+    refined_string=refined_string.strip()
+    return refined_string
+
+
+def read_input_file(input_file):
+    sample_list=[]
+    sample_dict = collections.OrderedDict()
+    with open(input_file) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        ctr = 0
+        for row in readCSV:
+            if ctr > 0:  # skips the first row in CSV file as header row
+                sample_list.append(row[1])
+                samid = row[0]
+                samp = row[1]
+                # termFreq=row[2]               #NN To be removed
+                sample_dict[samid.strip()] = samp.strip()
+            ctr += 1
+    return sample_dict
+
 
 # DIFFERENT METHODS USED (Will be organized in Modular arrangement later on)
 
@@ -1113,7 +1305,7 @@ def run(args):
     remainingAllTokensSet = []
     remainingTokenSet = []
     prioritizedRetainedSet=[]
-    samplesDict = collections.OrderedDict()
+    samples_dict = collections.OrderedDict()
     samplesList = []
     samplesSet = []
 
@@ -1200,20 +1392,10 @@ def run(args):
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
     fw.write('\t'.join(OUTPUT_FIELDS))
     
-    with open(args.input_file) as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        ctr = 0
-        for row in readCSV:
-            if ctr > 0:  # skips the first row in CSV file as header row
-                samplesList.append(row[1])
-                samid = row[0]
-                samp = row[1]
-                # termFreq=row[2]
-                samplesDict[samid.strip()] = samp.strip()
-            ctr += 1
+    samples_dict = read_input_file(args.input_file)
     
     # Iterate over samples for matching to ontology terms
-    for k, v in samplesDict.items():
+    for k, v in samples_dict.items():
         sampleid = k
         sample = v
         trigger = False
@@ -1245,65 +1427,34 @@ def run(args):
             tkn = preprocess(tkn)
 
             # Plurals are converted to singulars with exceptions
-            if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith("ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
-                lemma = tkn
-            elif (tkn not in lookup_table["inflection_exceptions"]):  # Further Inflection Exception list is taken into account
-                lemma = inflection.singularize(tkn)
-                if (tkn != lemma):  #Only in case when inflection makes some changes in lemma
-                    status_addendum.append("Inflection (Plural) Treatment")
-            else:
-                lemma = tkn
+            lemma = singularize_token(tkn, lookup_table, status_addendum)
 
             # Misspellings are dealt with  here
-            if (lemma in lookup_table["spelling_mistakes"].keys()):  # spelling mistakes taken care of
-                lemma = lookup_table["spelling_mistakes"][lemma]
-                status_addendum.append("Spelling Correction Treatment")
-            elif (lemma.lower() in lookup_table["spelling_mistakes_lower"].keys()):
-                lemma = lookup_table["spelling_mistakes_lower"][lemma.lower()]
-                status_addendum.append("Change Case and Spelling Correction Treatment")
-            if (lemma in lookup_table["abbreviations"].keys()):  # Abbreviations, acronyms, foreign language words taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
-                lemma = lookup_table["abbreviations"][lemma]
-                status_addendum.append("Abbreviation-Acronym Treatment")
-            elif (lemma.lower() in lookup_table["abbreviations_lower"].keys()):
-                lemma = lookup_table["abbreviations_lower"][lemma.lower()]
-                status_addendum.append("Change Case and Abbreviation-Acronym Treatment")
+            lemma = spelling_correction(lemma, lookup_table, status_addendum)
 
-            if (lemma in lookup_table["non_english_words"].keys()):  # Non English language words taken care of
-                lemma = lookup_table["non_english_words"][lemma]
-                status_addendum.append("Non English Language Words Treatment")
-            elif (lemma.lower() in lookup_table["non_english_words_lower"].keys()):
-                lemma = lookup_table["non_english_words_lower"][lemma.lower()]
+            # Abbreviations, acronyms, taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
+            lemma = abbreviation_normalization_token(lemma, lookup_table, status_addendum)
 
-                status_addendum.append("Change Case and Non English Language Words Treatment")
-
+            # non-EngLish language words taken care of
+            lemma = non_English_normalization_token(lemma, lookup_table, status_addendum)
 
             # ===This will create a cleaned sample after above treatments [Here we are making new phrase now in lower case]
-            if (not cleaned_sample and lemma.lower() not in lookup_table["stop_words"]):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
-                cleaned_sample = lemma.lower()
-            elif (
-                lemma.lower() not in lookup_table["stop_words"]):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
+            cleaned_sample = get_cleaned_sample(cleaned_sample, lemma, lookup_table)
+            cleaned_sample = re.sub(' +', ' ', cleaned_sample)
 
-                cleaned_sample = cleaned_sample + " " + lemma.lower()
+            # Phrase being cleaned for
+            cleaned_sample = abbreviation_normalization_phrase(cleaned_sample, lookup_table, status_addendum)
 
-            cleaned_sample = re.sub(' +', ' ', cleaned_sample)  # Extra innner spaces removed from cleaned sample
+            # Phrase being cleaned for
+            cleaned_sample = non_English_normalization_phrase(cleaned_sample, lookup_table, status_addendum)
 
-            if (cleaned_sample in lookup_table["abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
-                cleaned_sample = lookup_table["abbreviations"][cleaned_sample]
-                status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
-            elif (cleaned_sample in lookup_table["abbreviations_lower"].keys()):
-                cleaned_sample = lookup_table["abbreviations_lower"][cleaned_sample]
-                status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
+        #  Here we are making the tokens of cleaned sample phrase
+        cleaned_sample = remove_duplicate_tokens(cleaned_sample)
+        cleaned_sample_tokens = word_tokenize(cleaned_sample.lower())
 
-            if (cleaned_sample in lookup_table["non_english_words"].keys()):  # non English words taken care of
-                cleaned_sample = lookup_table["non_english_words"][cleaned_sample]
-                status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
-            elif (cleaned_sample in lookup_table["non_english_words_lower"].keys()):
-                cleaned_sample = lookup_table["non_english_words_lower"][cleaned_sample]
-                status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
+        # Part of Speech tags assigned to the tokens
+        tokens_pos = pos_tag(cleaned_sample_tokens)
 
-        # Here we are making the tokens of cleaned sample phrase
-        newSampleTokens = word_tokenize(cleaned_sample.lower())
-        tokens_pos = pos_tag(newSampleTokens)
         if args.format == "full":
             # output fields:
             #   'cleaned_sample': cleaned_sample
@@ -1416,39 +1567,7 @@ def run(args):
                 if (chktkn not in covered_tokens):
                     remainingTokenSet.append(chktkn)
 
-            # Matches in partial_matches, and their corresponding IDs
-            partial_matches_with_ids = []
-            #Decoding the partial matched set to get back resource ids
-            for matchstring in partial_matches:
-                if (matchstring in lookup_table["resource_terms"].keys()):
-                    resourceId = lookup_table["resource_terms"][matchstring]
-                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
-                elif (matchstring in lookup_table["resource_terms_revised"].keys()):
-                    resourceId = lookup_table["resource_terms_revised"][matchstring]
-                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
-                elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
-                    resourceId = lookup_table["resource_permutation_terms"][matchstring]
-                    resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
-                    partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
-                elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
-                    resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
-                    resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
-                    resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
-                    partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
-                elif (matchstring in lookup_table["processes"].keys()):
-                    resourceId = lookup_table["processes"][matchstring]
-                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
-                elif (matchstring in lookup_table["qualities"].keys()):
-                    resourceId = lookup_table["qualities"][matchstring]
-                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
-                elif (matchstring in lookup_table["qualities_lower"].keys()):
-                    resourceId = lookup_table["qualities_lower"][matchstring]
-                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
-                elif ("==" in matchstring):
-                    resList = matchstring.split("==")
-                    entityPart = resList[0]
-                    entityTag = resList[1]
-                    partial_matches_with_ids.append(entityPart + ":" + entityTag)
+            partial_matches_with_ids=get_component_match_withids(partial_matches, lookup_table)
 
             partialMatchedResourceListSet = set(partial_matches_with_ids)   # Makes a set from list of all matched components with resource ids
             retainedSet = []
