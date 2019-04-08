@@ -23,6 +23,9 @@ if __name__ == '__main__':
                         help='Output format')
     parser.add_argument('--version', action='store_true', dest='version',
                         help='Prints version information.', required=False)
+    parser.add_argument('-c', '--config',
+                        help="Path to JSON file containing the IRI of ontologies to fetch terms "
+                             "from")
     args = parser.parse_args()
     
     if args.version:

@@ -20,9 +20,12 @@ TODO:
             end-result of pipeline.py
 """
 
+import argparse
+import json
 import os
 import tempfile
 import unittest
+
 from lexmapr import pipeline
 
 
@@ -131,65 +134,6 @@ class TestPipelineMethods(unittest.TestCase):
         # "'", "," and "."
         self.assertEqual(pipeline.preprocess("cow's, . "), "cow,")
 
-    def test_find_between_r(self):
-        """Tests find_between_r."""
-        # Between first and last indices
-        self.assertEqual(pipeline.find_between_r("^string$", "^", "$"),
-            "string")
-        # Between non-first and last indices
-        self.assertEqual(pipeline.find_between_r("^string$", "s", "$"),
-            "tring")
-        # Between first and non-last indices
-        self.assertEqual(pipeline.find_between_r("^string$", "^", "g"),
-            "strin")
-        # Between non-first and non-last indices
-        self.assertEqual(pipeline.find_between_r("^string$", "s", "g"),
-            "trin")
-        # Same character for first and last parameters
-        self.assertEqual(pipeline.find_between_r("^string$", "r", "r"),
-            "")
-        # Invalid first parameter
-        self.assertEqual(pipeline.find_between_r("^string$", "e", "g"),
-            "")
-        # Invalid last parameter
-        self.assertEqual(pipeline.find_between_r("^string$", "^", "q"),
-            "")
-        # Invalid first and last parameters
-        self.assertEqual(pipeline.find_between_r("^string$", "e", "q"),
-            "")
-
-    def test_find_left_r(self):
-        """Tests find_left_r.
-
-        TODO:
-            * The commented-out tests fail due to an error with
-                find_left_r. Based on the specifiction of find_left_r,
-                the commented-out tests should pass, and the
-                uncommented-out tests should fail. For the purposes of
-                refactoring, where we must retain original
-                functionality of pipeline.py, this is currently
-                sufficient.
-            * Problems with find_left_r:
-                * Incorrect calculation of start
-                    * 1 is added to index
-                * Unnecessary calculation of end
-                    * Incorrect calculation of start sometimes causes
-                        ValueError to be thrown
-                * Incorrect range is returned
-                    * Partly due to incorrect calculation of start, but
-                        also due to us returning a substring between
-                        the 0 and start-2 indices
-        """
-        # Left of first index
-        # self.assertEqual(pipeline.find_left_r("foo", "f", "o"), "")
-        self.assertEqual(pipeline.find_left_r("foo", "f", "o"), "fo")
-        # Left of last index
-        # self.assertEqual(pipeline.find_left_r("bar", "r", "r"), "ba")
-        self.assertEqual(pipeline.find_left_r("bar", "r", "r"), "")
-        # Left of non-first and non-last index
-        # self.assertEqual(pipeline.find_left_r("bar", "a", "r"), "b")
-        self.assertEqual(pipeline.find_left_r("bar", "a", "r"), "")
-
     def test_allPermutations(self):
         """Tests allPermutations."""
         # Empty input string
@@ -201,7 +145,32 @@ class TestPipelineMethods(unittest.TestCase):
             set([("a", "b"), ("b", "a")]))
         # 4-gram input string
         self.assertEqual(len(pipeline.all_permutations("a b c d")), 24)
-    
+
+    def test_get_resource_permutation_terms(self):
+        self.assertCountEqual(pipeline.get_resource_permutation_terms(""), [""])
+        self.assertCountEqual(pipeline.get_resource_permutation_terms("a"), ["a"])
+        self.assertCountEqual(pipeline.get_resource_permutation_terms("a b"), ["a b", "b a"])
+
+        self.assertCountEqual(pipeline.get_resource_permutation_terms("a (b)"), ["a (b)", "(b) a"])
+
+    def test_get_resource_bracketed_permutation_terms(self):
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms(""), [])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a"), [])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a b"), [])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b"), [])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a b)"), [])
+
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b)"),
+                              ["a b", "b a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("(a) b"),
+                              ["a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("(a b)"),
+                              ["a b", "b a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b c)"),
+                              ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
+        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b,c)"),
+                              ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
+
     def test_combi(self):
         """Tests combi."""
         # Empty input string and n=1
@@ -333,6 +302,70 @@ class TestPipelineMethods(unittest.TestCase):
         self.assertEqual(
             pipeline.retainedPhrase(['foo bar:bar', 'foo bar:foo']),
             set(["foo bar:bar", "foo bar:foo"]))
+
+    def test_merge_lookup_tables(self):
+        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {}, {"a": {}})
+        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}}, {})
+
+        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}}, {"b": {}})
+        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}, "b": {}},
+                                                                    {"a": {}, "c": {}})
+
+        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": "b"}, {"a": {}})
+        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}}, {"a": "b"})
+        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": "b"}, {"a": "b"})
+        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}, "b": "c"},
+                                                                    {"a": {}, "b": {}})
+        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}, "b": {}},
+                                                                    {"a": {}, "b": "c"})
+        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}, "b": "c"},
+                                                                    {"a": {}, "b": "c"})
+
+        self.assertDictEqual({}, pipeline.merge_lookup_tables({}, {}))
+        self.assertDictEqual({"a": {}}, pipeline.merge_lookup_tables({"a": {}}, {"a": {}}))
+
+        self.assertDictEqual({"a": {"b": "c"}}, pipeline.merge_lookup_tables({"a": {"b": "c"}},
+                                                                             {"a": {}}))
+        self.assertDictEqual({"a": {"b": "c"}}, pipeline.merge_lookup_tables({"a": {}},
+                                                                             {"a": {"b": "c"}}))
+        self.assertDictEqual({"a": {"b": "c"}}, pipeline.merge_lookup_tables({"a": {"b": "c"}},
+                                                                             {"a": {"b": "c"}}))
+        self.assertDictEqual({"a": {"b": "c"}}, pipeline.merge_lookup_tables({"a": {"b": "d"}},
+                                                                             {"a": {"b": "c"}}))
+        self.assertDictEqual({"a": {"b": "d"}}, pipeline.merge_lookup_tables({"a": {"b": "c"}},
+                                                                             {"a": {"b": "d"}}))
+
+        self.assertDictEqual({"a": {"b": "c", "d": "e"}},
+                             pipeline.merge_lookup_tables({"a": {"b": "c","d": "e"}},
+                                                          {"a": {"b": "c"}}))
+        self.assertDictEqual({"a": {"b": "c", "d": "e"}},
+                             pipeline.merge_lookup_tables({"a": {"b": "c"}},
+                                                          {"a": {"b": "c", "d": "e"}}))
+        self.assertDictEqual({"a": {"b": "c", "d": "e"}},
+                             pipeline.merge_lookup_tables({"a": {"b": "f","d": "e"}},
+                                                          {"a": {"b": "c"}}))
+        self.assertDictEqual({"a": {"b": "f", "d": "e"}},
+                             pipeline.merge_lookup_tables({"a": {"b": "c"}},
+                                                          {"a": {"b": "f", "d": "e"}}))
+        self.assertDictEqual({"a": {"b": "c", "d": "e"}},
+                             pipeline.merge_lookup_tables({"a": {"b": "c", "d": "e"}},
+                                                          {"a": {"b": "c", "d": "e"}}))
+        self.assertDictEqual({"a": {"b": "c", "d": "e"}},
+                             pipeline.merge_lookup_tables({"a": {"b": "f", "d": "g"}},
+                                                          {"a": {"b": "c", "d": "e"}}))
+
+        self.assertDictEqual({"a": {"b": "c", "d": "e"}, "f": {"h": "m", "j": "k"}},
+                             pipeline.merge_lookup_tables({"a": {"b": "c", "d": "l"},
+                                                           "f": {"h": "i", "j": "k"}},
+                                                          {"a": {"b": "c", "d": "e"},
+                                                           "f": {"h": "m", "j": "k"}}))
+        self.assertDictEqual({"a": {"b": "c", "d": "e", "n": "o"},
+                              "f": {"h": "m", "j": "k", "p": "q"}},
+                             pipeline.merge_lookup_tables({"a": {"b": "c", "d": "l", "n": "o"},
+                                                           "f": {"h": "i", "j": "k"}},
+                                                          {"a": {"b": "c", "d": "e"},
+                                                           "f": {"h": "m", "j": "k", "p": "q"}}))
+
 
 class TestPipeline(unittest.TestCase):
     """Unit test suite for pipeline.run.
@@ -477,7 +510,7 @@ class TestPipeline(unittest.TestCase):
             actual_output_path = tempfile.mkstemp()[1]
             # Run pipeline.run using input_path and actual_output_path
             pipeline.run(type("",(object,),{"input_file": input_path,
-                "output": actual_output_path, "format": format})())
+                "output": actual_output_path, "format": format, "config": None})())
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
@@ -495,6 +528,310 @@ class TestPipeline(unittest.TestCase):
             for failure in failures:
                 print(failure)
             raise AssertionError
-                
+
+
+class TestOntologyMapping(unittest.TestCase):
+    """Test generation and use of lookup tables from online ontologies."""
+
+    @classmethod
+    def setUpClass(cls):
+        # Change directory to same as pipeline
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+        os.chdir(os.path.abspath(".."))
+
+        # Common argument
+        cls.small_simple_path = "tests/input/small_simple.csv"
+
+    def setUp(self):
+        # Delete any files from fetched_ontologies that we fetch during
+        # testing. i.e., bfo and pizza
+        for file in ["bfo.json", "bfo.tsv", "pizza.json", "pizza.tsv"]:
+            if os.path.exists(os.path.abspath("fetched_ontologies/%s" % file)):
+                os.remove(os.path.abspath("fetched_ontologies/%s" % file))
+        # Un-cache any files from ontology_lookup_tables that we create
+        # during testing. i.e., everything from tests/config
+        for test_config_file in os.listdir(os.path.abspath("tests/config")):
+            lookup_table_path = "ontology_lookup_tables/lookup_%s" % test_config_file
+            if os.path.exists(os.path.abspath(lookup_table_path)):
+                os.remove(os.path.abspath(lookup_table_path))
+
+    def tearDown(self):
+        self.setUp()
+
+    @staticmethod
+    def run_pipeline_with_args(input_file, config=None):
+        """Run pipeline with some default arguments.
+
+        input_file must be specified. web and root can be specified,
+        but otherwise are ``None`` by default.
+        """
+        pipeline.run(argparse.Namespace(input_file=input_file, config=config, format="basic",
+                                        output=None, version=False))
+
+    @staticmethod
+    def get_fetched_ontology(file_name):
+        with open(os.path.abspath("fetched_ontologies/%s.json" % file_name)) as file:
+            return json.load(file)
+
+    @staticmethod
+    def get_ontology_lookup_table(file_name):
+        with open(os.path.abspath("ontology_lookup_tables/%s.json" % file_name)) as file:
+            return json.load(file)
+
+    def test_fetch_ontology(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path)
+        self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/pizza.json"))
+        self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+
+    def test_fetch_ontologies(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path)
+        self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/bfo.json")))
+        self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo_and_pizza.json"))
+        self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/bfo.json")))
+        self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+
+    def test_fetch_ontology_specify_no_root(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo.json"))
+        bfo_fetched_ontology = self.get_fetched_ontology("bfo")
+        self.assertEqual(36, len(bfo_fetched_ontology["specifications"]))
+
+    def test_fetch_ontology_specify_with_root(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo_process.json"))
+        bfo_process_fetched_ontology = self.get_fetched_ontology("bfo")
+        self.assertEqual(3, len(bfo_process_fetched_ontology["specifications"]))
+
+    def test_ontology_table_creation(self):
+        self.assertFalse(os.path.exists(os.path.abspath("ontology_lookup_tables/lookup_bfo.json")))
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo.json"))
+        self.assertTrue(os.path.exists(os.path.abspath("ontology_lookup_tables/lookup_bfo.json")))
+
+    def test_ontology_table_creation_with_multiple_ontologies(self):
+        expected_lookup_table_rel_path = "ontology_lookup_tables/lookup_bfo_and_pizza.json"
+        self.assertFalse(os.path.exists(os.path.abspath(expected_lookup_table_rel_path)))
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo_and_pizza.json"))
+        self.assertTrue(os.path.exists(os.path.abspath(expected_lookup_table_rel_path)))
+
+    def test_ontology_table_keys(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo.json"))
+        fetched_ontology = self.get_ontology_lookup_table("lookup_bfo")
+
+        expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
+                         "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
+                         "processes", "qualities", "qualities_lower", "collocations",
+                         "inflection_exceptions", "stop_words", "suffixes",
+                         "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms"]
+        for expected_key in expected_keys:
+            try:
+                self.assertTrue(expected_key in fetched_ontology)
+            except AssertionError:
+                raise AssertionError(expected_key + " is not in fetched_ontology")
+
+    def test_ontology_table_keys_with_multiple_ontologies(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo_and_pizza.json"))
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_and_pizza")
+
+        expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
+                         "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
+                         "processes", "qualities", "qualities_lower", "collocations",
+                         "inflection_exceptions", "stop_words", "suffixes",
+                         "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms"]
+        for expected_key in expected_keys:
+            try:
+                self.assertTrue(expected_key in ontology_lookup_table)
+            except AssertionError:
+                raise AssertionError(expected_key + " is not in pizza_table_json")
+
+    def test_ontology_table_resource_terms_ID_based(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo_material_entity.json"))
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
+
+        expected_resource_terms_id_based = {
+            "BFO:0000024": "fiat object part",
+            "BFO:0000027": "object aggregate",
+            "BFO:0000030": "object"
+        }
+        actual_resource_terms_id_based = ontology_lookup_table["resource_terms_ID_based"]
+        self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
+
+    def test_ontology_table_resource_terms_ID_based_with_multiple_ontologies(self):
+        config_file_name = "bfo_material_entity_and_pizza_spiciness"
+        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath(test_config_file_rel_path))
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_resource_terms_id_based = {
+            "BFO:0000024": "fiat object part",
+            "BFO:0000027": "object aggregate",
+            "BFO:0000030": "object",
+            "pizza.owl:Hot": "Picante",
+            "pizza.owl:Medium": "Media",
+            "pizza.owl:Mild": "NaoPicante"
+        }
+        actual_resource_terms_id_based = ontology_lookup_table["resource_terms_ID_based"]
+        self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
+
+    def test_ontology_table_resource_terms(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo_material_entity.json"))
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
+
+        expected_resource_terms = {
+            "fiat object part": "BFO:0000024",
+            "object aggregate": "BFO:0000027",
+            "object": "BFO:0000030"
+        }
+        actual_resource_terms = ontology_lookup_table["resource_terms"]
+        self.assertDictEqual(expected_resource_terms, actual_resource_terms)
+
+    def test_ontology_table_resource_terms_with_multiple_ontologies(self):
+        config_file_name = "bfo_material_entity_and_pizza_spiciness"
+        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath(test_config_file_rel_path))
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_resource_terms = {
+            "fiat object part": "BFO:0000024",
+            "object aggregate": "BFO:0000027",
+            "object": "BFO:0000030",
+            "Picante": "pizza.owl:Hot",
+            "Media": "pizza.owl:Medium",
+            "NaoPicante": "pizza.owl:Mild"
+        }
+        actual_resource_terms = ontology_lookup_table["resource_terms"]
+        self.assertDictEqual(expected_resource_terms, actual_resource_terms)
+
+    def test_ontology_table_resource_terms_revised_where_terms_do_not_change(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo_material_entity.json"))
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
+
+        expected_resource_terms_revised = {
+            "fiat object part": "BFO:0000024",
+            "object aggregate": "BFO:0000027",
+            "object": "BFO:0000030"
+        }
+        actual_resource_terms_revised = ontology_lookup_table["resource_terms_revised"]
+        self.assertDictEqual(expected_resource_terms_revised, actual_resource_terms_revised)
+
+    def test_ontology_table_resource_terms_revised_where_terms_change(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/pizza_spiciness.json"))
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_pizza_spiciness")
+
+        expected_resource_terms_revised = {
+            "naopicante": "pizza.owl:Mild",
+            "media": "pizza.owl:Medium",
+            "picante": "pizza.owl:Hot"
+        }
+        actual_resource_terms_revised = ontology_lookup_table["resource_terms_revised"]
+        self.assertDictEqual(expected_resource_terms_revised, actual_resource_terms_revised)
+
+    def test_ontology_table_resource_terms_revised_with_multiple_ontologies(self):
+        config_file_name = "bfo_material_entity_and_pizza_spiciness"
+        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath(test_config_file_rel_path))
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_resource_terms_revised = {
+            "fiat object part": "BFO:0000024",
+            "object aggregate": "BFO:0000027",
+            "object": "BFO:0000030",
+            "naopicante": "pizza.owl:Mild",
+            "media": "pizza.owl:Medium",
+            "picante": "pizza.owl:Hot"
+        }
+        actual_resource_terms_revised = ontology_lookup_table["resource_terms_revised"]
+        self.assertDictEqual(expected_resource_terms_revised, actual_resource_terms_revised)
+
+    def test_ontology_table_synonyms(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo.json"))
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo")
+
+        expected_synonyms = {
+            "temporal instant.": "zero-dimensional temporal region",
+            "lonely-dimensional continuant fiat boundary.":
+                "two-dimensional continuant fiat boundary",
+            "lonelier-dimensional continuant fiat boundary.":
+                "one-dimensional continuant fiat boundary",
+            "loneliest-dimensional continuant fiat boundary.":
+                "zero-dimensional continuant fiat boundary",
+            "loneliestest-dimensional continuant fiat boundary.":
+                "zero-dimensional continuant fiat boundary",
+        }
+        actual_synonyms = ontology_lookup_table["synonyms"]
+        self.assertDictEqual(expected_synonyms, actual_synonyms)
+
+    def test_ontology_table_resource_permutation_terms(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo_material_entity.json"))
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
+
+        expected_resource_permutation_terms = {
+            "fiat object part": "BFO:0000024",
+            "fiat part object": "BFO:0000024",
+            "object fiat part": "BFO:0000024",
+            "object part fiat": "BFO:0000024",
+            "part fiat object": "BFO:0000024",
+            "part object fiat": "BFO:0000024",
+            "object aggregate": "BFO:0000027",
+            "aggregate object": "BFO:0000027",
+            "object": "BFO:0000030"
+        }
+        actual_resource_permutation_terms = ontology_lookup_table["resource_permutation_terms"]
+        self.assertDictEqual(expected_resource_permutation_terms, actual_resource_permutation_terms)
+
+    def test_ontology_table_resource_bracketed_permutation_terms(self):
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath("tests/config/bfo_spatial_region.json"))
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_spatial_region")
+
+        expected_resource_bracketed_permutation_terms = {
+            "one-dimensional region spatial": "BFO:0000026",
+            "one-dimensional spatial region": "BFO:0000026",
+            "region one-dimensional spatial": "BFO:0000026",
+            "region spatial one-dimensional": "BFO:0000026",
+            "spatial one-dimensional region": "BFO:0000026",
+            "spatial region one-dimensional": "BFO:0000026",
+            "two-dimensional region spatial": "BFO:0000009",
+            "two-dimensional spatial region": "BFO:0000009",
+            "region two-dimensional spatial": "BFO:0000009",
+            "region spatial two-dimensional": "BFO:0000009",
+            "spatial two-dimensional region": "BFO:0000009",
+            "spatial region two-dimensional": "BFO:0000009",
+            "three-dimensional region spatial": "BFO:0000028",
+            "three-dimensional spatial region": "BFO:0000028",
+            "region three-dimensional spatial": "BFO:0000028",
+            "region spatial three-dimensional": "BFO:0000028",
+            "spatial three-dimensional region": "BFO:0000028",
+            "spatial region three-dimensional": "BFO:0000028"
+        }
+        actual_resource_bracketed_permutation_terms =\
+            ontology_lookup_table["resource_bracketed_permutation_terms"]
+        self.assertDictEqual(expected_resource_bracketed_permutation_terms,
+                             actual_resource_bracketed_permutation_terms)
+
+
 if __name__ == '__main__':
     unittest.main()

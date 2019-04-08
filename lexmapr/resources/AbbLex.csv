@@ -1,104 +1,104 @@
-Term,Expansion
-µg,microgram
-a1,A1 grade
-aaa,AAA grade
-b,bit
-B,byte
-bbl,barrel
-bbq,barbeque
-bnl,boneless
-BNLS,boneless
-C,Celsius
-cc ,cubic centimeter
-cl,centilitre 
-cm,centimeter
-cm³,cubic centimeter
-co,1a
-CSF,cerebrospinal fluid
-cu,cubic
-doz,dozen
-ez,easy
-F,Fahrenheit
-fl oz,fluid ounce
-fld,fluid
-froz,frozen
-frz,frozen
-frz.,frozen
-frzn,frozen
-ft,foot
-fz,frozen
-fzn,frozen
-g,gram
-G,gigabyte
-GA,Georgia
-gal,gallon
-GB,gigabyte
-GI,gastrointestinal
-gm,gram
-gms,grams
-gr,gram
-gr,grain
-gro,gross
-h2o,water
-ha,hectare
-hlso,headless shell on
-Human,homo sapiens
-iqf,individually quick frozen
-iwp,individually wrapped pack
-K,Kelvin
-KB,kilobyte
-kg,kilogram
-kl,kiloliter
-km,kilometer
-kt,karat
-kw,kilowatt
-kwh,kilowatt hour
-l,liter
-lb,pound
-lbs,pounds
-ln,lymph node
-LT,long ton
-m,meter
-MB,megabyte
-mcg,microgram
-mg,milligram
-mi,mile
-mix,mixture
-ml,milliliter
-mm,millimeter
-mph,miles per hour
-MT,metric ton
-nd,not determined
-nm,nautical miles
-NRTE,not ready to eat
-nrte,not ready to eat
-nw,net weight
-oz,ounce
-p&d,peeled and deveined
-pb,peanut butter
-pct,packet
-pt,pint
-pud,peeled undeveined
-qt,quart
-rpm,revolutions per minute
-RTE,ready to eat
-rte,ready to eat
-sknl,skinless
-SKNLS,skinless
-sp,species
-sq,square
-sqr,square
-tbsp,tablespoon
-tn,metric ton
-Tn,ton
-tsp,teaspoon
-veg,vegetable
-vol,volume
-vp,vacuum packed
-w pb,with peanut butter
-w/,with
-wr,whole round
-yd,yard
-yf,yellowfin
-#,number
-&,and
+Term,Expansion,,,,
+µg,microgram,All Domains,,,
+a1,A1 grade,,,,
+aaa,AAA grade,,,,
+b,bit,,,,
+B,byte,,,,
+bbl,barrel,,,,
+bbq,barbeque,,,,
+bnl,boneless,,,,
+BNLS,boneless,,,,
+C,Celsius,,,,
+cc ,cubic centimeter,,,,
+cl,centilitre ,,,,
+cm,centimeter,,,,
+cm³,cubic centimeter,,,,
+co,1a,,,,
+CSF,cerebrospinal fluid,,,,
+cu,cubic,,,,
+doz,dozen,,,,
+ez,easy,,,,
+F,Fahrenheit,,,,
+fl oz,fluid ounce,,,,
+fld,fluid,,,,
+froz,frozen,,,,
+frz,frozen,,,,
+frz.,frozen,,,,
+frzn,frozen,,,,
+ft,foot,,,,
+fz,frozen,,,,
+fzn,frozen,,,,
+g,gram,,,,
+G,gigabyte,,,,
+GA,Georgia,,,,
+gal,gallon,,,,
+GB,gigabyte,,,,
+GI,gastrointestinal,,,,
+gm,gram,,,,
+gms,grams,,,,
+gr,gram,,,,
+gr,grain,,,,
+gro,gross,,,,
+h2o,water,,,,
+ha,hectare,,,,
+hlso,headless shell on,,,,
+Human,homo sapiens,,,,
+iqf,individually quick frozen,,,,
+iwp,individually wrapped pack,,,,
+K,Kelvin,,,,
+KB,kilobyte,,,,
+kg,kilogram,,,,
+kl,kiloliter,,,,
+km,kilometer,,,,
+kt,karat,,,,
+kw,kilowatt,,,,
+kwh,kilowatt hour,,,,
+l,liter,,,,
+lb,pound,,,,
+lbs,pounds,,,,
+ln,lymph node,,,,
+LT,long ton,,,,
+m,meter,,,,
+MB,megabyte,,,,
+mcg,microgram,,,,
+mg,milligram,,,,
+mi,mile,,,nm,nautical miles
+mix,mixture,,,,
+ml,milliliter,,,,
+mm,millimeter,,,,
+mph,miles per hour,,,,
+MT,metric ton,,,,
+nd,not determined,,,,
+NRTE,not ready to eat,,,,
+nrte,not ready to eat,,,,
+nw,net weight,,,,
+oz,ounce,,,,
+p&d,peeled and deveined,,,,
+pb,peanut butter,,,,
+pct,packet,,,,
+pt,pint,,,,
+pud,peeled undeveined,,,,
+qt,quart,,,,
+rpm,revolutions per minute,,,,
+RTE,ready to eat,,,,
+rte,ready to eat,,,,
+sknl,skinless,,,,
+SKNLS,skinless,,,,
+sp,species,,,,
+sq,square,,,,
+sqr,square,,,,
+tbsp,tablespoon,,,,
+tn,metric ton,,,,
+Tn,ton,,,,
+tsp,teaspoon,,,,
+veg,vegetable,,,,
+vol,volume,,,,
+vp,vacuum packed,,,,
+w pb,with peanut butter,,,,
+w/,with,,,,
+wr,whole round,,,,
+yd,yard,,,,
+yf,yellowfin,,,,
+#,number,,,,
+&,and,,,,
+NM,New Mexico,,,,

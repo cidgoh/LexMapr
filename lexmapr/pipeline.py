@@ -5,6 +5,7 @@ import nltk
 import re
 import inflection
 from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize.moses import MosesDetokenizer as detokenizer
 from nltk import pos_tag, ne_chunk
 import wikipedia
 import itertools
@@ -26,7 +27,199 @@ from lexmapr.ontofetch import Ontology
 logger = logging.getLogger("pipeline")
 logger.disabled = True
 
+
+def assign_confidence_level(match_status, match_status_addendum):
+    confidence_level = "Unassigned"
+    if "Full Term Match" in match_status:
+        if "[A Direct Match With Original Sample]" in match_status_addendum:
+            confidence_level="Highest"
+        if "[Change of Case in Input Data]" in match_status_addendum:
+            confidence_level="Highest"
+        if "[Change of Case in Resource Data]" in match_status_addendum:
+            confidence_level = "Highest"
+        if "[Permutation of Tokens in Resource Term]" in match_status_addendum:
+            confidence_level = "High"
+        if "[Permutation of Tokens in Bracketed Resource Term]" in match_status_addendum:
+            confidence_level = "High"
+        if "[Change of Case of Resource and Suffix Addition" in match_status_addendum:
+            confidence_level = "High"
+        if "[A Direct Match with Cleaned and Normalized Input]" in match_status_addendum:
+            confidence_level = "High"
+        if "[New Candidadte Terms -" in match_status_addendum:
+            confidence_level = "Highest But Subject to Inclusion of Candidate Term in Resources"
+        if "Inflection (Singularization) Treatment" in match_status_addendum:
+            confidence_level = "High"
+        if "Spelling Correction Treatment" in match_status_addendum:
+            confidence_level = "High"
+        if "Abbreviation-Acronym Treatment" in match_status_addendum:
+            confidence_level = "Moderate"
+        if "Non English Language Words Treatment" in match_status_addendum:
+            confidence_level = "Moderate"
+    if "Component Match" in match_status:
+        if "None" in match_status_addendum:
+            confidence_level = "High"
+        if "Inflection (Singularization) Treatment" in match_status_addendum:
+            confidence_level = "High"
+        if "Spelling Correction Treatment" in match_status_addendum:
+            confidence_level = "High"
+        if "Abbreviation-Acronym Treatment" in match_status_addendum:
+            confidence_level = "Moderate"
+        if "Non English Language Words Treatment" in match_status_addendum:
+            confidence_level = "Moderate"
+        if "Suffix Addition-" in match_status_addendum:
+            confidence_level = "High"
+        if "Synonym Usage" in match_status_addendum:
+            confidence_level = "High"
+        if "Using Semantic Tagging Resources" in match_status_addendum:
+            confidence_level = "Low"
+    return confidence_level
+
+
+def singularize_token(tkn, lookup_table, status_addendum):
+    lemma=tkn
+    if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith(
+            "ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
+        lemma = tkn
+    elif (tkn not in lookup_table[
+        "inflection_exceptions"]):  # Further Inflection Exception list is taken into account
+        lemma = inflection.singularize(tkn)
+    if (tkn != lemma):  # Only in case when inflection makes some changes in lemma
+        status_addendum.append("Inflection (Plural) Treatment")
+
+    return lemma
+
+
+def spelling_correction(lemma, lookup_table, status_addendum):
+    if (lemma in lookup_table["spelling_mistakes"].keys()):  # spelling mistakes taken care of
+        lemma = lookup_table["spelling_mistakes"][lemma]
+        status_addendum.append("Spelling Correction Treatment")
+    elif (lemma.lower() in lookup_table["spelling_mistakes_lower"].keys()):
+        lemma = lookup_table["spelling_mistakes_lower"][lemma.lower()]
+        status_addendum.append("Change Case and Spelling Correction Treatment")
+    return lemma
+
+
+def abbreviation_normalization_token(lemma, lookup_table, status_addendum):
+    if (lemma in lookup_table[
+        "abbreviations"].keys()):
+        lemma = lookup_table["abbreviations"][lemma]
+        status_addendum.append("Abbreviation-Acronym Treatment")
+    elif (lemma.lower() in lookup_table["abbreviations_lower"].keys()):
+        lemma = lookup_table["abbreviations_lower"][lemma.lower()]
+        status_addendum.append("Change Case and Abbreviation-Acronym Treatment")
+    return lemma
+
+
+def abbreviation_normalization_phrase(phrase, lookup_table, status_addendum):
+    if (phrase in lookup_table[
+        "abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
+        cleaned_sample = lookup_table["abbreviations"][phrase]
+        status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
+    elif (phrase in lookup_table["abbreviations_lower"].keys()):
+        cleaned_sample = lookup_table["abbreviations_lower"][phrase]
+        status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
+    return phrase
+
+
+def non_English_normalization_token(lemma, lookup_table, status_addendum):
+    if (lemma in lookup_table["non_english_words"].keys()):  # Non English language words taken care of
+        lemma = lookup_table["non_english_words"][lemma]
+        status_addendum.append("Non English Language Words Treatment")
+    elif (lemma.lower() in lookup_table["non_english_words_lower"].keys()):
+        lemma = lookup_table["non_english_words_lower"][lemma.lower()]
+        status_addendum.append("Change Case and Non English Language Words Treatment")
+    return lemma
+
+
+def non_English_normalization_phrase(phrase, lookup_table, status_addendum):
+    if (phrase in lookup_table["non_english_words"].keys()):  # non English words taken care of
+        phrase = lookup_table["non_english_words"][phrase]
+        status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
+    elif (phrase in lookup_table["non_english_words_lower"].keys()):
+        phrase = lookup_table["non_english_words_lower"][phrase]
+        status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
+    return phrase
+
+
+def get_cleaned_sample(cleaned_sample,lemma, lookup_table):
+    if (not cleaned_sample and lemma.lower() not in lookup_table[
+        "stop_words"]):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
+        cleaned_sample = lemma.lower()
+    elif (
+                lemma.lower() not in lookup_table[
+                "stop_words"]):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
+
+        cleaned_sample = cleaned_sample + " " + lemma.lower()
+    return cleaned_sample
+
+
+def get_component_match_withids(partial_matches, lookup_table):
+    # Matches in partial_matches, and their corresponding IDs
+    partial_matches_with_ids = []
+    # Decoding the partial matched set to get back resource ids
+    for matchstring in partial_matches:
+        if (matchstring in lookup_table["resource_terms"].keys()):
+            resourceId = lookup_table["resource_terms"][matchstring]
+            partial_matches_with_ids.append(matchstring + ":" + resourceId)
+        elif (matchstring in lookup_table["resource_terms_revised"].keys()):
+            resourceId = lookup_table["resource_terms_revised"][matchstring]
+            partial_matches_with_ids.append(matchstring + ":" + resourceId)
+        elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
+            resourceId = lookup_table["resource_permutation_terms"][matchstring]
+            resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
+            partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
+        elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
+            resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
+            resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
+            resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
+            partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
+        elif (matchstring in lookup_table["processes"].keys()):
+            resourceId = lookup_table["processes"][matchstring]
+            partial_matches_with_ids.append(matchstring + ":" + resourceId)
+        elif (matchstring in lookup_table["qualities"].keys()):
+            resourceId = lookup_table["qualities"][matchstring]
+            partial_matches_with_ids.append(matchstring + ":" + resourceId)
+        elif (matchstring in lookup_table["qualities_lower"].keys()):
+            resourceId = lookup_table["qualities_lower"][matchstring]
+            partial_matches_with_ids.append(matchstring + ":" + resourceId)
+        elif ("==" in matchstring):
+            resList = matchstring.split("==")
+            entityPart = resList[0]
+            entityTag = resList[1]
+            partial_matches_with_ids.append(entityPart + ":" + entityTag)
+    return partial_matches_with_ids
+
+
+def remove_duplicate_tokens(input_string):
+    refined_string=""
+    new_phrase_set = []
+    string_tokens = word_tokenize(input_string.lower())
+    for tkn in string_tokens:
+        new_phrase_set.append(tkn)
+    refined_string = detokenizer().detokenize(new_phrase_set, return_str=True)
+    refined_string=refined_string.strip()
+    return refined_string
+
+
+def read_input_file(input_file):
+    sample_list=[]
+    sample_dict = collections.OrderedDict()
+    with open(input_file) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        ctr = 0
+        for row in readCSV:
+            if ctr > 0:  # skips the first row in CSV file as header row
+                sample_list.append(row[1])
+                samid = row[0]
+                samp = row[1]
+                # termFreq=row[2]               #NN To be removed
+                sample_dict[samid.strip()] = samp.strip()
+            ctr += 1
+    return sample_dict
+
+
 # DIFFERENT METHODS USED (Will be organized in Modular arrangement later on)
+
 
 # 1-Method to determine  whether a string is a number (Used for Cardinal-Ordinal Tagging)
 def is_number(inputstring):
@@ -61,6 +254,7 @@ def ngrams(input, n):
         output.append(input[i:i + n])
     return output
 
+
 def get_gram_chunks(input, num):
     """Make num-gram chunks from input.
 
@@ -86,6 +280,7 @@ def get_gram_chunks(input, num):
         # Return all num-length substrings of input
         return ngrams(input, num)
 
+
 def preprocess(token):
     """Removes characters in token that are irrelevant to run.
 
@@ -101,24 +296,6 @@ def preprocess(token):
     # drop possessives, rightmost comma and rightmost period and return
     return token.replace("\'s", "").rstrip("', ").rstrip(". ")
 
-# 5-Method to find the string between two characters  first and last
-def find_between_r( s, first, last ):
-    try:
-        start = s.rindex( first ) + len( first )
-        end = s.rindex( last, start )
-        return s[start:end]
-    except ValueError:
-        return ""
-
-
-# 6-Method to find the string left to  the character  first
-def find_left_r(s, first, last):
-    try:
-        start = s.rindex(first) + len(first)
-        end = s.rindex(last, start)
-        return s[0:start - 2]
-    except ValueError:
-        return ""
 
 # 8-Method to get all permutations of input string          -has overhead so the size of the phrase has been limited to 4-grams
 def all_permutations(inputstring):
@@ -210,6 +387,7 @@ def retainedPhrase(termList):
         returnedSetFinal = set(returnedSet)
     return returnedSetFinal
 
+
 def get_resource_dict(file_name, lower=False):
     """Return dictionary containing resource data from a CSV file.
 
@@ -257,6 +435,7 @@ def get_resource_dict(file_name, lower=False):
     # Return
     return ret
 
+
 def get_all_resource_dicts():
     """Returns collection of all dictionaries used in pipeline.run.
 
@@ -273,7 +452,7 @@ def get_all_resource_dicts():
     # Abbreviations of resource terms
     ret["abbreviations"] = get_resource_dict("AbbLex.csv")
     # Abbreviations of resource terms, all lowercase
-    ret["abbreviation_lower"] = get_resource_dict("AbbLex.csv", True)
+    ret["abbreviations_lower"] = get_resource_dict("AbbLex.csv", True)
     # Non-english translations of resource terms
     ret["non_english_words"] = get_resource_dict("NefLex.csv")
     # Non-english translations of resource terms, all lowercase
@@ -318,46 +497,18 @@ def get_all_resource_dicts():
         # costly. We also ignore NCBI taxon terms, as there are
         # ~160000 such terms.
         if len(resource_tokens)<7 and "NCBITaxon" not in resource_id:
-            # resource_term contains a bracket
-            if "(" in resource_term:
-                # This will contain the term we permutate, as resource
-                # terms with brackets cannot be permutated as is.
-                term_to_permutate = ""
-                # Portion of resource_term before brackets
-                unbracketed_component = find_left_r(resource_term, "(", ")")
-                # Portion of resource_term inside brackets
-                bracketed_component = find_between_r(resource_term, "(", ")")
-                # bracketed_component contains one or more commas
-                if "," in bracketed_component:
-                    # Parts of bracketed_component separated by commas
-                    bracketed_component_parts = bracketed_component.split(",")
-                    # bracketed_component_parts joined into one string
-                    new_bracketed_component = " ".join(bracketed_component_parts)
-                    # Adjust term_to_permutate accordingly
-                    term_to_permutate = new_bracketed_component + " " + unbracketed_component
-                # bracketed_component does not contain a comma
-                else:
-                    # Adjust term_to_permutate accordingly
-                    term_to_permutate = bracketed_component + " " + unbracketed_component
-                # All permutations of tokens in term_to_permutate
-                permutations = all_permutations(term_to_permutate)
-                # Iterate across permutated lists of tokens
-                for permutation_tokens in permutations:
-                    # permutation_tokens joined into string
-                    permutation = ' '.join(permutation_tokens)
-                    # Add permutation to appropriate dictionary
-                    ret["resource_bracketed_permutation_terms"][permutation] = resource_id
-            # resource_term does not contain a bracket
-            else:
-                # All permutations of tokens in resource_term
-                permutations = all_permutations(resource_term)
-                # Iterate across permutated lists of tokens
-                for permutation_tokens in permutations:
-                    # permutation_tokens joined into string
-                    permutation = ' '.join(permutation_tokens)
-                    # Add permutation to appropriate dictionary
-                    ret["resource_permutation_terms"][permutation] = resource_id
+            # Add all bracketed permutations of resource_term to
+            # appropriate dictionary.
+            bracketed_permutations = get_resource_bracketed_permutation_terms(resource_term)
+            for bracketed_permutation in bracketed_permutations:
+                ret["resource_bracketed_permutation_terms"][bracketed_permutation] = resource_id
+            # Add all permutations of resource_term to appropriate
+            # dictionary.
+            permutations = get_resource_permutation_terms(resource_term)
+            for permutation in permutations:
+                ret["resource_permutation_terms"][permutation] = resource_id
     return ret
+
 
 def get_path(file_name, prefix=""):
     """Returns path of file_name relative to pipeline.py.
@@ -380,6 +531,7 @@ def get_path(file_name, prefix=""):
     # Return file_name appended to prefix and absolute path to
     # pipeline.py.
     return os.path.join(os.path.dirname(__file__), prefix+file_name)
+
 
 def is_lookup_table_outdated():
     """Returns True if lookup_table.json is outdated.
@@ -411,6 +563,7 @@ def is_lookup_table_outdated():
     else:
         return False
 
+
 def add_lookup_table_to_cache():
     """Saves nested dictionary of resources to a local file.
 
@@ -427,6 +580,7 @@ def add_lookup_table_to_cache():
     with open(get_path("lookup_table.json"), "w") as file:
         # Write lookup_table in JSON format
         json.dump(lookup_table, file)
+
 
 def get_lookup_table_from_cache():
     """Return contents of lookup_table.json.
@@ -458,196 +612,6 @@ def get_lookup_table_from_cache():
     # Read and return lookup_table.json
     return read_json(get_path("lookup_table.json"))
 
-def fetch_ontology(ontology_url):
-    """Adds JSON with data on ontology to fetched_ontologies/.
-
-    For details on fetched data, see ontofetch.py.
-
-    Arguments:
-        * <"str">: URL for ontology .owl file
-    Side effects:
-        * Creates lexmapr/fetched_ontologies if it does not exist
-        * Adds or modifies {id}.json to lexmapr/fetched_ontologies/,
-            where {id} is the id of the fetched ontology
-        * Runs ontofetch.py
-    """
-    # lexmapr/fetched_ontologies/ does not exist
-    if not os.path.isdir(get_path("fetched_ontologies")):
-        # Create lexmapr/fetched_ontologies/
-        os.makedirs(get_path("fetched_ontologies"))
-    # Arguments for ontofetch.py
-    sys.argv = [
-        "",
-        ontology_url,
-        "-o",
-        "fetched_ontologies/",
-    ]
-    # Run ontofetch.py
-    Ontology().__main__()
-
-def get_ontology_terms():
-    """Returns ontology terms and synonyms from specified ontologies.
-
-    Fetches ontology data for all URLs listed in
-    lexmapr/resources/WebOntologies.csv. See fetch_ontology docstring
-    for more details.
-
-    Returns a nested dictionary with the following format:
-
-        {
-            ontology_id1:
-                {
-                    resource_terms_ID_based: {
-                        term_ID: term_label,
-                        ...
-                    }
-                },
-                {
-                    synonyms: {
-                        synonym: [term_label1, ...],
-                        ...
-                    }
-                },
-            ontology_id2: { ... },
-            ...
-        }
-
-    Returns:
-        * <"dict">: Nested dictionary of resource terms and synonyms
-            from fetched ontologies
-    Restrictions:
-        * Ontologies to fetch must be listed in
-            lexmapr/resources/WebOntologies.csv
-
-    TODO:
-        * How do we check if a specific ontology is out of date?
-    """
-    # Return value
-    ret = {}
-    # Dictionary of listed ontologies in resources/WebOntologies.csv
-    web_ontologies = get_resource_dict("WebOntologies.csv")
-    # Iterate over ontology id's in web_ontologies
-    for ontology_id in web_ontologies:
-        # Add id and nested dictionaries to ret
-        ret[ontology_id] = {
-            # TODO: We have to get resource_terms,
-            #       resource_terms_revised, etc. too
-            "resource_terms_ID_based": {},
-            "synonyms": {},
-        }
-
-        # URL corresponding to id in web_ontologies
-        url = web_ontologies[ontology_id]
-        # Add ontology to fetched_ontologies/
-        fetch_ontology(url)
-        # Read saved ontology with id
-        ontology_content = read_json(get_path(ontology_id+".json", "fetched_ontologies/"))
-        # Content specifications
-        specifications = ontology_content["specifications"]
-
-        # Iterate over entity ids in specifications
-        for entity_id in specifications:
-            # Information on label, synonym, etc. for id
-            entity_content = specifications[entity_id]
-            # TODO: Why do we replace ":" with "_"?
-            new_entity_id = entity_id.replace(":", "_", 1)
-            # Label in entity_content
-            # TODO: Do we consider entities lacking a label?
-            if "label" in entity_content:
-                # Add new_entity_id-label key-value pair to ret
-                ret[ontology_id]["resource_terms_ID_based"][new_entity_id]=entity_content["label"]
-            # Synonyms in entity_content
-            if "synonyms" in entity_content:
-                # Iterate over synonyms in entity_content
-                for synonym in entity_content["synonyms"].split(";"):
-                    # synonym not in ret
-                    if synonym not in ret:
-                        # Add synonym-empty list key-value pair to ret
-                        ret[ontology_id]["synonyms"][synonym] = []
-                    # Append label to synonym value
-                    ret[ontology_id]["synonyms"][synonym].append(entity_content["label"])
-    return ret
-
-def is_ontology_table_outdated():
-    """Returns True if ontology_table.json is outdated.
-
-    ontology_table.json is considered outdated if it has an older last
-    modification time than lexmapr/resources/WebOntologies.csv.
-
-    Return values:
-        * <class "bool">: Indicates whether ontology_table.json is
-            outdated
-    Restrictions:
-        * should only be called if ontology_table.json exists
-
-    TODO:
-        * We must also consider when a single fetched ontology is no
-            longer up to date with the web ontology
-            * How do we do this?
-    """
-    # last modification time of ontology_table.json
-    ontology_table_modification_time = os.path.getmtime(get_path("ontology_table.json"))
-    # last modification time for lexmapr/resources/WebOntologies.csv
-    WebOntologies_modification_time = os.path.getmtime(get_path("WebOntologies.csv","resources/"))
-
-    # resources modified more recently than lookup_table.json
-    if WebOntologies_modification_time > ontology_table_modification_time:
-        return True
-    else:
-        return False
-
-def add_ontology_table_to_cache():
-    """Saves nested dictionary of ontology_terms to a local file.
-
-    The nested dictionary corresponds to the return value of
-    get_ontology_terms, and is saved as ontology_table.json. If such
-    a file already exists, it will be overwritten.
-
-    Side effects:
-        * Adds or modifies ontology_table.json
-    """
-    # Table containing terms from ontologies in fetched_ontologies/
-    ontology_table = get_ontology_terms()
-    # Open and write to ontology_table.json
-    with open(get_path("ontology_table.json"), "w") as file:
-        # Write ontology_table in JSON format
-        json.dump(ontology_table, file)
-
-def get_ontology_table_from_cache():
-    """Return contents of ontology_table.json.
-
-    The contents of ontology_table.json correspond to the return value
-    of get_ontology_terms.
-
-    If ontology_table.json does not exist, or is outdated, a new
-    ontology_table.json file is generated.
-
-    Return values:
-        * "dict": Contains key-value pairs corresponding to
-            terms in "fetched_ontologies/" JSON files
-
-    TODO:
-        * Should we cache ontology_table?
-            * If the terms are already cached in the files belonging to
-                the fetched_ontologies folder, seems unnecessary to
-                cache the return value too
-                * But in the future, we will be doing additional
-                    operations to the terms in those fetch_ontologies
-                    folder files, so we do benefit by caching the
-                    ret value under that circumstance
-    """
-    # ontology_table.json exists
-    if os.path.isfile(get_path("ontology_table.json")):
-        # ontology_table.json is not up to date
-        if is_ontology_table_outdated():
-            # add new ontology table to cache
-            add_ontology_table_to_cache()
-    # ontology_table.json does not exist
-    else:
-        # add ontology table to cache
-        add_ontology_table_to_cache()
-    # Read and return ontology_table.json
-    return read_json(get_path("ontology_table.json"))
 
 def read_json(path):
     """Returns JSON contents in string format for both Python 2 and 3.
@@ -667,6 +631,7 @@ def read_json(path):
         else:
             # Return ontology_table contents in utf-8
             return json.load(file, object_pairs_hook=unicode_to_utf_8)
+
 
 def unicode_to_utf_8(decoded_pairs):
     """object_pairs_hook to load json files without unicode values.
@@ -697,6 +662,176 @@ def unicode_to_utf_8(decoded_pairs):
         ret[key] = val
     # Return ret
     return ret
+
+
+def get_resource_permutation_terms(resource_label):
+    """Get permutations of some term.
+
+    :param resource_label: Name of some resource
+    :type resource_label: str
+    :return: All permutations of resource_label
+    :rtype: list
+    """
+    # Set of tuples, where each tuple is a different permutation of
+    # tokens from label
+    permutations_set = all_permutations(resource_label)
+    # Return value
+    ret = []
+    # Generate a string from each tuple, and add it to ret
+    for permutation_tuple in permutations_set:
+        permutation_string = " ".join(permutation_tuple)
+        ret = ret + [permutation_string]
+
+    return ret
+
+
+def get_resource_bracketed_permutation_terms(resource_label):
+    """Get bracketed permutations of some term.
+
+    Bracketed permutations follows the following definition:
+
+    * If a term has no bracketed content, it returns has no bracketed
+      permutations
+    * If a term has bracketed content, the bracketed permutations are
+      comprised of all permutations of the term with the bracket
+      characters removed
+
+    :param resource_label: Name of some resource
+    :type resource_label: str
+    :return: All bracketed permutations of resource_label
+    :rtype: list
+    """
+    if "(" not in resource_label or ")" not in resource_label:
+        return []
+
+    # Portion of label before brackets
+    unbracketed_component = resource_label.split("(")[0]
+    # Portion of label inside brackets
+    bracketed_component = resource_label.split("(")[1]
+    bracketed_component = bracketed_component.split(")")[0]
+    # Replace any commas in bracketed_component with spaces
+    bracketed_component = bracketed_component.replace(",", " ")
+
+    return get_resource_permutation_terms(bracketed_component + " " + unbracketed_component)
+
+
+def create_online_ontology_lookup_table_skeleton():
+    """Generate an empty lookup table.
+
+    This means it has all necessary keys, but the values are empty
+    dictionaries.
+
+    :return: Empty lookup table
+    :rtype: dict
+    """
+    return {"synonyms": {},
+            "abbreviations": {},
+            "abbreviations_lower": {},
+            "non_english_words": {},
+            "non_english_words_lower": {},
+            "spelling_mistakes": {},
+            "spelling_mistakes_lower": {},
+            "processes": {},
+            "qualities": {},
+            "qualities_lower": {},
+            "collocations": {},
+            "inflection_exceptions": {},
+            "stop_words": {},
+            "suffixes": {},
+            "resource_terms_ID_based": {},
+            "resource_terms": {},
+            "resource_terms_revised": {},
+            "resource_permutation_terms": {},
+            "resource_bracketed_permutation_terms": {}}
+
+
+def add_to_online_ontology_lookup_table(lookup_table, fetched_ontology):
+    """Add terms from fetched_ontology to lookup_table.
+
+    lookup_table can be used to map terms in run. See
+    create_online_ontology_lookup_table_skeleton for the expected
+    format of lookup_table.
+
+    :param lookup_table: See
+                         create_online_ontology_lookup_table_skeleton
+                         for the expected format of this parameter
+    :param fetched_ontology: See JSON output of ontofetch.py for the
+                             expected format of this parameter
+    :type lookup_table: dict
+    :type fetched_ontology: dict
+    :return: Modified lookup_table
+    :rtype: dict
+    """
+    # Parse content from fetched_ontology and add it to lookup_table
+    for resource in fetched_ontology["specifications"].values():
+        if "id" in resource and "label" in resource:
+            resource_id = resource["id"]
+            resource_label = resource["label"]
+            lookup_table["resource_terms_ID_based"][resource_id] = resource_label
+            lookup_table["resource_terms"][resource_label] = resource_id
+            lookup_table["resource_terms_revised"][resource_label.lower()] = resource_id
+
+            # List of tokens in resource_label
+            resource_tokens = word_tokenize(resource_label.lower())
+            # Add permutations if there are less than seven tokens.
+            # Permutating more tokens than this can lead to performance
+            # issues.
+            if len(resource_tokens) < 7:
+                permutations = get_resource_permutation_terms(resource_label)
+                for permutation in permutations:
+                    lookup_table["resource_permutation_terms"][permutation] = resource_id
+
+                bracketed_permutations = get_resource_bracketed_permutation_terms(resource_label)
+                for permutation in bracketed_permutations:
+                    lookup_table["resource_bracketed_permutation_terms"][permutation] = resource_id
+
+            if "synonyms" in resource:
+                synonyms = resource["synonyms"].split(";")
+                for synonym in synonyms:
+                    lookup_table["synonyms"][synonym] = resource_label
+
+    return lookup_table
+
+
+def merge_lookup_tables(lookup_table_one, lookup_table_two):
+    """Merges lookup tables.
+
+    Lookup tables, in the context of this pipeline, are dictionaries.
+    They have the same keys, but can have different values. The values
+    are also dictionaries.
+
+    If their is a conflict between identical keys during merging,
+    priority is given to lookup_table_two.
+
+    :param dict lookup_table_one: lookup table
+    :param dict lookup_table_two: lookup table
+    :return: lookup table with the combined values for each key from
+             lookup_table_one and lookup_table_two
+    :rtype: dict
+    :raises ValueError: if the definition of lookup table is not
+                        adhered to by the parameters
+    """
+    if lookup_table_one.keys() != lookup_table_two.keys():
+        raise ValueError("lookup_table_one and lookup_table_two do not have the same keys")
+
+    # Set of keys from lookup_table_one, which are identical to the
+    # keys from lookup_table_two. So these are just the common set of
+    # lookup table keys.
+    lookup_table_keys = lookup_table_one.keys()
+
+    for key in lookup_table_keys:
+        if type(lookup_table_one[key]) is not dict:
+            raise ValueError("lookup_table_one values are not all dictionaries")
+        if type(lookup_table_two[key]) is not dict:
+            raise ValueError("lookup_table_two values are not all dictionaries")
+
+    # Merge values from lookup_table_two into lookup_table_one
+    for key in lookup_table_keys:
+        for nested_key in lookup_table_two[key]:
+            lookup_table_one[key][nested_key] = lookup_table_two[key][nested_key]
+
+    return lookup_table_one
+
 
 def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     """Retrieve an annotated, full-term match for a sample.
@@ -971,6 +1106,7 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     # Return
     return ret
 
+
 def find_component_match(cleaned_sample, lookup_table, status_addendum):
     """Finds 1-5 gram component matches of cleaned_sample.
 
@@ -1130,6 +1266,7 @@ def find_component_match(cleaned_sample, lookup_table, status_addendum):
                                 continue
     return ret
 
+
 class MatchNotFoundError(Exception):
     """Exception class for indicating failed full-term matches.
 
@@ -1158,6 +1295,7 @@ class MatchNotFoundError(Exception):
         """Return message when this class is raised as an exception."""
         return repr(self.message)
 
+
 def run(args):
     """
     Main text mining pipeline.
@@ -1167,7 +1305,7 @@ def run(args):
     remainingAllTokensSet = []
     remainingTokenSet = []
     prioritizedRetainedSet=[]
-    samplesDict = collections.OrderedDict()
+    samples_dict = collections.OrderedDict()
     samplesList = []
     samplesSet = []
 
@@ -1176,14 +1314,59 @@ def run(args):
     # get_lookup_table_from_cache docstring for details.
     lookup_table = get_lookup_table_from_cache()
 
-    # This is a nested dictionary of resource terms and synonyms
-    # fetched from web ontologies. See get_ontology_table_from_cache
-    # docstring for detail.
-    # TODO: pipeline.run does not used these terms to map samples yet,
-    #       but will so in the future. For now, we will develop the
-    #       architecture to retrieve and store terms from web
-    #       ontologies.
-    ontology_table = get_ontology_table_from_cache()
+    # Lookup table will also consist of terms fetched from an online
+    # ontology.
+    if args.config is not None:
+        # Make fetched_ontologies folder if it does not already exist
+        if not os.path.isdir(os.path.abspath("fetched_ontologies")):
+            os.makedirs("fetched_ontologies")
+        # Make ontology_lookup_tables folder if it does not already exist
+        if not os.path.isdir(os.path.abspath("ontology_lookup_tables")):
+            os.makedirs("ontology_lookup_tables")
+
+        config_file_name = os.path.basename(args.config).rsplit('.', 1)[0]
+        ontology_lookup_table_abs_path = os.path.abspath("ontology_lookup_tables/lookup_%s.json")
+        ontology_lookup_table_abs_path = ontology_lookup_table_abs_path % config_file_name
+
+        # Retrieve lookup table for fetched ontology from cache
+        try:
+            with open(ontology_lookup_table_abs_path) as file:
+                ontology_lookup_table = json.load(file)
+        # Generate new ontology lookup table
+        except FileNotFoundError:
+            # Load user-specified config file
+            with open(os.path.abspath(args.config)) as file:
+                config_json = json.load(file)
+
+            # Create empty ontology lookup table
+            ontology_lookup_table = create_online_ontology_lookup_table_skeleton()
+
+            # Iterate over user-specified ontologies
+            for ontology_iri in config_json:
+                # Arguments for ontofetch.py
+                if config_json[ontology_iri] == "":
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies"]
+                else:
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies", "-r",
+                                config_json[ontology_iri]]
+                # Call ontofetch.py
+                ontofetch = Ontology()
+                ontofetch.__main__()
+                # Load fetched_ontology from JSON, and add the
+                # appropriate terms to lookup_table.
+                ontology_file_name = os.path.basename(ontology_iri).rsplit('.', 1)[0]
+                fetched_ontology_rel_path = "fetched_ontologies/%s.json" % ontology_file_name
+                with open(os.path.abspath(fetched_ontology_rel_path)) as file:
+                    fetched_ontology = json.load(file)
+                ontology_lookup_table = add_to_online_ontology_lookup_table(ontology_lookup_table,
+                                                                            fetched_ontology)
+
+            # Add ontology_lookup_table to cache
+            with open(ontology_lookup_table_abs_path, "w") as file:
+                json.dump(ontology_lookup_table, file)
+
+        # Merge ontology_lookup_table into lookup_table
+        lookup_table = merge_lookup_tables(lookup_table, ontology_lookup_table)
 
     # Output file Column Headings
     OUTPUT_FIELDS = [
@@ -1209,20 +1392,10 @@ def run(args):
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
     fw.write('\t'.join(OUTPUT_FIELDS))
     
-    with open(args.input_file) as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        ctr = 0
-        for row in readCSV:
-            if ctr > 0:  # skips the first row in CSV file as header row
-                samplesList.append(row[1])
-                samid = row[0]
-                samp = row[1]
-                # termFreq=row[2]
-                samplesDict[samid.strip()] = samp.strip()
-            ctr += 1
+    samples_dict = read_input_file(args.input_file)
     
     # Iterate over samples for matching to ontology terms
-    for k, v in samplesDict.items():
+    for k, v in samples_dict.items():
         sampleid = k
         sample = v
         trigger = False
@@ -1254,65 +1427,34 @@ def run(args):
             tkn = preprocess(tkn)
 
             # Plurals are converted to singulars with exceptions
-            if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith("ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
-                lemma = tkn
-            elif (tkn not in lookup_table["inflection_exceptions"]):  # Further Inflection Exception list is taken into account
-                lemma = inflection.singularize(tkn)
-                if (tkn != lemma):  #Only in case when inflection makes some changes in lemma
-                    status_addendum.append("Inflection (Plural) Treatment")
-            else:
-                lemma = tkn
+            lemma = singularize_token(tkn, lookup_table, status_addendum)
 
             # Misspellings are dealt with  here
-            if (lemma in lookup_table["spelling_mistakes"].keys()):  # spelling mistakes taken care of
-                lemma = lookup_table["spelling_mistakes"][lemma]
-                status_addendum.append("Spelling Correction Treatment")
-            elif (lemma.lower() in lookup_table["spelling_mistakes_lower"].keys()):
-                lemma = lookup_table["spelling_mistakes_lower"][lemma.lower()]
-                status_addendum.append("Change Case and Spelling Correction Treatment")
-            if (lemma in lookup_table["abbreviations"].keys()):  # Abbreviations, acronyms, foreign language words taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
-                lemma = lookup_table["abbreviations"][lemma]
-                status_addendum.append("Abbreviation-Acronym Treatment")
-            elif (lemma.lower() in lookup_table["abbreviation_lower"].keys()):
-                lemma = lookup_table["abbreviation_lower"][lemma.lower()]
-                status_addendum.append("Change Case and Abbreviation-Acronym Treatment")
+            lemma = spelling_correction(lemma, lookup_table, status_addendum)
 
-            if (lemma in lookup_table["non_english_words"].keys()):  # Non English language words taken care of
-                lemma = lookup_table["non_english_words"][lemma]
-                status_addendum.append("Non English Language Words Treatment")
-            elif (lemma.lower() in lookup_table["non_english_words_lower"].keys()):
-                lemma = lookup_table["non_english_words_lower"][lemma.lower()]
+            # Abbreviations, acronyms, taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
+            lemma = abbreviation_normalization_token(lemma, lookup_table, status_addendum)
 
-                status_addendum.append("Change Case and Non English Language Words Treatment")
-
+            # non-EngLish language words taken care of
+            lemma = non_English_normalization_token(lemma, lookup_table, status_addendum)
 
             # ===This will create a cleaned sample after above treatments [Here we are making new phrase now in lower case]
-            if (not cleaned_sample and lemma.lower() not in lookup_table["stop_words"]):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
-                cleaned_sample = lemma.lower()
-            elif (
-                lemma.lower() not in lookup_table["stop_words"]):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
+            cleaned_sample = get_cleaned_sample(cleaned_sample, lemma, lookup_table)
+            cleaned_sample = re.sub(' +', ' ', cleaned_sample)
 
-                cleaned_sample = cleaned_sample + " " + lemma.lower()
+            # Phrase being cleaned for
+            cleaned_sample = abbreviation_normalization_phrase(cleaned_sample, lookup_table, status_addendum)
 
-            cleaned_sample = re.sub(' +', ' ', cleaned_sample)  # Extra innner spaces removed from cleaned sample
+            # Phrase being cleaned for
+            cleaned_sample = non_English_normalization_phrase(cleaned_sample, lookup_table, status_addendum)
 
-            if (cleaned_sample in lookup_table["abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
-                cleaned_sample = lookup_table["abbreviations"][cleaned_sample]
-                status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
-            elif (cleaned_sample in lookup_table["abbreviation_lower"].keys()):
-                cleaned_sample = lookup_table["abbreviation_lower"][cleaned_sample]
-                status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
+        #  Here we are making the tokens of cleaned sample phrase
+        cleaned_sample = remove_duplicate_tokens(cleaned_sample)
+        cleaned_sample_tokens = word_tokenize(cleaned_sample.lower())
 
-            if (cleaned_sample in lookup_table["non_english_words"].keys()):  # non English words taken care of
-                cleaned_sample = lookup_table["non_english_words"][cleaned_sample]
-                status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
-            elif (cleaned_sample in lookup_table["non_english_words_lower"].keys()):
-                cleaned_sample = lookup_table["non_english_words_lower"][cleaned_sample]
-                status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
+        # Part of Speech tags assigned to the tokens
+        tokens_pos = pos_tag(cleaned_sample_tokens)
 
-        # Here we are making the tokens of cleaned sample phrase
-        newSampleTokens = word_tokenize(cleaned_sample.lower())
-        tokens_pos = pos_tag(newSampleTokens)
         if args.format == "full":
             # output fields:
             #   'cleaned_sample': cleaned_sample
@@ -1425,39 +1567,7 @@ def run(args):
                 if (chktkn not in covered_tokens):
                     remainingTokenSet.append(chktkn)
 
-            # Matches in partial_matches, and their corresponding IDs
-            partial_matches_with_ids = []
-            #Decoding the partial matched set to get back resource ids
-            for matchstring in partial_matches:
-                if (matchstring in lookup_table["resource_terms"].keys()):
-                    resourceId = lookup_table["resource_terms"][matchstring]
-                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
-                elif (matchstring in lookup_table["resource_terms_revised"].keys()):
-                    resourceId = lookup_table["resource_terms_revised"][matchstring]
-                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
-                elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
-                    resourceId = lookup_table["resource_permutation_terms"][matchstring]
-                    resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
-                    partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
-                elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
-                    resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
-                    resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
-                    resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
-                    partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
-                elif (matchstring in lookup_table["processes"].keys()):
-                    resourceId = lookup_table["processes"][matchstring]
-                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
-                elif (matchstring in lookup_table["qualities"].keys()):
-                    resourceId = lookup_table["qualities"][matchstring]
-                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
-                elif (matchstring in lookup_table["qualities_lower"].keys()):
-                    resourceId = lookup_table["qualities_lower"][matchstring]
-                    partial_matches_with_ids.append(matchstring + ":" + resourceId)
-                elif ("==" in matchstring):
-                    resList = matchstring.split("==")
-                    entityPart = resList[0]
-                    entityTag = resList[1]
-                    partial_matches_with_ids.append(entityPart + ":" + entityTag)
+            partial_matches_with_ids=get_component_match_withids(partial_matches, lookup_table)
 
             partialMatchedResourceListSet = set(partial_matches_with_ids)   # Makes a set from list of all matched components with resource ids
             retainedSet = []
