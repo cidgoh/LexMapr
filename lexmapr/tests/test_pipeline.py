@@ -624,7 +624,7 @@ class TestOntologyMapping(unittest.TestCase):
     def test_ontology_table_keys(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo.json"))
-        fetched_ontology = self.get_ontology_lookup_table("lookup_bfo")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo")
 
         expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
                          "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
@@ -634,9 +634,9 @@ class TestOntologyMapping(unittest.TestCase):
                          "resource_permutation_terms", "resource_bracketed_permutation_terms"]
         for expected_key in expected_keys:
             try:
-                self.assertTrue(expected_key in fetched_ontology)
+                self.assertTrue(expected_key in ontology_lookup_table)
             except AssertionError:
-                raise AssertionError(expected_key + " is not in fetched_ontology")
+                raise AssertionError(expected_key + " is not in ontology_lookup_table")
 
     def test_ontology_table_keys_with_multiple_ontologies(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
@@ -653,7 +653,7 @@ class TestOntologyMapping(unittest.TestCase):
             try:
                 self.assertTrue(expected_key in ontology_lookup_table)
             except AssertionError:
-                raise AssertionError(expected_key + " is not in pizza_table_json")
+                raise AssertionError(expected_key + " is not in ontology_lookup_table")
 
     def test_ontology_table_resource_terms_ID_based(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
@@ -831,6 +831,9 @@ class TestOntologyMapping(unittest.TestCase):
             ontology_lookup_table["resource_bracketed_permutation_terms"]
         self.assertDictEqual(expected_resource_bracketed_permutation_terms,
                              actual_resource_bracketed_permutation_terms)
+
+    def test_ontology_table_resource_terms_prioritisation(self):
+        self.assertFalse(True)
 
 
 if __name__ == '__main__':
