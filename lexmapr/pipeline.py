@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import collections
 import csv
 import nltk
 import re
@@ -1334,21 +1335,20 @@ def run(args):
                 ontology_lookup_table = json.load(file)
         # Generate new ontology lookup table
         except FileNotFoundError:
-            # Load user-specified config file
+            # Load user-specified config file into an OrderedDict
             with open(os.path.abspath(args.config)) as file:
-                config_json = json.load(file)
+                config_json = json.load(file, object_pairs_hook=collections.OrderedDict)
 
             # Create empty ontology lookup table
             ontology_lookup_table = create_online_ontology_lookup_table_skeleton()
 
-            # Iterate over user-specified ontologies
-            for ontology_iri in config_json:
+            # Iterate over config_json backwards
+            for ontology_iri, root_entity_iri in reversed(config_json.items()):
                 # Arguments for ontofetch.py
-                if config_json[ontology_iri] == "":
+                if root_entity_iri == "":
                     sys.argv = ["", ontology_iri, "-o", "fetched_ontologies"]
                 else:
-                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies", "-r",
-                                config_json[ontology_iri]]
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies", "-r", root_entity_iri]
                 # Call ontofetch.py
                 ontofetch = Ontology()
                 ontofetch.__main__()

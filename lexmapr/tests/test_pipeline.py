@@ -832,9 +832,37 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_bracketed_permutation_terms,
                              actual_resource_bracketed_permutation_terms)
 
-    def test_ontology_table_resource_terms_prioritisation(self):
-        self.assertFalse(True)
+    def test_ontology_table_resource_terms_prioritisation_pizza_first(self):
+        config_file_name = "pizza_spiciness_and_pizza_two_spiciness"
+        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath(test_config_file_rel_path))
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
+        expected_resource_terms = {
+            "Picante": "pizza.owl:Hot",
+            "Media": "pizza.owl:Medium",
+            "NaoPicante": "pizza.owl:Mild"
+        }
+        actual_resource_terms = ontology_lookup_table["resource_terms"]
+        self.assertDictEqual(expected_resource_terms, actual_resource_terms)
+
+    def test_ontology_table_resource_terms_prioritisation_pizza_two_first(self):
+        config_file_name = "pizza_two_spiciness_and_pizza_spiciness"
+        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath(test_config_file_rel_path))
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_resource_terms = {
+            "Picante": "pizza.owl:Hottwo",
+            "Media": "pizza.owl:Mediumtwo",
+            "NaoPicante": "pizza.owl:Mildtwo"
+        }
+        actual_resource_terms = ontology_lookup_table["resource_terms"]
+        self.assertDictEqual(expected_resource_terms, actual_resource_terms)
 
 if __name__ == '__main__':
     unittest.main()
