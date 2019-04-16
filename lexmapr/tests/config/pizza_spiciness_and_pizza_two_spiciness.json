@@ -1,0 +1,4 @@
+{
+  "https://raw.githubusercontent.com/ivansg44/LexMapr/prioritize_ontology_term_selection/lexmapr/tests/ontologies/pizza.owl": "http://www.co-ode.org/ontologies/pizza/pizza.owl#Spiciness",
+  "https://raw.githubusercontent.com/ivansg44/LexMapr/prioritize_ontology_term_selection/lexmapr/tests/ontologies/pizza_two.owl": "http://www.co-ode.org/ontologies/pizza/pizza.owl#Spiciness"
+}
