@@ -57,4 +57,4 @@ optional arguments:
 | `inflection-exceptions.csv`   | Exception list for avoiding false positives during inflection treatment                              |
 | `candidateProcesses.csv`      | Additional processes which are candidates for inclusion                                              |
 | `wikipediaCollocations.csv`   | Additional compound terms (collocations) detected out of datasets which are candidates for inclusion |
-| `mining-stopwords.csv`        | Stop Words list for treatment refined for domian under consideration                                 |
+| `mining-stopwords.csv`        | Stop Words list for treatment refined for domain under consideration                                 |
