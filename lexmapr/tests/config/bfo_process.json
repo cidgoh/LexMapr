@@ -1,3 +1,3 @@
-{
-  "https://raw.githubusercontent.com/ivansg44/LexMapr/fetch_web_ontologies/lexmapr/tests/ontologies/bfo.owl": "http://purl.obolibrary.org/obo/BFO_0000015"
-}
+[
+  {"https://raw.githubusercontent.com/ivansg44/LexMapr/fetch_web_ontologies/lexmapr/tests/ontologies/bfo.owl": "http://purl.obolibrary.org/obo/BFO_0000015"}
+]

@@ -687,6 +687,24 @@ class TestOntologyMapping(unittest.TestCase):
         actual_resource_terms_id_based = ontology_lookup_table["resource_terms_ID_based"]
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
 
+    def test_ontology_table_resource_terms_ID_based_with_multiple_root_entities(self):
+        config_file_name = "bfo_process_and_material_entity"
+        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(input_file=self.small_simple_path,
+                                    config=os.path.abspath(test_config_file_rel_path))
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_resource_terms_id_based = {
+            "BFO:0000024": "fiat object part",
+            "BFO:0000027": "object aggregate",
+            "BFO:0000030": "object",
+            "BFO:0000144": "process profile",
+            "BFO:0000182": "history"
+        }
+        actual_resource_terms_id_based = ontology_lookup_table["resource_terms_ID_based"]
+        self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
+
     def test_ontology_table_resource_terms(self):
         self.run_pipeline_with_args(input_file=self.small_simple_path,
                                     config=os.path.abspath("tests/config/bfo_material_entity.json"))
