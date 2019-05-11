@@ -1337,13 +1337,14 @@ def run(args):
         except FileNotFoundError:
             # Load user-specified config file into an OrderedDict
             with open(os.path.abspath(args.config)) as file:
-                config_json = json.load(file, object_pairs_hook=collections.OrderedDict)
+                config_json = json.load(file)
 
             # Create empty ontology lookup table
             ontology_lookup_table = create_online_ontology_lookup_table_skeleton()
 
             # Iterate over config_json backwards
-            for ontology_iri, root_entity_iri in reversed(config_json.items()):
+            for json_object in reversed(config_json):
+                (ontology_iri, root_entity_iri), = json_object.items()
                 # Arguments for ontofetch.py
                 if root_entity_iri == "":
                     sys.argv = ["", ontology_iri, "-o", "fetched_ontologies"]
