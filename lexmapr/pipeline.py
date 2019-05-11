@@ -1,21 +1,23 @@
 #!/usr/bin/env python
-"""TODO: ...script docstring"""
 
 import collections
 import csv
-import itertools
-import json
-import logging
-import os
-import re
-import sys
-
-import dateutil.parser
-import inflection
 import nltk
-import nltk.tokenize.moses
-import pkg_resources
-
+import re
+import inflection
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize.moses import MosesDetokenizer as detokenizer
+from nltk import pos_tag, ne_chunk
+import wikipedia
+import itertools
+from itertools import combinations
+from dateutil.parser import parse
+import sys
+from pkg_resources import resource_filename, resource_listdir
+import logging
+import collections
+import json
+import os
 # TODO: We should figure out a way ontofetch can be imported remotely,
 #       as opposed to simply copying and pasting the ontofetch.py and
 #       its dependencies.
@@ -192,11 +194,10 @@ def get_component_match_withids(partial_matches, lookup_table):
 def remove_duplicate_tokens(input_string):
     refined_string=""
     new_phrase_set = []
-    string_tokens = nltk.tokenize.word_tokenize(input_string.lower())
+    string_tokens = word_tokenize(input_string.lower())
     for tkn in string_tokens:
         new_phrase_set.append(tkn)
-    detokenizer = nltk.tokenize.moses.MosesDetokenizer()
-    refined_string = detokenizer.detokenize(new_phrase_set, return_str=True)
+    refined_string = detokenizer().detokenize(new_phrase_set, return_str=True)
     refined_string=refined_string.strip()
     return refined_string
 
@@ -240,7 +241,7 @@ def is_number(inputstring):
 # 2-Method to determine  whether a string is a date or day (Used for DateOrDay Tagging)
 def is_date(inputstring):
     try:
-        dateutil.parser.parse(inputstring)
+        parse(inputstring)
         return True
     except ValueError:
         return False
@@ -270,7 +271,7 @@ def get_gram_chunks(input, num):
         * <"list">: Contains num-gram chunks as described above
     """
     # List of tokens from input
-    input_tokens = nltk.tokenize.word_tokenize(input)
+    input_tokens = word_tokenize(input)
     # input_tokens has less than 7 tokens
     if len(input_tokens) < 7:
         # Return all num-token combinations of input_tokens
@@ -307,14 +308,14 @@ def all_permutations(inputstring):
 # 9-Method to get all combinations of input string
 # TODO: This function seems unneccessary. Delete it.
 def combi(input, n):
-    output=itertools.combinations(input, n)
+    output=combinations(input, n)
     return output
 
 
 # 10-Method to get the punctuation treatment of input string - removes some predetermined punctuation and replaces it with a space
 def punctuationTreatment(inputstring, punctuationList):
     finalSample = ""
-    sampleTokens = nltk.tokenize.word_tokenize(inputstring)
+    sampleTokens = word_tokenize(inputstring)
     for token in sampleTokens:
         withoutPunctuation = ""
         number_result = is_number(token)
@@ -411,7 +412,7 @@ def get_resource_dict(file_name, lower=False):
     # Return value
     ret = {}
     # Open file_name
-    with open(pkg_resources.resource_filename('lexmapr.resources', file_name)) as csvfile:
+    with open(resource_filename('lexmapr.resources', file_name)) as csvfile:
         # Skip first line
         next(csvfile)
         # Read file_name
@@ -491,7 +492,7 @@ def get_all_resource_dicts():
         # ID corresponding to resource_term
         resource_id = ret["resource_terms_revised"][resource_term]
         # List of tokens in resource_term
-        resource_tokens = nltk.tokenize.word_tokenize(resource_term.lower())
+        resource_tokens = word_tokenize(resource_term.lower())
         # To limit performance overhead, we ignore resource_terms with
         # more than 7 tokens, as permutating too many tokens can be
         # costly. We also ignore NCBI taxon terms, as there are
@@ -772,7 +773,7 @@ def add_to_online_ontology_lookup_table(lookup_table, fetched_ontology):
             lookup_table["resource_terms_revised"][resource_label.lower()] = resource_id
 
             # List of tokens in resource_label
-            resource_tokens = nltk.tokenize.word_tokenize(resource_label.lower())
+            resource_tokens = word_tokenize(resource_label.lower())
             # Add permutations if there are less than seven tokens.
             # Permutating more tokens than this can lead to performance
             # issues.
@@ -1163,7 +1164,7 @@ def find_component_match(cleaned_sample, lookup_table, status_addendum):
             # gram_chunk concatenated into a single string
             concatenated_gram_chunk = " ".join(gram_chunk)
             # Tokenized list of concatenated_gram_chunk
-            gram_tokens = nltk.tokenize.word_tokenize(concatenated_gram_chunk)
+            gram_tokens = word_tokenize(concatenated_gram_chunk)
             # Flag indicating successful component match for i
             match_found = False
             # Permutations of concatenated_gram_chunk
@@ -1412,7 +1413,7 @@ def run(args):
 
         sample = punctuationTreatment(sample, punctuations)  # Sample gets simple punctuation treatment
         sample = re.sub(' +', ' ', sample)  # Extra innner spaces are removed
-        sampleTokens = nltk.tokenize.word_tokenize(sample.lower())    #Sample is tokenized into tokenList
+        sampleTokens = word_tokenize(sample.lower())    #Sample is tokenized into tokenList
 
         cleaned_sample = ""  # Phrase that will be used for cleaned sample
         lemma = ""
@@ -1450,10 +1451,10 @@ def run(args):
 
         #  Here we are making the tokens of cleaned sample phrase
         cleaned_sample = remove_duplicate_tokens(cleaned_sample)
-        cleaned_sample_tokens = nltk.tokenize.word_tokenize(cleaned_sample.lower())
+        cleaned_sample_tokens = word_tokenize(cleaned_sample.lower())
 
         # Part of Speech tags assigned to the tokens
-        tokens_pos = nltk.pos_tag(cleaned_sample_tokens)
+        tokens_pos = pos_tag(cleaned_sample_tokens)
 
         if args.format == "full":
             # output fields:
@@ -1505,7 +1506,7 @@ def run(args):
                 fw.write("\t" + full_term_match["matched_term"] + "\t"
                     + full_term_match["all_match_terms_with_resource_ids"])
             # Tokenize sample
-            sample_tokens = nltk.tokenize.word_tokenize(sample.lower())
+            sample_tokens = word_tokenize(sample.lower())
             # Add all tokens to covered_tokens
             [covered_tokens.append(token) for token in sample_tokens]
             # Remove all tokens from remaining_tokens
@@ -1548,7 +1549,7 @@ def run(args):
             coveredTSet = []
             remainingTSet = []
             for tknstr in partial_matches:
-                strTokens = nltk.tokenize.word_tokenize(tknstr.lower())
+                strTokens = word_tokenize(tknstr.lower())
                 for eachTkn in strTokens:
                     if ("==" in eachTkn):
                         resList = eachTkn.split("==")
