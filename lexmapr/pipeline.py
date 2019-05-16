@@ -346,7 +346,7 @@ def retainedPhrase(termList):
     returnedSet = []
     for x in termList:
         x.replace("'", "")
-        lst2 = x.split(":")
+        lst2 = x.split(":", 1)
         a = lst2[0]
         a = a.replace("=", ",")
         a = a.replace("'", "")
