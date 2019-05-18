@@ -366,8 +366,8 @@ def retainedPhrase(termList):
                 if wrd in retainedSet and wrd in othrwrd and wrd != othrwrd:
                     retainedSet.remove(wrd)
         else:# compound word
-            ctr = 0
             for othrwrd in wordList:
+                ctr = 0
                 # product egg raw yolk   {'egg yolk (raw):FOODON_03301439', 'egg (raw):FOODON_03301075', 'egg product:zFOODON_BaseTerm_368'}
                 input = wrd.split(' ')
                 for i in range(len(input)):
@@ -1193,8 +1193,7 @@ def find_component_match(cleaned_sample, lookup_table, status_addendum):
                     status_addendum.append("Synonym Usage")
 
                 def handle_component_match(component_match):
-                    """Changes local variables upon component match.
-                    """
+                    """Changes local variables upon component match."""
                     ret["component_matches"].append(component_match)
                     ret["token_matches"] += gram_tokens
 
