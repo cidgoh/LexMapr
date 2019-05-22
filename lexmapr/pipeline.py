@@ -1171,35 +1171,12 @@ def find_component_matches(cleaned_sample, lookup_table, status_addendum):
             # Iterate over all permutations
             for permutation in permutations:
                 # Join elements of permutation into a single string
-                joined_permutation = ' '.join(permutation)
-                # joined_permutation is an abbreviation or acronym
-                if joined_permutation in lookup_table["abbreviations"]:
-                    # Expand joined_permutation
-                    joined_permutation = lookup_table["abbreviations"][joined_permutation]
-                    # Adjust status_addendum accordingly
-                    status_addendum.append("Abbreviation-Acronym Treatment")
-                # joined_permutation is a non-english word
-                if joined_permutation in lookup_table["non_english_words"]:
-                    # Translate joined_permutation
-                    joined_permutation = lookup_table["non_english_words"][joined_permutation]
-                    # Adjust status_addendum accordingly
-                    status_addendum.append("Non English Language Words Treatment")
-                # joined_permutation is a synonym
-                if joined_permutation in lookup_table["synonyms"]:
-                    # Translate joined_permutation to synonym
-                    joined_permutation = lookup_table["synonyms"][joined_permutation]
-                    # Adjust status_addendum accordingly
-                    status_addendum.append("Synonym Usage")
+                joined_permutation = " ".join(permutation)
 
-                def handle_component_match(component_match):
-                    """Changes local variables upon component match."""
-                    ret["component_matches"].append(component_match)
-                    ret["token_matches"] += gram_tokens
-
-                if i>=3:
+                if i >= 3:
                     component_match = find_component_match(joined_permutation, lookup_table,
                                                            status_addendum)
-                elif i>1:
+                elif i > 1:
                     component_match = find_component_match(joined_permutation, lookup_table,
                                                            status_addendum, consider_qualities=True)
                 else:
@@ -1209,14 +1186,15 @@ def find_component_matches(cleaned_sample, lookup_table, status_addendum):
 
                 # Match found
                 if component_match:
-                    handle_component_match(component_match)
+                    ret["component_matches"].append(component_match)
+                    ret["token_matches"] += gram_tokens
                     break
 
     return ret
 
 
 def find_component_match(component, lookup_table, status_addendum, consider_qualities=False,
-                         consider_processes=False):
+                         consider_processes=False, additional_processing=True):
     """Attempt to match component with a term from lookup_table.
 
     Modifies ``status_addendum``.
@@ -1230,6 +1208,8 @@ def find_component_match(component, lookup_table, status_addendum, consider_qual
         qualities
     :param bool consider_processes: Attempt to match component to
         processes
+    :param bool additional_processing: Attempt abbreviation, acronym,
+        non-english and synonym translation before matching
     :returns: Resource term matching ``component``, or None a match is
         not found
     :rtype: str or None
@@ -1239,8 +1219,25 @@ def find_component_match(component, lookup_table, status_addendum, consider_qual
     * In the future, we may want find_full_term_match and this method
       to have the same functionality, and then we do not need both
     """
+    if additional_processing:
+        # component is an abbreviation or acronym
+        if component in lookup_table["abbreviations"]:
+            # Expand component
+            component = lookup_table["abbreviations"][component]
+            status_addendum.append("Abbreviation-Acronym Treatment")
+        # component is a non-english word
+        if component in lookup_table["non_english_words"]:
+            # Translate component
+            component = lookup_table["non_english_words"][component]
+            status_addendum.append("Non English Language Words Treatment")
+        # component is a synonym
+        if component in lookup_table["synonyms"]:
+            # Translate component to synonym
+            component = lookup_table["synonyms"][component]
+            status_addendum.append("Synonym Usage")
+
     # There is a full-term component match with no treatment or
-    # change-of-case in r esource term.
+    # change-of-case in resource term.
     if component in lookup_table["resource_terms"]\
             or component in lookup_table["resource_terms_revised"]:
         return component
