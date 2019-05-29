@@ -1246,6 +1246,10 @@ def run(args):
             "Remaining_Tokens",
             "Different Components(In case of Component Match)"
         ]
+    else:
+        OUTPUT_FIELDS += [
+            "Matched_Components"
+        ]
     
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
     fw.write('\t'.join(OUTPUT_FIELDS))
@@ -1360,8 +1364,7 @@ def run(args):
                     + full_term_match["match_status_micro_level"])
             # Write to some headers
             else:
-                fw.write("\t" + full_term_match["matched_term"] + "\t"
-                    + full_term_match["all_match_terms_with_resource_ids"])
+                fw.write("\t" + full_term_match["all_match_terms_with_resource_ids"])
             # Tokenize sample
             sample_tokens = word_tokenize(sample.lower())
             # Add all tokens to covered_tokens
@@ -1448,8 +1451,7 @@ def run(args):
                     fw.write("\t")
                 
                 if args.format != 'full':
-                    for memb in retainedSet:   # This for indv column print
-                        fw.write("\t" + str(memb))
+                    fw.write("\t" + str(sorted(list(retainedSet))))
 
                 if args.format == 'full':
                     for comp in sorted(list(retainedSet)):
