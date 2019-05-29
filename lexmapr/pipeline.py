@@ -511,160 +511,6 @@ def get_all_resource_dicts():
     return ret
 
 
-def get_path(file_name, prefix=""):
-    """Returns path of file_name relative to pipeline.py.
-
-    Specifically, returns a path with the following pattern:
-
-        {path to pipeline.py}/{prefix}file_name
-
-    The path does not need to currently exist.
-
-    Arguments:
-        * file_name <class "str">: Name of file we want the relative
-            path to from pipeline.py.
-    Return values:
-        * <class "str">: Path to file_name
-    Optional arguments:
-        * prefix <class "str">: characters desired directly before
-            file_name in returned path
-    """
-    # Return file_name appended to prefix and absolute path to
-    # pipeline.py.
-    return os.path.join(os.path.dirname(__file__), prefix+file_name)
-
-
-def is_lookup_table_outdated():
-    """Returns True if lookup_table.json is outdated.
-
-    lookup_table.json is considered outdated if it has an older last
-    modification time than any file in /resources.
-
-    Return values:
-        * <class "bool">: Indicates whether lookup_table.json is
-            outdated
-    Restrictions:
-        * should only be called if lookup_table.json exists
-    """
-    # last modification time of lookup_table.json
-    lookup_table_modification_time = os.path.getmtime(get_path("lookup_table.json"))
-
-    # list of all file names in resources folder
-    resource_names = [file_name for file_name in os.listdir(get_path("resources"))]
-    # list of paths to all files in resources folder
-    resource_paths = [get_path(file_name, "resources/") for file_name in resource_names]
-    # list of last modification times for files in resources folder
-    resources_files_modification_times = [os.path.getmtime(path) for path in resource_paths]
-    # most recent modification time of a file in resources folder
-    resources_folder_modification_time = max(resources_files_modification_times)
-
-    # resources modified more recently than lookup_table.json
-    if resources_folder_modification_time > lookup_table_modification_time:
-        return True
-    else:
-        return False
-
-
-def add_lookup_table_to_cache():
-    """Saves nested dictionary of resources to a local file.
-
-    The nested dictionary corresponds to the return value of
-    get_all_resource_dicts, and is saved as lookup_table.json. If such
-    a file already exists, it will be overwritten.
-
-    Side effects:
-        * Adds or modifies lookup_table.json
-    """
-    # Nested dictionary of all resource dictionaries used in run
-    lookup_table = get_all_resource_dicts()
-    # Open and write to lookup_table.json
-    with open(get_path("lookup_table.json"), "w") as file:
-        # Write lookup_table in JSON format
-        json.dump(lookup_table, file)
-
-
-def get_lookup_table_from_cache():
-    """Return contents of lookup_table.json.
-
-    The contents of lookup_table.json correspond to the return value of
-    get_all_resource_dicts. Retrieving said contents from
-    lookup_table.json is faster than running get_all_resource_dicts.
-
-    If lookup_table.json does not exist, or is outdated (see
-    is_lookup_table_outdated for details), a new lookup_table.json file
-    is generated.
-
-    Return values:
-        * <class "dict">: Contains key-value pairs corresponding to
-            files in "resources/"
-            * key: <class "str">
-            * val: <class "dict">
-    """
-    # lookup_table.json exists
-    if os.path.isfile(get_path("lookup_table.json")):
-        # lookup_table.json out of date
-        if is_lookup_table_outdated():
-            # add new lookup table to cache
-            add_lookup_table_to_cache()
-    # lookup_table.json does not exist
-    else:
-        # add lookup table to cache
-        add_lookup_table_to_cache()
-    # Read and return lookup_table.json
-    return read_json(get_path("lookup_table.json"))
-
-
-def read_json(path):
-    """Returns JSON contents in string format for both Python 2 and 3.
-
-    Arguments:
-        * path <"str">: Path to JSON file
-    Return values:
-        * <"dict"> or <"list">: Corresponds to JSON dictionary or array
-    """
-    # Open and read ontology_table.json
-    with open(path, "r") as file:
-        # Python 3
-        if sys.version_info[0] >= 3:
-            # Return ontology_table contents in unicode
-            return json.load(file)
-        # Python 2
-        else:
-            # Return ontology_table contents in utf-8
-            return json.load(file, object_pairs_hook=unicode_to_utf_8)
-
-
-def unicode_to_utf_8(decoded_pairs):
-    """object_pairs_hook to load json files without unicode values.
-
-    Arguments:
-        * decoded_pairs <class "list"> of <class "tuple">: Each tuple
-            contains a key-value pair from a json file being loaded
-    Return values:
-        * <class "dict">: This corresponds to a value from the JSON
-            file. Any unicode strings have been converted to utf-8.
-    Restrictions:
-        * Should be called as the object_pairs_hook inside json.load
-        * Should only be called in Python 2
-    """
-    # Return value
-    ret = {}
-    # Iterate over tuples in decoded_pairs
-    for key, val in decoded_pairs:
-        # key is unicode
-        if isinstance(key, unicode):
-            # Convert key to utf-8
-            key = key.encode("utf-8")
-        # val is unicode
-        if isinstance(val, unicode):
-            # Convert val to utf-8
-            val = val.encode("utf-8")
-        # Add key-val pair to ret
-        ret[key] = val
-    # Return ret
-    return ret
-
-
 def get_resource_permutation_terms(resource_label):
     """Get permutations of some term.
 
@@ -1315,10 +1161,16 @@ def run(args):
     samplesList = []
     samplesSet = []
 
-    # This will be a nested dictionary of all resource dictionaries used by
-    # run. It is retrieved from cache if possible. See
-    # get_lookup_table_from_cache docstring for details.
-    lookup_table = get_lookup_table_from_cache()
+    # Cache (or get from cache) the lookup table containing pre-defined
+    # resources used for matching.
+    lookup_table_path = os.path.abspath("lookup_table.json")
+    if os.path.exists(lookup_table_path):
+        with open(lookup_table_path) as fp:
+            lookup_table = json.load(fp)
+    else:
+        lookup_table = get_all_resource_dicts()
+        with open(lookup_table_path, "w") as fp:
+            json.dump(lookup_table, fp)
 
     # Lookup table will also consist of terms fetched from an online
     # ontology.
