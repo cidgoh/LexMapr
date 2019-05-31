@@ -1,0 +1,19 @@
+Bucket ,Ontology Id,,,,
+food material,FOODON_00002403,,,,
+food source,FOODON_03411564 ,,,EthnicQuality,CandidateBucket1
+processed food product,FOODON_03311737  ,,,pathogen,CandidateBucket2
+organism,OBI_0100026,,,,
+organism substance,UBERON_0000463 ,,,Portion_FoodOrOther,CandidateBucket3
+environmental feature,ENVO_00002297,,,,
+material anatomical entity,UBERON_0000465 ,,,,
+environmental (swab or sampling),GENEPIO_0001732 ,,,,
+container,NCIT_C43186,,,,
+biological sex,PATO_0000047,,,,
+physical quality,PATO_0001018,,,,
+chemical entity,CHEBI_24431,,,,
+quality,PATO_0000001 ,,,,
+sample,sep_00042,,,,
+construction,ENVO_00000070,,,,
+unit,UO_0000000 ,,,,
+geographic feature,ENVO_00000000,,,,
+biome,ENVO_00000428 ,,,,
