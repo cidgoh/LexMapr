@@ -483,6 +483,12 @@ class TestPipeline(unittest.TestCase):
         "test_full_term_wiki_match": ["test_full_term_wiki_match", "full"],
     }
 
+    def setUp(self):
+
+        # Delete lookup table if cached
+        if os.path.exists(os.path.abspath("lookup_table.json")):
+            os.remove(os.path.abspath("lookup_table.json"))
+
     def test_pipeline_with_files(self):
         """Compares actual pipeline.run outputs to expected outputs.
 
