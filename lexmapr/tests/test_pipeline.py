@@ -661,9 +661,9 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
 
         expected_resource_terms_id_based = {
-            "BFO:0000024": "fiat object part",
-            "BFO:0000027": "object aggregate",
-            "BFO:0000030": "object"
+            "BFO_0000024": "fiat object part",
+            "BFO_0000027": "object aggregate",
+            "BFO_0000030": "object"
         }
         actual_resource_terms_id_based = ontology_lookup_table["resource_terms_ID_based"]
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
@@ -677,12 +677,12 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms_id_based = {
-            "BFO:0000024": "fiat object part",
-            "BFO:0000027": "object aggregate",
-            "BFO:0000030": "object",
-            "pizza.owl:Hot": "Picante",
-            "pizza.owl:Medium": "Media",
-            "pizza.owl:Mild": "NaoPicante"
+            "BFO_0000024": "fiat object part",
+            "BFO_0000027": "object aggregate",
+            "BFO_0000030": "object",
+            "pizza.owl_Hot": "Picante",
+            "pizza.owl_Medium": "Media",
+            "pizza.owl_Mild": "NaoPicante"
         }
         actual_resource_terms_id_based = ontology_lookup_table["resource_terms_ID_based"]
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
@@ -696,11 +696,11 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms_id_based = {
-            "BFO:0000024": "fiat object part",
-            "BFO:0000027": "object aggregate",
-            "BFO:0000030": "object",
-            "BFO:0000144": "process profile",
-            "BFO:0000182": "history"
+            "BFO_0000024": "fiat object part",
+            "BFO_0000027": "object aggregate",
+            "BFO_0000030": "object",
+            "BFO_0000144": "process profile",
+            "BFO_0000182": "history"
         }
         actual_resource_terms_id_based = ontology_lookup_table["resource_terms_ID_based"]
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
@@ -711,9 +711,9 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
 
         expected_resource_terms = {
-            "fiat object part": "BFO:0000024",
-            "object aggregate": "BFO:0000027",
-            "object": "BFO:0000030"
+            "fiat object part": "BFO_0000024",
+            "object aggregate": "BFO_0000027",
+            "object": "BFO_0000030"
         }
         actual_resource_terms = ontology_lookup_table["resource_terms"]
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)
@@ -727,12 +727,12 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms = {
-            "fiat object part": "BFO:0000024",
-            "object aggregate": "BFO:0000027",
-            "object": "BFO:0000030",
-            "Picante": "pizza.owl:Hot",
-            "Media": "pizza.owl:Medium",
-            "NaoPicante": "pizza.owl:Mild"
+            "fiat object part": "BFO_0000024",
+            "object aggregate": "BFO_0000027",
+            "object": "BFO_0000030",
+            "Picante": "pizza.owl_Hot",
+            "Media": "pizza.owl_Medium",
+            "NaoPicante": "pizza.owl_Mild"
         }
         actual_resource_terms = ontology_lookup_table["resource_terms"]
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)
@@ -743,9 +743,9 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
 
         expected_resource_terms_revised = {
-            "fiat object part": "BFO:0000024",
-            "object aggregate": "BFO:0000027",
-            "object": "BFO:0000030"
+            "fiat object part": "BFO_0000024",
+            "object aggregate": "BFO_0000027",
+            "object": "BFO_0000030"
         }
         actual_resource_terms_revised = ontology_lookup_table["resource_terms_revised"]
         self.assertDictEqual(expected_resource_terms_revised, actual_resource_terms_revised)
@@ -756,9 +756,9 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_pizza_spiciness")
 
         expected_resource_terms_revised = {
-            "naopicante": "pizza.owl:Mild",
-            "media": "pizza.owl:Medium",
-            "picante": "pizza.owl:Hot"
+            "naopicante": "pizza.owl_Mild",
+            "media": "pizza.owl_Medium",
+            "picante": "pizza.owl_Hot"
         }
         actual_resource_terms_revised = ontology_lookup_table["resource_terms_revised"]
         self.assertDictEqual(expected_resource_terms_revised, actual_resource_terms_revised)
@@ -772,12 +772,12 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms_revised = {
-            "fiat object part": "BFO:0000024",
-            "object aggregate": "BFO:0000027",
-            "object": "BFO:0000030",
-            "naopicante": "pizza.owl:Mild",
-            "media": "pizza.owl:Medium",
-            "picante": "pizza.owl:Hot"
+            "fiat object part": "BFO_0000024",
+            "object aggregate": "BFO_0000027",
+            "object": "BFO_0000030",
+            "naopicante": "pizza.owl_Mild",
+            "media": "pizza.owl_Medium",
+            "picante": "pizza.owl_Hot"
         }
         actual_resource_terms_revised = ontology_lookup_table["resource_terms_revised"]
         self.assertDictEqual(expected_resource_terms_revised, actual_resource_terms_revised)
@@ -807,15 +807,15 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
 
         expected_resource_permutation_terms = {
-            "fiat object part": "BFO:0000024",
-            "fiat part object": "BFO:0000024",
-            "object fiat part": "BFO:0000024",
-            "object part fiat": "BFO:0000024",
-            "part fiat object": "BFO:0000024",
-            "part object fiat": "BFO:0000024",
-            "object aggregate": "BFO:0000027",
-            "aggregate object": "BFO:0000027",
-            "object": "BFO:0000030"
+            "fiat object part": "BFO_0000024",
+            "fiat part object": "BFO_0000024",
+            "object fiat part": "BFO_0000024",
+            "object part fiat": "BFO_0000024",
+            "part fiat object": "BFO_0000024",
+            "part object fiat": "BFO_0000024",
+            "object aggregate": "BFO_0000027",
+            "aggregate object": "BFO_0000027",
+            "object": "BFO_0000030"
         }
         actual_resource_permutation_terms = ontology_lookup_table["resource_permutation_terms"]
         self.assertDictEqual(expected_resource_permutation_terms, actual_resource_permutation_terms)
@@ -826,24 +826,24 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_spatial_region")
 
         expected_resource_bracketed_permutation_terms = {
-            "one-dimensional region spatial": "BFO:0000026",
-            "one-dimensional spatial region": "BFO:0000026",
-            "region one-dimensional spatial": "BFO:0000026",
-            "region spatial one-dimensional": "BFO:0000026",
-            "spatial one-dimensional region": "BFO:0000026",
-            "spatial region one-dimensional": "BFO:0000026",
-            "two-dimensional region spatial": "BFO:0000009",
-            "two-dimensional spatial region": "BFO:0000009",
-            "region two-dimensional spatial": "BFO:0000009",
-            "region spatial two-dimensional": "BFO:0000009",
-            "spatial two-dimensional region": "BFO:0000009",
-            "spatial region two-dimensional": "BFO:0000009",
-            "three-dimensional region spatial": "BFO:0000028",
-            "three-dimensional spatial region": "BFO:0000028",
-            "region three-dimensional spatial": "BFO:0000028",
-            "region spatial three-dimensional": "BFO:0000028",
-            "spatial three-dimensional region": "BFO:0000028",
-            "spatial region three-dimensional": "BFO:0000028"
+            "one-dimensional region spatial": "BFO_0000026",
+            "one-dimensional spatial region": "BFO_0000026",
+            "region one-dimensional spatial": "BFO_0000026",
+            "region spatial one-dimensional": "BFO_0000026",
+            "spatial one-dimensional region": "BFO_0000026",
+            "spatial region one-dimensional": "BFO_0000026",
+            "two-dimensional region spatial": "BFO_0000009",
+            "two-dimensional spatial region": "BFO_0000009",
+            "region two-dimensional spatial": "BFO_0000009",
+            "region spatial two-dimensional": "BFO_0000009",
+            "spatial two-dimensional region": "BFO_0000009",
+            "spatial region two-dimensional": "BFO_0000009",
+            "three-dimensional region spatial": "BFO_0000028",
+            "three-dimensional spatial region": "BFO_0000028",
+            "region three-dimensional spatial": "BFO_0000028",
+            "region spatial three-dimensional": "BFO_0000028",
+            "spatial three-dimensional region": "BFO_0000028",
+            "spatial region three-dimensional": "BFO_0000028"
         }
         actual_resource_bracketed_permutation_terms =\
             ontology_lookup_table["resource_bracketed_permutation_terms"]
@@ -859,9 +859,9 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms = {
-            "Picante": "pizza.owl:Hot",
-            "Media": "pizza.owl:Medium",
-            "NaoPicante": "pizza.owl:Mild"
+            "Picante": "pizza.owl_Hot",
+            "Media": "pizza.owl_Medium",
+            "NaoPicante": "pizza.owl_Mild"
         }
         actual_resource_terms = ontology_lookup_table["resource_terms"]
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)
@@ -875,9 +875,9 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms = {
-            "Picante": "pizza.owl:Hottwo",
-            "Media": "pizza.owl:Mediumtwo",
-            "NaoPicante": "pizza.owl:Mildtwo"
+            "Picante": "pizza.owl_Hottwo",
+            "Media": "pizza.owl_Mediumtwo",
+            "NaoPicante": "pizza.owl_Mildtwo"
         }
         actual_resource_terms = ontology_lookup_table["resource_terms"]
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)

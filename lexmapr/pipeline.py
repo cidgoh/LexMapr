@@ -614,6 +614,10 @@ def add_to_online_ontology_lookup_table(lookup_table, fetched_ontology):
         if "id" in resource and "label" in resource:
             resource_id = resource["id"]
             resource_label = resource["label"]
+
+            # Keep consistent with resource_id values in resources/
+            resource_id = resource_id.replace(":", "_")
+
             lookup_table["resource_terms_ID_based"][resource_id] = resource_label
             lookup_table["resource_terms"][resource_label] = resource_id
             lookup_table["resource_terms_revised"][resource_label.lower()] = resource_id
