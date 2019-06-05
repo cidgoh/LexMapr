@@ -784,6 +784,18 @@ class TestOntologyMapping(unittest.TestCase):
         actual_synonyms = ontology_lookup_table["synonyms"]
         self.assertDictEqual(expected_synonyms, actual_synonyms)
 
+    def test_ontology_table_parents_one_level_one_parent(self):
+        self.run_pipeline_with_args(config_file_name="bfo_process.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_process.json")
+
+        expected_parents = {
+            "BFO_0000182": ["BFO:0000015"],
+            "BFO_0000144": ["BFO:0000015"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
+
     def test_ontology_table_resource_permutation_terms(self):
         self.run_pipeline_with_args(config_file_name="bfo_material_entity.json")
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity.json")

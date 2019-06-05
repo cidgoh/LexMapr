@@ -543,6 +543,7 @@ def add_predefined_resources_to_lookup_table(lookup_table):
                 lookup_table["resource_permutation_terms"][permutation] = resource_id
     return lookup_table
 
+
 def get_resource_permutation_terms(resource_label):
     """Get permutations of some term.
 
@@ -641,6 +642,13 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 synonyms = resource["synonyms"].split(";")
                 for synonym in synonyms:
                     lookup_table["synonyms"][synonym] = resource_label
+
+            if "parent_id" in resource:
+                lookup_table["parents"][resource_id] = [resource["parent_id"]]
+                # TODO:
+                # * different parents across children
+                # * multiple parents for one child
+                # * multiple levels
 
     return lookup_table
 
