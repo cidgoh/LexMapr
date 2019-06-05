@@ -460,6 +460,7 @@ def create_lookup_table_skeleton():
             "inflection_exceptions": {},
             "stop_words": {},
             "suffixes": {},
+            "parents": {},
             "resource_terms_ID_based": {},
             "resource_terms": {},
             "resource_terms_revised": {},
@@ -468,13 +469,13 @@ def create_lookup_table_skeleton():
 
 
 def add_predefined_resources_to_lookup_table(lookup_table):
-    """Returns collection of all dictionaries used in pipeline.run.
+    """Add elements from ``resources/`` to lookup table.
 
-    Return values:
-        * class <"dict">: Contains key-value pairs corresponding to
-            files in "resources/"
-            * key: class <"str">
-            * val: class <"dict">
+    :param lookup_table: See create_lookup_table_skeleton for the
+                         expected format of this parameter
+    :type lookup_table: dict
+    :return: Modified ``lookup_table``
+    :rtype: dict
     """
     # Synonyms of resource terms
     lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
@@ -597,17 +598,16 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
     """Add terms from fetched_ontology to lookup_table.
 
     lookup_table can be used to map terms in run. See
-    create_online_ontology_lookup_table_skeleton for the expected
-    format of lookup_table.
+    create_lookup_table_skeleton for the expected format of
+    lookup_table.
 
-    :param lookup_table: See
-                         create_online_ontology_lookup_table_skeleton
-                         for the expected format of this parameter
+    :param lookup_table: See create_lookup_table_skeleton for the
+                         expected format of this parameter
     :param fetched_ontology: See JSON output of ontofetch.py for the
                              expected format of this parameter
     :type lookup_table: dict
     :type fetched_ontology: dict
-    :return: Modified lookup_table
+    :return: Modified ``lookup_table``
     :rtype: dict
     """
     # Parse content from fetched_ontology and add it to lookup_table
