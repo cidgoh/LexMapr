@@ -789,8 +789,56 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_process.json")
 
         expected_parents = {
-            "BFO_0000182": ["BFO:0000015"],
-            "BFO_0000144": ["BFO:0000015"]
+            "BFO_0000182": ["BFO_0000015"],
+            "BFO_0000144": ["BFO_0000015"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
+
+    def test_ontology_table_parents_one_level_two_parents(self):
+        config_file_name = "bfo_process_and_material_entity.json"
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(config_file_name=config_file_name)
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_parents = {
+            "BFO_0000182": ["BFO_0000015"],
+            "BFO_0000144": ["BFO_0000015"],
+            "BFO_0000024": ["BFO_0000040"],
+            "BFO_0000027": ["BFO_0000040"],
+            "BFO_0000030": ["BFO_0000040"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
+
+    def test_ontology_table_parents_multiple_levels_one_branch(self):
+        self.run_pipeline_with_args(config_file_name="bfo_realizable_entity.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_realizable_entity.json")
+
+        expected_parents = {
+            "BFO_0000034": ["BFO_0000016"],
+            "BFO_0000016": ["BFO_0000017"],
+            "BFO_0000023": ["BFO_0000017"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
+
+    def test_ontology_table_parents_multiple_levels_multiple_branches(self):
+        config_file_name = "bfo_specifically_dependent_continuant.json"
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(config_file_name=config_file_name)
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_parents = {
+            "BFO_0000034": ["BFO_0000016"],
+            "BFO_0000016": ["BFO_0000017"],
+            "BFO_0000023": ["BFO_0000017"],
+            "BFO_0000145": ["BFO_0000019"],
+            "BFO_0000017": ["BFO_0000020"],
+            "BFO_0000019": ["BFO_0000020"]
         }
         actual_parents = ontology_lookup_table["parents"]
 

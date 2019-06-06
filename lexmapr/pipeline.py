@@ -644,11 +644,10 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                     lookup_table["synonyms"][synonym] = resource_label
 
             if "parent_id" in resource:
-                lookup_table["parents"][resource_id] = [resource["parent_id"]]
-                # TODO:
-                # * different parents across children
-                # * multiple parents for one child
-                # * multiple levels
+                # Keep parent_id consistent with resource_id values
+                parent_id = resource["parent_id"].replace(":", "_")
+
+                lookup_table["parents"][resource_id] = [parent_id]
 
     return lookup_table
 
