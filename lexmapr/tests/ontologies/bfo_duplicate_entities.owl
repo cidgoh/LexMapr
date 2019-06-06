@@ -1562,6 +1562,7 @@
 
     <owl:Class rdf:about="http://purl.obolibrary.org/obo/BFO_0000145">
         <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000019"/>
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000017"/>
         <obo:BFO_0000179>r-quality</obo:BFO_0000179>
         <obo:BFO_0000180>RelationalQuality</obo:BFO_0000180>
         <obo:IAO_0000112 xml:lang="en">John’s role of husband to Mary is dependent on Mary’s role of wife to John, and both are dependent on the object aggregate comprising John and Mary as member parts joined together through the relational quality of being married.</obo:IAO_0000112>
