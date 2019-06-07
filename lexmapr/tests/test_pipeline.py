@@ -844,7 +844,7 @@ class TestOntologyMapping(unittest.TestCase):
 
         self.assertDictEqual(expected_parents, actual_parents)
 
-    def test_ontology_table_parents_multiple_parents_per_resource(self):
+    def test_ontology_table_multiple_parents_per_resource(self):
         config_file_name = "bfo_duplicate_entities_specifically_dependent_continuant.json"
         expected_lookup_table_name = "lookup_" + config_file_name
         self.run_pipeline_with_args(config_file_name=config_file_name)
@@ -859,6 +859,33 @@ class TestOntologyMapping(unittest.TestCase):
             "BFO_0000034": ["BFO_0000016"],
         }
         actual_parents = ontology_lookup_table["parents"]
+
+        # Sort lists to ignore order in assertion
+        sorted_expected_parents = {}
+        for key, value in expected_parents.items():
+            sorted_expected_parents[key] = sorted(value)
+        sorted_actual_parents = {}
+        for key, value in actual_parents.items():
+            sorted_actual_parents[key] = sorted(value)
+
+        self.assertDictEqual(sorted_expected_parents, sorted_actual_parents)
+
+    def test_ontology_table_overlapping_parents_from_different_fetches(self):
+        config_file_name = "bfo_duplicate_entities_process_and_material_entity.json"
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(config_file_name=config_file_name)
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_parents = {
+            "BFO_0000182": ["BFO_0000015"],
+            "BFO_0000144": ["BFO_0000015"],
+            "BFO_0000024": ["BFO_0000040", "BFO_0000015"],
+            "BFO_0000027": ["BFO_0000040", "BFO_0000015"],
+            "BFO_0000030": ["BFO_0000040", "BFO_0000015"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
 
         # Sort lists to ignore order in assertion
         sorted_expected_parents = {}

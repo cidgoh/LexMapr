@@ -647,7 +647,13 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 # Keep parent_id consistent with resource_id values
                 parent_id = resource["parent_id"].replace(":", "_")
 
-                lookup_table["parents"][resource_id] = [parent_id]
+                # Instead of overwriting parents like we do with
+                # synonyms, we will concatenate parents from different
+                # fetches.
+                if resource_id in lookup_table["parents"]:
+                    lookup_table["parents"][resource_id] += [parent_id]
+                else:
+                    lookup_table["parents"][resource_id] = [parent_id]
 
                 if "other_parents" in resource:
                     # Keep values consistent with resource_id values
