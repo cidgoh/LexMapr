@@ -651,7 +651,9 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 # synonyms, we will concatenate parents from different
                 # fetches.
                 if resource_id in lookup_table["parents"]:
-                    lookup_table["parents"][resource_id] += [parent_id]
+                    # Prevent duplicates
+                    if not parent_id in lookup_table["parents"][resource_id]:
+                        lookup_table["parents"][resource_id] += [parent_id]
                 else:
                     lookup_table["parents"][resource_id] = [parent_id]
 
@@ -659,6 +661,10 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                     # Keep values consistent with resource_id values
                     other_parents = list(map(lambda x: x.replace(":", "_"),
                                              resource["other_parents"]))
+
+                    # Prevent duplicates
+                    other_parents = list(filter(
+                        lambda x: x not in lookup_table["parents"][resource_id], other_parents))
 
                     lookup_table["parents"][resource_id] += other_parents
 
