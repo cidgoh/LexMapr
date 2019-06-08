@@ -1,0 +1,4 @@
+[
+  {"https://raw.githubusercontent.com/ivansg44/LexMapr/fetch_parents/lexmapr/tests/ontologies/bfo_duplicate_entities.owl": "http://purl.obolibrary.org/obo/BFO_0000015"},
+  {"https://raw.githubusercontent.com/ivansg44/LexMapr/fetch_parents/lexmapr/tests/ontologies/bfo_duplicate_entities.owl": "http://purl.obolibrary.org/obo/BFO_0000040"}
+]

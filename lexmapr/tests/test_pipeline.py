@@ -23,6 +23,8 @@ TODO:
 import argparse
 import json
 import os
+import pkg_resources
+import shutil
 import tempfile
 import unittest
 
@@ -483,6 +485,17 @@ class TestPipeline(unittest.TestCase):
         "test_full_term_wiki_match": ["test_full_term_wiki_match", "full"],
     }
 
+    @classmethod
+    def setUpClass(cls):
+        # Change working directory to temporary directory
+        cls.tmp_dir = tempfile.mkdtemp()
+        os.chdir(cls.tmp_dir)
+
+    @classmethod
+    def tearDownClass(cls):
+        # Remove temporary directory
+        shutil.rmtree(cls.tmp_dir)
+
     def test_pipeline_with_files(self):
         """Compares actual pipeline.run outputs to expected outputs.
 
@@ -498,16 +511,15 @@ class TestPipeline(unittest.TestCase):
         # Iterate over all expected outputs
         for expected_output in self.test_files:
             # Path of expected output file
-            expected_output_path = os.path.join(os.path.dirname(__file__),
-                "output/" + expected_output + ".tsv")
+            expected_output_path = pkg_resources.resource_filename("lexmapr.tests.output",
+                                                                   expected_output + ".tsv")
             # Path of input file
             input = self.test_files[expected_output][0]
-            input_path = os.path.join(os.path.dirname(__file__),
-                "input/" + input + ".csv")
+            input_path = pkg_resources.resource_filename("lexmapr.tests.input", input + ".csv")
             # Format value
             format = self.test_files[expected_output][1]
-            # Temporary file path to store actual output of input file
-            actual_output_path = tempfile.mkstemp()[1]
+            # File path to store actual output of input file
+            actual_output_path = "actual_output.tsv"
             # Run pipeline.run using input_path and actual_output_path
             pipeline.run(type("",(object,),{"input_file": input_path,
                 "output": actual_output_path, "format": format, "config": None})())
@@ -531,134 +543,117 @@ class TestPipeline(unittest.TestCase):
 
 
 class TestOntologyMapping(unittest.TestCase):
-    """Test generation and use of lookup tables from online ontologies."""
+    """Test fetching and use of resources from online ontologies."""
 
     @classmethod
     def setUpClass(cls):
-        # Change directory to same as pipeline
-        os.chdir(os.path.dirname(os.path.abspath(__file__)))
-        os.chdir(os.path.abspath(".."))
+        # Change working directory to temporary directory
+        cls.tmp_dir = tempfile.mkdtemp()
+        os.chdir(cls.tmp_dir)
 
-        # Common argument
-        cls.small_simple_path = "tests/input/small_simple.csv"
-
-    def setUp(self):
-        # Delete any files from fetched_ontologies that we fetch during
-        # testing. i.e., bfo and pizza
-        for file in ["bfo.json", "bfo.tsv", "pizza.json", "pizza.tsv"]:
-            if os.path.exists(os.path.abspath("fetched_ontologies/%s" % file)):
-                os.remove(os.path.abspath("fetched_ontologies/%s" % file))
-        # Un-cache any files from ontology_lookup_tables that we create
-        # during testing. i.e., everything from tests/config
-        for test_config_file in os.listdir(os.path.abspath("tests/config")):
-            lookup_table_path = "ontology_lookup_tables/lookup_%s" % test_config_file
-            if os.path.exists(os.path.abspath(lookup_table_path)):
-                os.remove(os.path.abspath(lookup_table_path))
+    @classmethod
+    def tearDownClass(cls):
+        # Remove temporary directory
+        shutil.rmtree(cls.tmp_dir)
 
     def tearDown(self):
-        self.setUp()
+        # Remove cached ontology resources between tests
+        shutil.rmtree("fetched_ontologies/")
+        shutil.rmtree("ontology_lookup_tables/")
 
     @staticmethod
-    def run_pipeline_with_args(input_file, config=None):
-        """Run pipeline with some default arguments.
+    def run_pipeline_with_args(config_file_name=None):
+        """Run pipeline with some default arguments."""
 
-        input_file must be specified. web and root can be specified,
-        but otherwise are ``None`` by default.
-        """
-        pipeline.run(argparse.Namespace(input_file=input_file, config=config, format="basic",
-                                        output=None, version=False))
+        # Path to input file used in all tests
+        small_simple_path =\
+            pkg_resources.resource_filename("lexmapr.tests.input", "small_simple.csv")
+
+        if config_file_name:
+            config_file_path = pkg_resources.resource_filename("lexmapr.tests.config",
+                                                               config_file_name)
+            pipeline.run(argparse.Namespace(input_file=small_simple_path, config=config_file_path,
+                                            format="basic", output=None, version=False))
+        else:
+            pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
+                                            format="basic", output=None, version=False))
 
     @staticmethod
     def get_fetched_ontology(file_name):
-        with open(os.path.abspath("fetched_ontologies/%s.json" % file_name)) as file:
+        with open("fetched_ontologies/%s" % file_name) as file:
             return json.load(file)
 
     @staticmethod
     def get_ontology_lookup_table(file_name):
-        with open(os.path.abspath("ontology_lookup_tables/%s.json" % file_name)) as file:
+        with open("ontology_lookup_tables/%s" % file_name) as file:
             return json.load(file)
 
     def test_fetch_ontology(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path)
-        self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+        self.run_pipeline_with_args()
+        self.assertFalse(os.path.exists("fetched_ontologies/pizza.json"))
 
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/pizza.json"))
+        self.run_pipeline_with_args(config_file_name="pizza.json")
         self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
 
     def test_fetch_ontologies(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path)
+        self.run_pipeline_with_args()
         self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/bfo.json")))
         self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
 
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo_and_pizza.json"))
+        self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
         self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/bfo.json")))
         self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
 
     def test_fetch_ontology_specify_no_root(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo.json"))
-        bfo_fetched_ontology = self.get_fetched_ontology("bfo")
+        self.run_pipeline_with_args(config_file_name="bfo.json")
+        bfo_fetched_ontology = self.get_fetched_ontology("bfo.json")
         self.assertEqual(36, len(bfo_fetched_ontology["specifications"]))
 
     def test_fetch_ontology_specify_with_root(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo_process.json"))
-        bfo_process_fetched_ontology = self.get_fetched_ontology("bfo")
+        self.run_pipeline_with_args(config_file_name="bfo_process.json")
+        bfo_process_fetched_ontology = self.get_fetched_ontology("bfo.json")
         self.assertEqual(3, len(bfo_process_fetched_ontology["specifications"]))
 
     def test_ontology_table_creation(self):
         self.assertFalse(os.path.exists(os.path.abspath("ontology_lookup_tables/lookup_bfo.json")))
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo.json"))
+        self.run_pipeline_with_args(config_file_name="bfo.json")
         self.assertTrue(os.path.exists(os.path.abspath("ontology_lookup_tables/lookup_bfo.json")))
 
     def test_ontology_table_creation_with_multiple_ontologies(self):
         expected_lookup_table_rel_path = "ontology_lookup_tables/lookup_bfo_and_pizza.json"
         self.assertFalse(os.path.exists(os.path.abspath(expected_lookup_table_rel_path)))
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo_and_pizza.json"))
+        self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
         self.assertTrue(os.path.exists(os.path.abspath(expected_lookup_table_rel_path)))
 
     def test_ontology_table_keys(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo.json"))
-        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo")
+        self.run_pipeline_with_args(config_file_name="bfo.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo.json")
 
         expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
                          "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
                          "processes", "qualities", "qualities_lower", "collocations",
-                         "inflection_exceptions", "stop_words", "suffixes",
+                         "inflection_exceptions", "stop_words", "suffixes", "parents",
                          "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
                          "resource_permutation_terms", "resource_bracketed_permutation_terms"]
-        for expected_key in expected_keys:
-            try:
-                self.assertTrue(expected_key in ontology_lookup_table)
-            except AssertionError:
-                raise AssertionError(expected_key + " is not in ontology_lookup_table")
+
+        self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
     def test_ontology_table_keys_with_multiple_ontologies(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo_and_pizza.json"))
-        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_and_pizza")
+        self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_and_pizza.json")
 
         expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
                          "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
                          "processes", "qualities", "qualities_lower", "collocations",
-                         "inflection_exceptions", "stop_words", "suffixes",
+                         "inflection_exceptions", "stop_words", "suffixes", "parents",
                          "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
                          "resource_permutation_terms", "resource_bracketed_permutation_terms"]
-        for expected_key in expected_keys:
-            try:
-                self.assertTrue(expected_key in ontology_lookup_table)
-            except AssertionError:
-                raise AssertionError(expected_key + " is not in ontology_lookup_table")
+
+        self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
     def test_ontology_table_resource_terms_ID_based(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo_material_entity.json"))
-        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
+        self.run_pipeline_with_args(config_file_name="bfo_material_entity.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity.json")
 
         expected_resource_terms_id_based = {
             "BFO_0000024": "fiat object part",
@@ -669,11 +664,9 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
 
     def test_ontology_table_resource_terms_ID_based_with_multiple_ontologies(self):
-        config_file_name = "bfo_material_entity_and_pizza_spiciness"
-        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        config_file_name = "bfo_material_entity_and_pizza_spiciness.json"
         expected_lookup_table_name = "lookup_" + config_file_name
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath(test_config_file_rel_path))
+        self.run_pipeline_with_args(config_file_name=config_file_name)
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms_id_based = {
@@ -688,11 +681,9 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
 
     def test_ontology_table_resource_terms_ID_based_with_multiple_root_entities(self):
-        config_file_name = "bfo_process_and_material_entity"
-        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        config_file_name = "bfo_process_and_material_entity.json"
         expected_lookup_table_name = "lookup_" + config_file_name
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath(test_config_file_rel_path))
+        self.run_pipeline_with_args(config_file_name=config_file_name)
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms_id_based = {
@@ -706,9 +697,8 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
 
     def test_ontology_table_resource_terms(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo_material_entity.json"))
-        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
+        self.run_pipeline_with_args(config_file_name="bfo_material_entity.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity.json")
 
         expected_resource_terms = {
             "fiat object part": "BFO_0000024",
@@ -719,11 +709,9 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)
 
     def test_ontology_table_resource_terms_with_multiple_ontologies(self):
-        config_file_name = "bfo_material_entity_and_pizza_spiciness"
-        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        config_file_name = "bfo_material_entity_and_pizza_spiciness.json"
         expected_lookup_table_name = "lookup_" + config_file_name
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath(test_config_file_rel_path))
+        self.run_pipeline_with_args(config_file_name=config_file_name)
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms = {
@@ -738,9 +726,8 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)
 
     def test_ontology_table_resource_terms_revised_where_terms_do_not_change(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo_material_entity.json"))
-        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
+        self.run_pipeline_with_args(config_file_name="bfo_material_entity.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity.json")
 
         expected_resource_terms_revised = {
             "fiat object part": "BFO_0000024",
@@ -751,9 +738,8 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms_revised, actual_resource_terms_revised)
 
     def test_ontology_table_resource_terms_revised_where_terms_change(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/pizza_spiciness.json"))
-        ontology_lookup_table = self.get_ontology_lookup_table("lookup_pizza_spiciness")
+        self.run_pipeline_with_args(config_file_name="pizza_spiciness.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_pizza_spiciness.json")
 
         expected_resource_terms_revised = {
             "naopicante": "pizza.owl_Mild",
@@ -764,11 +750,9 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms_revised, actual_resource_terms_revised)
 
     def test_ontology_table_resource_terms_revised_with_multiple_ontologies(self):
-        config_file_name = "bfo_material_entity_and_pizza_spiciness"
-        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        config_file_name = "bfo_material_entity_and_pizza_spiciness.json"
         expected_lookup_table_name = "lookup_" + config_file_name
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath(test_config_file_rel_path))
+        self.run_pipeline_with_args(config_file_name=config_file_name)
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms_revised = {
@@ -783,9 +767,8 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms_revised, actual_resource_terms_revised)
 
     def test_ontology_table_synonyms(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo.json"))
-        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo")
+        self.run_pipeline_with_args(config_file_name="bfo.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo.json")
 
         expected_synonyms = {
             "temporal instant.": "zero-dimensional temporal region",
@@ -801,10 +784,172 @@ class TestOntologyMapping(unittest.TestCase):
         actual_synonyms = ontology_lookup_table["synonyms"]
         self.assertDictEqual(expected_synonyms, actual_synonyms)
 
+    def test_ontology_table_parents_one_level_one_parent(self):
+        self.run_pipeline_with_args(config_file_name="bfo_process.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_process.json")
+
+        expected_parents = {
+            "BFO_0000182": ["BFO_0000015"],
+            "BFO_0000144": ["BFO_0000015"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
+
+    def test_ontology_table_parents_one_level_two_parents(self):
+        config_file_name = "bfo_process_and_material_entity.json"
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(config_file_name=config_file_name)
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_parents = {
+            "BFO_0000182": ["BFO_0000015"],
+            "BFO_0000144": ["BFO_0000015"],
+            "BFO_0000024": ["BFO_0000040"],
+            "BFO_0000027": ["BFO_0000040"],
+            "BFO_0000030": ["BFO_0000040"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
+
+    def test_ontology_table_parents_multiple_levels_one_branch(self):
+        self.run_pipeline_with_args(config_file_name="bfo_realizable_entity.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_realizable_entity.json")
+
+        expected_parents = {
+            "BFO_0000034": ["BFO_0000016"],
+            "BFO_0000016": ["BFO_0000017"],
+            "BFO_0000023": ["BFO_0000017"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
+
+    def test_ontology_table_parents_multiple_levels_multiple_branches(self):
+        config_file_name = "bfo_specifically_dependent_continuant.json"
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(config_file_name=config_file_name)
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_parents = {
+            "BFO_0000034": ["BFO_0000016"],
+            "BFO_0000016": ["BFO_0000017"],
+            "BFO_0000023": ["BFO_0000017"],
+            "BFO_0000145": ["BFO_0000019"],
+            "BFO_0000017": ["BFO_0000020"],
+            "BFO_0000019": ["BFO_0000020"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
+
+    def test_ontology_table_multiple_parents_per_resource(self):
+        config_file_name = "bfo_duplicate_entities_specifically_dependent_continuant.json"
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(config_file_name=config_file_name)
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_parents = {
+            "BFO_0000019": ["BFO_0000020"],
+            "BFO_0000017": ["BFO_0000020"],
+            "BFO_0000145": ["BFO_0000019", "BFO_0000017"],
+            "BFO_0000016": ["BFO_0000017"],
+            "BFO_0000023": ["BFO_0000017"],
+            "BFO_0000034": ["BFO_0000016"],
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        # Sort lists to ignore order in assertion
+        sorted_expected_parents = {}
+        for key, value in expected_parents.items():
+            sorted_expected_parents[key] = sorted(value)
+        sorted_actual_parents = {}
+        for key, value in actual_parents.items():
+            sorted_actual_parents[key] = sorted(value)
+
+        self.assertDictEqual(sorted_expected_parents, sorted_actual_parents)
+
+    def test_ontology_table_overlapping_parents_from_different_fetches(self):
+        config_file_name = "bfo_duplicate_entities_process_and_material_entity.json"
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(config_file_name=config_file_name)
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_parents = {
+            "BFO_0000182": ["BFO_0000015"],
+            "BFO_0000144": ["BFO_0000015"],
+            "BFO_0000024": ["BFO_0000040", "BFO_0000015"],
+            "BFO_0000027": ["BFO_0000040", "BFO_0000015"],
+            "BFO_0000030": ["BFO_0000040", "BFO_0000015"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
+
+        # Sort lists to ignore order in assertion
+        sorted_expected_parents = {}
+        for key, value in expected_parents.items():
+            sorted_expected_parents[key] = sorted(value)
+        sorted_actual_parents = {}
+        for key, value in actual_parents.items():
+            sorted_actual_parents[key] = sorted(value)
+
+        self.assertDictEqual(sorted_expected_parents, sorted_actual_parents)
+
+    def test_ontology_table_duplicate_parents(self):
+        config_file_name = "bfo_process_twice.json"
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(config_file_name=config_file_name)
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_parents = {
+            "BFO_0000182": ["BFO_0000015"],
+            "BFO_0000144": ["BFO_0000015"]
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        self.assertDictEqual(expected_parents, actual_parents)
+
+        # Sort lists to ignore order in assertion
+        sorted_expected_parents = {}
+        for key, value in expected_parents.items():
+            sorted_expected_parents[key] = sorted(value)
+        sorted_actual_parents = {}
+        for key, value in actual_parents.items():
+            sorted_actual_parents[key] = sorted(value)
+
+        self.assertDictEqual(sorted_expected_parents, sorted_actual_parents)
+
+    def test_ontology_table_duplicate_other_parents(self):
+        config_file_name = "bfo_duplicate_entities_specifically_dependent_continuant_twice.json"
+        expected_lookup_table_name = "lookup_" + config_file_name
+        self.run_pipeline_with_args(config_file_name=config_file_name)
+        ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
+
+        expected_parents = {
+            "BFO_0000019": ["BFO_0000020"],
+            "BFO_0000017": ["BFO_0000020"],
+            "BFO_0000145": ["BFO_0000019", "BFO_0000017"],
+            "BFO_0000016": ["BFO_0000017"],
+            "BFO_0000023": ["BFO_0000017"],
+            "BFO_0000034": ["BFO_0000016"],
+        }
+        actual_parents = ontology_lookup_table["parents"]
+
+        # Sort lists to ignore order in assertion
+        sorted_expected_parents = {}
+        for key, value in expected_parents.items():
+            sorted_expected_parents[key] = sorted(value)
+        sorted_actual_parents = {}
+        for key, value in actual_parents.items():
+            sorted_actual_parents[key] = sorted(value)
+
+        self.assertDictEqual(sorted_expected_parents, sorted_actual_parents)
+
     def test_ontology_table_resource_permutation_terms(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo_material_entity.json"))
-        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity")
+        self.run_pipeline_with_args(config_file_name="bfo_material_entity.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity.json")
 
         expected_resource_permutation_terms = {
             "fiat object part": "BFO_0000024",
@@ -821,9 +966,8 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_permutation_terms, actual_resource_permutation_terms)
 
     def test_ontology_table_resource_bracketed_permutation_terms(self):
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath("tests/config/bfo_spatial_region.json"))
-        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_spatial_region")
+        self.run_pipeline_with_args(config_file_name="bfo_spatial_region.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_spatial_region.json")
 
         expected_resource_bracketed_permutation_terms = {
             "one-dimensional region spatial": "BFO_0000026",
@@ -851,11 +995,9 @@ class TestOntologyMapping(unittest.TestCase):
                              actual_resource_bracketed_permutation_terms)
 
     def test_ontology_table_resource_terms_prioritisation_pizza_first(self):
-        config_file_name = "pizza_spiciness_and_pizza_two_spiciness"
-        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        config_file_name = "pizza_spiciness_and_pizza_two_spiciness.json"
         expected_lookup_table_name = "lookup_" + config_file_name
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath(test_config_file_rel_path))
+        self.run_pipeline_with_args(config_file_name=config_file_name)
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms = {
@@ -867,11 +1009,9 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)
 
     def test_ontology_table_resource_terms_prioritisation_pizza_two_first(self):
-        config_file_name = "pizza_two_spiciness_and_pizza_spiciness"
-        test_config_file_rel_path = "tests/config/%s.json" % config_file_name
+        config_file_name = "pizza_two_spiciness_and_pizza_spiciness.json"
         expected_lookup_table_name = "lookup_" + config_file_name
-        self.run_pipeline_with_args(input_file=self.small_simple_path,
-                                    config=os.path.abspath(test_config_file_rel_path))
+        self.run_pipeline_with_args(config_file_name=config_file_name)
         ontology_lookup_table = self.get_ontology_lookup_table(expected_lookup_table_name)
 
         expected_resource_terms = {
@@ -881,6 +1021,7 @@ class TestOntologyMapping(unittest.TestCase):
         }
         actual_resource_terms = ontology_lookup_table["resource_terms"]
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -437,60 +437,93 @@ def get_resource_dict(file_name, lower=False):
     return ret
 
 
-def get_all_resource_dicts():
-    """Returns collection of all dictionaries used in pipeline.run.
+def create_lookup_table_skeleton():
+    """Generate an empty lookup table.
 
-    Return values:
-        * class <"dict">: Contains key-value pairs corresponding to
-            files in "resources/"
-            * key: class <"str">
-            * val: class <"dict">
+    This means it has all necessary keys, but the values are empty
+    dictionaries.
+
+    :return: Empty lookup table
+    :rtype: dict
     """
-    # return value
-    ret = {}
+    return {"synonyms": {},
+            "abbreviations": {},
+            "abbreviations_lower": {},
+            "non_english_words": {},
+            "non_english_words_lower": {},
+            "spelling_mistakes": {},
+            "spelling_mistakes_lower": {},
+            "processes": {},
+            "qualities": {},
+            "qualities_lower": {},
+            "collocations": {},
+            "inflection_exceptions": {},
+            "stop_words": {},
+            "suffixes": {},
+            "parents": {},
+            "resource_terms_ID_based": {},
+            "resource_terms": {},
+            "resource_terms_revised": {},
+            "resource_permutation_terms": {},
+            "resource_bracketed_permutation_terms": {}}
+
+
+def add_predefined_resources_to_lookup_table(lookup_table):
+    """Add elements from ``resources/`` to lookup table.
+
+    :param lookup_table: See create_lookup_table_skeleton for the
+                         expected format of this parameter
+    :type lookup_table: dict
+    :return: Modified ``lookup_table``
+    :rtype: dict
+    """
     # Synonyms of resource terms
-    ret["synonyms"] = get_resource_dict("SynLex.csv")
+    lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
     # Abbreviations of resource terms
-    ret["abbreviations"] = get_resource_dict("AbbLex.csv")
+    lookup_table["abbreviations"] = get_resource_dict("AbbLex.csv")
     # Abbreviations of resource terms, all lowercase
-    ret["abbreviations_lower"] = get_resource_dict("AbbLex.csv", True)
+    lookup_table["abbreviations_lower"] = get_resource_dict("AbbLex.csv", True)
     # Non-english translations of resource terms
-    ret["non_english_words"] = get_resource_dict("NefLex.csv")
+    lookup_table["non_english_words"] = get_resource_dict("NefLex.csv")
     # Non-english translations of resource terms, all lowercase
-    ret["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
+    lookup_table["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
     # Common misspellings of resource terms
-    ret["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
+    lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
     # Common misspellings of resource terms, all lowercase
-    ret["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
+    lookup_table["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
     # Terms corresponding to candidate processes
-    ret["processes"] = get_resource_dict("candidateProcesses.csv")
+    lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
     # Terms corresponding to semantic taggings
-    ret["qualities"] = get_resource_dict("SemLex.csv")
+    lookup_table["qualities"] = get_resource_dict("SemLex.csv")
     # Terms corresponding to semantic taggings, all lowercase
-    ret["qualities_lower"] = get_resource_dict("SemLex.csv", True)
+    lookup_table["qualities_lower"] = get_resource_dict("SemLex.csv", True)
     # Terms corresponding to wikipedia collocations
-    ret["collocations"] = get_resource_dict("wikipediaCollocations.csv")
+    lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
     # Terms excluded from inflection treatment
-    ret["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
+    lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
     # Constrained list of stop words considered to be meaningless
-    ret["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
+    lookup_table["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
     # Suffixes to consider appending to terms when mining ontologies
-    ret["suffixes"] = get_resource_dict("suffixes.csv")
+    lookup_table["suffixes"] = get_resource_dict("suffixes.csv")
     # ID-resource combinations
-    ret["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
+    lookup_table["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
     # Swap keys and values in resource_terms_ID_based
-    ret["resource_terms"] = {v:k for k,v in ret["resource_terms_ID_based"].items()}
+    lookup_table["resource_terms"] = {
+        v: k for k, v in lookup_table["resource_terms_ID_based"].items()
+    }
     # Convert keys in resource_terms to lowercase
-    ret["resource_terms_revised"] = {k.lower():v for k,v in ret["resource_terms"].items()}
+    lookup_table["resource_terms_revised"] = {
+        k.lower(): v for k, v in lookup_table["resource_terms"].items()
+    }
 
     # Will contain permutations of resource terms
-    ret["resource_permutation_terms"] = {}
+    lookup_table["resource_permutation_terms"] = {}
     # Will contain permutations of resource terms with brackets
-    ret["resource_bracketed_permutation_terms"] = {}
+    lookup_table["resource_bracketed_permutation_terms"] = {}
     # Iterate across resource_terms_revised
-    for resource_term in ret["resource_terms_revised"]:
+    for resource_term in lookup_table["resource_terms_revised"]:
         # ID corresponding to resource_term
-        resource_id = ret["resource_terms_revised"][resource_term]
+        resource_id = lookup_table["resource_terms_revised"][resource_term]
         # List of tokens in resource_term
         resource_tokens = word_tokenize(resource_term.lower())
         # To limit performance overhead, we ignore resource_terms with
@@ -500,15 +533,15 @@ def get_all_resource_dicts():
         if len(resource_tokens)<7 and "NCBITaxon" not in resource_id:
             # Add all bracketed permutations of resource_term to
             # appropriate dictionary.
-            bracketed_permutations = get_resource_bracketed_permutation_terms(resource_term)
-            for bracketed_permutation in bracketed_permutations:
-                ret["resource_bracketed_permutation_terms"][bracketed_permutation] = resource_id
+            bracketed_perms = get_resource_bracketed_permutation_terms(resource_term)
+            for bracketed_perm in bracketed_perms:
+                lookup_table["resource_bracketed_permutation_terms"][bracketed_perm] = resource_id
             # Add all permutations of resource_term to appropriate
             # dictionary.
             permutations = get_resource_permutation_terms(resource_term)
             for permutation in permutations:
-                ret["resource_permutation_terms"][permutation] = resource_id
-    return ret
+                lookup_table["resource_permutation_terms"][permutation] = resource_id
+    return lookup_table
 
 
 def get_resource_permutation_terms(resource_label):
@@ -562,51 +595,20 @@ def get_resource_bracketed_permutation_terms(resource_label):
     return get_resource_permutation_terms(bracketed_component + " " + unbracketed_component)
 
 
-def create_online_ontology_lookup_table_skeleton():
-    """Generate an empty lookup table.
-
-    This means it has all necessary keys, but the values are empty
-    dictionaries.
-
-    :return: Empty lookup table
-    :rtype: dict
-    """
-    return {"synonyms": {},
-            "abbreviations": {},
-            "abbreviations_lower": {},
-            "non_english_words": {},
-            "non_english_words_lower": {},
-            "spelling_mistakes": {},
-            "spelling_mistakes_lower": {},
-            "processes": {},
-            "qualities": {},
-            "qualities_lower": {},
-            "collocations": {},
-            "inflection_exceptions": {},
-            "stop_words": {},
-            "suffixes": {},
-            "resource_terms_ID_based": {},
-            "resource_terms": {},
-            "resource_terms_revised": {},
-            "resource_permutation_terms": {},
-            "resource_bracketed_permutation_terms": {}}
-
-
-def add_to_online_ontology_lookup_table(lookup_table, fetched_ontology):
+def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
     """Add terms from fetched_ontology to lookup_table.
 
     lookup_table can be used to map terms in run. See
-    create_online_ontology_lookup_table_skeleton for the expected
-    format of lookup_table.
+    create_lookup_table_skeleton for the expected format of
+    lookup_table.
 
-    :param lookup_table: See
-                         create_online_ontology_lookup_table_skeleton
-                         for the expected format of this parameter
+    :param lookup_table: See create_lookup_table_skeleton for the
+                         expected format of this parameter
     :param fetched_ontology: See JSON output of ontofetch.py for the
                              expected format of this parameter
     :type lookup_table: dict
     :type fetched_ontology: dict
-    :return: Modified lookup_table
+    :return: Modified ``lookup_table``
     :rtype: dict
     """
     # Parse content from fetched_ontology and add it to lookup_table
@@ -640,6 +642,31 @@ def add_to_online_ontology_lookup_table(lookup_table, fetched_ontology):
                 synonyms = resource["synonyms"].split(";")
                 for synonym in synonyms:
                     lookup_table["synonyms"][synonym] = resource_label
+
+            if "parent_id" in resource:
+                # Keep parent_id consistent with resource_id values
+                parent_id = resource["parent_id"].replace(":", "_")
+
+                # Instead of overwriting parents like we do with
+                # synonyms, we will concatenate parents from different
+                # fetches.
+                if resource_id in lookup_table["parents"]:
+                    # Prevent duplicates
+                    if not parent_id in lookup_table["parents"][resource_id]:
+                        lookup_table["parents"][resource_id] += [parent_id]
+                else:
+                    lookup_table["parents"][resource_id] = [parent_id]
+
+                if "other_parents" in resource:
+                    # Keep values consistent with resource_id values
+                    other_parents = list(map(lambda x: x.replace(":", "_"),
+                                             resource["other_parents"]))
+
+                    # Prevent duplicates
+                    other_parents = list(filter(
+                        lambda x: x not in lookup_table["parents"][resource_id], other_parents))
+
+                    lookup_table["parents"][resource_id] += other_parents
 
     return lookup_table
 
@@ -1172,7 +1199,8 @@ def run(args):
         with open(lookup_table_path) as fp:
             lookup_table = json.load(fp)
     else:
-        lookup_table = get_all_resource_dicts()
+        lookup_table = create_lookup_table_skeleton()
+        lookup_table = add_predefined_resources_to_lookup_table(lookup_table)
         with open(lookup_table_path, "w") as fp:
             json.dump(lookup_table, fp)
 
@@ -1201,7 +1229,7 @@ def run(args):
                 config_json = json.load(file)
 
             # Create empty ontology lookup table
-            ontology_lookup_table = create_online_ontology_lookup_table_skeleton()
+            ontology_lookup_table = create_lookup_table_skeleton()
 
             # Iterate over config_json backwards
             for json_object in reversed(config_json):
@@ -1220,8 +1248,8 @@ def run(args):
                 fetched_ontology_rel_path = "fetched_ontologies/%s.json" % ontology_file_name
                 with open(os.path.abspath(fetched_ontology_rel_path)) as file:
                     fetched_ontology = json.load(file)
-                ontology_lookup_table = add_to_online_ontology_lookup_table(ontology_lookup_table,
-                                                                            fetched_ontology)
+                ontology_lookup_table = add_fetched_ontology_to_lookup_table(ontology_lookup_table,
+                                                                             fetched_ontology)
 
             # Add ontology_lookup_table to cache
             with open(ontology_lookup_table_abs_path, "w") as file:
