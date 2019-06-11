@@ -456,6 +456,9 @@ class TestPipeline(unittest.TestCase):
         # Some samples are a full-term match, based on a
         # Wikipedia-based collocation resource.
         "test_full_term_wiki_match": {"input": "test_full_term_wiki_match"},
+        # Bucket classification
+        "empty_buckets_not_full": {"input": "empty", "format": "not full", "bucket": True},
+        "empty_buckets": {"input": "empty", "bucket": True},
     }
 
     @classmethod
@@ -496,11 +499,12 @@ class TestPipeline(unittest.TestCase):
             # File path to store actual output of input file
             actual_output_path = "actual_output.tsv"
             # Run pipeline.run using input_path and actual_output_path
-            default_args = {"format": "full"}
+            default_args = {"format": "full", "bucket": False}
             default_args.update(pipeline_args)
             pipeline.run(argparse.Namespace(input_file=default_args["input"], config=None,
                                             format=default_args["format"],
-                                            output=actual_output_path, version=False, bucket=None))
+                                            output=actual_output_path, version=False,
+                                            bucket=default_args["bucket"]))
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
@@ -552,11 +556,11 @@ class TestOntologyMapping(unittest.TestCase):
                                                                config_file_name)
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=config_file_path,
                                             format="basic", output=None, version=False,
-                                            bucket=None))
+                                            bucket=False))
         else:
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
                                             format="basic", output=None, version=False,
-                                            bucket=None))
+                                            bucket=False))
 
     @staticmethod
     def get_fetched_ontology(file_name):

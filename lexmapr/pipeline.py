@@ -112,7 +112,15 @@ def run(args):
         OUTPUT_FIELDS += [
             "Matched_Components"
         ]
-    
+
+    if args.bucket:
+        OUTPUT_FIELDS += [
+            "LexMapr Classification (Full List)",
+            "LexMapr Bucket",
+            "Third Party Bucket",
+            "Third Party Classification"
+        ]
+
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
     fw.write('\t'.join(OUTPUT_FIELDS))
     
