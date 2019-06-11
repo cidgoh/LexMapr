@@ -404,64 +404,68 @@ class TestPipeline(unittest.TestCase):
     
     maxDiff = None
 
-    # Dictionary containing the names of input and expected output
-    # file test cases without extensions. The keys are expected
-    # output files, and the values are a list with two values: the
-    # input file, and format value. It is assumed input and output
-    # files have .csv and .tsv extensions, and are in
-    # ./lexmapr/tests/test_input and ./lexmapr/tests/test_input
-    # respectively. All future test cases must be added here.
+    # Dictionary containing pipeline arguments (values), and the names
+    # of their expected output files (keys). These are not technically
+    # valid arguments because we should supply the paths of input
+    # files, but we will convert the values for input to paths later,
+    # to avoid long strings here.
     test_files = {
         # Empty file without "full" format argument
-        "empty_not_full": ["empty", "not full"],
+        "empty_not_full": {"input": "empty", "format": "not full"},
         # Empty file with "full" format argument
-        "empty": ["empty", "full"],
+        "empty": {"input": "empty"},
         # Non-empty file without "full" format argument
-        "small_simple_not_full": ["small_simple", "not full"],
+        "small_simple_not_full": {"input": "small_simple", "format": "not full"},
         # Non-empty file with "full" format argument
-        "small_simple": ["small_simple", "full"],
+        "small_simple": {"input": "small_simple"},
         # Some rows requires punctuation treatment
-        "test_punctuation": ["test_punctuation", "full"],
+        "test_punctuation": {"input": "test_punctuation"},
         # Some rows require extra inner spaces to be removed--
         # some due to punctuation treatment.
-        "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
+        "test_extra_inner_spaces": {"input": "test_extra_inner_spaces"},
         # Varying number of tokens per row
-        "test_tokenization": ["test_tokenization", "full"],
+        "test_tokenization": {"input": "test_tokenization"},
         # Some tokens require preprocessing
-        "test_preprocessing": ["test_preprocessing", "full"],
+        "test_preprocessing": {"input": "test_preprocessing"},
         # Some tokens require inflection treatment
-        "test_pluralization": ["test_pluralization", "full"],
+        "test_pluralization": {"input": "test_pluralization"},
         # Some tokens require spelling corrections
-        "test_spelling_corrections": ["test_spelling_corrections", "full"],
+        "test_spelling_corrections": {"input": "test_spelling_corrections"},
         # Some tokens require abbreviation or acronym translation
-        "test_abbreviations": ["test_abbreviations", "full"],
+        "test_abbreviations": {"input": "test_abbreviations"},
         # Some tokens require non-english to english translation
         # TODO: We must add capitalized non-english words to
         #       ../resources/NefLex, and then makes tests for potential
         #       translations from nonEnglishWordsLowerDict.
-        "test_non_english_words": ["test_non_english_words", "full"],
+        "test_non_english_words": {"input": "test_non_english_words"},
         # Some tokens are stop-words
-        "test_stop_word_handling": ["test_stop_word_handling", "full"],
+        "test_stop_word_handling": {"input": "test_stop_word_handling"},
         # Varying paths of candidate phrase creations
-        "test_candidate_phrase": ["test_candidate_phrase", "full"],
+        "test_candidate_phrase": {"input": "test_candidate_phrase"},
         # Some Sample_Id's are missing a sample
-        "test_sample_id_only": ["test_sample_id_only", "full"],
+        "test_sample_id_only": {"input": "test_sample_id_only"},
         # Some samples are a full-term direct match
-        "test_full_term_dir_match": ["test_full_term_dir_match", "full"],
+        "test_full_term_dir_match": {"input": "test_full_term_dir_match"},
         # Some samples are a full-term match, provided a change-of-case
         # in input or resource data.
-        "test_full_term_coc_match": ["test_full_term_coc_match", "full"],
+        "test_full_term_coc_match": {"input": "test_full_term_coc_match"},
         # Some samples are a full-term match, if permutated
-        "test_full_term_perm_match": ["test_full_term_perm_match", "full"],
+        "test_full_term_perm_match": {"input": "test_full_term_perm_match"},
         # Some samples are a full-term match, if given an added suffix
-        "test_full_term_sfx_match": ["test_full_term_sfx_match", "full"],
+        "test_full_term_sfx_match": {"input": "test_full_term_sfx_match"},
         # Some samples are a full-term match, based on a
         # Wikipedia-based collocation resource.
-        "test_full_term_wiki_match": ["test_full_term_wiki_match", "full"],
+        "test_full_term_wiki_match": {"input": "test_full_term_wiki_match"},
     }
 
     @classmethod
     def setUpClass(cls):
+        # Convert input file names to paths in test_files.
+        for expected_output_filename, pipeline_args in cls.test_files.items():
+            input_path = pkg_resources.resource_filename("lexmapr.tests.test_input",
+                                                         pipeline_args["input"] + ".csv")
+            cls.test_files[expected_output_filename]["input"] = input_path
+
         # Change working directory to temporary directory
         cls.tmp_dir = tempfile.mkdtemp()
         os.chdir(cls.tmp_dir)
@@ -484,20 +488,19 @@ class TestPipeline(unittest.TestCase):
         # outputs that are not equal to their actual outputs.
         failures = []
         # Iterate over all expected outputs
-        for expected_output in self.test_files:
+        for expected_output_filename, pipeline_args in self.test_files.items():
             # Path of expected output file
             expected_output_path = pkg_resources.resource_filename("lexmapr.tests.test_output",
-                                                                   expected_output + ".tsv")
-            # Path of input file
-            input = self.test_files[expected_output][0]
-            input_path = pkg_resources.resource_filename("lexmapr.tests.test_input", input + ".csv")
-            # Format value
-            format = self.test_files[expected_output][1]
+                                                                   expected_output_filename
+                                                                   + ".tsv")
             # File path to store actual output of input file
             actual_output_path = "actual_output.tsv"
             # Run pipeline.run using input_path and actual_output_path
-            pipeline.run(type("",(object,),{"input_file": input_path,
-                "output": actual_output_path, "format": format, "config": None, "bucket": None})())
+            default_args = {"format": "full"}
+            default_args.update(pipeline_args)
+            pipeline.run(argparse.Namespace(input_file=default_args["input"], config=None,
+                                            format=default_args["format"],
+                                            output=actual_output_path, version=False, bucket=None))
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
@@ -509,7 +512,7 @@ class TestPipeline(unittest.TestCase):
                 self.assertMultiLineEqual(expected_output_contents, actual_output_contents)
             except AssertionError as e:
                 print(e)
-                failures += [expected_output]
+                failures += [expected_output_path]
         if failures:
             print("Failed files:")
             for failure in failures:
