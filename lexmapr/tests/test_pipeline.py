@@ -409,8 +409,8 @@ class TestPipeline(unittest.TestCase):
     # output files, and the values are a list with two values: the
     # input file, and format value. It is assumed input and output
     # files have .csv and .tsv extensions, and are in
-    # ./lexmapr/tests/input and ./lexmapr/tests/input respectively.
-    # All future test cases must be added here.
+    # ./lexmapr/tests/test_input and ./lexmapr/tests/test_input
+    # respectively. All future test cases must be added here.
     test_files = {
         # Empty file without "full" format argument
         "empty_not_full": ["empty", "not full"],
@@ -486,18 +486,18 @@ class TestPipeline(unittest.TestCase):
         # Iterate over all expected outputs
         for expected_output in self.test_files:
             # Path of expected output file
-            expected_output_path = pkg_resources.resource_filename("lexmapr.tests.output",
+            expected_output_path = pkg_resources.resource_filename("lexmapr.tests.test_output",
                                                                    expected_output + ".tsv")
             # Path of input file
             input = self.test_files[expected_output][0]
-            input_path = pkg_resources.resource_filename("lexmapr.tests.input", input + ".csv")
+            input_path = pkg_resources.resource_filename("lexmapr.tests.test_input", input + ".csv")
             # Format value
             format = self.test_files[expected_output][1]
             # File path to store actual output of input file
             actual_output_path = "actual_output.tsv"
             # Run pipeline.run using input_path and actual_output_path
             pipeline.run(type("",(object,),{"input_file": input_path,
-                "output": actual_output_path, "format": format, "config": None})())
+                "output": actual_output_path, "format": format, "config": None, "bucket": None})())
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
@@ -542,16 +542,18 @@ class TestOntologyMapping(unittest.TestCase):
 
         # Path to input file used in all tests
         small_simple_path =\
-            pkg_resources.resource_filename("lexmapr.tests.input", "small_simple.csv")
+            pkg_resources.resource_filename("lexmapr.tests.test_input", "small_simple.csv")
 
         if config_file_name:
-            config_file_path = pkg_resources.resource_filename("lexmapr.tests.config",
+            config_file_path = pkg_resources.resource_filename("lexmapr.tests.test_config",
                                                                config_file_name)
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=config_file_path,
-                                            format="basic", output=None, version=False))
+                                            format="basic", output=None, version=False,
+                                            bucket=None))
         else:
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
-                                            format="basic", output=None, version=False))
+                                            format="basic", output=None, version=False,
+                                            bucket=None))
 
     @staticmethod
     def get_fetched_ontology(file_name):

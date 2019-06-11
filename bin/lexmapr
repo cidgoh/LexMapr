@@ -25,7 +25,9 @@ if __name__ == '__main__':
                         help='Prints version information.', required=False)
     parser.add_argument('-c', '--config',
                         help="Path to JSON file containing the IRI of ontologies to fetch terms "
-                             "from")
+                             "from"),
+    parser.add_argument('-b', '--bucket',
+                        help="Classify samples into pre-defined buckets")
     args = parser.parse_args()
     
     if args.version:
