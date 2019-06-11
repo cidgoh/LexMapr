@@ -2,78 +2,21 @@
 
 import collections
 import csv
-import nltk
-import re
-import inflection
-from nltk.tokenize import sent_tokenize, word_tokenize
-from nltk.tokenize.moses import MosesDetokenizer as detokenizer
-from nltk import pos_tag, ne_chunk
-import wikipedia
 import itertools
 from itertools import combinations
-from dateutil.parser import parse
-import sys
-from pkg_resources import resource_filename, resource_listdir
-import logging
-import collections
 import json
 import os
-# TODO: We should figure out a way ontofetch can be imported remotely,
-#       as opposed to simply copying and pasting the ontofetch.py and
-#       its dependencies.
-# Source:
-# https://github.com/GenEpiO/geem/blob/master/scripts/ontofetch.py
+import re
+import sys
+
+from dateutil.parser import parse
+import inflection
+from nltk.tokenize import word_tokenize
+from nltk.tokenize.moses import MosesDetokenizer
+from nltk import pos_tag
+from pkg_resources import resource_filename
+
 from lexmapr.ontofetch import Ontology
-
-logger = logging.getLogger("pipeline")
-logger.disabled = True
-
-
-def assign_confidence_level(match_status, match_status_addendum):
-    confidence_level = "Unassigned"
-    if "Full Term Match" in match_status:
-        if "[A Direct Match With Original Sample]" in match_status_addendum:
-            confidence_level="Highest"
-        if "[Change of Case in Input Data]" in match_status_addendum:
-            confidence_level="Highest"
-        if "[Change of Case in Resource Data]" in match_status_addendum:
-            confidence_level = "Highest"
-        if "[Permutation of Tokens in Resource Term]" in match_status_addendum:
-            confidence_level = "High"
-        if "[Permutation of Tokens in Bracketed Resource Term]" in match_status_addendum:
-            confidence_level = "High"
-        if "[Change of Case of Resource and Suffix Addition" in match_status_addendum:
-            confidence_level = "High"
-        if "[A Direct Match with Cleaned and Normalized Input]" in match_status_addendum:
-            confidence_level = "High"
-        if "[New Candidadte Terms -" in match_status_addendum:
-            confidence_level = "Highest But Subject to Inclusion of Candidate Term in Resources"
-        if "Inflection (Singularization) Treatment" in match_status_addendum:
-            confidence_level = "High"
-        if "Spelling Correction Treatment" in match_status_addendum:
-            confidence_level = "High"
-        if "Abbreviation-Acronym Treatment" in match_status_addendum:
-            confidence_level = "Moderate"
-        if "Non English Language Words Treatment" in match_status_addendum:
-            confidence_level = "Moderate"
-    if "Component Match" in match_status:
-        if "None" in match_status_addendum:
-            confidence_level = "High"
-        if "Inflection (Singularization) Treatment" in match_status_addendum:
-            confidence_level = "High"
-        if "Spelling Correction Treatment" in match_status_addendum:
-            confidence_level = "High"
-        if "Abbreviation-Acronym Treatment" in match_status_addendum:
-            confidence_level = "Moderate"
-        if "Non English Language Words Treatment" in match_status_addendum:
-            confidence_level = "Moderate"
-        if "Suffix Addition-" in match_status_addendum:
-            confidence_level = "High"
-        if "Synonym Usage" in match_status_addendum:
-            confidence_level = "High"
-        if "Using Semantic Tagging Resources" in match_status_addendum:
-            confidence_level = "Low"
-    return confidence_level
 
 
 def singularize_token(tkn, lookup_table, status_addendum):
@@ -197,7 +140,7 @@ def remove_duplicate_tokens(input_string):
     string_tokens = word_tokenize(input_string.lower())
     for tkn in string_tokens:
         new_phrase_set.append(tkn)
-    refined_string = detokenizer().detokenize(new_phrase_set, return_str=True)
+    refined_string = MosesDetokenizer().detokenize(new_phrase_set, return_str=True)
     refined_string=refined_string.strip()
     return refined_string
 
@@ -338,7 +281,6 @@ def punctuationTreatment(inputstring, punctuationList):
 # 22-Method to get the final retained set of matched terms
 def retainedPhrase(termList):
     returnedSetFinal = []
-    logger.debug(termList)
     termDict = {}
     termDictAdd = {}
     wordList = []
@@ -1413,8 +1355,6 @@ def run(args):
 
         # Component Matches Section
         if (not trigger):
-            logger.debug("We will go further with other rules now targetting components of input data")
-
             # 1-5 gram component matches for cleaned_sample, and
             # tokens covered by said matches. See find_component_match
             # docstring for details.
@@ -1468,7 +1408,6 @@ def run(args):
             # If size of set is more than one member, looks for the retained matched terms by defined criteria
             if (len(partialMatchedResourceListSet) > 0):
                 retainedSet = retainedPhrase(list(partialMatchedResourceListSet))
-                logger.debug("retainedSet " + str(retainedSet))
                 # HERE SHOULD HAVE ANOTHER RETAING SET
 
             final_status = set(status_addendum)
