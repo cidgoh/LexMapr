@@ -714,7 +714,6 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     retained_tokens = []
     # Dictionary to return
     ret = dict.fromkeys([
-        "matched_term",
         "all_match_terms_with_resource_ids",
         "retained_terms_with_resource_ids",
         "match_status_macro_level",
@@ -725,7 +724,6 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     if sample == "":
         # Update ret
         ret.update({
-            "matched_term": "--",
             "all_match_terms_with_resource_ids": "--",
             "match_status_micro_level": "Empty Sample",
         })
@@ -864,8 +862,6 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
             # Term with first suffix in suffixes that provides
             # a full-term match.
             term_with_suffix = sample + " " + matched_suffixes[0]
-            # Term we add a suffix to
-            matched_term = sample.lower()
             # Resource ID for matched_term
             resource_id = resource_terms_revised[term_with_suffix]
             # Update retained_tokens
@@ -882,8 +878,6 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
             # Term with first suffix in suffixes that provides
             # a full-term match.
             term_with_suffix = cleaned_sample.lower() + " " + matched_clean_suffixes[0]
-            # Term we cleaned and added a suffix to
-            matched_term = sample.lower()
             # Resource ID for matched_term
             resource_id = resource_terms_revised[term_with_suffix]
             # Update retained_tokens
@@ -905,7 +899,6 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     final_status = set(status_addendum)
     # Update ret
     ret.update({
-        "matched_term": matched_term,
         "all_match_terms_with_resource_ids":
             str(sorted(list(retained_tokens))),
         "retained_terms_with_resource_ids":

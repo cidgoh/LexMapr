@@ -104,16 +104,9 @@ def run(args):
 
     if args.format == 'full':
         OUTPUT_FIELDS += [
-            "Phrase_POS_Tagged",
-            "Probable_Candidate_Terms",
-            "Matched_Term",
-            "All_matched_Terms_with_Resource_IDs",
-            "Retained_Terms_with_Resource_IDs",
-            "Number of Components(In case of Component Match)",
+            "Final_Refined_Terms_with_Resource_IDs",
             "Match_Status(Macro Level)",
-            "Match_Status(Micro Level)",
-            "Remaining_Tokens",
-            "Different Components(In case of Component Match)"
+            "Match_Status(Micro Level)"
         ]
     else:
         OUTPUT_FIELDS += [
@@ -181,43 +174,8 @@ def run(args):
             cleaned_sample = helpers.non_English_normalization_phrase(cleaned_sample, lookup_table,
                                                                       status_addendum)
 
-        #  Here we are making the tokens of cleaned sample phrase
         cleaned_sample = helpers.remove_duplicate_tokens(cleaned_sample)
-        cleaned_sample_tokens = word_tokenize(cleaned_sample.lower())
-
-        # Part of Speech tags assigned to the tokens
-        tokens_pos = pos_tag(cleaned_sample_tokens)
-
-        if args.format == "full":
-            # output fields:
-            #   'cleaned_sample': cleaned_sample
-            #   'phrase_pos_tagged': str(tokens_pos)
-            fw.write('\t' + cleaned_sample + '\t' + str(tokens_pos))
-        else:
-            # output_fields:
-            #   'cleaned_sample': cleaned_sample
-            fw.write('\t' + cleaned_sample )
-
-        # This part works for getting the Candidate phrase based on POS tagging and application of the relevant rule  [Not a major contributor -not used now except for printing]
-        qualityList = []
-        phraseStr = ""
-        prevPhraseStr = ""
-        prevTag = "X"
-        for tkp in tokens_pos:
-            # print(tkp)
-            currentTag = tkp[1]
-            # qualityListForSet.append(tkp[1])
-            if ((tkp[1] == 'NN' or tkp[1] == 'NNS') and (prevTag == "X" or prevTag == "NN" or prevTag == "NNS")):
-                phraseStr = tkp[0]
-                if not prevPhraseStr:
-                    prevPhraseStr = phraseStr
-                else:
-                    prevPhraseStr = prevPhraseStr + " " + phraseStr
-                    prevTag = currentTag
-        if args.format == 'full':
-            # output field:
-            #   'probable_candidate_terms': str(prevPhraseStr)
-            fw.write('\t' + str(prevPhraseStr))
+        fw.write('\t' + cleaned_sample)
 
         #---------------------------STARTS APPLICATION OF RULES-----------------------------------------------
         try:
@@ -227,12 +185,8 @@ def run(args):
 
             # Write to all headers
             if args.format == "full":
-                fw.write("\t" + str([full_term_match["matched_term"]]) + "\t"
-                    + full_term_match["all_match_terms_with_resource_ids"]
-                    + "\t"
-                    + full_term_match["retained_terms_with_resource_ids"]
-                    + "\t" + "\t"
-                    + full_term_match["match_status_macro_level"] + "\t"
+                fw.write("\t"+ full_term_match["retained_terms_with_resource_ids"]
+                    + "\t" + full_term_match["match_status_macro_level"] + "\t"
                     + full_term_match["match_status_micro_level"])
             # Write to some headers
             else:
@@ -314,26 +268,11 @@ def run(args):
             # In case it is for componet matching and we have at least one component matched
             if (len(partial_matches) > 0):
                 if args.format == 'full':
-                    fw.write('\t' + str(sorted(list(partial_matches))) + '\t' + str(sorted(list(partialMatchedResourceListSet))) + '\t' + str(sorted(list(retainedSet))) + '\t' + str(len(retainedSet)) + '\t' + status + '\t' + str(sorted(list(final_status))) + '\t' + str(sorted(list(remSetDiff))))
+                    fw.write('\t' + str(sorted(list(retainedSet))) + '\t' + status + '\t'
+                             + str(sorted(list(final_status))))
 
-                compctr = 0
-                if args.format == 'full':
-                    fw.write("\t")
-                
                 if args.format != 'full':
                     fw.write("\t" + str(sorted(list(retainedSet))))
-
-                if args.format == 'full':
-                    for comp in sorted(list(retainedSet)):
-                        compctr += 1
-                        if (compctr == 1):
-                            fw.write("Component" + str(compctr) + "-> " + str(comp))
-                        else:
-                            fw.write(", Component" + str(compctr) + "-> " + str(comp))
-                    trigger = True
-                else:        # In case of no matching case
-                    if args.format == 'full':
-                        fw.write('\t' + str(sorted(list(partial_matches))) + '\t' + str(sorted(list(partial_matches_with_ids))) + '\t\t' + "\t" + "Sorry No Match" + "\t" + str(sorted(list(remaining_tokens))))
 
     fw.write('\n')
     #Output files closed
