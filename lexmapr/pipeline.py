@@ -121,6 +121,19 @@ def run(args):
             "Third Party Classification"
         ]
 
+        # Cache (or get from cache) the lookup table containing pre-defined
+        # resources used for **classification**.
+        classification_lookup_table_path = os.path.abspath("classification_lookup_table.json")
+        if os.path.exists(classification_lookup_table_path):
+            with open(classification_lookup_table_path) as fp:
+                classification_lookup_table = json.load(fp)
+        else:
+            classification_lookup_table = helpers.create_lookup_table_skeleton()
+            # classification_lookup_table =\
+            #     helpers.add_classification_resources_to_lookup_table(classification_lookup_table)
+            with open(classification_lookup_table_path, "w") as fp:
+                json.dump(classification_lookup_table, fp)
+
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
     fw.write('\t'.join(OUTPUT_FIELDS))
     

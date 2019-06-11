@@ -397,7 +397,13 @@ def create_lookup_table_skeleton():
             "resource_terms": {},
             "resource_terms_revised": {},
             "resource_permutation_terms": {},
-            "resource_bracketed_permutation_terms": {}}
+            "resource_bracketed_permutation_terms": {},
+            "buckets_ifsactop": {},
+            "buckets_lexmapr": {},
+            "ifsac_labels": {},
+            "ifsac_refinement": {},
+            "ifsac_default": {}
+            }
 
 
 def add_predefined_resources_to_lookup_table(lookup_table):

@@ -618,7 +618,9 @@ class TestOntologyMapping(unittest.TestCase):
                          "processes", "qualities", "qualities_lower", "collocations",
                          "inflection_exceptions", "stop_words", "suffixes", "parents",
                          "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
-                         "resource_permutation_terms", "resource_bracketed_permutation_terms"]
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
+                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
+                         "ifsac_default"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
@@ -631,7 +633,9 @@ class TestOntologyMapping(unittest.TestCase):
                          "processes", "qualities", "qualities_lower", "collocations",
                          "inflection_exceptions", "stop_words", "suffixes", "parents",
                          "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
-                         "resource_permutation_terms", "resource_bracketed_permutation_terms"]
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
+                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
+                         "ifsac_default"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
@@ -1006,6 +1010,72 @@ class TestOntologyMapping(unittest.TestCase):
         actual_resource_terms = ontology_lookup_table["resource_terms"]
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)
 
+
+class TestClassification(unittest.TestCase):
+    """Tests processes of classification of samples into buckets.
+
+    This differs from the black-box approach taken in TestPipeline, as
+    we are concerned with the mechanics behind the classification.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        # Change working directory to temporary directory
+        cls.tmp_dir = tempfile.mkdtemp()
+        os.chdir(cls.tmp_dir)
+
+    @classmethod
+    def tearDownClass(cls):
+        # Remove temporary directory
+        shutil.rmtree(cls.tmp_dir)
+
+    def tearDown(self):
+        # Remove cached classification lookup table between tests
+        os.remove("classification_lookup_table.json")
+
+    @staticmethod
+    def run_pipeline_with_args(bucket=False):
+        """Run pipeline with some default arguments."""
+
+        # Path to input file used in all tests
+        small_simple_path =\
+            pkg_resources.resource_filename("lexmapr.tests.test_input", "small_simple.csv")
+
+        if bucket:
+            pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
+                                            format="basic", output=None, version=False,
+                                            bucket=True))
+        else:
+            pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
+                                            format="basic", output=None, version=False,
+                                            bucket=False))
+
+    @staticmethod
+    def get_classification_lookup_table():
+        with open("classification_lookup_table.json") as fp:
+            return json.load(fp)
+
+    def test_generate_classification_table(self):
+        self.run_pipeline_with_args()
+        self.assertFalse(os.path.exists("classification_lookup_table.json"))
+
+        self.run_pipeline_with_args(bucket=True)
+        self.assertTrue(os.path.exists(os.path.abspath("classification_lookup_table.json")))
+
+    def test_classification_table_keys(self):
+        self.run_pipeline_with_args(bucket=True)
+        ontology_lookup_table = self.get_classification_lookup_table()
+
+        expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
+                         "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
+                         "processes", "qualities", "qualities_lower", "collocations",
+                         "inflection_exceptions", "stop_words", "suffixes", "parents",
+                         "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
+                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
+                         "ifsac_default"]
+
+        self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
 if __name__ == '__main__':
     unittest.main()
