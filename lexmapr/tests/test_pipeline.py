@@ -1,94 +1,65 @@
 #!/usr/bin/env python
-"""Tests functionality of lexmapr.pipeline.
 
-This script uses unit testing to test the helper and run functions
-found in lexmapr.pipeline. It is currently only compatible with
-Python 3. To run these tests, enter the following command line
-arguments from the root directory:
+"""Tests functionality of LexMapr.
 
-    $ PYTHONHASHSEED=0 python3 lexmapr/tests/test_pipeline.py
-
-TODO:
-    * Refactor test suites as needed, after refactoring pipeline.py
-        * Add new tests as needed for greater path/branch coverage
-            * There are many internals within lexmapr.pipeline.run that
-                are difficult to test, due to the lack of modularity
-                * For now, we will take a black box approach for the
-                    entirety of lexmapr.pipeline.run, but revisit with
-                    more in-depth testing later
-        * Break test classes up into a pattern more consistent with
-            end-result of pipeline.py
+Requires environmental variable ``PYTHONHASHSEED=0`` for tests to pass.
 """
 
 import argparse
 import json
 import os
-import pkg_resources
 import shutil
 import tempfile
 import unittest
 
-from lexmapr import pipeline
+import pkg_resources
+
+import lexmapr.pipeline as pipeline
+import lexmapr.pipeline_helpers as pipeline_helpers
 
 
-class TestPipelineMethods(unittest.TestCase):
-    """Unit test suite for pipeline methods outside pipeline.run.
-
-    Subclass of unittest.TestCase.
-
-    Public methods:
-        * test_is_number()
-        * test_is_date()
-        * test_ngrams()
-        * test_preProcess
-        * test_find_between_r()
-        * test_find_left_r()
-        * test_allPermutations()
-        * test_combi()
-        * test_punctuationTreatment()
-        * test_retainedPhrase()
-    """
+class TestPipelineHelpers(unittest.TestCase):
 
     def test_is_number(self):
         """Tests is_number."""
         # 0 value
-        self.assertTrue(pipeline.is_number("0"))
+        self.assertTrue(pipeline_helpers.is_number("0"))
         # Positive float value
-        self.assertTrue(pipeline.is_number("1.5"))
+        self.assertTrue(pipeline_helpers.is_number("1.5"))
         # Negative float value
-        self.assertTrue(pipeline.is_number("-1.5"))
+        self.assertTrue(pipeline_helpers.is_number("-1.5"))
         # Empty string
-        self.assertFalse(pipeline.is_number(""))
+        self.assertFalse(pipeline_helpers.is_number(""))
         # Non-empty string
-        self.assertFalse(pipeline.is_number("foo"))
+        self.assertFalse(pipeline_helpers.is_number("foo"))
 
     def test_is_date(self):
         """Tests is_date_true."""
         # Year, month and day with dashes
-        self.assertTrue(pipeline.is_date("2018-05-07"))
+        self.assertTrue(pipeline_helpers.is_date("2018-05-07"))
         # American month, day and year
-        self.assertTrue(pipeline.is_date("12/22/78"))
+        self.assertTrue(pipeline_helpers.is_date("12/22/78"))
         # Textual month, day and year
-        self.assertTrue(pipeline.is_date("July 1st, 2008"))
+        self.assertTrue(pipeline_helpers.is_date("July 1st, 2008"))
         # Empty string
-        self.assertFalse(pipeline.is_date(""))
+        self.assertFalse(pipeline_helpers.is_date(""))
         # Non-empty string
-        self.assertFalse(pipeline.is_date("foo"))
+        self.assertFalse(pipeline_helpers.is_date("foo"))
 
     def test_ngrams(self):
         """Tests ngrams."""
         # Empty string and n = 1
-        self.assertEqual(pipeline.ngrams("", 1), [[""]],)
+        self.assertEqual(pipeline_helpers.ngrams("", 1), [[""]],)
         # Empty string and n=2
-        self.assertEqual(pipeline.ngrams("", 1), [[""]],)
+        self.assertEqual(pipeline_helpers.ngrams("", 1), [[""]],)
         # Two-word string and n=1
-        self.assertEqual(pipeline.ngrams("hello world!", 1),
+        self.assertEqual(pipeline_helpers.ngrams("hello world!", 1),
             [["hello"], ["world!"]])
         # Two-word string and n=2
-        self.assertEqual(pipeline.ngrams("hello world!", 2),
+        self.assertEqual(pipeline_helpers.ngrams("hello world!", 2),
             [["hello", "world!"]])
         # Three-word string and n=2
-        self.assertEqual(pipeline.ngrams("why, hello world!", 2),
+        self.assertEqual(pipeline_helpers.ngrams("why, hello world!", 2),
             [["why,", "hello"], ["hello", "world!"]])
 
     def test_preProcess(self):
@@ -102,7 +73,7 @@ class TestPipelineMethods(unittest.TestCase):
                 the commented-out tests should pass, and the
                 uncommented-out tests should fail. For the purposes of
                 refactoring, where we must retain original
-                functionality of pipeline.py, this is currently
+                functionality of pipeline_helpers.py, this is currently
                 sufficient.
             * Problems with string tokens containing multiple
                 instances of:
@@ -112,85 +83,87 @@ class TestPipelineMethods(unittest.TestCase):
                     preProcess)
         """
         # No special characters
-        self.assertEqual(pipeline.preprocess("cow"), "cow")
+        self.assertEqual(pipeline_helpers.preprocess("cow"), "cow")
         # One "'s"
-        self.assertEqual(pipeline.preprocess("cow's"), "cow")
+        self.assertEqual(pipeline_helpers.preprocess("cow's"), "cow")
         # Two "'s"
-        self.assertEqual(pipeline.preprocess("cow's and chicken's"),
+        self.assertEqual(pipeline_helpers.preprocess("cow's and chicken's"),
             "cow and chicken")
         # One ", "
-        self.assertEqual(pipeline.preprocess("cow, "), "cow")
+        self.assertEqual(pipeline_helpers.preprocess("cow, "), "cow")
         # Two ", "
-        # self.assertEqual(pipeline.preProcess("cow, horse, and goat"),
+        # self.assertEqual(pipeline_helpers.preProcess("cow, horse, and goat"),
         #     "cow horse and goat")
-        self.assertEqual(pipeline.preprocess("cow, horse, and goat"),
+        self.assertEqual(pipeline_helpers.preprocess("cow, horse, and goat"),
             "cow, horse, and goat")
         # One "."
-        self.assertEqual(pipeline.preprocess("cow. "), "cow")
+        self.assertEqual(pipeline_helpers.preprocess("cow. "), "cow")
         # Two "."
-        self.assertEqual(pipeline.preprocess("cow. horse. "), "cow. horse")
+        self.assertEqual(pipeline_helpers.preprocess("cow. horse. "), "cow. horse")
         # "'s" and ","
-        self.assertEqual(pipeline.preprocess("cow's, "), "cow")
+        self.assertEqual(pipeline_helpers.preprocess("cow's, "), "cow")
         # "'", "." and ","
-        self.assertEqual(pipeline.preprocess("cow's. , "), "cow")
+        self.assertEqual(pipeline_helpers.preprocess("cow's. , "), "cow")
         # "'", "," and "."
-        self.assertEqual(pipeline.preprocess("cow's, . "), "cow,")
+        self.assertEqual(pipeline_helpers.preprocess("cow's, . "), "cow,")
 
     def test_allPermutations(self):
         """Tests allPermutations."""
         # Empty input string
-        self.assertSetEqual(pipeline.all_permutations(""), set([()]))
+        self.assertSetEqual(pipeline_helpers.all_permutations(""), set([()]))
         # 1-gram input string
-        self.assertSetEqual(pipeline.all_permutations("a"), set([("a",)]))
+        self.assertSetEqual(pipeline_helpers.all_permutations("a"), set([("a",)]))
         # 2-gram input string
-        self.assertSetEqual(pipeline.all_permutations("a b"),
+        self.assertSetEqual(pipeline_helpers.all_permutations("a b"),
             set([("a", "b"), ("b", "a")]))
         # 4-gram input string
-        self.assertEqual(len(pipeline.all_permutations("a b c d")), 24)
+        self.assertEqual(len(pipeline_helpers.all_permutations("a b c d")), 24)
 
     def test_get_resource_permutation_terms(self):
-        self.assertCountEqual(pipeline.get_resource_permutation_terms(""), [""])
-        self.assertCountEqual(pipeline.get_resource_permutation_terms("a"), ["a"])
-        self.assertCountEqual(pipeline.get_resource_permutation_terms("a b"), ["a b", "b a"])
+        self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms(""), [""])
+        self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms("a"), ["a"])
+        self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms("a b"),
+                              ["a b", "b a"])
 
-        self.assertCountEqual(pipeline.get_resource_permutation_terms("a (b)"), ["a (b)", "(b) a"])
+        self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms("a (b)"),
+                              ["a (b)", "(b) a"])
 
     def test_get_resource_bracketed_permutation_terms(self):
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms(""), [])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a"), [])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a b"), [])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b"), [])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a b)"), [])
+        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms(""), [])
+        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a"), [])
+        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a b"), [])
+        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a (b"), [])
+        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a b)"), [])
 
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b)"),
+        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a (b)"),
                               ["a b", "b a"])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("(a) b"),
+        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("(a) b"),
                               ["a"])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("(a b)"),
+        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("(a b)"),
                               ["a b", "b a"])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b c)"),
+        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a (b c)"),
                               ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
-        self.assertCountEqual(pipeline.get_resource_bracketed_permutation_terms("a (b,c)"),
+        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a (b,c)"),
                               ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
 
     def test_combi(self):
         """Tests combi."""
         # Empty input string and n=1
-        self.assertSetEqual(set(pipeline.combi("", 1)), set([]))
+        self.assertSetEqual(set(pipeline_helpers.combi("", 1)), set([]))
         # Empty input string and n=2
-        self.assertSetEqual(set(pipeline.combi("", 2)), set([]))
+        self.assertSetEqual(set(pipeline_helpers.combi("", 2)), set([]))
         # 1-char input string and n=1
-        self.assertSetEqual(set(pipeline.combi("a", 1)), set([("a",)]))
+        self.assertSetEqual(set(pipeline_helpers.combi("a", 1)), set([("a",)]))
         # 1-char input string and n=2
-        self.assertSetEqual(set(pipeline.combi("a", 2)), set([]))
+        self.assertSetEqual(set(pipeline_helpers.combi("a", 2)), set([]))
         # 3-char input string and n=1
-        self.assertSetEqual(set(pipeline.combi("bar", 1)),
+        self.assertSetEqual(set(pipeline_helpers.combi("bar", 1)),
             set([("b",), ("a",), ("r",)]))
         # 3-char input string and n=2
-        self.assertSetEqual(set(pipeline.combi("bar", 2)),
+        self.assertSetEqual(set(pipeline_helpers.combi("bar", 2)),
             set([("b", "a"), ("a", "r"), ("b", "r")]))
         # 3-char input string and n=3
-        self.assertSetEqual(set(pipeline.combi("bar", 3)),
+        self.assertSetEqual(set(pipeline_helpers.combi("bar", 3)),
             set([("b", "a", "r")]))
 
     def test_punctuationTreatment(self):
@@ -209,31 +182,31 @@ class TestPipelineMethods(unittest.TestCase):
                     ends with a punctuation mark
                     * e.g., _foo_ -> ["_foo_"] -> " foo "
         """
-        # Punctuation list used in pipeline
+        # Punctuation list used in pipeline_helpers
         punctuationList = ["-", "_", "(", ")", ";", "/", ":", "%"]
         # Empty input string
         self.assertEqual(
-            pipeline.punctuationTreatment("", punctuationList),
+            pipeline_helpers.punctuationTreatment("", punctuationList),
             "")
         # Single-token input string with no punctuation
         self.assertEqual(
-            pipeline.punctuationTreatment("foo", punctuationList),
+            pipeline_helpers.punctuationTreatment("foo", punctuationList),
             "foo")
         # Multi-token input string with no punctuation
         self.assertEqual(
-            pipeline.punctuationTreatment("foo bar", punctuationList),
+            pipeline_helpers.punctuationTreatment("foo bar", punctuationList),
             "foo bar")
         # Single-token input string with punctuation
         self.assertEqual(
-            pipeline.punctuationTreatment("_foo-bar_", punctuationList),
+            pipeline_helpers.punctuationTreatment("_foo-bar_", punctuationList),
             " foo bar ")
         # Multi-token input string with punctuation
         self.assertEqual(
-            pipeline.punctuationTreatment("_foo;ba r_", punctuationList),
+            pipeline_helpers.punctuationTreatment("_foo;ba r_", punctuationList),
             " foo   ba r ")
         # Multi-token input string with number, date and punctuation
         self.assertEqual(
-            pipeline.punctuationTreatment("a-b 12/22/78 -1", punctuationList),
+            pipeline_helpers.punctuationTreatment("a-b 12/22/78 -1", punctuationList),
             "a b 12/22/78 -1")
 
     def test_retainedPhrase(self):
@@ -253,7 +226,7 @@ class TestPipelineMethods(unittest.TestCase):
                     quotation mark at the end
                     * e.g., "{'foo:bar', 'hello:world'}"
                         -> set(["foo:bar", "hello:world'"])
-                    * This is because pipeline.retainedPhrase
+                    * This is because pipeline_helpers.retainedPhrase
                         eliminates "'," from values--not "'"
                 * Potential to return no key-value pairs
                     * This happens if a compound key is a subset of
@@ -267,106 +240,108 @@ class TestPipelineMethods(unittest.TestCase):
         """
         # Single-term list
         self.assertSetEqual(
-            pipeline.retainedPhrase(['foo:bar']),
+            pipeline_helpers.retainedPhrase(['foo:bar']),
             set(["foo:bar"]))
         # Multi-term list
         self.assertSetEqual(
-            pipeline.retainedPhrase(['foo:bar', 'hello:world']),
+            pipeline_helpers.retainedPhrase(['foo:bar', 'hello:world']),
             set(["foo:bar", "hello:world"]))
         # Multi-term list with "="
         self.assertSetEqual(
-            pipeline.retainedPhrase(['foo:b=ar', 'he=llo:world']),
+            pipeline_helpers.retainedPhrase(['foo:b=ar', 'he=llo:world']),
             set(["foo:b=ar", "he,llo:world"]))
         # Key substring of a key
         self.assertSetEqual(
-            pipeline.retainedPhrase(['foo:bar', 'foofoo:bar']),
+            pipeline_helpers.retainedPhrase(['foo:bar', 'foofoo:bar']),
             set(["foofoo:bar"]))
         # Key substring of a compound key (multi-word)
         self.assertSetEqual(
-            pipeline.retainedPhrase(['foo:bar', 'foo bar:bar']),
+            pipeline_helpers.retainedPhrase(['foo:bar', 'foo bar:bar']),
             set(["foo bar:bar"]))
         # Compound key substring of a compound key
         self.assertSetEqual(
-            pipeline.retainedPhrase(['foo bar hello:world', 'foo bar:bar']),
+            pipeline_helpers.retainedPhrase(['foo bar hello:world', 'foo bar:bar']),
             set(["foo bar hello:world"]))
         # Compound key overlapping, but not substring of a compound key
         self.assertSetEqual(
-            pipeline.retainedPhrase(['foo hello:world', 'foo bar:bar']),
+            pipeline_helpers.retainedPhrase(['foo hello:world', 'foo bar:bar']),
             set(["foo hello:world", "foo bar:bar"]))
         # Compound key substring of a compound key (no differing words)
         self.assertEqual(
-            pipeline.retainedPhrase(['foo bar:bar', 'foo bar bar:bar']),
+            pipeline_helpers.retainedPhrase(['foo bar:bar', 'foo bar bar:bar']),
             [])
         # Identical keys, but different values
         self.assertEqual(
-            pipeline.retainedPhrase(['foo:bar', 'foo:foo']),
+            pipeline_helpers.retainedPhrase(['foo:bar', 'foo:foo']),
             set(["foo:bar", "foo:foo"]))
         self.assertEqual(
-            pipeline.retainedPhrase(['foo bar:bar', 'foo bar:foo']),
+            pipeline_helpers.retainedPhrase(['foo bar:bar', 'foo bar:foo']),
             set(["foo bar:bar", "foo bar:foo"]))
 
     def test_merge_lookup_tables(self):
-        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {}, {"a": {}})
-        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}}, {})
+        self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {}, {"a": {}})
+        self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {"a": {}}, {})
 
-        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}}, {"b": {}})
-        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}, "b": {}},
+        self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {"a": {}}, {"b": {}})
+        self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {"a": {}, "b": {}},
                                                                     {"a": {}, "c": {}})
 
-        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": "b"}, {"a": {}})
-        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}}, {"a": "b"})
-        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": "b"}, {"a": "b"})
-        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}, "b": "c"},
+        self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {"a": "b"}, {"a": {}})
+        self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {"a": {}}, {"a": "b"})
+        self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {"a": "b"}, {"a": "b"})
+        self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {"a": {}, "b": "c"},
                                                                     {"a": {}, "b": {}})
-        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}, "b": {}},
+        self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {"a": {}, "b": {}},
                                                                     {"a": {}, "b": "c"})
-        self.assertRaises(ValueError, pipeline.merge_lookup_tables, {"a": {}, "b": "c"},
+        self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {"a": {}, "b": "c"},
                                                                     {"a": {}, "b": "c"})
 
-        self.assertDictEqual({}, pipeline.merge_lookup_tables({}, {}))
-        self.assertDictEqual({"a": {}}, pipeline.merge_lookup_tables({"a": {}}, {"a": {}}))
+        self.assertDictEqual({}, pipeline_helpers.merge_lookup_tables({}, {}))
+        self.assertDictEqual({"a": {}}, pipeline_helpers.merge_lookup_tables({"a": {}}, {"a": {}}))
 
-        self.assertDictEqual({"a": {"b": "c"}}, pipeline.merge_lookup_tables({"a": {"b": "c"}},
-                                                                             {"a": {}}))
-        self.assertDictEqual({"a": {"b": "c"}}, pipeline.merge_lookup_tables({"a": {}},
+        self.assertDictEqual({"a": {"b": "c"}},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "c"}}, {"a": {}}))
+        self.assertDictEqual({"a": {"b": "c"}}, pipeline_helpers.merge_lookup_tables({"a": {}},
                                                                              {"a": {"b": "c"}}))
-        self.assertDictEqual({"a": {"b": "c"}}, pipeline.merge_lookup_tables({"a": {"b": "c"}},
-                                                                             {"a": {"b": "c"}}))
-        self.assertDictEqual({"a": {"b": "c"}}, pipeline.merge_lookup_tables({"a": {"b": "d"}},
-                                                                             {"a": {"b": "c"}}))
-        self.assertDictEqual({"a": {"b": "d"}}, pipeline.merge_lookup_tables({"a": {"b": "c"}},
-                                                                             {"a": {"b": "d"}}))
+        self.assertDictEqual({"a": {"b": "c"}},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "c"}},
+                                                                  {"a": {"b": "c"}}))
+        self.assertDictEqual({"a": {"b": "c"}},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "d"}},
+                                                                  {"a": {"b": "c"}}))
+        self.assertDictEqual({"a": {"b": "d"}},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "c"}},
+                                                                  {"a": {"b": "d"}}))
 
         self.assertDictEqual({"a": {"b": "c", "d": "e"}},
-                             pipeline.merge_lookup_tables({"a": {"b": "c","d": "e"}},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "c","d": "e"}},
                                                           {"a": {"b": "c"}}))
         self.assertDictEqual({"a": {"b": "c", "d": "e"}},
-                             pipeline.merge_lookup_tables({"a": {"b": "c"}},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "c"}},
                                                           {"a": {"b": "c", "d": "e"}}))
         self.assertDictEqual({"a": {"b": "c", "d": "e"}},
-                             pipeline.merge_lookup_tables({"a": {"b": "f","d": "e"}},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "f","d": "e"}},
                                                           {"a": {"b": "c"}}))
         self.assertDictEqual({"a": {"b": "f", "d": "e"}},
-                             pipeline.merge_lookup_tables({"a": {"b": "c"}},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "c"}},
                                                           {"a": {"b": "f", "d": "e"}}))
         self.assertDictEqual({"a": {"b": "c", "d": "e"}},
-                             pipeline.merge_lookup_tables({"a": {"b": "c", "d": "e"}},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "c", "d": "e"}},
                                                           {"a": {"b": "c", "d": "e"}}))
         self.assertDictEqual({"a": {"b": "c", "d": "e"}},
-                             pipeline.merge_lookup_tables({"a": {"b": "f", "d": "g"}},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "f", "d": "g"}},
                                                           {"a": {"b": "c", "d": "e"}}))
 
         self.assertDictEqual({"a": {"b": "c", "d": "e"}, "f": {"h": "m", "j": "k"}},
-                             pipeline.merge_lookup_tables({"a": {"b": "c", "d": "l"},
+                             pipeline_helpers.merge_lookup_tables({"a": {"b": "c", "d": "l"},
                                                            "f": {"h": "i", "j": "k"}},
                                                           {"a": {"b": "c", "d": "e"},
                                                            "f": {"h": "m", "j": "k"}}))
         self.assertDictEqual({"a": {"b": "c", "d": "e", "n": "o"},
                               "f": {"h": "m", "j": "k", "p": "q"}},
-                             pipeline.merge_lookup_tables({"a": {"b": "c", "d": "l", "n": "o"},
-                                                           "f": {"h": "i", "j": "k"}},
-                                                          {"a": {"b": "c", "d": "e"},
-                                                           "f": {"h": "m", "j": "k", "p": "q"}}))
+                             pipeline_helpers.merge_lookup_tables(
+                                 {"a": {"b": "c", "d": "l", "n": "o"}, "f": {"h": "i", "j": "k"}},
+                                 {"a": {"b": "c", "d": "e"}, "f": {"h": "m", "j": "k", "p": "q"}}))
 
 
 class TestPipeline(unittest.TestCase):
