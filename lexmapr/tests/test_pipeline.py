@@ -577,16 +577,16 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertFalse(os.path.exists("fetched_ontologies/pizza.json"))
 
         self.run_pipeline_with_args(config_file_name="pizza.json")
-        self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+        self.assertTrue(os.path.exists("fetched_ontologies/pizza.json"))
 
     def test_fetch_ontologies(self):
         self.run_pipeline_with_args()
-        self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/bfo.json")))
-        self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+        self.assertFalse(os.path.exists("fetched_ontologies/bfo.json"))
+        self.assertFalse(os.path.exists("fetched_ontologies/pizza.json"))
 
         self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
-        self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/bfo.json")))
-        self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+        self.assertTrue(os.path.exists("fetched_ontologies/bfo.json"))
+        self.assertTrue(os.path.exists("fetched_ontologies/pizza.json"))
 
     def test_fetch_ontology_specify_no_root(self):
         self.run_pipeline_with_args(config_file_name="bfo.json")
@@ -599,15 +599,15 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertEqual(3, len(bfo_process_fetched_ontology["specifications"]))
 
     def test_ontology_table_creation(self):
-        self.assertFalse(os.path.exists(os.path.abspath("ontology_lookup_tables/lookup_bfo.json")))
+        self.assertFalse(os.path.exists("ontology_lookup_tables/lookup_bfo.json"))
         self.run_pipeline_with_args(config_file_name="bfo.json")
-        self.assertTrue(os.path.exists(os.path.abspath("ontology_lookup_tables/lookup_bfo.json")))
+        self.assertTrue(os.path.exists("ontology_lookup_tables/lookup_bfo.json"))
 
     def test_ontology_table_creation_with_multiple_ontologies(self):
         expected_lookup_table_rel_path = "ontology_lookup_tables/lookup_bfo_and_pizza.json"
-        self.assertFalse(os.path.exists(os.path.abspath(expected_lookup_table_rel_path)))
+        self.assertFalse(os.path.exists(expected_lookup_table_rel_path))
         self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
-        self.assertTrue(os.path.exists(os.path.abspath(expected_lookup_table_rel_path)))
+        self.assertTrue(os.path.exists(expected_lookup_table_rel_path))
 
     def test_ontology_table_keys(self):
         self.run_pipeline_with_args(config_file_name="bfo.json")
@@ -1041,14 +1041,8 @@ class TestClassification(unittest.TestCase):
         small_simple_path =\
             pkg_resources.resource_filename("lexmapr.tests.test_input", "small_simple.csv")
 
-        if bucket:
-            pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
-                                            format="basic", output=None, version=False,
-                                            bucket=True))
-        else:
-            pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
-                                            format="basic", output=None, version=False,
-                                            bucket=False))
+        pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None, format="basic",
+                                        output=None, version=False, bucket=bucket))
 
     @staticmethod
     def get_classification_lookup_table():
@@ -1060,11 +1054,11 @@ class TestClassification(unittest.TestCase):
         self.assertFalse(os.path.exists("classification_lookup_table.json"))
 
         self.run_pipeline_with_args(bucket=True)
-        self.assertTrue(os.path.exists(os.path.abspath("classification_lookup_table.json")))
+        self.assertTrue(os.path.exists("classification_lookup_table.json"))
 
     def test_classification_table_keys(self):
         self.run_pipeline_with_args(bucket=True)
-        ontology_lookup_table = self.get_classification_lookup_table()
+        classification_table = self.get_classification_lookup_table()
 
         expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
                          "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
@@ -1075,7 +1069,8 @@ class TestClassification(unittest.TestCase):
                          "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
                          "ifsac_default"]
 
-        self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
+        self.assertCountEqual(expected_keys, classification_table.keys())
+
 
 if __name__ == '__main__':
     unittest.main()

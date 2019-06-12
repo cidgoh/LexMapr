@@ -129,8 +129,8 @@ def run(args):
                 classification_lookup_table = json.load(fp)
         else:
             classification_lookup_table = helpers.create_lookup_table_skeleton()
-            # classification_lookup_table =\
-            #     helpers.add_classification_resources_to_lookup_table(classification_lookup_table)
+            classification_lookup_table =\
+                helpers.add_classification_resources_to_lookup_table(classification_lookup_table)
             with open(classification_lookup_table_path, "w") as fp:
                 json.dump(classification_lookup_table, fp)
 
