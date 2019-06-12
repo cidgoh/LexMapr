@@ -13,22 +13,19 @@ script_name = os.path.basename(os.path.realpath(sys.argv[0]))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('input_file',
-                        help='Input csv file')
-    parser.add_argument('-o', '--output', nargs='?',
-                        help='Output file')
-    parser.add_argument('log_file', nargs='?', default=sys.stderr,
-                        help='Log file')
-    parser.add_argument('-f', '--format', default='basic',
-                        help='Output format')
+    parser.add_argument('input_file', help='Input csv file', nargs='?')
+    parser.add_argument('-o', '--output', nargs='?', help='Output file')
+    parser.add_argument('-f', '--format', default='basic', help='Output format')
     parser.add_argument('--version', action='store_true', dest='version',
-                        help='Prints version information.', required=False)
+                        help='Prints version information', required=False)
     parser.add_argument('-c', '--config',
                         help="Path to JSON file containing the IRI of ontologies to fetch terms "
                              "from")
     args = parser.parse_args()
     
     if args.version:
-        print(script_name + ' ' + __version__)
+        print(script_name + ' ' + lexmapr.__version__)
+    elif not args.input_file:
+        parser.error('Please supply an input file')
     else:
         lexmapr.pipeline.run(args)
