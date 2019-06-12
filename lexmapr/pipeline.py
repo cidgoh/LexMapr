@@ -9,9 +9,9 @@ import re
 import sys
 
 from nltk.tokenize import word_tokenize
-from nltk import pos_tag
 
 from lexmapr.ontofetch import Ontology
+from lexmapr.pipeline_classification import add_classification_resources_to_lookup_table
 import lexmapr.pipeline_helpers as helpers
 
 
@@ -130,7 +130,7 @@ def run(args):
         else:
             classification_lookup_table = helpers.create_lookup_table_skeleton()
             classification_lookup_table =\
-                helpers.add_classification_resources_to_lookup_table(classification_lookup_table)
+                add_classification_resources_to_lookup_table(classification_lookup_table)
             with open(classification_lookup_table_path, "w") as fp:
                 json.dump(classification_lookup_table, fp)
 
