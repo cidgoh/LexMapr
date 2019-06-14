@@ -31,9 +31,6 @@ def spelling_correction(lemma, lookup_table, status_addendum):
     if (lemma in lookup_table["spelling_mistakes"].keys()):  # spelling mistakes taken care of
         lemma = lookup_table["spelling_mistakes"][lemma]
         status_addendum.append("Spelling Correction Treatment")
-    elif (lemma.lower() in lookup_table["spelling_mistakes_lower"].keys()):
-        lemma = lookup_table["spelling_mistakes_lower"][lemma.lower()]
-        status_addendum.append("Change Case and Spelling Correction Treatment")
     return lemma
 
 
@@ -42,9 +39,6 @@ def abbreviation_normalization_token(lemma, lookup_table, status_addendum):
         "abbreviations"].keys()):
         lemma = lookup_table["abbreviations"][lemma]
         status_addendum.append("Abbreviation-Acronym Treatment")
-    elif (lemma.lower() in lookup_table["abbreviations_lower"].keys()):
-        lemma = lookup_table["abbreviations_lower"][lemma.lower()]
-        status_addendum.append("Change Case and Abbreviation-Acronym Treatment")
     return lemma
 
 
@@ -53,9 +47,6 @@ def abbreviation_normalization_phrase(phrase, lookup_table, status_addendum):
         "abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
         cleaned_sample = lookup_table["abbreviations"][phrase]
         status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
-    elif (phrase in lookup_table["abbreviations_lower"].keys()):
-        cleaned_sample = lookup_table["abbreviations_lower"][phrase]
-        status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
     return phrase
 
 
@@ -63,9 +54,6 @@ def non_English_normalization_token(lemma, lookup_table, status_addendum):
     if (lemma in lookup_table["non_english_words"].keys()):  # Non English language words taken care of
         lemma = lookup_table["non_english_words"][lemma]
         status_addendum.append("Non English Language Words Treatment")
-    elif (lemma.lower() in lookup_table["non_english_words_lower"].keys()):
-        lemma = lookup_table["non_english_words_lower"][lemma.lower()]
-        status_addendum.append("Change Case and Non English Language Words Treatment")
     return lemma
 
 
@@ -73,21 +61,18 @@ def non_English_normalization_phrase(phrase, lookup_table, status_addendum):
     if (phrase in lookup_table["non_english_words"].keys()):  # non English words taken care of
         phrase = lookup_table["non_english_words"][phrase]
         status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
-    elif (phrase in lookup_table["non_english_words_lower"].keys()):
-        phrase = lookup_table["non_english_words_lower"][phrase]
-        status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
     return phrase
 
 
 def get_cleaned_sample(cleaned_sample,lemma, lookup_table):
-    if (not cleaned_sample and lemma.lower() not in lookup_table[
+    if (not cleaned_sample and lemma not in lookup_table[
         "stop_words"]):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
-        cleaned_sample = lemma.lower()
+        cleaned_sample = lemma
     elif (
-                lemma.lower() not in lookup_table[
+                lemma not in lookup_table[
                 "stop_words"]):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
 
-        cleaned_sample = cleaned_sample + " " + lemma.lower()
+        cleaned_sample = cleaned_sample + " " + lemma
     return cleaned_sample
 
 
@@ -99,26 +84,20 @@ def get_component_match_withids(partial_matches, lookup_table):
         if (matchstring in lookup_table["resource_terms"].keys()):
             resourceId = lookup_table["resource_terms"][matchstring]
             partial_matches_with_ids.append(matchstring + ":" + resourceId)
-        elif (matchstring in lookup_table["resource_terms_revised"].keys()):
-            resourceId = lookup_table["resource_terms_revised"][matchstring]
-            partial_matches_with_ids.append(matchstring + ":" + resourceId)
         elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
             resourceId = lookup_table["resource_permutation_terms"][matchstring]
             resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
-            partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
+            partial_matches_with_ids.append(resourceOriginalTerm + ":" + resourceId)
         elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
             resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
             resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
             resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
-            partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
+            partial_matches_with_ids.append(resourceOriginalTerm + ":" + resourceId)
         elif (matchstring in lookup_table["processes"].keys()):
             resourceId = lookup_table["processes"][matchstring]
             partial_matches_with_ids.append(matchstring + ":" + resourceId)
         elif (matchstring in lookup_table["qualities"].keys()):
             resourceId = lookup_table["qualities"][matchstring]
-            partial_matches_with_ids.append(matchstring + ":" + resourceId)
-        elif (matchstring in lookup_table["qualities_lower"].keys()):
-            resourceId = lookup_table["qualities_lower"][matchstring]
             partial_matches_with_ids.append(matchstring + ":" + resourceId)
         elif ("==" in matchstring):
             resList = matchstring.split("==")
@@ -131,7 +110,7 @@ def get_component_match_withids(partial_matches, lookup_table):
 def remove_duplicate_tokens(input_string):
     refined_string=""
     new_phrase_set = []
-    string_tokens = word_tokenize(input_string.lower())
+    string_tokens = word_tokenize(input_string)
     for tkn in string_tokens:
         new_phrase_set.append(tkn)
     refined_string = MosesDetokenizer().detokenize(new_phrase_set, return_str=True)
@@ -321,48 +300,38 @@ def retainedPhrase(termList):
     return returnedSetFinal
 
 
-def get_resource_dict(file_name, lower=False):
-    """Return dictionary containing resource data from a CSV file.
+def get_resource_dict(resource_file_name):
+    """Get dictionary containing data from a ``resources/`` csv file.
 
-    Arguments:
-        * file_name <class "str">: CSV file containing key-value
-            information on resources relevant to pipeline
-    Return values:
-        * class <"dict">: Contains key-value pairs from file_name
-            * key: class <"str">
-            * val: class <"str">
-    Restrictions:
-        * No information will be taken from the first row of file_name
-        * Unique keys must appear as the first term on unique rows
-        * Values should appear immediately after their corresponding
-            key and a comma
-            * Otherwise, an empty string value will be used
-    Optional arguments:
-        * lower <class "bool">: If set to True, all keys in the return
-            value are converted to lowercase
+    The data is standardized to lowercase.
+
+    :param resource_file_name: Name of file (with extension) in
+        ``resources/``
+    :type resource_file_name: str
+    :return: data in ``resource_file_name``
+    :rtype: dict
     """
     # Return value
     ret = {}
     # Open file_name
-    with open(resource_filename('lexmapr.resources', file_name)) as csvfile:
+    with open(resource_filename('lexmapr.resources', resource_file_name)) as fp:
         # Skip first line
-        next(csvfile)
+        next(fp)
         # Read file_name
-        file_contents = csv.reader(csvfile, delimiter=",")
+        file_contents = csv.reader(fp, delimiter=",")
         # Iterate across rows in file_contents
         for row in file_contents:
             # Get key
             key = row[0].strip()
-            # Lowercase key requested
-            if lower:
-                # Convert key to lowercase
-                key = key.lower()
             try:
                 # Get corresponding value
                 val = row[1].strip()
             except IndexError:
                 # No corresponding value
                 val = ""
+            # Convert key and val to lowercase
+            key = key.lower()
+            val = val.lower()
             # Add key-value pair to ret
             ret[key] = val
     # Return
@@ -380,22 +349,17 @@ def create_lookup_table_skeleton():
     """
     return {"synonyms": {},
             "abbreviations": {},
-            "abbreviations_lower": {},
             "non_english_words": {},
-            "non_english_words_lower": {},
             "spelling_mistakes": {},
-            "spelling_mistakes_lower": {},
             "processes": {},
             "qualities": {},
-            "qualities_lower": {},
             "collocations": {},
             "inflection_exceptions": {},
             "stop_words": {},
             "suffixes": {},
             "parents": {},
-            "resource_terms_ID_based": {},
+            "resource_terms_id_based": {},
             "resource_terms": {},
-            "resource_terms_revised": {},
             "resource_permutation_terms": {},
             "resource_bracketed_permutation_terms": {}}
 
@@ -413,56 +377,44 @@ def add_predefined_resources_to_lookup_table(lookup_table):
     lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
     # Abbreviations of resource terms
     lookup_table["abbreviations"] = get_resource_dict("AbbLex.csv")
-    # Abbreviations of resource terms, all lowercase
-    lookup_table["abbreviations_lower"] = get_resource_dict("AbbLex.csv", True)
     # Non-english translations of resource terms
     lookup_table["non_english_words"] = get_resource_dict("NefLex.csv")
-    # Non-english translations of resource terms, all lowercase
-    lookup_table["non_english_words_lower"] = get_resource_dict("NefLex.csv", True)
     # Common misspellings of resource terms
     lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
-    # Common misspellings of resource terms, all lowercase
-    lookup_table["spelling_mistakes_lower"] = get_resource_dict("ScorLex.csv", True)
     # Terms corresponding to candidate processes
     lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
     # Terms corresponding to semantic taggings
     lookup_table["qualities"] = get_resource_dict("SemLex.csv")
-    # Terms corresponding to semantic taggings, all lowercase
-    lookup_table["qualities_lower"] = get_resource_dict("SemLex.csv", True)
     # Terms corresponding to wikipedia collocations
     lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
     # Terms excluded from inflection treatment
-    lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv", True)
+    lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv")
     # Constrained list of stop words considered to be meaningless
-    lookup_table["stop_words"] = get_resource_dict("mining-stopwords.csv", True)
+    lookup_table["stop_words"] = get_resource_dict("mining-stopwords.csv")
     # Suffixes to consider appending to terms when mining ontologies
     lookup_table["suffixes"] = get_resource_dict("suffixes.csv")
     # ID-resource combinations
-    lookup_table["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
-    # Swap keys and values in resource_terms_ID_based
+    lookup_table["resource_terms_id_based"] = get_resource_dict("CombinedResourceTerms.csv")
+    # Swap keys and values in resource_terms_id_based
     lookup_table["resource_terms"] = {
-        v: k for k, v in lookup_table["resource_terms_ID_based"].items()
-    }
-    # Convert keys in resource_terms to lowercase
-    lookup_table["resource_terms_revised"] = {
-        k.lower(): v for k, v in lookup_table["resource_terms"].items()
+        v: k for k, v in lookup_table["resource_terms_id_based"].items()
     }
 
     # Will contain permutations of resource terms
     lookup_table["resource_permutation_terms"] = {}
     # Will contain permutations of resource terms with brackets
     lookup_table["resource_bracketed_permutation_terms"] = {}
-    # Iterate across resource_terms_revised
-    for resource_term in lookup_table["resource_terms_revised"]:
+    # Iterate across resource_terms
+    for resource_term in lookup_table["resource_terms"]:
         # ID corresponding to resource_term
-        resource_id = lookup_table["resource_terms_revised"][resource_term]
+        resource_id = lookup_table["resource_terms"][resource_term]
         # List of tokens in resource_term
-        resource_tokens = word_tokenize(resource_term.lower())
+        resource_tokens = word_tokenize(resource_term)
         # To limit performance overhead, we ignore resource_terms with
         # more than 7 tokens, as permutating too many tokens can be
         # costly. We also ignore NCBI taxon terms, as there are
         # ~160000 such terms.
-        if len(resource_tokens)<7 and "NCBITaxon" not in resource_id:
+        if len(resource_tokens)<7 and "ncbitaxon" not in resource_id:
             # Add all bracketed permutations of resource_term to
             # appropriate dictionary.
             bracketed_perms = get_resource_bracketed_permutation_terms(resource_term)
@@ -549,15 +501,16 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
             resource_id = resource["id"]
             resource_label = resource["label"]
 
-            # Keep consistent with resource_id values in resources/
+            # Standardize values
             resource_id = resource_id.replace(":", "_")
+            resource_id = resource_id.lower()
+            resource_label = resource_label.lower()
 
-            lookup_table["resource_terms_ID_based"][resource_id] = resource_label
+            lookup_table["resource_terms_id_based"][resource_id] = resource_label
             lookup_table["resource_terms"][resource_label] = resource_id
-            lookup_table["resource_terms_revised"][resource_label.lower()] = resource_id
 
             # List of tokens in resource_label
-            resource_tokens = word_tokenize(resource_label.lower())
+            resource_tokens = word_tokenize(resource_label)
             # Add permutations if there are less than seven tokens.
             # Permutating more tokens than this can lead to performance
             # issues.
@@ -573,11 +526,15 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
             if "synonyms" in resource:
                 synonyms = resource["synonyms"].split(";")
                 for synonym in synonyms:
+                    #Standardize synonym
+                    synonym = synonym.lower()
+
                     lookup_table["synonyms"][synonym] = resource_label
 
             if "parent_id" in resource:
-                # Keep parent_id consistent with resource_id values
+                # Standardize parent_id
                 parent_id = resource["parent_id"].replace(":", "_")
+                parent_id = parent_id.lower()
 
                 # Instead of overwriting parents like we do with
                 # synonyms, we will concatenate parents from different
@@ -590,8 +547,8 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                     lookup_table["parents"][resource_id] = [parent_id]
 
                 if "other_parents" in resource:
-                    # Keep values consistent with resource_id values
-                    other_parents = list(map(lambda x: x.replace(":", "_"),
+                    # Standardize values
+                    other_parents = list(map(lambda x: x.replace(":", "_").lower(),
                                              resource["other_parents"]))
 
                     # Prevent duplicates
@@ -672,14 +629,6 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         * MatchNotFoundError: Full-term match not found
 
     TODO:
-        * simplify change-of-case treatments as follows:
-            * resource dictionaries only contain lower-case
-                words
-            * check if sample.lower() is in a given dictionary
-            * add appropriate status addendum
-            * check if sample != sample.lower()
-                * if true, add change-of-case treatment to
-                    status addendum
         * reduce number of parameters
             * what we need, and makes sense as a parameter for this
                 type of function
@@ -739,102 +688,71 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         retained_tokens.append(matched_term + ":" + resource_id)
         # Update status_addendum
         status_addendum.append("A Direct Match")
-    # Full-term match with change-of-case in input data
-    elif sample.lower() in lookup_table["resource_terms"]:
-        # Term with we found a full-term match for
-        matched_term = sample.lower()
-        # Resource ID for matched_term
-        resource_id = lookup_table["resource_terms"][matched_term]
-        # Update retained_tokens
-        retained_tokens.append(matched_term + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append("Change of Case in Input Data")
-    # Full-term match with change-of-case in resource data
-    elif sample.lower() in lookup_table["resource_terms_revised"]:
-        # Term with we found a full-term match for
-        matched_term = sample.lower()
-        # Resource ID for matched_term
-        resource_id = lookup_table["resource_terms_revised"][matched_term]
-        # Update retained_tokens
-        retained_tokens.append(matched_term + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append("Change of Case in Resource Data")
     # Full-term match with permutation of resource term
-    elif sample.lower() in lookup_table["resource_permutation_terms"]:
+    elif sample in lookup_table["resource_permutation_terms"]:
         # Term we found a permutation for
-        matched_term = sample.lower()
+        matched_term = sample
         # Resource ID for matched_term's permutation
         resource_id = lookup_table["resource_permutation_terms"][matched_term]
         # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
+        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
         # Update retained_tokens
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
         status_addendum.append("Permutation of Tokens in Resource Term")
     # Full-term match with permutation of bracketed resource term
-    elif sample.lower() in lookup_table["resource_bracketed_permutation_terms"]:
+    elif sample in lookup_table["resource_bracketed_permutation_terms"]:
         # Term we found a permutation for
-        matched_term = sample.lower()
+        matched_term = sample
         # Resource ID for matched_term's permutation
         resource_id = lookup_table["resource_bracketed_permutation_terms"][matched_term]
         # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
+        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
         # Update retained_tokens
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
     # Full-term cleaned sample match without any treatment
-    elif cleaned_sample.lower() in lookup_table["resource_terms"]:
+    elif cleaned_sample in lookup_table["resource_terms"]:
         # Term with we found a full-term match for
-        matched_term = cleaned_sample.lower()
+        matched_term = cleaned_sample
         # Resource ID for matched_term
         resource_id = lookup_table["resource_terms"][matched_term]
         # Update retained_tokens
         retained_tokens.append(matched_term + ":" + resource_id)
         # Update status_addendum
         status_addendum.append("A Direct Match with Cleaned Sample")
-    # Full-term cleaned sample match with change-of-case in
-    # resource data.
-    elif cleaned_sample.lower() in lookup_table["resource_terms_revised"]:
-        # Term with we found a full-term match for
-        matched_term = cleaned_sample.lower()
-        # Resource ID for matched_term
-        resource_id = lookup_table["resource_terms_revised"][matched_term]
-        # Update retained_tokens
-        retained_tokens.append(matched_term + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append("Change of Case of Resource Terms")
     # Full-term cleaned sample match with permutation of
     # resource term.
-    elif cleaned_sample.lower() in lookup_table["resource_permutation_terms"]:
+    elif cleaned_sample in lookup_table["resource_permutation_terms"]:
         # Term we found a permutation for
-        matched_term = cleaned_sample.lower()
+        matched_term = cleaned_sample
         # Resource ID for matched_term's permutation
         resource_id = lookup_table["resource_permutation_terms"][matched_term]
         # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
+        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
         # Update retained_tokens
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
         status_addendum.append("Permutation of Tokens in Resource Term")
     # Full-term cleaned sample match with permutation of
     # bracketed resource term.
-    elif cleaned_sample.lower() in lookup_table["resource_bracketed_permutation_terms"]:
+    elif cleaned_sample in lookup_table["resource_bracketed_permutation_terms"]:
         # Term we found a permutation for
-        matched_term = cleaned_sample.lower()
+        matched_term = cleaned_sample
         # Resource ID for matched_term's permutation
         resource_id = lookup_table["resource_bracketed_permutation_terms"][matched_term]
         # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
+        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
         # Update retained_tokens
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
     # A full-term cleaned sample match with multi-word
     # collocation from Wikipedia exists.
-    elif cleaned_sample.lower() in lookup_table["collocations"]:
+    elif cleaned_sample in lookup_table["collocations"]:
         # Term we found a full-term match for
-        matched_term = cleaned_sample.lower()
+        matched_term = cleaned_sample
         # Resource ID for matched_term
         resource_id = lookup_table["collocations"][matched_term]
         # Update retained_tokens
@@ -845,16 +763,16 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         )
     # Full-term match not found
     else:
-        resource_terms_revised = lookup_table["resource_terms_revised"]
+        resource_terms = lookup_table["resource_terms"]
         # Find all suffixes that when appended to sample, are
-        # in resource_terms_revised.
+        # in resource_terms.
         matched_suffixes = [
-            s for s in lookup_table["suffixes"] if sample+" "+s in resource_terms_revised
+            s for s in lookup_table["suffixes"] if sample+" "+s in resource_terms
         ]
         # Find all suffixes that when appended to cleaned
-        # sample, are in resource_terms_revised.
+        # sample, are in resource_terms.
         matched_clean_suffixes = [
-            s for s in lookup_table["suffixes"] if cleaned_sample+" "+s in resource_terms_revised
+            s for s in lookup_table["suffixes"] if cleaned_sample+" "+s in resource_terms
         ]
         # A full-term match with change of resource and suffix
         # addition exists.
@@ -863,30 +781,26 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
             # a full-term match.
             term_with_suffix = sample + " " + matched_suffixes[0]
             # Resource ID for matched_term
-            resource_id = resource_terms_revised[term_with_suffix]
+            resource_id = resource_terms[term_with_suffix]
             # Update retained_tokens
             retained_tokens.append(term_with_suffix + ":" + resource_id)
             # Update status_addendum
             status_addendum.append(
-                "[Change of Case of Resource and Suffix Addition- "
-                + matched_suffixes[0]
-                + " to the Input]"
+                "[Suffix Addition- " + matched_suffixes[0] + " to the Input]"
             )
         # A full-term cleaned sample match with change of resource and
         # suffix addition exists.
         elif matched_clean_suffixes:
             # Term with first suffix in suffixes that provides
             # a full-term match.
-            term_with_suffix = cleaned_sample.lower() + " " + matched_clean_suffixes[0]
+            term_with_suffix = cleaned_sample + " " + matched_clean_suffixes[0]
             # Resource ID for matched_term
-            resource_id = resource_terms_revised[term_with_suffix]
+            resource_id = resource_terms[term_with_suffix]
             # Update retained_tokens
             retained_tokens.append(term_with_suffix + ":" + resource_id)
             # Update status_addendum
             status_addendum.append(
-                "[CleanedSample-Change of Case of Resource and Suffix Addition- "
-                + matched_clean_suffixes[0]
-                + " to the Input]"
+                "[CleanedSample-Suffix Addition- " + matched_clean_suffixes[0] + " to the Input]"
             )
         # No full-term match possible with suffixes either
         else:
@@ -1038,10 +952,9 @@ def find_component_match(component, lookup_table, status_addendum, consider_qual
             component = lookup_table["synonyms"][component]
             status_addendum.append("Synonym Usage")
 
-    # There is a full-term component match with no treatment or
-    # change-of-case in resource term.
-    if component in lookup_table["resource_terms"]\
-            or component in lookup_table["resource_terms_revised"]:
+    # There is a full-term component match with no treatment in
+    # resource term.
+    if component in lookup_table["resource_terms"]:
         return component
     # There is a full-term component match with permutation of
     # bracketed resource term.
@@ -1053,14 +966,14 @@ def find_component_match(component, lookup_table, status_addendum, consider_qual
             component_with_suffix = component+" "+suffix
             # A full-term component match with change of resource and
             # suffix addition exists.
-            if component_with_suffix in lookup_table["resource_terms_revised"]:
+            if component_with_suffix in lookup_table["resource_terms"]:
                 status_addendum.append("Suffix Addition- "+suffix+" to the Input")
                 return component_with_suffix
 
         if consider_qualities:
             # A full-term component match using semantic resources
             # exists.
-            if component in lookup_table["qualities_lower"]:
+            if component in lookup_table["qualities"]:
                 status_addendum.append("Using Semantic Tagging Resources")
                 return component
 

@@ -1,6 +1,6 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	Breast	breast	['breast:CandidateTerm_FoodOn_1007']	Full Term Match	['Change of Case in Input Data']
-small_simple2	Baked Potato	baked potato	['potato (baked):FOODON_03302196']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
+small_simple1	Breast	breast	['breast:candidateterm_foodon_1007']	Full Term Match	['A Direct Match']
+small_simple2	Baked Potato	baked potato	['potato (baked):foodon_03302196']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
 small_simple3	by		[':']	Full Term Match	['A Direct Match with Cleaned Sample']
 small_simple4	been does		[':']	Full Term Match	['A Direct Match with Cleaned Sample', 'Inflection (Plural) Treatment']
-small_simple5	does Pie	pie	['pie:CandidateTerm_FoodOn_1074']	Full Term Match	['A Direct Match with Cleaned Sample', 'Inflection (Plural) Treatment']
+small_simple5	does Pie	pie	['pie:candidateterm_foodon_1074']	Full Term Match	['A Direct Match with Cleaned Sample', 'Inflection (Plural) Treatment']
