@@ -65,14 +65,14 @@ def non_English_normalization_phrase(phrase, lookup_table, status_addendum):
 
 
 def get_cleaned_sample(cleaned_sample,lemma, lookup_table):
-    if (not cleaned_sample and lemma.lower() not in lookup_table[
+    if (not cleaned_sample and lemma not in lookup_table[
         "stop_words"]):  # if newphrase is empty and lemma is in not in stopwordlist (abridged according to domain)
-        cleaned_sample = lemma.lower()
+        cleaned_sample = lemma
     elif (
-                lemma.lower() not in lookup_table[
+                lemma not in lookup_table[
                 "stop_words"]):  # if newphrase is not empty and lemma is in not in stopwordlist (abridged according to domain)
 
-        cleaned_sample = cleaned_sample + " " + lemma.lower()
+        cleaned_sample = cleaned_sample + " " + lemma
     return cleaned_sample
 
 
@@ -87,12 +87,12 @@ def get_component_match_withids(partial_matches, lookup_table):
         elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
             resourceId = lookup_table["resource_permutation_terms"][matchstring]
             resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
-            partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
+            partial_matches_with_ids.append(resourceOriginalTerm + ":" + resourceId)
         elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
             resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
             resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
             resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
-            partial_matches_with_ids.append(resourceOriginalTerm.lower() + ":" + resourceId)
+            partial_matches_with_ids.append(resourceOriginalTerm + ":" + resourceId)
         elif (matchstring in lookup_table["processes"].keys()):
             resourceId = lookup_table["processes"][matchstring]
             partial_matches_with_ids.append(matchstring + ":" + resourceId)
@@ -110,7 +110,7 @@ def get_component_match_withids(partial_matches, lookup_table):
 def remove_duplicate_tokens(input_string):
     refined_string=""
     new_phrase_set = []
-    string_tokens = word_tokenize(input_string.lower())
+    string_tokens = word_tokenize(input_string)
     for tkn in string_tokens:
         new_phrase_set.append(tkn)
     refined_string = MosesDetokenizer().detokenize(new_phrase_set, return_str=True)
@@ -529,7 +529,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                     #Standardize synonym
                     synonym = synonym.lower()
 
-                    lookup_table["synonyms"][synonym.lower()] = resource_label
+                    lookup_table["synonyms"][synonym] = resource_label
 
             if "parent_id" in resource:
                 # Standardize parent_id

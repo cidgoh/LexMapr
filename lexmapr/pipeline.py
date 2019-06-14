@@ -139,13 +139,13 @@ def run(args):
 
         sample = helpers.punctuationTreatment(sample, punctuations)  # Sample gets simple punctuation treatment
         sample = re.sub(' +', ' ', sample)  # Extra innner spaces are removed
-        sampleTokens = word_tokenize(sample.lower())    #Sample is tokenized into tokenList
+        sampleTokens = word_tokenize(sample)    #Sample is tokenized into tokenList
 
         cleaned_sample = ""  # Phrase that will be used for cleaned sample
         lemma = ""
 
         for tkn in sampleTokens:
-            remaining_tokens.append(tkn.lower())  # To start with all remaining tokens in set
+            remaining_tokens.append(tkn)  # To start with all remaining tokens in set
 
         # ===Few preliminary things- Inflection,spelling mistakes, Abbreviations, acronyms, foreign words, Synonyms taken care of
         for tkn in sampleTokens:
@@ -195,7 +195,7 @@ def run(args):
             else:
                 fw.write("\t" + full_term_match["all_match_terms_with_resource_ids"])
             # Tokenize sample
-            sample_tokens = word_tokenize(sample.lower())
+            sample_tokens = word_tokenize(sample)
             # Add all tokens to covered_tokens
             [covered_tokens.append(token) for token in sample_tokens]
             # Remove all tokens from remaining_tokens
@@ -237,7 +237,7 @@ def run(args):
             coveredTSet = []
             remainingTSet = []
             for tknstr in partial_matches:
-                strTokens = word_tokenize(tknstr.lower())
+                strTokens = word_tokenize(tknstr)
                 for eachTkn in strTokens:
                     if ("==" in eachTkn):
                         resList = eachTkn.split("==")
