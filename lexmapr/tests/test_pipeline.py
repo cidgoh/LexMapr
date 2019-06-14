@@ -608,7 +608,7 @@ class TestOntologyMapping(unittest.TestCase):
                          "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
                          "processes", "qualities", "qualities_lower", "collocations",
                          "inflection_exceptions", "stop_words", "suffixes", "parents",
-                         "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
+                         "resource_terms_id_based", "resource_terms", "resource_terms_revised",
                          "resource_permutation_terms", "resource_bracketed_permutation_terms"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
@@ -621,12 +621,12 @@ class TestOntologyMapping(unittest.TestCase):
                          "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
                          "processes", "qualities", "qualities_lower", "collocations",
                          "inflection_exceptions", "stop_words", "suffixes", "parents",
-                         "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
+                         "resource_terms_id_based", "resource_terms", "resource_terms_revised",
                          "resource_permutation_terms", "resource_bracketed_permutation_terms"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
-    def test_ontology_table_resource_terms_ID_based(self):
+    def test_ontology_table_resource_terms_id_based(self):
         self.run_pipeline_with_args(config_file_name="bfo_material_entity.json")
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_material_entity.json")
 
@@ -635,10 +635,10 @@ class TestOntologyMapping(unittest.TestCase):
             "BFO_0000027": "object aggregate",
             "BFO_0000030": "object"
         }
-        actual_resource_terms_id_based = ontology_lookup_table["resource_terms_ID_based"]
+        actual_resource_terms_id_based = ontology_lookup_table["resource_terms_id_based"]
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
 
-    def test_ontology_table_resource_terms_ID_based_with_multiple_ontologies(self):
+    def test_ontology_table_resource_terms_id_based_with_multiple_ontologies(self):
         config_file_name = "bfo_material_entity_and_pizza_spiciness.json"
         expected_lookup_table_name = "lookup_" + config_file_name
         self.run_pipeline_with_args(config_file_name=config_file_name)
@@ -652,10 +652,10 @@ class TestOntologyMapping(unittest.TestCase):
             "pizza.owl_Medium": "Media",
             "pizza.owl_Mild": "NaoPicante"
         }
-        actual_resource_terms_id_based = ontology_lookup_table["resource_terms_ID_based"]
+        actual_resource_terms_id_based = ontology_lookup_table["resource_terms_id_based"]
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
 
-    def test_ontology_table_resource_terms_ID_based_with_multiple_root_entities(self):
+    def test_ontology_table_resource_terms_id_based_with_multiple_root_entities(self):
         config_file_name = "bfo_process_and_material_entity.json"
         expected_lookup_table_name = "lookup_" + config_file_name
         self.run_pipeline_with_args(config_file_name=config_file_name)
@@ -668,7 +668,7 @@ class TestOntologyMapping(unittest.TestCase):
             "BFO_0000144": "process profile",
             "BFO_0000182": "history"
         }
-        actual_resource_terms_id_based = ontology_lookup_table["resource_terms_ID_based"]
+        actual_resource_terms_id_based = ontology_lookup_table["resource_terms_id_based"]
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)
 
     def test_ontology_table_resource_terms(self):

@@ -393,7 +393,7 @@ def create_lookup_table_skeleton():
             "stop_words": {},
             "suffixes": {},
             "parents": {},
-            "resource_terms_ID_based": {},
+            "resource_terms_id_based": {},
             "resource_terms": {},
             "resource_terms_revised": {},
             "resource_permutation_terms": {},
@@ -438,10 +438,10 @@ def add_predefined_resources_to_lookup_table(lookup_table):
     # Suffixes to consider appending to terms when mining ontologies
     lookup_table["suffixes"] = get_resource_dict("suffixes.csv")
     # ID-resource combinations
-    lookup_table["resource_terms_ID_based"] = get_resource_dict("CombinedResourceTerms.csv")
-    # Swap keys and values in resource_terms_ID_based
+    lookup_table["resource_terms_id_based"] = get_resource_dict("CombinedResourceTerms.csv")
+    # Swap keys and values in resource_terms_id_based
     lookup_table["resource_terms"] = {
-        v: k for k, v in lookup_table["resource_terms_ID_based"].items()
+        v: k for k, v in lookup_table["resource_terms_id_based"].items()
     }
     # Convert keys in resource_terms to lowercase
     lookup_table["resource_terms_revised"] = {
@@ -552,7 +552,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
             # Keep consistent with resource_id values in resources/
             resource_id = resource_id.replace(":", "_")
 
-            lookup_table["resource_terms_ID_based"][resource_id] = resource_label
+            lookup_table["resource_terms_id_based"][resource_id] = resource_label
             lookup_table["resource_terms"][resource_label] = resource_id
             lookup_table["resource_terms_revised"][resource_label.lower()] = resource_id
 
@@ -766,7 +766,7 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         # Resource ID for matched_term's permutation
         resource_id = lookup_table["resource_permutation_terms"][matched_term]
         # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
+        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
         # Update retained_tokens
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
@@ -778,7 +778,7 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         # Resource ID for matched_term's permutation
         resource_id = lookup_table["resource_bracketed_permutation_terms"][matched_term]
         # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
+        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
         # Update retained_tokens
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
@@ -812,7 +812,7 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         # Resource ID for matched_term's permutation
         resource_id = lookup_table["resource_permutation_terms"][matched_term]
         # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
+        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
         # Update retained_tokens
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
@@ -825,7 +825,7 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         # Resource ID for matched_term's permutation
         resource_id = lookup_table["resource_bracketed_permutation_terms"][matched_term]
         # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_ID_based"][resource_id]
+        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
         # Update retained_tokens
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
