@@ -629,14 +629,6 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         * MatchNotFoundError: Full-term match not found
 
     TODO:
-        * simplify change-of-case treatments as follows:
-            * resource dictionaries only contain lower-case
-                words
-            * check if sample.lower() is in a given dictionary
-            * add appropriate status addendum
-            * check if sample != sample.lower()
-                * if true, add change-of-case treatment to
-                    status addendum
         * reduce number of parameters
             * what we need, and makes sense as a parameter for this
                 type of function
@@ -794,9 +786,7 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
             retained_tokens.append(term_with_suffix + ":" + resource_id)
             # Update status_addendum
             status_addendum.append(
-                "[Change of Case of Resource and Suffix Addition- "
-                + matched_suffixes[0]
-                + " to the Input]"
+                "[Suffix Addition- " + matched_suffixes[0] + " to the Input]"
             )
         # A full-term cleaned sample match with change of resource and
         # suffix addition exists.
@@ -810,9 +800,7 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
             retained_tokens.append(term_with_suffix + ":" + resource_id)
             # Update status_addendum
             status_addendum.append(
-                "[CleanedSample-Change of Case of Resource and Suffix Addition- "
-                + matched_clean_suffixes[0]
-                + " to the Input]"
+                "[CleanedSample-Suffix Addition- " + matched_clean_suffixes[0] + " to the Input]"
             )
         # No full-term match possible with suffixes either
         else:
@@ -964,8 +952,8 @@ def find_component_match(component, lookup_table, status_addendum, consider_qual
             component = lookup_table["synonyms"][component]
             status_addendum.append("Synonym Usage")
 
-    # There is a full-term component match with no treatment or
-    # change-of-case in resource term.
+    # There is a full-term component match with no treatment in
+    # resource term.
     if component in lookup_table["resource_terms"]:
         return component
     # There is a full-term component match with permutation of

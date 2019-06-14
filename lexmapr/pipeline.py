@@ -165,7 +165,7 @@ def run(args):
             # non-EngLish language words taken care of
             lemma = helpers.non_English_normalization_token(lemma, lookup_table, status_addendum)
 
-            # ===This will create a cleaned sample after above treatments [Here we are making new phrase now in lower case]
+            # ===This will create a cleaned sample after above treatments
             cleaned_sample = helpers.get_cleaned_sample(cleaned_sample, lemma, lookup_table)
             cleaned_sample = re.sub(' +', ' ', cleaned_sample)
 
