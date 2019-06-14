@@ -134,6 +134,9 @@ def run(args):
         #   sample_desc: sample
         fw.write('\n' + sampleid + '\t' + sample)
 
+        # Standardize sample to lowercase
+        sample = sample.lower()
+
         sample = helpers.punctuationTreatment(sample, punctuations)  # Sample gets simple punctuation treatment
         sample = re.sub(' +', ' ', sample)  # Extra innner spaces are removed
         sampleTokens = word_tokenize(sample.lower())    #Sample is tokenized into tokenList
