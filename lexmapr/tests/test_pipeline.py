@@ -1011,12 +1011,11 @@ class TestClassification(unittest.TestCase):
         self.run_pipeline_with_args(bucket=True)
         classification_table = self.get_classification_lookup_table()
 
-        expected_keys = ["synonyms", "abbreviations", "abbreviations_lower", "non_english_words",
-                         "non_english_words_lower", "spelling_mistakes", "spelling_mistakes_lower",
-                         "processes", "qualities", "qualities_lower", "collocations",
-                         "inflection_exceptions", "stop_words", "suffixes", "parents",
-                         "resource_terms_ID_based", "resource_terms", "resource_terms_revised",
-                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
+        expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
+                         "processes", "qualities", "collocations", "inflection_exceptions",
+                         "stop_words", "suffixes", "parents", "resource_terms_id_based",
+                         "resource_terms", "resource_permutation_terms",
+                         "resource_bracketed_permutation_terms",
                          "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
                          "ifsac_default"]
 
