@@ -224,9 +224,9 @@ def run(args):
             [remaining_tokens.remove(token) for token in sample_tokens]
 
             if args.bucket:
-                matched_terms = full_term_match["retained_terms_with_resource_ids"]
-                classification_result = classify_sample(sample, matched_terms, lookup_table,
-                                                        classification_lookup_table)
+                matched_terms_with_ids = full_term_match["retained_terms_with_resource_ids"]
+                classification_result = classify_sample(sample, matched_terms_with_ids,
+                                                        lookup_table, classification_lookup_table)
 
             # Set trigger to True
             trigger = True

@@ -29,7 +29,7 @@ def add_classification_resources_to_lookup_table(classification_lookup_table):
     return classification_lookup_table
 
 
-def classify_sample(sample, matched_terms, lookup_table, classification_lookup_table):
+def classify_sample(sample, matched_terms_with_ids, lookup_table, classification_lookup_table):
     """TODO..."""
 
     # Attempt to find a classification using ifsac_default
@@ -39,8 +39,9 @@ def classify_sample(sample, matched_terms, lookup_table, classification_lookup_t
             default_classification = ifsac_label
             break
 
-    if matched_terms:
-        for matched_term in matched_terms:
+    if matched_terms_with_ids:
+        for matched_term_with_id in matched_terms_with_ids:
+            [_, term_id] = matched_term_with_id.split(":", 1)
             pass
 
     # Stub
