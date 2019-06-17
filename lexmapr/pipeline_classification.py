@@ -29,6 +29,19 @@ def add_classification_resources_to_lookup_table(classification_lookup_table):
     return classification_lookup_table
 
 
-def classify_sample():
+def classify_sample(sample, matched_terms, lookup_table, classification_lookup_table):
+    """TODO..."""
+
+    # Attempt to find a classification using ifsac_default
+    default_classification = ""
+    for bucket, ifsac_label in classification_lookup_table["ifsac_default"].items():
+        if bucket in sample:
+            default_classification = ifsac_label
+            break
+
+    if matched_terms:
+        for matched_term in matched_terms:
+            pass
+
     # Stub
     return False

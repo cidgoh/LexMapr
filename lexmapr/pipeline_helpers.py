@@ -608,61 +608,16 @@ def merge_lookup_tables(lookup_table_one, lookup_table_two):
 def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     """Retrieve an annotated, full-term match for a sample.
 
-    Also returns relevant information for empty samples.
-
-    Arguments:
-        * sample <"str">: Name of sample we want to find a full-term
-            match for.
-        * lookup_table <"dict">: Nested dictionary containing resources
-            needed to find a full_term_match. See
-            get_lookup_table_from_cache for details.
-        * cleaned_sample <"str">: Vleaned version of sample we will
-            use to look for a full-term match, if one for sample does
-            not exist.
-        * status_addendum <"list"> of <"str">: Modifications made to
-            sample in preprocessing.
-    Return values:
-        * <"dict">: Contains all relevant annotations for
-            output headers.
-            * key <"str">
-            * val <"str">
-    Restrictions:
-        * cleaned_sample and status_addendum makes this function
-            dependent on being called where it is called inside of run
-            right now
-    Exceptions raised:
-        * MatchNotFoundError: Full-term match not found
-
-    TODO:
-        * reduce number of parameters
-            * what we need, and makes sense as a parameter for this
-                type of function
-                * sample
-                * lookup_table
-                    * Rather than make lookup_table into a global
-                        variable, we should pass it as a parameter
-                        * It will allow us to more easily separate
-                            pipeline.py functions into different files
-                            in the future (if we choose to do so)
-            * what does not look good as a parameter
-                * cleaned_sample
-                    * if we can make a helper function that generates
-                        cleaned_sample, we can simply call it
-                    * we can also call find_full_term_match in run with
-                        sample, and then if nothing is found, with
-                        cleaned_sample
-                        * this would involve adjusting the outputted
-                            annotations of run, so sample and
-                            cleaned_sample outputs are more similar,
-                            and we just have to add something like
-                            "cleaned sample" to the beginning of
-                            cleaned_sample output annotations
-                * status_addendum
-                    * Call to some sort of a preprocessing method to
-                        get changes to status_addendum that occur
-                        before find_full_term_match
-                        * A function for component matching could have
-                            the same call
+    :param str sample: Sample to match
+    :param dict[str, dict] lookup_table: Nested dictionary containing
+        resources needed to find a component match
+    :param str cleaned_sample: Cleaned-up version of sample that may be
+        needed to find a match
+    :param list[str] status_addendum: Modifications made to sample in
+        pre-processing
+    :returns: Relevant match-annotations for pipeline output
+    :rtype: dict[str, str or list[str]]
+    :raises MatchNotFoundError: If a match is not found
     """
     # Tokens to retain for all_match_terms_with_resource_ids
     retained_tokens = []
@@ -819,11 +774,11 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     # Update ret
     ret.update({
         "all_match_terms_with_resource_ids":
-            str(sorted(list(retained_tokens))),
+            sorted(list(retained_tokens)),
         "retained_terms_with_resource_ids":
-            str(sorted(list(retained_tokens))),
+            sorted(list(retained_tokens)),
         "match_status_macro_level": "Full Term Match",
-        "match_status_micro_level": str(sorted(list(final_status))),
+        "match_status_micro_level": sorted(list(final_status)),
     })
     # Return
     return ret

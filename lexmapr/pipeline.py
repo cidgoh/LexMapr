@@ -11,7 +11,8 @@ import sys
 from nltk.tokenize import word_tokenize
 
 from lexmapr.ontofetch import Ontology
-from lexmapr.pipeline_classification import add_classification_resources_to_lookup_table
+from lexmapr.pipeline_classification import (add_classification_resources_to_lookup_table,
+                                             classify_sample)
 import lexmapr.pipeline_helpers as helpers
 
 
@@ -209,18 +210,23 @@ def run(args):
 
             # Write to all headers
             if args.format == "full":
-                fw.write("\t"+ full_term_match["retained_terms_with_resource_ids"]
+                fw.write("\t"+ str(full_term_match["retained_terms_with_resource_ids"])
                     + "\t" + full_term_match["match_status_macro_level"] + "\t"
-                    + full_term_match["match_status_micro_level"])
+                    + str(full_term_match["match_status_micro_level"]))
             # Write to some headers
             else:
-                fw.write("\t" + full_term_match["all_match_terms_with_resource_ids"])
+                fw.write("\t" + str(full_term_match["all_match_terms_with_resource_ids"]))
             # Tokenize sample
             sample_tokens = word_tokenize(sample)
             # Add all tokens to covered_tokens
             [covered_tokens.append(token) for token in sample_tokens]
             # Remove all tokens from remaining_tokens
             [remaining_tokens.remove(token) for token in sample_tokens]
+
+            if args.bucket:
+                matched_terms = full_term_match["retained_terms_with_resource_ids"]
+                classification_result = classify_sample(sample, matched_terms, lookup_table,
+                                                        classification_lookup_table)
 
             # Set trigger to True
             trigger = True
