@@ -155,15 +155,18 @@ def run(args):
         #   sample_desc: sample
         fw.write('\n' + sampleid + '\t' + sample)
 
+        # Standardize sample to lowercase
+        sample = sample.lower()
+
         sample = helpers.punctuationTreatment(sample, punctuations)  # Sample gets simple punctuation treatment
         sample = re.sub(' +', ' ', sample)  # Extra innner spaces are removed
-        sampleTokens = word_tokenize(sample.lower())    #Sample is tokenized into tokenList
+        sampleTokens = word_tokenize(sample)    #Sample is tokenized into tokenList
 
         cleaned_sample = ""  # Phrase that will be used for cleaned sample
         lemma = ""
 
         for tkn in sampleTokens:
-            remaining_tokens.append(tkn.lower())  # To start with all remaining tokens in set
+            remaining_tokens.append(tkn)  # To start with all remaining tokens in set
 
         # ===Few preliminary things- Inflection,spelling mistakes, Abbreviations, acronyms, foreign words, Synonyms taken care of
         for tkn in sampleTokens:
@@ -183,7 +186,7 @@ def run(args):
             # non-EngLish language words taken care of
             lemma = helpers.non_English_normalization_token(lemma, lookup_table, status_addendum)
 
-            # ===This will create a cleaned sample after above treatments [Here we are making new phrase now in lower case]
+            # ===This will create a cleaned sample after above treatments
             cleaned_sample = helpers.get_cleaned_sample(cleaned_sample, lemma, lookup_table)
             cleaned_sample = re.sub(' +', ' ', cleaned_sample)
 
@@ -213,7 +216,7 @@ def run(args):
             else:
                 fw.write("\t" + full_term_match["all_match_terms_with_resource_ids"])
             # Tokenize sample
-            sample_tokens = word_tokenize(sample.lower())
+            sample_tokens = word_tokenize(sample)
             # Add all tokens to covered_tokens
             [covered_tokens.append(token) for token in sample_tokens]
             # Remove all tokens from remaining_tokens
@@ -255,7 +258,7 @@ def run(args):
             coveredTSet = []
             remainingTSet = []
             for tknstr in partial_matches:
-                strTokens = word_tokenize(tknstr.lower())
+                strTokens = word_tokenize(tknstr)
                 for eachTkn in strTokens:
                     if ("==" in eachTkn):
                         resList = eachTkn.split("==")

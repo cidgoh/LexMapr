@@ -1,6 +1,6 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	Chicken Breast	chicken breast	['chicken breast:CandidateTerm_FoodOn_1131']	Full Term Match	['Change of Case in Input Data']
-small_simple2	Baked Potato	baked potato	['potato (baked):FOODON_03302196']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
-small_simple3	Canned Corn	canned corn	['corn (canned):FOODON_03302665']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
-small_simple4	Frozen Yogurt	frozen yogurt	['frozen yogurt:FOODON_03307445']	Full Term Match	['Change of Case in Input Data']
-small_simple5	Apple Pie	apple pie	['apple pie:FOODON_00002475']	Full Term Match	['Change of Case in Input Data']
+small_simple1	Chicken Breast	chicken breast	['chicken breast:candidateterm_foodon_1131']	Full Term Match	['A Direct Match']
+small_simple2	Baked Potato	baked potato	['potato (baked):foodon_03302196']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
+small_simple3	Canned Corn	canned corn	['corn (canned):foodon_03302665']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
+small_simple4	Frozen Yogurt	frozen yogurt	['frozen yogurt:foodon_03307445']	Full Term Match	['A Direct Match']
+small_simple5	Apple Pie	apple pie	['apple pie:foodon_00002475']	Full Term Match	['A Direct Match']
