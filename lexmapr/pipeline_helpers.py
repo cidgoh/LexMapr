@@ -85,11 +85,11 @@ def get_component_match_withids(partial_matches, lookup_table):
             partial_matches_with_ids.append(matchstring + ":" + resourceId)
         elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
             resourceId = lookup_table["resource_permutation_terms"][matchstring]
-            resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
+            resourceOriginalTerm = lookup_table["resource_terms_id_based"][resourceId]
             partial_matches_with_ids.append(resourceOriginalTerm + ":" + resourceId)
         elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
             resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
-            resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
+            resourceOriginalTerm = lookup_table["resource_terms_id_based"][resourceId]
             resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
             partial_matches_with_ids.append(resourceOriginalTerm + ":" + resourceId)
         elif (matchstring in lookup_table["processes"].keys()):
