@@ -29,6 +29,22 @@ def add_classification_resources_to_lookup_table(classification_lookup_table):
     return classification_lookup_table
 
 
+def classify_sample_helper(sample_hierarchy, buckets):
+    """TODO..."""
+    sample_hierarchy_classification = {}
+
+    for i in range(len(sample_hierarchy)):
+        parent_id = sample_hierarchy[i]
+        # 1-based indexing of parent hierarchy
+        parent_level = i+1
+
+        for bucket_label, bucket_id in buckets.items():
+            if bucket_id == parent_id:
+                sample_hierarchy_classification[parent_level] = {bucket_id: bucket_label}
+
+    return sample_hierarchy_classification
+
+
 def classify_sample(sample, matched_terms_with_ids, lookup_table, classification_lookup_table):
     """TODO..."""
 
@@ -43,7 +59,11 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
         for matched_term_with_id in matched_terms_with_ids:
             [_, term_id] = matched_term_with_id.split(":", 1)
             matched_term_hierarchy = get_term_parent_hierarchy(term_id, lookup_table)
-            pass
+
+            if matched_term_hierarchy:
+                lexmapr_classification =\
+                    classify_sample_helper(matched_term_hierarchy,
+                                           classification_lookup_table["buckets_lexmapr"])
 
     # Stub
     return False
