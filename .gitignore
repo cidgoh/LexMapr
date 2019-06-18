@@ -110,3 +110,4 @@ venv.bak/
 fetched_ontologies/
 ontology_lookup_tables/
 lookup_table.json
+classification_lookup_table.json

@@ -343,6 +343,19 @@ class TestPipelineHelpers(unittest.TestCase):
                                  {"a": {"b": "c", "d": "l", "n": "o"}, "f": {"h": "i", "j": "k"}},
                                  {"a": {"b": "c", "d": "e"}, "f": {"h": "m", "j": "k", "p": "q"}}))
 
+    def test_get_term_parent_hierarchy(self):
+        lookup_table = {"parents": {"a": ["b"], "b": ["c"], "d": ["e", "f"], "e": ["g"]}}
+        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("z", lookup_table),
+                             [])
+        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("b", lookup_table),
+                             ["c"])
+        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("c", lookup_table),
+                             [])
+        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("a", lookup_table),
+                             ["b", "c"])
+        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("d", lookup_table),
+                             ["e", "g"])
+
 
 class TestPipeline(unittest.TestCase):
     """Unit test suite for pipeline.run.
