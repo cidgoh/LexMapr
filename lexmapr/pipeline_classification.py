@@ -48,11 +48,17 @@ def classify_sample_helper(sample_hierarchy, buckets):
 def classify_sample(sample, matched_terms_with_ids, lookup_table, classification_lookup_table):
     """TODO..."""
 
+    lexmapr_classifications = []
+    lexmapr_micro_classifications = []
+    ifsac_classifications = []
+    ifsac_micro_classifications = []
+    ifsac_micro_labels = []
+
     # Attempt to find a classification using ifsac_default
     default_classification = ""
-    for bucket, ifsac_label in classification_lookup_table["ifsac_default"].items():
+    for bucket, label in classification_lookup_table["ifsac_default"].items():
         if bucket in sample:
-            default_classification = ifsac_label
+            default_classification = label
             break
 
     if matched_terms_with_ids:
@@ -61,9 +67,48 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
             matched_term_hierarchy = get_term_parent_hierarchy(term_id, lookup_table)
 
             if matched_term_hierarchy:
-                lexmapr_classification =\
+                lexmapr_classification = \
                     classify_sample_helper(matched_term_hierarchy,
                                            classification_lookup_table["buckets_lexmapr"])
+
+                if lexmapr_classification:
+                    lexmapr_classifications.append(lexmapr_classification)
+
+                    lexmapr_micro_classification_level = min(lexmapr_classification.keys())
+                    lexmapr_micro_classification = \
+                        lexmapr_classification[lexmapr_micro_classification_level]
+                    lexmapr_micro_classifications.append(lexmapr_micro_classification)
+
+                ifsac_classification = \
+                    classify_sample_helper(matched_term_hierarchy,
+                                           classification_lookup_table["buckets_ifsactop"])
+
+                if ifsac_classification:
+                    ifsac_classifications.append(ifsac_classification)
+
+                    ifsac_micro_classification_level = min(ifsac_classification.keys())
+                    ifsac_micro_classification = \
+                        ifsac_classification[ifsac_micro_classification_level]
+                    ifsac_micro_classifications.append(ifsac_micro_classification)
+
+                    # ``ifsac_micro_classification`` has is a one-item
+                    # dictionary of the following format:
+                    # ``{bucket_id:bucket_label}``.
+                    ifsac_micro_bucket_id = list(ifsac_micro_classification.keys())[0]
+
+                    ifsac_micro_label = \
+                        classification_lookup_table["ifsac_labels"][ifsac_micro_bucket_id]
+                    ifsac_micro_labels.append(ifsac_micro_label)
+            else:
+                # Attempt to find a classification using ifsac_default
+                default_classification = ""
+                for bucket, label in classification_lookup_table["ifsac_default"].items():
+                    if bucket in sample:
+                        default_classification = label
+
+                if default_classification:
+                    ifsac_micro_classifications.append("Default classification")
+                    ifsac_micro_labels.append(default_classification)
 
     # Stub
     return False
