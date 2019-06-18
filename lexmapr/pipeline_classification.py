@@ -15,23 +15,21 @@ def add_classification_resources_to_lookup_table(classification_lookup_table):
     """
     # Some default buckets pre-defined by LexMapr
     classification_lookup_table["buckets_lexmapr"] = get_resource_dict("buckets-lexmapr.csv")
-    # Buckets made with IFSAC in mind, and their corresponding ontology
-    # IDs.
+    # Buckets made with IFSAC in mind
     classification_lookup_table["buckets_ifsactop"] = get_resource_dict("buckets-ifsactop.csv")
-    # Ontology IDs for buckets made with IFSAC in mind, and their
-    # corresponding IFSAC labels.
+    # IFSAC labels corresponding to IFSAC buckets
     classification_lookup_table["ifsac_labels"] = get_resource_dict("ifsac-labels.csv")
-    # Better maps for certain terms, with IFSAC in mind?
-    classification_lookup_table["ifsac_refinement"] = get_resource_dict("ifsac-refinement.csv")
-    # ???
+
+    # Default labels to consider with IFSAC in mind
     classification_lookup_table["ifsac_default"] = get_resource_dict("ifsac-default.csv")
+    classification_lookup_table["ifsac_refinement"] = get_resource_dict("ifsac-refinement.csv")
 
     return classification_lookup_table
 
 
-def refine_ifsac_micro_labels(sample, ifsac_micro_labels, label_refinements):
+def refine_ifsac_micro_labels(sample, ifsac_final_labels, label_refinements):
     """TODO..."""
-    ret = set(ifsac_micro_labels)
+    ret = set(ifsac_final_labels)
 
     for label, refined_label in label_refinements.items():
         if label in sample:
@@ -139,6 +137,7 @@ def refine_ifsac_micro_labels(sample, ifsac_micro_labels, label_refinements):
 
     return ret
 
+
 def classify_sample_helper(sample_hierarchy, buckets):
     """TODO..."""
     sample_hierarchy_classification = {}
@@ -158,11 +157,16 @@ def classify_sample_helper(sample_hierarchy, buckets):
 def classify_sample(sample, matched_terms_with_ids, lookup_table, classification_lookup_table):
     """TODO..."""
 
-    lexmapr_classifications = []
-    lexmapr_micro_classifications = []
-    ifsac_classifications = []
-    ifsac_micro_classifications = []
-    ifsac_micro_labels = []
+    # LexMapr and IFSAC buckets mapped to the parental hierarchies of
+    # each element in ``matched_term_with_ids``.
+    lexmapr_hierarchy_buckets = []
+    ifsac_hierarchy_buckets = []
+    # Lowest-level mapping for each element in ``matched_terms_with_ids``.
+    lexmapr_final_buckets = []
+    ifsac_final_buckets = []
+    # IFSAC labels corresponding to the buckets in
+    # ``ifsac_final_buckets``.
+    ifsac_final_labels = []
 
     if matched_terms_with_ids:
         for matched_term_with_id in matched_terms_with_ids:
@@ -170,38 +174,37 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
             matched_term_hierarchy = get_term_parent_hierarchy(term_id, lookup_table)
 
             if matched_term_hierarchy:
-                lexmapr_classification = \
+                lexmapr_hierarchy_bucket = \
                     classify_sample_helper(matched_term_hierarchy,
                                            classification_lookup_table["buckets_lexmapr"])
 
-                if lexmapr_classification:
-                    lexmapr_classifications.append(lexmapr_classification)
+                if lexmapr_hierarchy_bucket:
+                    lexmapr_hierarchy_buckets.append(lexmapr_hierarchy_bucket)
 
-                    lexmapr_micro_classification_level = min(lexmapr_classification.keys())
-                    lexmapr_micro_classification = \
-                        lexmapr_classification[lexmapr_micro_classification_level]
-                    lexmapr_micro_classifications.append(lexmapr_micro_classification)
+                    lexmapr_final_bucket_level = min(lexmapr_hierarchy_bucket.keys())
+                    lexmapr_final_bucket = lexmapr_hierarchy_bucket[lexmapr_final_bucket_level]
+                    lexmapr_final_buckets.append(lexmapr_final_bucket)
 
-                ifsac_classification = \
+                ifsac_hierarchy_bucket = \
                     classify_sample_helper(matched_term_hierarchy,
                                            classification_lookup_table["buckets_ifsactop"])
 
-                if ifsac_classification:
-                    ifsac_classifications.append(ifsac_classification)
+                if ifsac_hierarchy_bucket:
+                    ifsac_hierarchy_buckets.append(ifsac_hierarchy_bucket)
 
-                    ifsac_micro_classification_level = min(ifsac_classification.keys())
-                    ifsac_micro_classification = \
-                        ifsac_classification[ifsac_micro_classification_level]
-                    ifsac_micro_classifications.append(ifsac_micro_classification)
+                    ifsac_final_bucket_level = min(ifsac_hierarchy_bucket.keys())
+                    ifsac_final_bucket = \
+                        ifsac_hierarchy_bucket[ifsac_final_bucket_level]
+                    ifsac_final_buckets.append(ifsac_final_bucket)
 
-                    # ``ifsac_micro_classification`` has is a one-item
+                    # ``ifsac_final_bucket`` has is a one-item
                     # dictionary of the following format:
                     # ``{bucket_id:bucket_label}``.
-                    ifsac_micro_bucket_id = list(ifsac_micro_classification.keys())[0]
+                    ifsac_final_bucket_id = list(ifsac_final_bucket.keys())[0]
 
-                    ifsac_micro_label = \
-                        classification_lookup_table["ifsac_labels"][ifsac_micro_bucket_id]
-                    ifsac_micro_labels.append(ifsac_micro_label)
+                    ifsac_final_label = \
+                        classification_lookup_table["ifsac_labels"][ifsac_final_bucket_id]
+                    ifsac_final_labels.append(ifsac_final_label)
             else:
                 # Attempt to find a classification using ifsac_default
                 default_classification = ""
@@ -210,11 +213,11 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
                         default_classification = label
 
                 if default_classification:
-                    ifsac_micro_classifications.append("Default classification")
-                    ifsac_micro_labels.append(default_classification)
+                    ifsac_final_buckets.append("Default classification")
+                    ifsac_final_labels.append(default_classification)
 
         refined_ifsac_micro_labels = \
-            refine_ifsac_micro_labels(sample, ifsac_micro_labels,
+            refine_ifsac_micro_labels(sample, ifsac_final_labels,
                                       classification_lookup_table["ifsac_refinement"])
 
     # Stub
