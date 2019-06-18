@@ -27,7 +27,7 @@ def add_classification_resources_to_lookup_table(classification_lookup_table):
     return classification_lookup_table
 
 
-def refine_ifsac_micro_labels(sample, ifsac_final_labels, label_refinements):
+def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     """TODO..."""
     ret = set(ifsac_final_labels)
 
@@ -135,7 +135,7 @@ def refine_ifsac_micro_labels(sample, ifsac_final_labels, label_refinements):
         ret.clear()
         ret.add("multi ingredient")
 
-    return ret
+    return list(ret)
 
 
 def classify_sample_helper(sample_hierarchy, buckets):
@@ -216,9 +216,13 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
                     ifsac_final_buckets.append("Default classification")
                     ifsac_final_labels.append(default_classification)
 
-        refined_ifsac_micro_labels = \
-            refine_ifsac_micro_labels(sample, ifsac_final_labels,
+        ifsac_final_labels = \
+            refine_ifsac_final_labels(sample, ifsac_final_labels,
                                       classification_lookup_table["ifsac_refinement"])
 
-    # Stub
-    return False
+    return {
+        "lexmapr_hierarchy_buckets": lexmapr_hierarchy_buckets,
+        "lexmapr_final_buckets": lexmapr_final_buckets,
+        "ifsac_final_buckets": ifsac_final_buckets,
+        "ifsac_final_labels": ifsac_final_labels
+    }

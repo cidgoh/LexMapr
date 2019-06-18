@@ -227,6 +227,10 @@ def run(args):
                 matched_terms_with_ids = full_term_match["retained_terms_with_resource_ids"]
                 classification_result = classify_sample(sample, matched_terms_with_ids,
                                                         lookup_table, classification_lookup_table)
+                fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"]) + "\t"
+                         + str(classification_result["lexmapr_final_buckets"]) + "\t"
+                         + str(classification_result["ifsac_final_buckets"]) + "\t"
+                         + str(classification_result["ifsac_final_labels"]))
 
             # Set trigger to True
             trigger = True
