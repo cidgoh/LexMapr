@@ -340,6 +340,16 @@ def run(args):
                 if args.format != 'full':
                     fw.write("\t" + str(sorted(list(retainedSet))))
 
+                if args.bucket:
+                    matched_terms_with_ids = partial_matches_with_ids
+                    classification_result = classify_sample(sample, matched_terms_with_ids,
+                                                            lookup_table,
+                                                            classification_lookup_table)
+                    fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"]) + "\t"
+                             + str(classification_result["lexmapr_final_buckets"]) + "\t"
+                             + str(classification_result["ifsac_final_buckets"]) + "\t"
+                             + str(classification_result["ifsac_final_labels"]))
+
     fw.write('\n')
     #Output files closed
     if fw is not sys.stdout:
