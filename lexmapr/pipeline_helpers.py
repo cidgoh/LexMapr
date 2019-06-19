@@ -870,13 +870,28 @@ def find_component_matches(cleaned_sample, lookup_table, status_addendum):
                 if i >= 3:
                     component_match = find_component_match(joined_permutation, lookup_table,
                                                            status_addendum)
+                    if not component_match:
+                        component_match = find_component_match(joined_permutation, lookup_table,
+                                                               status_addendum,
+                                                               additional_processing=True)
                 elif i > 1:
                     component_match = find_component_match(joined_permutation, lookup_table,
                                                            status_addendum, consider_qualities=True)
+                    if not component_match:
+                        component_match = find_component_match(joined_permutation, lookup_table,
+                                                               status_addendum,
+                                                               consider_qualities=True,
+                                                               additional_processing=True)
                 else:
                     component_match = find_component_match(joined_permutation, lookup_table,
                                                            status_addendum, consider_qualities=True,
                                                            consider_processes=True)
+                    if not component_match:
+                        component_match = find_component_match(joined_permutation, lookup_table,
+                                                               status_addendum,
+                                                               consider_qualities=True,
+                                                               consider_processes=True,
+                                                               additional_processing=True)
 
                 # Match found
                 if component_match:
@@ -888,7 +903,7 @@ def find_component_matches(cleaned_sample, lookup_table, status_addendum):
 
 
 def find_component_match(component, lookup_table, status_addendum, consider_qualities=False,
-                         consider_processes=False, additional_processing=True):
+                         consider_processes=False, additional_processing=False):
     """Attempt to match component with a term from lookup_table.
 
     Modifies ``status_addendum``.
