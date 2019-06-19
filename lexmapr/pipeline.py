@@ -115,12 +115,17 @@ def run(args):
         ]
 
     if args.bucket:
-        OUTPUT_FIELDS += [
-            "LexMapr Classification (Full List)",
-            "LexMapr Bucket",
-            "Third Party Bucket",
-            "Third Party Classification"
-        ]
+        if args. format == "full":
+            OUTPUT_FIELDS += [
+                "LexMapr Classification (Full List)",
+                "LexMapr Bucket",
+                "Third Party Bucket",
+                "Third Party Classification"
+            ]
+        else:
+            OUTPUT_FIELDS += [
+                "Third Party Classification"
+            ]
 
         # Cache (or get from cache) the lookup table containing pre-defined
         # resources used for **classification**.
@@ -227,10 +232,13 @@ def run(args):
                 matched_terms_with_ids = full_term_match["retained_terms_with_resource_ids"]
                 classification_result = classify_sample(sample, matched_terms_with_ids,
                                                         lookup_table, classification_lookup_table)
-                fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"]) + "\t"
-                         + str(classification_result["lexmapr_final_buckets"]) + "\t"
-                         + str(classification_result["ifsac_final_buckets"]) + "\t"
-                         + str(classification_result["ifsac_final_labels"]))
+                if args.format == "full":
+                    fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"]) + "\t"
+                             + str(classification_result["lexmapr_final_buckets"]) + "\t"
+                             + str(classification_result["ifsac_final_buckets"]) + "\t"
+                             + str(classification_result["ifsac_final_labels"]))
+                else:
+                    fw.write("\t" + str(classification_result["ifsac_final_labels"]))
 
             # Set trigger to True
             trigger = True
@@ -345,10 +353,13 @@ def run(args):
                     classification_result = classify_sample(sample, matched_terms_with_ids,
                                                             lookup_table,
                                                             classification_lookup_table)
-                    fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"]) + "\t"
-                             + str(classification_result["lexmapr_final_buckets"]) + "\t"
-                             + str(classification_result["ifsac_final_buckets"]) + "\t"
-                             + str(classification_result["ifsac_final_labels"]))
+                    if args.format == "full":
+                        fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"])
+                                 + "\t" + str(classification_result["lexmapr_final_buckets"]) + "\t"
+                                 + str(classification_result["ifsac_final_buckets"]) + "\t"
+                                 + str(classification_result["ifsac_final_labels"]))
+                    else:
+                        fw.write("\t" + str(classification_result["ifsac_final_labels"]))
 
     fw.write('\n')
     #Output files closed
