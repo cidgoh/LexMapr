@@ -272,10 +272,10 @@ def run(args):
                 for eachTkn in strTokens:
                     if ("==" in eachTkn):
                         resList = eachTkn.split("==")
-                        entityPart = resList[0]
-                        entityTag = resList[1]
-                        coveredTSet.append(entityPart)
-                        covered_tokens.append(entityPart)
+                        entity_part = resList[0]
+                        entity_tag = resList[1]
+                        coveredTSet.append(entity_part)
+                        covered_tokens.append(entity_part)
                     else:
                         coveredTSet.append(eachTkn)
                         covered_tokens.append(eachTkn)
@@ -287,7 +287,23 @@ def run(args):
                 if (chktkn not in covered_tokens):
                     remainingTokenSet.append(chktkn)
 
-            partial_matches_with_ids=helpers.get_component_match_withids(partial_matches, lookup_table)
+            partial_matches_with_ids = []
+            for partial_match in partial_matches:
+                partial_match_id = helpers.get_resource_id(partial_match, lookup_table)
+                if partial_match_id:
+                    try:
+                        # The partial match may be a permutated term, so we
+                        # get the original.
+                        true_label = lookup_table["resource_terms_id_based"][partial_match_id]
+                    except KeyError:
+                        true_label = partial_match
+
+                    partial_matches_with_ids.append(true_label + ":" + partial_match_id)
+                elif "==" in partial_match:
+                    res_list = partial_match.split("==")
+                    entity_part = res_list[0]
+                    entity_tag = res_list[1]
+                    partial_matches_with_ids.append(entity_part + ":" + entity_tag)
 
             partialMatchedResourceListSet = set(partial_matches_with_ids)   # Makes a set from list of all matched components with resource ids
             retainedSet = []

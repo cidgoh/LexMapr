@@ -75,35 +75,27 @@ def get_cleaned_sample(cleaned_sample,lemma, lookup_table):
     return cleaned_sample
 
 
-def get_component_match_withids(partial_matches, lookup_table):
-    # Matches in partial_matches, and their corresponding IDs
-    partial_matches_with_ids = []
-    # Decoding the partial matched set to get back resource ids
-    for matchstring in partial_matches:
-        if (matchstring in lookup_table["resource_terms"].keys()):
-            resourceId = lookup_table["resource_terms"][matchstring]
-            partial_matches_with_ids.append(matchstring + ":" + resourceId)
-        elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
-            resourceId = lookup_table["resource_permutation_terms"][matchstring]
-            resourceOriginalTerm = lookup_table["resource_terms_id_based"][resourceId]
-            partial_matches_with_ids.append(resourceOriginalTerm + ":" + resourceId)
-        elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
-            resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
-            resourceOriginalTerm = lookup_table["resource_terms_id_based"][resourceId]
-            resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
-            partial_matches_with_ids.append(resourceOriginalTerm + ":" + resourceId)
-        elif (matchstring in lookup_table["processes"].keys()):
-            resourceId = lookup_table["processes"][matchstring]
-            partial_matches_with_ids.append(matchstring + ":" + resourceId)
-        elif (matchstring in lookup_table["qualities"].keys()):
-            resourceId = lookup_table["qualities"][matchstring]
-            partial_matches_with_ids.append(matchstring + ":" + resourceId)
-        elif ("==" in matchstring):
-            resList = matchstring.split("==")
-            entityPart = resList[0]
-            entityTag = resList[1]
-            partial_matches_with_ids.append(entityPart + ":" + entityTag)
-    return partial_matches_with_ids
+def get_resource_id(resource_label, lookup_table):
+    """Translate a resource label to a resource ID.
+
+    :param str resource_label: Resource label to translate
+    :param dict[str, dict] lookup_table: Nested dictionary containing
+        data needed to retrieve a resource ID
+    :returns: resource ID corresponding to ``resource_label``
+    :rtype: str
+    """
+    if resource_label in lookup_table["resource_terms"]:
+        return lookup_table["resource_terms"][resource_label]
+    elif resource_label in lookup_table["resource_permutation_terms"]:
+        return lookup_table["resource_permutation_terms"][resource_label]
+    elif resource_label in lookup_table["resource_bracketed_permutation_terms"]:
+        return lookup_table["resource_bracketed_permutation_terms"][resource_label]
+    elif resource_label in lookup_table["processes"]:
+        return lookup_table["processes"][resource_label]
+    elif resource_label in lookup_table["qualities"]:
+        return lookup_table["qualities"][resource_label]
+    else:
+        return ""
 
 
 def remove_duplicate_tokens(input_string):
