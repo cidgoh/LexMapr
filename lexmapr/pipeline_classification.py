@@ -205,16 +205,17 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
                     ifsac_final_label = \
                         classification_lookup_table["ifsac_labels"][ifsac_final_bucket_id]
                     ifsac_final_labels.append(ifsac_final_label)
-            else:
-                # Attempt to find a classification using ifsac_default
-                default_classification = ""
-                for bucket, label in classification_lookup_table["ifsac_default"].items():
-                    if bucket in sample:
-                        default_classification = label
 
-                if default_classification:
-                    ifsac_final_buckets.append("Default classification")
-                    ifsac_final_labels.append(default_classification)
+        if not ifsac_final_buckets:
+            # Attempt to find a classification using ifsac_default
+            default_classification = ""
+            for bucket, label in classification_lookup_table["ifsac_default"].items():
+                if bucket in sample:
+                    default_classification = label
+
+            if default_classification:
+                ifsac_final_buckets.append("Default classification")
+                ifsac_final_labels.append(default_classification)
 
         ifsac_final_labels = \
             refine_ifsac_final_labels(sample, ifsac_final_labels,

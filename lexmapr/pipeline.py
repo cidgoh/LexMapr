@@ -287,7 +287,7 @@ def run(args):
                 if (chktkn not in covered_tokens):
                     remainingTokenSet.append(chktkn)
 
-            partial_matches_with_ids = []
+            partial_matches_with_ids_dict = {}
             for partial_match in partial_matches:
                 partial_match_id = helpers.get_resource_id(partial_match, lookup_table)
                 if partial_match_id:
@@ -298,12 +298,28 @@ def run(args):
                     except KeyError:
                         true_label = partial_match
 
-                    partial_matches_with_ids.append(true_label + ":" + partial_match_id)
+                    partial_matches_with_ids_dict[true_label] = partial_match_id
                 elif "==" in partial_match:
                     res_list = partial_match.split("==")
                     entity_part = res_list[0]
                     entity_tag = res_list[1]
-                    partial_matches_with_ids.append(entity_part + ":" + entity_tag)
+                    partial_matches_with_ids_dict[entity_part] = entity_tag
+
+            # We need to eventually remove partial matches that are
+            # ancestral to other partial matches.
+            ancestors = []
+            for _, partial_match_id in partial_matches_with_ids_dict.items():
+                partial_match_hierarchy = helpers.get_term_parent_hierarchy(partial_match_id,
+                                                                            lookup_table)
+                ancestors += partial_match_hierarchy
+
+            # Add non-ancestral values from
+            # partial_matches_with_ids_dict to form required for
+            # output.
+            partial_matches_with_ids = []
+            for partial_match, partial_match_id in partial_matches_with_ids_dict.items():
+                if partial_match_id not in ancestors:
+                    partial_matches_with_ids.append(partial_match + ":" + partial_match_id)
 
             partialMatchedResourceListSet = set(partial_matches_with_ids)   # Makes a set from list of all matched components with resource ids
             retainedSet = []
