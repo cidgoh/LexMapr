@@ -1,6 +1,6 @@
 """Functions used for bucket classification."""
 
-from lexmapr.pipeline_helpers import get_resource_dict, get_term_parent_hierarchy
+from lexmapr.pipeline_helpers import get_resource_dict, get_term_parent_hierarchy, word_tokenize
 
 
 def add_classification_resources_to_lookup_table(classification_lookup_table):
@@ -31,8 +31,9 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     """TODO..."""
     ret = set(ifsac_final_labels)
 
+    sample_tokens = word_tokenize(sample)
     for label, refined_label in label_refinements.items():
-        if label in sample:
+        if label in sample_tokens:
             ret.add(refined_label)
             break
 

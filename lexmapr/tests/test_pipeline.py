@@ -346,15 +346,15 @@ class TestPipelineHelpers(unittest.TestCase):
     def test_get_term_parent_hierarchy(self):
         lookup_table = {"parents": {"a": ["b"], "b": ["c"], "d": ["e", "f"], "e": ["g"]}}
         self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("z", lookup_table),
-                             [])
+                             ["z"])
         self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("b", lookup_table),
-                             ["c"])
-        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("c", lookup_table),
-                             [])
-        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("a", lookup_table),
                              ["b", "c"])
+        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("c", lookup_table),
+                             ["c"])
+        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("a", lookup_table),
+                             ["a", "b", "c"])
         self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("d", lookup_table),
-                             ["e", "g"])
+                             ["d", "e", "g"])
 
 
 class TestPipeline(unittest.TestCase):

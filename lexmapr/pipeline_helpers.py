@@ -601,7 +601,7 @@ def get_term_parent_hierarchy(term_id, lookup_table):
     """Get the parent hierarchy for a resource.
 
     This currently only returns up to one hierarchy, when there may be
-    many. ``term_id`` is not included in the returned hierarchy.
+    many. ``term_id`` is included in the returned hierarchy.
 
     :param str term_id: ID of some resource cached in ``lookup_table``
     :param dict[str, dict] lookup_table: Nested dictionary containing
@@ -610,7 +610,7 @@ def get_term_parent_hierarchy(term_id, lookup_table):
 
     **TODO**: Expand this to return all hierarchies
     """
-    hierarchy = []
+    hierarchy = [term_id]
 
     try:
         while True:

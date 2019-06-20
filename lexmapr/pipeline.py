@@ -319,6 +319,9 @@ def run(args):
             for _, partial_match_id in partial_matches_with_ids_dict.items():
                 partial_match_hierarchy = helpers.get_term_parent_hierarchy(partial_match_id,
                                                                             lookup_table)
+                # We do not need the first element
+                partial_match_hierarchy.pop(0)
+
                 ancestors += partial_match_hierarchy
 
             # Add non-ancestral values from
