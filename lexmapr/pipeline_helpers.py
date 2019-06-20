@@ -597,30 +597,38 @@ def merge_lookup_tables(lookup_table_one, lookup_table_two):
     return lookup_table_one
 
 
-def get_term_parent_hierarchy(term_id, lookup_table):
-    """Get the parent hierarchy for a resource.
+def get_term_parent_hierarchies(term_id, lookup_table):
+    """Get the parent hierarchies for a resource.
 
-    This currently only returns up to one hierarchy, when there may be
-    many. ``term_id`` is included in the returned hierarchy.
+    ``term_id`` is included in each returned hierarchy.
 
     :param str term_id: ID of some resource cached in ``lookup_table``
     :param dict[str, dict] lookup_table: Nested dictionary containing
         data needed to retrieve a parent hierarchy
-    :returns: parent hierarchy of resource with id value of ``term_id``
+    :returns: parent hierarchies of resource with id value of
+        ``term_id``
+    :rtype: list[list[str]]
 
     **TODO**: Expand this to return all hierarchies
     """
-    hierarchy = [term_id]
+    hierarchies = [[term_id]]
 
-    try:
-        while True:
-            parent = lookup_table["parents"][term_id][0]
-            hierarchy.append(parent)
-            term_id = parent
-    except KeyError:
-        pass
+    i = 0
 
-    return hierarchy
+    while i < len(hierarchies):
+        hierarchy = hierarchies[i]
+        node = hierarchy[-1]
+
+        if node in lookup_table["parents"]:
+            node_parents = lookup_table["parents"][node]
+            for node_parent in node_parents:
+                hierarchies.append(hierarchy + [node_parent])
+            hierarchies.pop(i)
+            continue
+        else:
+            i += 1
+
+    return hierarchies
 
 
 def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):

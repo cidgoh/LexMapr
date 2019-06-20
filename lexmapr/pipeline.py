@@ -315,14 +315,16 @@ def run(args):
 
             # We need to eventually remove partial matches that are
             # ancestral to other partial matches.
-            ancestors = []
+            ancestors = set()
             for _, partial_match_id in partial_matches_with_ids_dict.items():
-                partial_match_hierarchy = helpers.get_term_parent_hierarchy(partial_match_id,
-                                                                            lookup_table)
-                # We do not need the first element
-                partial_match_hierarchy.pop(0)
+                partial_match_hierarchies = helpers.get_term_parent_hierarchies(partial_match_id,
+                                                                                lookup_table)
 
-                ancestors += partial_match_hierarchy
+                for partial_match_hierarchy in partial_match_hierarchies:
+                    # We do not need the first element
+                    partial_match_hierarchy.pop(0)
+
+                    ancestors |= set(partial_match_hierarchy)
 
             # Add non-ancestral values from
             # partial_matches_with_ids_dict to form required for

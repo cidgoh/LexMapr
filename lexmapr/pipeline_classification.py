@@ -1,6 +1,6 @@
 """Functions used for bucket classification."""
 
-from lexmapr.pipeline_helpers import get_resource_dict, get_term_parent_hierarchy, word_tokenize
+from lexmapr.pipeline_helpers import get_resource_dict, get_term_parent_hierarchies, word_tokenize
 
 
 def add_classification_resources_to_lookup_table(classification_lookup_table):
@@ -172,9 +172,9 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
     if matched_terms_with_ids:
         for matched_term_with_id in matched_terms_with_ids:
             [_, term_id] = matched_term_with_id.split(":", 1)
-            matched_term_hierarchy = get_term_parent_hierarchy(term_id, lookup_table)
+            matched_term_hierarchies = get_term_parent_hierarchies(term_id, lookup_table)
 
-            if matched_term_hierarchy:
+            for matched_term_hierarchy in matched_term_hierarchies:
                 lexmapr_hierarchy_bucket = \
                     classify_sample_helper(matched_term_hierarchy,
                                            classification_lookup_table["buckets_lexmapr"])

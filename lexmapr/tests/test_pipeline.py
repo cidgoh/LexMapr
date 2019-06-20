@@ -343,18 +343,21 @@ class TestPipelineHelpers(unittest.TestCase):
                                  {"a": {"b": "c", "d": "l", "n": "o"}, "f": {"h": "i", "j": "k"}},
                                  {"a": {"b": "c", "d": "e"}, "f": {"h": "m", "j": "k", "p": "q"}}))
 
-    def test_get_term_parent_hierarchy(self):
-        lookup_table = {"parents": {"a": ["b"], "b": ["c"], "d": ["e", "f"], "e": ["g"]}}
-        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("z", lookup_table),
-                             ["z"])
-        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("b", lookup_table),
-                             ["b", "c"])
-        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("c", lookup_table),
-                             ["c"])
-        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("a", lookup_table),
-                             ["a", "b", "c"])
-        self.assertListEqual(pipeline_helpers.get_term_parent_hierarchy("d", lookup_table),
-                             ["d", "e", "g"])
+    def test_get_term_parent_hierarchies(self):
+        lookup_table = {"parents": {"a": ["b"], "b": ["c"], "d": ["e", "f"], "g": ["h", "i"],
+                                    "i": ["j"]}}
+        self.assertCountEqual([["z"]],
+                              pipeline_helpers.get_term_parent_hierarchies("z", lookup_table))
+        self.assertCountEqual([["c"]],
+                              pipeline_helpers.get_term_parent_hierarchies("c", lookup_table))
+        self.assertCountEqual([["b", "c"]],
+                              pipeline_helpers.get_term_parent_hierarchies("b", lookup_table))
+        self.assertCountEqual([["a", "b", "c"]],
+                              pipeline_helpers.get_term_parent_hierarchies("a", lookup_table))
+        self.assertCountEqual([["d", "e"], ["d", "f"]],
+                              pipeline_helpers.get_term_parent_hierarchies("d", lookup_table))
+        self.assertCountEqual([["g", "h"], ["g", "i", "j"]],
+                              pipeline_helpers.get_term_parent_hierarchies("g", lookup_table))
 
 
 class TestPipeline(unittest.TestCase):
