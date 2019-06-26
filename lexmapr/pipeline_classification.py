@@ -184,7 +184,8 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
 
                     lexmapr_final_bucket_level = min(lexmapr_hierarchy_bucket.keys())
                     lexmapr_final_bucket = lexmapr_hierarchy_bucket[lexmapr_final_bucket_level]
-                    lexmapr_final_buckets.append(lexmapr_final_bucket)
+                    if lexmapr_final_bucket not in lexmapr_final_buckets:
+                        lexmapr_final_buckets.append(lexmapr_final_bucket)
 
                 ifsac_hierarchy_bucket = \
                     classify_sample_helper(matched_term_hierarchy,
@@ -196,16 +197,17 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
                     ifsac_final_bucket_level = min(ifsac_hierarchy_bucket.keys())
                     ifsac_final_bucket = \
                         ifsac_hierarchy_bucket[ifsac_final_bucket_level]
-                    ifsac_final_buckets.append(ifsac_final_bucket)
+                    if ifsac_final_bucket not in ifsac_final_buckets:
+                        ifsac_final_buckets.append(ifsac_final_bucket)
 
-                    # ``ifsac_final_bucket`` has is a one-item
-                    # dictionary of the following format:
-                    # ``{bucket_id:bucket_label}``.
-                    ifsac_final_bucket_id = list(ifsac_final_bucket.keys())[0]
+                        # ``ifsac_final_bucket`` has is a one-item
+                        # dictionary of the following format:
+                        # ``{bucket_id:bucket_label}``.
+                        ifsac_final_bucket_id = list(ifsac_final_bucket.keys())[0]
 
-                    ifsac_final_label = \
-                        classification_lookup_table["ifsac_labels"][ifsac_final_bucket_id]
-                    ifsac_final_labels.append(ifsac_final_label)
+                        ifsac_final_label = \
+                            classification_lookup_table["ifsac_labels"][ifsac_final_bucket_id]
+                        ifsac_final_labels.append(ifsac_final_label)
 
         if not ifsac_final_buckets:
             # Attempt to find a classification using ifsac_default
