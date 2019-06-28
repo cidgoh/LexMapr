@@ -189,3 +189,13 @@ tuna salad (food product),FOODON_03308735,,,,,,,,,,,,
 amphibian,FOODON_03411624,Wild Animals,,Wild Animals,,,,,,,,,
 bivalve,FOODON_03412113
 Actinopterygii,NCBITaxon_7898
+prepared food product,FOODON_00001180
+vertebrate animal food product,FOODON_00001092,needed because envo is missing its correct parents
+vertebrate animal food source,FOODON_03411297,needed because envo is missing its correct parents
+cattle,FOODON_03411161,needed because foodon has this subclassed under beef food product
+biological product,ENVO_02000043
+gull,foodon_03413503
+breast,uberon_0000310
+liver,uberon_0002107
+milk,uberon_0001913
+chicken meat food product,foodon_00001040
