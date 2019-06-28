@@ -1662,7 +1662,7 @@
         <obo:IAO_0000112 xml:lang="en">the moment at which a child is born</obo:IAO_0000112>
         <obo:IAO_0000112 xml:lang="en">the moment at which a finger is detached in an industrial accident</obo:IAO_0000112>
         <obo:IAO_0000112 xml:lang="en">the moment of death.</obo:IAO_0000112>
-        <oboInOwl#hasSynonym xml:lang="en">temporal instant.</obo:IAO_0000118>
+        <oboInOwl#hasSynonym xml:lang="en">temporal instant.</oboInOwl#hasSynonym>
         <obo:IAO_0000600 xml:lang="en">A zero-dimensional temporal region is a temporal region that is without extent. (axiom label in BFO2 Reference: [102-001])</obo:IAO_0000600>
         <obo:IAO_0000602>(forall (x) (if (ZeroDimensionalTemporalRegion x) (TemporalRegion x))) // axiom label in BFO2 CLIF: [102-001] </obo:IAO_0000602>
         <rdfs:isDefinedBy rdf:resource="http://purl.obolibrary.org/obo/bfo.owl"/>
