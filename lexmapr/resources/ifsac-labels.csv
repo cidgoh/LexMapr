@@ -92,8 +92,8 @@ FOODON_00001185,Grains,rice food product,,,,,FOODON_00001185,Grains,rice food pr
 FOODON_00001132 ,Pork,swine meat food product,,,,,FOODON_00001132 ,Pork,swine meat food product,,Pork,,,,,,
 FOODON_03412114,Crustaceans,snail food source,,,,,FOODON_03412114,Crustaceans,snail food source,,Crustaceans,,,,,,
 FOODON_03306867,Nuts,peanut butter,,,,,FOODON_03306867,Nuts,peanut butter,,Nuts,,,,,,
-FOODON_03414374,Beef,bovine (food source),,,,,FOODON_03414374,Beef,bovine (food source),,Beef,,,,,,
-FOODON_03411201,Beef,cow (food source),,,,,FOODON_03411201,Beef,cow (food source),,Beef,,,,,,
+FOODON_03414374,Cow,bovine (food source),,,,,FOODON_03414374,Beef,bovine (food source),,Beef,,,,,,
+FOODON_03411201,Cow,cow (food source),,,,,FOODON_03411201,Beef,cow (food source),,Beef,,,,,,
 FOODON_00001765,Seeded Vegetable (Other),corn (vegetable) food product,,,,,FOODON_00001765,Seeded Vegetable (Other),corn (vegetable) food product,,Seeded vegetable (other),,,,NCBITaxon_9913,Cow,Bos taurus
 FOODON_03411335,Crustaceans,crab (food source),,,,,FOODON_03411335,Crustacean,crab (food source),,Crustacean,,,,,,
 FOODON_00002448,Seeded Vegetable (Vine Grown),zucchini food product,,,,,FOODON_00002448,Seeded Vegetable (Vine Grown),zucchini food product,,Seeded Vegetable (vine grown),,,,,,
@@ -125,7 +125,7 @@ FOODON_03306581,Fluid Milk,whole milk (food product),,,,,FOODON_03306581,Fluid m
 FOODON_00002252,Solid/Semisolid Dairy Products,soft cheese food product,,,,,FOODON_00002252,Solid/Semisolid Dairy Products,soft cheese food product,,Solid/semisolid dairy products,,Clinical-Chemical Entity,,,,
 FOODON_00001945,Solid/Semisolid Dairy Products,hard cheese food product,,,,,FOODON_00001945,Solid/Semisolid Dairy Products,hard cheese food product,,Solid/semisolid dairy products,,,,,,
 FOODON_00002200,Wild Animals,amphibian or reptile food product,,Other Animal-Wild Animal,,,FOODON_00002200,Other Animal-Wild Animal,amphibian or reptile food product,,Other Animal ,,,,,,
-FOODON_00001678,Calf,calf meat food product,,,,,FOODON_00001678,Calf,calf meat food product,,Calf,,,,,,
+FOODON_00001678,Cow,calf meat food product,,,,,FOODON_00001678,Calf,calf meat food product,,Calf,,,,,,
 FOODON_03411625 ,Wild Animals,reptile (food source),,Other Animal-Wild Animal,,,FOODON_03411625 ,Other Animal-Wild Animal,reptile (food source),,Other Animal ,,,,,,
 ENVO_00002011,Environmental-Water,fresh water,,,,,ENVO_00002011,Environmental-Water,fresh water,,Environmental-Water,,,,,,
 CHEBI_15377,Environmental-Water,water,,,,,CHEBI_15377,Environmental-Water,water,,Environmental-Water,,,,,,
@@ -163,7 +163,7 @@ FOODON_00001792,Crustaceans,crustacean food product,,,,,FOODON_00001792,Crustace
 ENVO_00002003,Clinical/Research,feces,,,,,ENVO_00002003,Clinical-Fecal,feces,,,,,,,,
 FOODON_00001248,Fish,fish food product,,,,,FOODON_00001248,Fish,fish food product,,,,,,,,
 ENVO_00003862,Dairy,dairy,,,,,,,,,,,,,,,
-CHEBI_33287,Clinical/Research,fertilizer,,,,,,,,,,,,,,,
+CHEBI_33287,Environmental-Farm,fertilizer,,,,,,,,,,,,,,,
 FOODON_00001800  ,Dairy,dairy dessert food product,,,,,,,,,,,,,,,
 ENVO_02000020,Clinical/Research,blood,,,,,,,,,,Pork Meat case,,,,,
 FOODON_00001057,Plant Fruit,plant fruit food product,,,,,,,,,,,,,,,
@@ -204,3 +204,4 @@ uberon_0000310,meats
 uberon_0002107,meats
 uberon_0001913,dairy
 foodon_00001040,chicken
+FOODON_00001666,Vegetable Row Crops Flower
