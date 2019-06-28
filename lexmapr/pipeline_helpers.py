@@ -528,6 +528,30 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
 
                     lookup_table["synonyms"][synonym] = resource_label
 
+            if "oboInOwl:hasBroadSynonym" in resource:
+                synonyms = resource["oboInOwl:hasBroadSynonym"]
+                for synonym in synonyms:
+                    # Standardize synonym
+                    synonym = synonym.lower()
+
+                    lookup_table["synonyms"][synonym] = resource_label
+
+            if "oboInOwl:hasNarrowSynonym" in resource:
+                synonyms = resource["oboInOwl:hasNarrowSynonym"]
+                for synonym in synonyms:
+                    # Standardize synonym
+                    synonym = synonym.lower()
+
+                    lookup_table["synonyms"][synonym] = resource_label
+
+            if "oboInOwl:hasExactSynonym" in resource:
+                synonyms = resource["oboInOwl:hasExactSynonym"]
+                for synonym in synonyms:
+                    # Standardize synonym
+                    synonym = synonym.lower()
+
+                    lookup_table["synonyms"][synonym] = resource_label
+
             if "parent_id" in resource:
                 # Standardize parent_id
                 parent_id = resource["parent_id"].replace(":", "_")

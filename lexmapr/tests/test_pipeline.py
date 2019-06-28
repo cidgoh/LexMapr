@@ -739,6 +739,27 @@ class TestOntologyMapping(unittest.TestCase):
         actual_synonyms = ontology_lookup_table["synonyms"]
         self.assertDictEqual(expected_synonyms, actual_synonyms)
 
+    def test_ontology_table_varying_synonyms(self):
+        self.run_pipeline_with_args(config_file_name="bfo_varying_synonyms.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_varying_synonyms.json")
+
+        expected_synonyms = {
+            "temporal instant.": "zero-dimensional temporal region",
+            "temporal instant..": "zero-dimensional temporal region",
+            "lonely-dimensional continuant fiat boundary.":
+                "two-dimensional continuant fiat boundary",
+            "lonely-dimensional continuant fiat boundary..":
+                "two-dimensional continuant fiat boundary",
+            "lonelier-dimensional continuant fiat boundary.":
+                "one-dimensional continuant fiat boundary",
+            "loneliest-dimensional continuant fiat boundary.":
+                "zero-dimensional continuant fiat boundary",
+            "loneliestest-dimensional continuant fiat boundary.":
+                "zero-dimensional continuant fiat boundary",
+        }
+        actual_synonyms = ontology_lookup_table["synonyms"]
+        self.assertDictEqual(expected_synonyms, actual_synonyms)
+
     def test_ontology_table_parents_one_level_one_parent(self):
         self.run_pipeline_with_args(config_file_name="bfo_process.json")
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_process.json")
