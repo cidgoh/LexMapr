@@ -47,6 +47,7 @@ def stop_err(msg, exit_code = 1):
 class OntoHelper(object):
 
 	CODE_VERSION = '0.0.3'
+	SYNONYM_FIELDS = ['oboInOwl_hasSynonym','oboInOwl_hasBroadSynonym','oboInOwl_hasExactSynonym','oboInOwl_hasNarrowSynonym','IAO_0000118']
 
 	def __init__(self):
 
@@ -66,6 +67,7 @@ class OntoHelper(object):
 		self.struct['@context'] = OrderedDict({
 			'owl': 'http://www.w3.org/2002/07/owl#',
 			'rdfs': 'http://www.w3.org/2000/01/rdf-schema#', 
+			'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
 			'oboInOwl': 'http://www.geneontology.org/formats/oboInOwl#',
 			'xmls': 'http://www.w3.org/2001/XMLSchema#',
 			'vcard': 'http://www.w3.org/2006/vcard/ns#',
@@ -95,7 +97,8 @@ class OntoHelper(object):
 			'IAO':	rdflib.URIRef('http://purl.obolibrary.org/obo/IAO_'),
 			'GENEPIO':rdflib.URIRef('http://purl.obolibrary.org/obo/GENEPIO_'), # Still needed for a few GEEM relations
 			'RO':	rdflib.URIRef('http://purl.obolibrary.org/obo/RO_'),
-			'OBI':	rdflib.URIRef('http://purl.obolibrary.org/obo/OBI_')
+			'OBI':	rdflib.URIRef('http://purl.obolibrary.org/obo/OBI_'),
+			'AGENCY': rdflib.URIRef('http://genepio.org/ontology/lexmapr/')
 		}
 
 		self.queries = {
@@ -123,8 +126,35 @@ class OntoHelper(object):
 				OPTIONAL {?resource (dc:license|terms:license) ?license.}
 				OPTIONAL {?resource (dc:date|terms:date) ?date.}
 			}
-			""", initNs = self.namespace)
+			""", initNs = self.namespace),
 
+			# ################################################################
+			# Terms are augmented with synonyms in order for type-as-you-go inputs
+			# to return appropriately filtered phrases
+			#
+			# INPUT
+			# 	?datum : id of term to get labels for
+			# OUTPUT
+			#   ?Synonym ?ExactSynonym ?NarrowSynonym
+			#
+			'entity_synonyms': prepareQuery("""
+
+				SELECT DISTINCT ?datum 
+					?oboInOwl_hasSynonym 
+					?oboInOwl_hasBroadSynonym 
+					?oboInOwl_hasExactSynonym 
+					?oboInOwl_hasNarrowSynonym 
+					?IAO_0000118
+				WHERE {  
+					{?datum rdf:type owl:Class} UNION {?datum rdf:type owl:NamedIndividual}.
+					{?datum oboInOwl:hasSynonym ?oboInOwl_hasSynonym.} 
+					UNION {?datum oboInOwl:hasBroadSynonym ?oboInOwl_hasBroadSynonym.}
+					UNION {?datum oboInOwl:hasExactSynonym ?oboInOwl_hasExactSynonym.}
+					UNION {?datum oboInOwl:hasNarrowSynonym ?oboInOwl_hasNarrowSynonym.}
+					UNION {?datum IAO:0000118 ?IAO_0000118.}
+				}
+			""", initNs = self.namespace),
+			
 		}
 
 	def __main__(self):
@@ -482,7 +512,7 @@ class OntoHelper(object):
 			output_folder = options.output_folder 
 		else:
 			output_folder = os.path.dirname(os.path.realpath(sys.argv[0]))
-		output_file_basename = output_folder + '/' + ontology_filename
+		output_file_basename = output_folder + ontology_filename
 
 		return (main_ontology_file, output_file_basename)
 
@@ -511,9 +541,13 @@ class OntoHelper(object):
 			row = []
 			for field in fields:
 				value = entity[field] if field in entity else ''
-				if isinstance(value, list): # Constructed parent_id list.
-					value = ','.join(value)
-				row.append(value.replace('\t',' ')) # str() handles other_parents array
+
+				# A list gets popped into a field as |-separated items
+				if isinstance(value, list):
+					value = '|'.join(value)
+
+				# Ensure tab and\n value isn't in field
+				row.append(value.replace('\t',' ').replace('\n',' ') )
 
 			output.append('\t'.join(row))
 

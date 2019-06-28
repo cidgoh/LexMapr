@@ -16,15 +16,20 @@
 	ISSUE: Doing a "BINDING (?x as ?y)" expression prevents ?x from 
 	being output in a SELECT. bug leads to no such field being output.
 
-	e.g. python ontofetch.py ../genepio/src/ontology/genepio-merged.owl
-	     writes files genepio-merged.json, genepio-merged.tsv into folder
-	     program was launched in.
+	EXAMPLES
+	Retrieve local file genepio-merged.owl and write files genepio-merged.json, genepio-merged.tsv into folder program was launched in.
 
-	e.g. python ontofetch.py https://raw.githubusercontent.com/obi-ontology/obi/master/obi.owl -o test/
-	     writes files test/obi.json and test/obi.tsv into test/ subfolder.
+		> python ontofetch.py ../genepio/src/ontology/genepio-merged.owl
+	     
+	Retrieve OBI and write files test/obi.json and test/obi.tsv into test/ subfolder.
 
+		> python ontofetch.py https://raw.githubusercontent.com/obi-ontology/obi/master/obi.owl -o test/
+	     
+	Retrieve OBI "data visualization" and IAO "documenting" branches
 
-	FUTURE: Get ontology version, and add to output core filename ???
+		> python ontofetch.py https://raw.githubusercontent.com/obi-ontology/obi/master/obi.owl -o test/ -r http://purl.obolibrary.org/obo/OBI_0200111,http://purl.obolibrary.org/obo/IAO_0000572
+
+	FUTURE: Get ontology version, and add to "version" field
 	
 	**************************************************************************
 """ 
@@ -33,8 +38,8 @@ import json
 import sys
 import os
 import optparse
-#import rdfextras; rdfextras.registerplugins() # so we can Graph.query()
-# import urllib2 # Note: this is python 2.7 ; 3.x breaks this up into separate modules.
+
+#from ontohelper import OntoHelper as oh
 import lexmapr.ontohelper as oh
 
 import rdflib
@@ -64,15 +69,20 @@ class MyParser(optparse.OptionParser):
 class Ontology(object):
 	"""
 
+
 	"""
 
-	CODE_VERSION = '0.0.3'
+	CODE_VERSION = '0.0.4'
+	# This list doesn't include synonym types. ontohelper.py provides them.
+	FIELDS = ['id','parent_id','language','ontology','other_parents','label','definition','ul_label','ui_definition','ui_help','deprecated','replaced_by']
+
 
 	def __init__(self):
 
 		self.onto_helper = oh.OntoHelper()
-		# ADDITIONAL FIELDS THAT WOULD BE MANAGED IN SYNCHRONIZATION of TARGET LOOKUP TABLE: 'updated','preferred'
-		self.fields = ['id','parent_id','language','ontology','other_parents','label','definition','ul_label','ui_definition','ui_help','synonyms','deprecated','replaced_by']
+		# ADDITIONAL FIELDS THAT WOULD BE MANAGED IN SYNCHRONIZATION of TARGET
+		# LOOKUP TABLE: 'updated','preferred'
+		self.fields = self.FIELDS + self.onto_helper.SYNONYM_FIELDS
 
 		""" 
 		Add these PREFIXES to Sparql query window if you want to test a query there:
@@ -125,26 +135,7 @@ class Ontology(object):
 			""", initNs = self.onto_helper.namespace),
 
 
-			# ################################################################
-			# Terms are augmented with synonyms in order for type-as-you-go inputs
-			# to return appropriately filtered phrases
-			#
-			# INPUT
-			# 	?datum : id of term to get labels for
-			# OUTPUT
-			#   ?Synonym ?ExactSynonym ?NarrowSynonym
-			#
-			'entity_synonyms': prepareQuery("""
 
-				SELECT DISTINCT ?datum ?Synonym ?ExactSynonym ?NarrowSynonym ?AlternativeTerm
-				WHERE {  
-					{?datum rdf:type owl:Class} UNION {?datum rdf:type owl:NamedIndividual}.
-					{?datum oboInOwl:hasSynonym ?Synonym.} 
-					UNION {?datum oboInOwl:hasExactSynonym ?ExactSynonym.}
-					UNION {?datum oboInOwl:hasNarrowSynonym ?NarrowSynonym.}
-					UNION {?datum IAO:0000118 ?AlternativeTerm.}
-				}
-			""", initNs = self.onto_helper.namespace),
 
 			# ################################################################
 			# Fetch parent IDs of given entity. with respect to class-subclass
@@ -155,22 +146,28 @@ class Ontology(object):
 			# OUTPUT
 			#   ?parent_ids
 			#
-			'entity_parents': prepareQuery("""
-				SELECT DISTINCT ?datum_id (group_concat(distinct ?parent_id;separator=",") as ?parent_ids)
-				WHERE {
-					?datum_id rdfs:subClassOf ?parent_id.
-					?parent_id rdfs:label ?label # to ensure parent_id entity is in graph as well.
-				}
-			""", initNs = self.onto_helper.namespace),
+			#'entity_parents': prepareQuery("""
+			#	SELECT DISTINCT ?datum_id (group_concat(distinct ?parent_id;separator=",") as ?parent_ids)
+			#	WHERE {
+			#		?datum_id rdfs:subClassOf ?parent_id.
+			#		?parent_id rdfs:label ?label # to ensure parent_id entity is in graph as well.
+			#	}
+			#""", initNs = self.onto_helper.namespace),
 		}
 
 	def __main__(self):
 		"""
-		
-		Note rdflib utf8 issue below.
+		By default, retrieves 'http://www.w3.org/2002/07/owl#Thing' and all
+		subclasses in given ontology and place them into self.onto_helper.struct.specifications.  Produces a .json and .tsv
+		output file of all term labels, definitions, synonyms, etc.
 
+		To retrieve a 
+		branch like BFO:entity (BFO:0000001), add command line option:
+		 -r http://purl.obolibrary.org/obo/BFO_0000001  
+		
 		INPUT
-			args[0]:string A filepath or URL of ontology to process
+			args[0]:string: A filepath or URL of ontology to process
+			options.root_uri: string: A comma-delimited list of 0 or more term URI ids.
 		"""
 
 		(options, args) = self.get_command_line()
@@ -180,7 +177,7 @@ class Ontology(object):
 			return self.CODE_VERSION
 
 		if not len(args):
-			stop_err('Please supply an OWL ontology file (in RDF format)')
+			stop_err('Please supply an OWL ontology file (in RDF/XML format)')
 
 		(main_ontology_file, output_file_basename) = self.onto_helper.check_ont_file(args[0], options)
 
@@ -204,16 +201,13 @@ class Ontology(object):
 		self.onto_helper.set_ontology_metadata(self.onto_helper.queries['ontology_metadata'])
 		print ('Metadata: ' + json.dumps(self.onto_helper.struct['metadata'],  sort_keys=False, indent=4, separators=(',', ': ')) )
 
-		# By default, retrieve all subclasses of 'owl:Thing' in given ontology
-		# and place in self.onto_helper.struct.specifications. To retrieve a 
-		# branch like BFO:entity (BFO:0000001), add command line option:
-		# -r http://purl.obolibrary.org/obo/BFO_0000001  
-		print ('Doing term hierarchy query starting at:' + options.root_uri)
-		specBinding = {'root': rdflib.URIRef(options.root_uri)} 
-		entities = self.onto_helper.do_query_table(self.queries['tree'], specBinding)
+		for term_id in options.root_uri.split(','):
+			print ('Doing term hierarchy query starting at: ' + term_id)
+			specBinding = {'root': rdflib.URIRef(term_id)} 
+			entities = self.onto_helper.do_query_table(self.queries['tree'], specBinding)
 
-		print ('Doing terms: ' + str(len(entities)) )
-		self.do_entities(entities)
+			print ('Doing terms: ' + str(len(entities)) )
+			self.do_entities(entities)
 		
 		self.onto_helper.do_output_json(self.onto_helper.struct, output_file_basename)
 		self.onto_helper.do_output_tsv(self.onto_helper.struct, output_file_basename, self.fields)
@@ -253,7 +247,8 @@ class Ontology(object):
 		# 2nd pass does parents:
 		# Parent gets entry in structure too, though maybe not a label.
 		# If not already mentioned in its own right, then it was parent
-		# of top-level entity, and not really important.
+		# of top-level entity, and not really important, so it gets a
+		# minimal entry.
 		for parent_id in parents:
 			if not parent_id in self.onto_helper.struct['specifications']:
 				self.onto_helper.set_entity_default(self.onto_helper.struct, 'specifications', parent_id, {
@@ -319,47 +314,58 @@ class Ontology(object):
 			myDict = row.asdict()	
 			# Adds any new text items to given id's structure
 			self.onto_helper.struct['specifications'][id].update(myDict) 
+			# Issue: carriage returns in definition; this is taken care of in
+			# do_output_tsv()
 
 
 	def do_entity_synonyms(self, id):
 		"""
 		Augment each entry in 'specifications' with semi-colon-delimited 
-		synonyms gathered from 'entity_synonyms' query of annotations: 
+		synonyms gathered from 'entity_synonyms' query of annotations which
+		originate in these relations 
 
 			oboInOwl:hasSynonym
+			oboInOwl:hasBroadSynonym
 			oboInOwl:hasExactSynonym
 			oboInOwl:hasNarrowSynonym
-			IAO:0000118 AlternativeTerm
+			IAO:0000118 alternative_term
 
 		ISSUE: 
 		Not Multilingual yet.  Some synonym entries have {language: french} or
-		{language: Scottish Gaelic} etc. at end. 
+		{language: Scottish Gaelic} etc. at end. Add @en , @fr etc. to end of 
+		phrase.
 
 		INPUT
-			?datum ?Synonym ?ExactSynonym ?NarrowSynonym ?AlternativeTerm
+			?synonym ?broad_synonym ?exact_synonym ?narrow_synonym ?alternative_term
+		OUTPUT
+			for each of above fields, an array containing one or more terms
 		"""
 		
 		myURI = rdflib.URIRef(self.onto_helper.get_expanded_id(id))
-		rows = self.onto_helper.graph.query(self.queries['entity_synonyms'], initBindings={'datum': myURI })
-		synonymArray = []
+		rows = self.onto_helper.graph.query(
+			self.onto_helper.queries['entity_synonyms'], 
+			initBindings = {'datum': myURI }
+		)
+
+		spec = self.onto_helper.struct['specifications'][id]
 
 		for row in rows:
 
 			# Specification distinguishes between these kinds of synonym
-			for field in ['Synonym','ExactSynonym','NarrowSynonym','AlternativeTerm']:
+			for field in self.onto_helper.SYNONYM_FIELDS:
 
 				if row[field]: 
-					# Clean up synonym phrases.  Insisting on terms separated
-					# by comma+space because chemistry expressions have tight
+					# Clean up synonym phrases.  Can't split comma-delimited synonyms
+					# because a number of ontologies have phrase synonyms with commas
+					# in them.  Also chemistry expressions have tight (no space)
 					# comma separated synonyms
-					stringy = row[field].encode('unicode-escape').decode('utf8').replace('\\n', '\n')
-					phrases = stringy.strip().replace(', ','\n').replace('"','').split('\n')
-					for phrase in phrases:
-						synonymArray.append( phrase.strip())
-	
-		if len(synonymArray) > 0:
-			synonym_text = ';'.join(synonymArray)
-			self.onto_helper.set_entity_default(self.onto_helper.struct, 'specifications', id, 'synonyms', synonym_text )
+					phrases = row[field].replace('\\n', ';').strip().replace('"','').split(';')
+					if phrases:
+						prefix_field = field.replace('_',':',1)
+						if prefix_field in spec:
+							spec[prefix_field] += phrases
+						else:
+							spec[prefix_field] = phrases
 
 
 	def get_command_line(self):
@@ -379,7 +385,8 @@ class Ontology(object):
 
 		parser.add_option('-o', '--output', dest='output_folder', type='string', help='Path of output file to create')
 		
-		parser.add_option('-r', '--root', dest='root_uri', type='string', help='Root term to fetch underlying terms from (full URI)', default='http://www.w3.org/2002/07/owl#Thing')
+		parser.add_option('-r', '--root', dest='root_uri', type='string', help='Comma separated list of full URI root entity ids to fetch underlying terms from. Defaults to owl#Thing.', default='http://www.w3.org/2002/07/owl#Thing')
+
 		return parser.parse_args()
 
 

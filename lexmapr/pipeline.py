@@ -73,9 +73,9 @@ def run(args):
                 (ontology_iri, root_entity_iri), = json_object.items()
                 # Arguments for ontofetch.py
                 if root_entity_iri == "":
-                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies"]
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies/"]
                 else:
-                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies", "-r", root_entity_iri]
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies/", "-r", root_entity_iri]
                 # Call ontofetch.py
                 ontofetch = Ontology()
                 ontofetch.__main__()

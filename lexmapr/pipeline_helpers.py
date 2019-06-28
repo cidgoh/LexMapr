@@ -520,10 +520,10 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 for permutation in bracketed_permutations:
                     lookup_table["resource_bracketed_permutation_terms"][permutation] = resource_id
 
-            if "synonyms" in resource:
-                synonyms = resource["synonyms"].split(";")
+            if "oboInOwl:hasSynonym" in resource:
+                synonyms = resource["oboInOwl:hasSynonym"]
                 for synonym in synonyms:
-                    #Standardize synonym
+                    # Standardize synonym
                     synonym = synonym.lower()
 
                     lookup_table["synonyms"][synonym] = resource_label
