@@ -894,6 +894,10 @@ def find_component_matches(cleaned_sample, lookup_table, status_addendum):
             # Permutations of concatenated_gram_chunk
             permutations = all_permutations(concatenated_gram_chunk)
 
+            # Abort if all tokens already covered
+            if set(gram_tokens) <= set(ret["token_matches"]):
+                continue
+
             # Iterate over all permutations
             for permutation in permutations:
                 # Join elements of permutation into a single string
