@@ -33,7 +33,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
 
     sample_tokens = word_tokenize(sample)
     for label, refined_label in label_refinements.items():
-        if label in sample_tokens:
+        label_tokens = word_tokenize(label)
+        if not (set(label_tokens) - set(sample_tokens)):
             ret.add(refined_label)
             break
 
@@ -236,8 +237,10 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
         if not ifsac_final_buckets:
             # Attempt to find a classification using ifsac_default
             default_classification = ""
+            sample_tokens = word_tokenize(sample)
             for bucket, label in classification_lookup_table["ifsac_default"].items():
-                if bucket in sample:
+                bucket_tokens = word_tokenize(bucket)
+                if not (set(bucket_tokens) - set(sample_tokens)):
                     default_classification = label
 
             if default_classification:
