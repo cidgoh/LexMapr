@@ -1,5 +1,7 @@
 """Functions used for bucket classification."""
 
+from inflection import singularize
+
 from lexmapr.pipeline_helpers import get_resource_dict, get_term_parent_hierarchies, word_tokenize
 
 
@@ -32,8 +34,10 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     ret = set(ifsac_final_labels)
 
     sample_tokens = word_tokenize(sample)
+    sample_tokens = list(map(lambda token: singularize(token), sample_tokens))
     for label, refined_label in label_refinements.items():
         label_tokens = word_tokenize(label)
+        label_tokens = list(map(lambda token: singularize(token), label_tokens))
         if not (set(label_tokens) - set(sample_tokens)):
             ret.add(refined_label)
             break
@@ -161,6 +165,11 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.clear()
         ret.add("multi ingredient")
 
+    if "food" in ret:
+        ret.remove("food")
+    if "organism" in ret:
+        ret.remove("organism")
+
     return list(ret)
 
 
@@ -234,12 +243,14 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
                             classification_lookup_table["ifsac_labels"][ifsac_final_bucket_id]
                         ifsac_final_labels.append(ifsac_final_label)
 
-        if not ifsac_final_buckets:
+        if not ifsac_final_labels or set(ifsac_final_labels) == {"food"}:
             # Attempt to find a classification using ifsac_default
             default_classification = ""
             sample_tokens = word_tokenize(sample)
+            sample_tokens = list(map(lambda token: singularize(token), sample_tokens))
             for bucket, label in classification_lookup_table["ifsac_default"].items():
                 bucket_tokens = word_tokenize(bucket)
+                bucket_tokens = list(map(lambda token: singularize(token), bucket_tokens))
                 if not (set(bucket_tokens) - set(sample_tokens)):
                     default_classification = label
 
