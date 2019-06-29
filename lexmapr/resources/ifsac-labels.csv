@@ -166,7 +166,7 @@ ENVO_00003862,Dairy,dairy,,,,,,,,,,,,,,,
 CHEBI_33287,Environmental-Farm,fertilizer,,,,,,,,,,,,,,,
 FOODON_00001800  ,Dairy,dairy dessert food product,,,,,,,,,,,,,,,
 ENVO_02000020,Clinical/Research,blood,,,,,,,,,,Pork Meat case,,,,,
-FOODON_00001057,Plant Fruit,plant fruit food product,,,,,,,,,,,,,,,
+FOODON_00001057,Fruits,plant fruit food product,,,,,,,,,,,,,,,
 ENVO_01000685,Environmental-Water,,,,,,,,,,,,,,,,
 NCBITaxon_9940,Sheep,ovis aries,,FOODON_03411229,Companion Animal,horse,,,,,,,,,,,
 ENVO_01000604,Environmental-Vehicle,vehicle,,,,,,,,,,,,,,,
@@ -205,3 +205,5 @@ uberon_0002107,meats
 uberon_0001913,dairy
 foodon_00001040,chicken
 FOODON_00001666,Vegetable Row Crops Flower
+FOODON_00001140,fruits
+FOODON_00001156,sub tropical fruit
