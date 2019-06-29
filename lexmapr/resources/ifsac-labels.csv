@@ -3,7 +3,7 @@ FOODON_03411222,Fish,fish (food source),,,,,FOODON_03411222,Fish,fish (food sour
 FOODON_03411433,Shellfish,shellfish (food source),,,,,FOODON_03411433,Shellfish,shellfish (food source),,Shellfish,,,,,,
 FOODON_00001256,Dairy,dairy food product,,,,,FOODON_00001256,Dairy,dairy food product,,Dairy,,,,,,
 FOODON_00001274,Eggs,egg food product,,,,,FOODON_00001274,Eggs,egg food product,,Eggs,,,,,,
-FOODON_00001006,Meats,meat food product,,,,,FOODON_00001006,Meat,meat food product,,Meat,,,,,,
+FOODON_00001006,meat,meat food product,,,,,FOODON_00001006,Meat,meat food product,,Meat,,,,,,
 FOODON_00001131,Poultry,poultry meat food product,,,,,FOODON_00001131,Poultry,poultry meat food product,,Poultry,,,,,,
 FOODON_03420108,Sugars,sugar,,,,,FOODON_03420108,Sugars,sugar,Sugar-Oils,Sugars,,,,,,
 FOODON_00002131,Oils,plant based refined or partially-refined food product,,,,,FOODON_00002131,Oils,plant based refined or partially-refined food product,Sugar-Oils,Oils,,,,,,
@@ -14,26 +14,26 @@ FOODON_00001172,Nuts,nut food product,,,,,FOODON_00001172,Nuts,nut food product,
 FOODON_00001173,Seeds,plant seed food product,,,,,FOODON_00001173,Seeds,plant seed food product,,Seeds,,,,,,
 FOODON_00002268,Herbs,spice or herb product flavoring or seasoning,,,,,FOODON_00002268,Herbs,spice or herb product flavoring or seasoning,,Herbs,,,,,,
 FOODON_03315615 ,Fruits,fruit food product,,,,,FOODON_03315615 ,Fruits,fruit food product,,Fruits,,,,,,
-FOODON_03411331,Bi-Valve Mollusk,clam (food source),,,,,FOODON_03411331,Bi-Valve Mollusk,clam (food source),,Bi-Valve Mollusk,,,,,,
-FOODON_03411223,Bi-Valve Mollusk,mussel (food source),,,,,FOODON_03411223,Bi-Valve Mollusk,mussel (food source),,Bi-Valve Mollusk,,,,,,
-FOODON_03411224,Bi-Valve Mollusk,oyster (food source),,,,,FOODON_03411224,Bi-Valve Mollusk,oyster (food source),,Bi-Valve Mollusk,,,,,,
-FOODON_03411489,Bi-Valve Mollusk,scallop (food source),,,,,FOODON_03411489,Bi-Valve Mollusk,scallop (food source),,Bi-Valve Mollusk,,,,,,
-FOODON_03411408,Non Bi-Valve Mollusk,abalone (food source),,,,,FOODON_03411408,Non Bi-Valve Mollusk,abalone (food source),,Non Bi-Valve Mollusk,,,,,,
-CHEBI_17029,Non Bi-Valve Mollusk,chitin,,,,,CHEBI_17029,Non Bi-Valve Mollusk,chitin,,Non Bi-Valve Mollusk,,,,,,
-FOODON_03412279,Non Bi-Valve Mollusk,limpet (food source),,,,,FOODON_03412279,Non Bi-Valve Mollusk,limpet (food source),,Non Bi-Valve Mollusk,,,,,,
-FOODON_03411514,Non Bi-Valve Mollusk,octopus (food source),,,,,FOODON_03411514,Non Bi-Valve Mollusk,octopus (food source),,Non Bi-Valve Mollusk,,,,,,
-FOODON_03412114,Non Bi-Valve Mollusk,snail (food source),,,,,FOODON_03412114,Non Bi-Valve Mollusk,snail (food source),,Non Bi-Valve Mollusk,,,,,,
-FOODON_03411205,Non Bi-Valve Mollusk,squid (food source),,,,,FOODON_03411205,Non Bi-Valve Mollusk,squid (food source),,Non Bi-Valve Mollusk,,,,,,
-FOODON_03411633,Non Bi-Valve Mollusk,whelk (food source),,,,,FOODON_03411633,Non Bi-Valve Mollusk,whelk (food source),,Non Bi-Valve Mollusk,,,,,,
+FOODON_03411331,mollusks (bi-valve),clam (food source),,,,,FOODON_03411331,mollusks (bi-valve),clam (food source),,mollusks (bi-valve),,,,,,
+FOODON_03411223,mollusks (bi-valve),mussel (food source),,,,,FOODON_03411223,mollusks (bi-valve),mussel (food source),,mollusks (bi-valve),,,,,,
+FOODON_03411224,mollusks (bi-valve),oyster (food source),,,,,FOODON_03411224,mollusks (bi-valve),oyster (food source),,mollusks (bi-valve),,,,,,
+FOODON_03411489,mollusks (bi-valve),scallop (food source),,,,,FOODON_03411489,mollusks (bi-valve),scallop (food source),,mollusks (bi-valve),,,,,,
+FOODON_03411408,mollusks (non-bi-valve),abalone (food source),,,,,FOODON_03411408,mollusks (non-bi-valve),abalone (food source),,mollusks (non-bi-valve),,,,,,
+CHEBI_17029,mollusks (non-bi-valve),chitin,,,,,CHEBI_17029,mollusks (non-bi-valve),chitin,,mollusks (non-bi-valve),,,,,,
+FOODON_03412279,mollusks (non-bi-valve),limpet (food source),,,,,FOODON_03412279,mollusks (non-bi-valve),limpet (food source),,mollusks (non-bi-valve),,,,,,
+FOODON_03411514,mollusks (non-bi-valve),octopus (food source),,,,,FOODON_03411514,mollusks (non-bi-valve),octopus (food source),,mollusks (non-bi-valve),,,,,,
+FOODON_03412114,mollusks (non-bi-valve),snail (food source),,,,,FOODON_03412114,mollusks (non-bi-valve),snail (food source),,mollusks (non-bi-valve),,,,,,
+FOODON_03411205,mollusks (non-bi-valve),squid (food source),,,,,FOODON_03411205,mollusks (non-bi-valve),squid (food source),,mollusks (non-bi-valve),,,,,,
+FOODON_03411633,mollusks (non-bi-valve),whelk (food source),,,,,FOODON_03411633,mollusks (non-bi-valve),whelk (food source),,mollusks (non-bi-valve),,,,,,
 FOODON_03411343,Other Aquatic Animals,whale (food source),,,,,FOODON_03411343,Other Aquatic Animal,whale (food source),,Other Aquatic Animal,,,,,,
 FOODON_03306461,Other Aquatic Animals,seal meat (raw) ,,,,,FOODON_03306461,Other Aquatic Animal,seal meat (raw) ,,Other Aquatic Animal,,,,,,
 FOODON_03411252,Other Aquatic Animals,frog (food source),,,,,FOODON_03411252,Other Aquatic Animal,frog (food source),,Other Aquatic Animal,,,,,,
 FOODON_00001041,Beef,beef food product,,,,,FOODON_00001041,Beef,beef food product,,Beef,,,,,,
 FOODON_00001038,Pork,pork meat food product,,,,,FOODON_00001038,Pork,pork meat food product,,Pork,,,,,,
-FOODON_00002236,Other Meats,sheep meat food product,,,,,FOODON_00002236,Other Meats,sheep meat food product,Mutton,Other Meats,,,,,,
-FOODON_03411328,Other Animals,goat (food source),,,,,FOODON_03411328,Other Meats,goat (food source),Chevon,Other Meats,,,,,,
-FOODON_00001992 ,Other Meats,lamb meat food product,,,,,FOODON_00001992 ,Other Meats,lamb meat food product,"Lamb Chops, Rack of Lamb",Other Meats,,,,,,
-FOODON_03411229,Other Animals,horse (food source),,,,,FOODON_03411229,Other Meats,horse (food source),Horse ,Other Meats,,,,,,
+FOODON_00002236,other meat,sheep meat food product,,,,,FOODON_00002236,other meat,sheep meat food product,Mutton,other meat,,,,,,
+FOODON_03411328,Other Animals,goat (food source),,,,,FOODON_03411328,other meat,goat (food source),Chevon,other meat,,,,,,
+FOODON_00001992 ,other meat,lamb meat food product,,,,,FOODON_00001992 ,other meat,lamb meat food product,"Lamb Chops, Rack of Lamb",other meat,,,,,,
+FOODON_03411229,Other Animals,horse (food source),,,,,FOODON_03411229,other meat,horse (food source),Horse ,other meat,,,,,,
 FOODON_03411457,Chicken,chicken (food source),,,,,FOODON_03411457,Chicken,chicken (food source),,Chicken,,,,,,
 FOODON_00001286,Turkey,turkey meat food product,,,,,FOODON_00001286,Turkey,turkey meat food product,,Turkey,,,,,,
 FOODON_03411316,Other Poultry,duck (food source),,,,,FOODON_03411316,Other Poultry,duck (food source),Ducks,Other Poultry,,,,,,
@@ -53,11 +53,11 @@ FOODON_03420183,Sprouts,sprout,,,,,FOODON_03420183,Sprouts,sprout,Sprouts,Sprout
 FOODON_00001901,root/underground (other),ginger food product,,,,,FOODON_00001901,Other root/Underground vegetable,ginger food product,Ginger,Other root/Underground vegetable,,,,,,
 FOODON_00002310,root/underground (other),taro vegetable food product,,,,,FOODON_00002310,Other root/Underground vegetable,taro vegetable food product,Taro,Other root/Underground vegetable,,,,,,
 FOODON_00001163,Seeded Vegetables (Solanaceous),solanaceous fruit food product,,,,,FOODON_00001163,Seeded Vegetables (Solanaceous),solanaceous fruit food product,,Seeded Vegetables (Solanaceous),,,,,,
-FOODON_00001264,Legumes,legume food product,,,,,FOODON_00001264,Legumes,legume food product,,Legumes,,,,,,
+FOODON_00001264,seeded vegetables (legumes),legume food product,,,,,FOODON_00001264,seeded vegetables (legumes),legume food product,,seeded vegetables (legumes),,,,,,
 FOODON_00002064,Seeded Vegetables (Other),okra vegetable food product,,,,,FOODON_00002064,Seeded Vegetables (Other),okra vegetable food product,Okra,Seeded Vegetables (Other),,,,,,
 FOODON_03315081,Herbs,tea food product,,,,,FOODON_03315081,Herbs,tea food product,Teas,Herbs,,,,,,
-FOODON_03411566,Vegetable Row Crop Leafy,leafy vegetable (food source),,,,,FOODON_03411566,Vegetable Row Crop leafy,leafy vegetable (food source),,Vegetable Row Crop leafy,,,,,,
-FOODON_00001152,Melons,melon fruit food product,,,,,FOODON_00001152,Melons,melon fruit food product,,Melons,,,,,,
+FOODON_03411566,vegetable row crops (leafy),leafy vegetable (food source),,,,,FOODON_03411566,vegetable row crops (leafy),leafy vegetable (food source),,vegetable row crops (leafy),,,,,,
+FOODON_00001152,melon fruit,melon fruit food product,,,,,FOODON_00001152,melon fruit,melon fruit food product,,melon fruit,,,,,,
 FOODON_00001158,Pome fruit,pomaceous fruit food product,,,,,FOODON_00001158,Pome fruit,pomaceous fruit food product,,Pome fruit,,,,,,
 FOODON_03411539,Stone Fruit,stone fruit (food source),,,,,FOODON_03411539,Stone Fruit,stone fruit (food source),,Stone Fruit,,,,,,
 FOODON_00001653,Small Fruit,blackberry food product,,,,,FOODON_00001653,Small Fruit,blackberry food product,,Small Fruit,,,,,,
@@ -85,7 +85,7 @@ FOODON_03411162,Sub-tropical Fruit,pomegranate plant (food source),,,,,FOODON_03
 FOODON_03315395,Grains,flour product,,,,,FOODON_03315395,Flour-based Products ,flour product,FOODON_00001175 ,Flour-based Products ,,,,,,
 FOODON_00002153,Plant Seeds,plant seed vegetable food product,,,,,FOODON_00002153,Plant Seeds,plant seed vegetable food product,,Plant Seeds,,,,,,
 FOODON_00001709,Grains,cereal food product,,,,,FOODON_00001709,Grains,cereal food product,,Grains,,,,,,
-FOODON_00001175 ,Vegetable Row Crops Flower,plant stem food product,,,,,FOODON_00001175 ,Vegetable Row Crops Flower,plant stem food product,,Vegetable Row Crops Flower,,,,,,
+FOODON_00001175 ,vegetable row crops (flower),plant stem food product,,,,,FOODON_00001175 ,vegetable row crops (flower),plant stem food product,,vegetable row crops (flower),,,,,,
 FOODON_00002099,Nuts,peanut food product,,,,,FOODON_00002099,Nuts,peanut food product,,Nuts,,,,,,
 FOODON_00001709,Grains,cereal food product,,,,,FOODON_00001709,Grains,cereal food product,,Grains,,,,,,
 FOODON_00001185,Grains,rice food product,,,,,FOODON_00001185,Grains,rice food product,,Grains,,,,,,
@@ -97,7 +97,7 @@ FOODON_03411201,Cow,cow (food source),,,,,FOODON_03411201,Beef,cow (food source)
 FOODON_00001765,Seeded Vegetables (Other),corn (vegetable) food product,,,,,FOODON_00001765,Seeded Vegetables (Other),corn (vegetable) food product,,Seeded Vegetables (Other),,,,NCBITaxon_9913,Cow,Bos taurus
 FOODON_03411335,Crustaceans,crab (food source),,,,,FOODON_03411335,Crustacean,crab (food source),,Crustacean,,,,,,
 FOODON_00002448,Seeded Vegetables (Vine-Grown),zucchini food product,,,,,FOODON_00002448,Seeded Vegetables (Vine-Grown),zucchini food product,,Seeded Vegetables (Vine-Grown),,,,,,
-FOODON_00002143  ,Vegetable Row Crop Leafy,plant leaf vegetable food product,,,,,FOODON_00002143  ,Vegetable Row Crop (leafy),plant leaf vegetable food product,,Vegetable Row Crop (leafy),,,,,,
+FOODON_00002143  ,vegetable row crops (leafy),plant leaf vegetable food product,,,,,FOODON_00002143  ,Vegetable Row Crop (leafy),plant leaf vegetable food product,,Vegetable Row Crop (leafy),,,,,,
 FOODON_00002156,vegetable row crops (stem),plant stem or spear vegetable food product,,,,,FOODON_00002156,Stem Vegetable,plant stem or spear vegetable food product,,Stem Vegetable,,,,,,
 NCBITaxon_9823,Pig,: sus scrofa,,,,,NCBITaxon_9823,Pork,: sus scrofa,,Pork,,,,,,
 FOODON_03309997,Animal Feed,,,,,,FOODON_03309997,Animal Feed,,,Animal Feed,,,,,,
@@ -105,7 +105,7 @@ FOODON_03411136,Pig,swine (food source),,,,,FOODON_03411136,Pork,swine (food sou
 FOODON_00001134,Beef,bovine meat food product,,,,,FOODON_00001134,Beef,bovine meat food product,NCBITaxon_9823 ,Beef,,,,,,
 FOODON_00001132,Pork,porcine meat food product,,,,,FOODON_00001132,Pork,porcine meat food product,FOODON_03309997,Pork,,,,,,
 NCBITaxon_9031,Chicken,gallus gallus,,,,,NCBITaxon_9031,Chicken,gallus gallus,,Chicken,,,,,,
-FOODON_03411183,Other Animals,sheep (food source),,,,,FOODON_03411183,Other Meats,sheep (food source),,Other Meats,,,,,,
+FOODON_03411183,Other Animals,sheep (food source),,,,,FOODON_03411183,other meat,sheep (food source),,other meat,,,,,,
 FOODON_03420113,Dairy,milk or milk component,,,,,FOODON_03420113,Dairy,milk or milk component,,Dairy,,,,,,
 FOODON_00001093 ,Grains,cereal grain food product,,,,,FOODON_00001093 ,Grains,cereal grain food product,,Grains,,,,,,
 FOODON_03304497,Seeds,edible seed (food product),,,,,FOODON_03304497,Seeds,edible seed (food product),,Seeds,,,,,,
@@ -184,26 +184,26 @@ GENEPIO_0001732,Environmental,environmental (swab or sampling),,,,,,,,,,,,,,,
 FOODON_03411374,Crustaceans,crustacean,,,,,,,,,,,,,,,
 ENVO_02000019 ,Clinical/Research,bodily fluid material,,,,,,,,,,,,,,,
 FOODON_00001046,Aquatic Animals,seafood product,,,,,,,,,,,,,,,
-FOODON_00001994,Legumes,leguminous vegetable food product,,,,,,,,,,,,,,,
+FOODON_00001994,seeded vegetables (legumes),leguminous vegetable food product,,,,,,,,,,,,,,,
 GENEPIO_0001056,Animal Feed,pet treat,,,,,,,,,,,,,,,
-FOODON_03316042,Multi Ingredient,salad,,,,,,,,,,,,,,,
+FOODON_03316042,Multi-Ingredient,salad,,,,,,,,,,,,,,,
 FOODON_03307643,Small Fruit,strawberry pie (food product),,,,,,,,,,,,,,,
-FOODON_03308735,Multi Ingredient,tuna salad (food product),,,,,,,,,,,,,,,
+FOODON_03308735,Multi-Ingredient,tuna salad (food product),,,,,,,,,,,,,,,
 FOODON_00002111,Seeded Vegetables (Solanaceous),pepper vegetable food product (green or red),,,,,,,,,,,,,,,
 FOODON_03411624,Wild Animals,amphibian,,,,,,,,,,,,,,,
-FOODON_03412113,Bi-Valve Mollusk
+FOODON_03412113,mollusks (bi-valve)
 NCBITaxon_7898,Fish
-FOODON_00001180,Multi Ingredient
+FOODON_00001180,Multi-Ingredient
 FOODON_00001092,Animal
 FOODON_03411297,Animal
 FOODON_03411161,Cow
 ENVO_02000043,Clinical/Research
 foodon_03413503,game
-uberon_0000310,meats
-uberon_0002107,meats
+uberon_0000310,meat
+uberon_0002107,meat
 uberon_0001913,dairy
 foodon_00001040,chicken
-FOODON_00001666,Vegetable Row Crops Flower
+FOODON_00001666,vegetable row crops (flower)
 FOODON_00001140,fruits
 FOODON_00001156,Sub-tropical Fruit
 NCIT_C14201,Companion Animals
