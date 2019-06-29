@@ -125,12 +125,19 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "environmental" in ret and ret.intersection(environmental_categories):
         ret.remove("environmental")
 
-    # plant_categories = {"oils", "sugars", "vegetables", "sprouts", "root"}
-    #
-    # if "plant" in ret and ret.intersection(plant_categories):
-    #     ret.remove("plant")
+    plant_categories = {"vegetables", "fungi", "sprouts", "root/underground",
+                        "root/underground (roots)", "root/underground (tubers)",
+                        "root/underground (bulbs)", "root/underground (other)",
+                        "seeded vegetables", "seeded vegetables (vine-grown)",
+                        "seeded vegetables (solanaceous)", "seeded vegetables (legumes)",
+                        "seeded vegetables (other)", "herbs", "vegetable row crops (flower)",
+                        "vegetable row crops (stem)", "vegetable row crops (leafy)", "fruits",
+                        "melon fruit", "pome fruit", "stone fruit", "small fruit", "tropical fruit",
+                        "sub-tropical fruit", "grains", "beans", "nuts", "seeds"}
+    if "plant" in ret and ret.intersection(plant_categories):
+        ret.remove("plant")
 
-    fruit_categories = {"melons", "pome fruit", "stone fruit", "sub tropical fruit", "small fruit",
+    fruit_categories = {"melons", "pome fruit", "stone fruit", "sub-tropical fruit", "small fruit",
                         "tropical fruit"}
     if "fruits" in ret and ret.intersection(fruit_categories):
         ret.remove("fruits")
