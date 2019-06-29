@@ -54,10 +54,10 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     #     ret.remove("dairy")
     if "beef" in ret and ("cow" in ret or "calf" in ret):
         ret.remove("beef")
-    if "meats" in ret and ("chicken" in ret or "crustaceans" in ret or "pork" in ret or
-                           "beef" in ret or "fish" in ret or "avian" in ret or "turkey" in ret
-                           or "other poultry" in ret or "poultry" in ret):
-        ret.remove("meats")
+    # if "meats" in ret and ("chicken" in ret or "crustaceans" in ret or "pork" in ret or
+    #                        "beef" in ret or "fish" in ret or "avian" in ret or "turkey" in ret
+    #                        or "other poultry" in ret or "poultry" in ret):
+    #     ret.remove("meats")
     if ("shellfish" in ret or "siluriformes" in ret) and "fish" in ret:
         ret.remove("fish")
     if "poultry" in ret and "chicken" in sample:
@@ -71,17 +71,10 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.add("clinical/research")  # "clinical-fecal"
     if "environmental-animal housing" in ret and "finished" in sample:
         ret.remove("environmental-animal housing")
-    if "pork" in ret and "clinical/research" in ret:
-        ret.remove("pork")
-        ret.add("pig")
-    # if "clinical/research" in ret and ("environmental" in ret or "environmental-water" in ret
-    #                                    or "environmental-factory/production facility/abattoir"
-    #                                    in ret):
-    #     ret.remove("clinical/research")
 
     if "herbs" in ret and "organism" in ret:
         ret.remove("organism")
-    if "organism" in ret and ("homo sapiens" in sample or "human" in sample):
+    if "animal" in ret and ("homo sapiens" in sample or "human" in sample):
         ret.remove("organism")
         ret.add("human")
 
@@ -101,47 +94,60 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         if "avian" in ret:
             ret.remove("avian")
 
-    if "clinical/research" in ret and "organism" in ret and not ("human" in ret or "fish" in ret
-                                                                 or "chicken" in ret or "beef"
-                                                                 in ret or "pork" in ret or "turkey"
-                                                                 in ret or "crustaceans" in ret
-                                                                 or "calf" in ret or "pig" in ret
-                                                                 or "cattle" in ret or "sheep"
-                                                                 in ret or "cow" in ret):
-        ret.clear()
-        ret.add("animal")
-        ret.add("clinical/research")
+    # if "clinical/research" in ret and "organism" in ret and not ("human" in ret or "fish" in ret
+    #                                                              or "chicken" in ret or "beef"
+    #                                                              in ret or "pork" in ret or "turkey"
+    #                                                              in ret or "crustaceans" in ret
+    #                                                              or "calf" in ret or "pig" in ret
+    #                                                              or "cattle" in ret or "sheep"
+    #                                                              in ret or "cow" in ret):
+    #     ret.clear()
+    #     ret.add("animal")
+    #     ret.add("clinical/research")
     if "clinical/research" in ret and "environmental" in ret and "biological" in sample:
         ret.remove("environmental")
 
-    if "beef" in ret and not "liver" in sample and ("clinical/research" in ret or "environmental"
-                                                    in ret or "dairy" in ret):
-        ret.remove("beef")
-        ret.add("cow")
 
-    if "clinical/research" in ret and "liver" in sample and len(ret) > 1:
-        ret.remove("clinical/research")
-    if "cow" in ret and "calf" in ret:
-        ret.remove("cow")
-    if "calf" in ret:
-        ret.remove("calf")
-        ret.add("cattle")
+    # if "clinical/research" in ret and "liver" in sample and len(ret) > 1:
+    #     ret.remove("clinical/research")
+    # if "cow" in ret and "calf" in ret:
+    #     ret.remove("cow")
+    # if "calf" in ret:
+    #     ret.remove("calf")
+    #     ret.add("cattle")
 
-    if "pig" in ret and "liver" in sample:
+    if "pig" in ret and "meats" in ret:
         ret.remove("pig")
         ret.add("pork")
-    if "cow" in ret and "liver" in sample:
+    if "cow" in ret and "meats" in ret:
         ret.remove("cow")
         ret.add("beef")
+    if "other animals" in ret and "meats" in ret:
+        ret.remove("other animals")
+        ret.add("other meats")
+
+    if "pork" in ret and "clinical/research" in ret:
+        ret.remove("pork")
+        ret.add("pig")
+    if "beef" in ret and ("clinical/research" in ret or "dairy" in ret):
+        ret.remove("beef")
+        ret.add("cow")
+    if "other meats" in ret and "clinical/research" in ret:
+        ret.remove("other meats")
+        ret.add("other animals")
+    if "meats" in ret and "clinical/research" in ret:
+        ret.remove("meats")
 
     animal_categories = {"human", "fish", "chicken", "turkey", "crustaceans", "pig", "sheep", "cow",
                          "avian", "companion animals", "shellfish", "non bi-valve mollusk",
                          "bi-valve mollusk", "aquatic animals", "other aquatic animals",
-                         "wild animal", "other poultry"}
+                         "wild animal", "other poultry", "poultry", "pork", "beef"}
     if "animal" in ret and ret.intersection(animal_categories):
         ret.remove("animal")
     if "meats" in ret and ret.intersection(animal_categories):
         ret.remove("meats")
+    if "other meats" in ret and "other animals":
+        ret.remove("other meats")
 
     environmental_categories = {"environmental-water", "environmental-farm",
                                 "environmental-restaurant", "environmental-store",

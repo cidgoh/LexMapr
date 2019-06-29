@@ -30,10 +30,10 @@ FOODON_03306461,Other Aquatic Animals,seal meat (raw) ,,,,,FOODON_03306461,Other
 FOODON_03411252,Other Aquatic Animals,frog (food source),,,,,FOODON_03411252,Other Aquatic Animal,frog (food source),,Other Aquatic Animal,,,,,,
 FOODON_00001041,Beef,beef food product,,,,,FOODON_00001041,Beef,beef food product,,Beef,,,,,,
 FOODON_00001038,Pork,pork meat food product,,,,,FOODON_00001038,Pork,pork meat food product,,Pork,,,,,,
-FOODON_00002236,Sheep,sheep meat food product,,,,,FOODON_00002236,Other Meats,sheep meat food product,Mutton,Other Meats,,,,,,
-FOODON_03411328,Other Meats,goat (food source),,,,,FOODON_03411328,Other Meats,goat (food source),Chevon,Other Meats,,,,,,
+FOODON_00002236,Other Meats,sheep meat food product,,,,,FOODON_00002236,Other Meats,sheep meat food product,Mutton,Other Meats,,,,,,
+FOODON_03411328,Other Animals,goat (food source),,,,,FOODON_03411328,Other Meats,goat (food source),Chevon,Other Meats,,,,,,
 FOODON_00001992 ,Other Meats,lamb meat food product,,,,,FOODON_00001992 ,Other Meats,lamb meat food product,"Lamb Chops, Rack of Lamb",Other Meats,,,,,,
-FOODON_03411229,Other Meats,horse (food source),,,,,FOODON_03411229,Other Meats,horse (food source),Horse ,Other Meats,,,,,,
+FOODON_03411229,Other Animals,horse (food source),,,,,FOODON_03411229,Other Meats,horse (food source),Horse ,Other Meats,,,,,,
 FOODON_03411457,Chicken,chicken (food source),,,,,FOODON_03411457,Chicken,chicken (food source),,Chicken,,,,,,
 FOODON_00001286,Turkey,turkey meat food product,,,,,FOODON_00001286,Turkey,turkey meat food product,,Turkey,,,,,,
 FOODON_03411316,Other Poultry,duck (food source),,,,,FOODON_03411316,Other Poultry,duck (food source),Ducks,Other Poultry,,,,,,
@@ -105,7 +105,7 @@ FOODON_03411136,Pig,swine (food source),,,,,FOODON_03411136,Pork,swine (food sou
 FOODON_00001134,Beef,bovine meat food product,,,,,FOODON_00001134,Beef,bovine meat food product,NCBITaxon_9823 ,Beef,,,,,,
 FOODON_00001132,Pork,porcine meat food product,,,,,FOODON_00001132,Pork,porcine meat food product,FOODON_03309997,Pork,,,,,,
 NCBITaxon_9031,Chicken,gallus gallus,,,,,NCBITaxon_9031,Chicken,gallus gallus,,Chicken,,,,,,
-FOODON_03411183,Sheep,sheep (food source),,,,,FOODON_03411183,Other Meats,sheep (food source),,Other Meats,,,,,,
+FOODON_03411183,Other Animals,sheep (food source),,,,,FOODON_03411183,Other Meats,sheep (food source),,Other Meats,,,,,,
 FOODON_03420113,Dairy,milk or milk component,,,,,FOODON_03420113,Dairy,milk or milk component,,Dairy,,,,,,
 FOODON_00001093 ,Grains,cereal grain food product,,,,,FOODON_00001093 ,Grains,cereal grain food product,,Grains,,,,,,
 FOODON_03304497,Seeds,edible seed (food product),,,,,FOODON_03304497,Seeds,edible seed (food product),,Seeds,,,,,,
@@ -122,8 +122,8 @@ FOODON_03317076,Roots (Root/Underground Vegetables),root vegetable product,,,,,F
 FOODON_00001771,Dairy,cow milk based food product,,,,,FOODON_00001771,Dairy,cow milk based food product,,Dairy,,,,,,
 FOODON_03301484,Fluid Milk,skim milk (food product),,,,,FOODON_03301484,Fluid milk,skim milk (food product),,Fluid milk,,,,,,
 FOODON_03306581,Fluid Milk,whole milk (food product),,,,,FOODON_03306581,Fluid milk,whole milk (food product),,Fluid milk,,,,,,
-FOODON_00002252,Solid/Semisolid Dairy Products,soft cheese food product,,,,,FOODON_00002252,Solid/Semisolid Dairy Products,soft cheese food product,,Solid/semisolid dairy products,,Clinical-Chemical Entity,,,,
-FOODON_00001945,Solid/Semisolid Dairy Products,hard cheese food product,,,,,FOODON_00001945,Solid/Semisolid Dairy Products,hard cheese food product,,Solid/semisolid dairy products,,,,,,
+FOODON_00002252,Dairy,soft cheese food product,,,,,FOODON_00002252,Solid/Semisolid Dairy Products,soft cheese food product,,Solid/semisolid dairy products,,Clinical-Chemical Entity,,,,
+FOODON_00001945,Dairy,hard cheese food product,,,,,FOODON_00001945,Solid/Semisolid Dairy Products,hard cheese food product,,Solid/semisolid dairy products,,,,,,
 FOODON_00002200,Wild Animals,amphibian or reptile food product,,Other Animal-Wild Animal,,,FOODON_00002200,Other Animal-Wild Animal,amphibian or reptile food product,,Other Animal ,,,,,,
 FOODON_00001678,Cow,calf meat food product,,,,,FOODON_00001678,Calf,calf meat food product,,Calf,,,,,,
 FOODON_03411625 ,Wild Animals,reptile (food source),,Other Animal-Wild Animal,,,FOODON_03411625 ,Other Animal-Wild Animal,reptile (food source),,Other Animal ,,,,,,
@@ -214,3 +214,6 @@ ENVO_01000009,clinical/research
 FOODON_00002403,food,stop un-matched foods from reaching environmental
 FOODON_03411564,food,stop un-matched foods from reaching environmental
 FOODON_00001002,food,stop un-matched foods from reaching environmental
+NCBITaxon_33213,Animal
+NCBITaxon_33090,Plant
+NCBITaxon_9606,Human

@@ -209,4 +209,6 @@ biotic mesoscopic physical object,ENVO_01000009
 food material,FOODON_00002403,stop un-matched foods from reaching environmental
 food source,FOODON_03411564,stop un-matched foods from reaching environmental
 foodon product type,FOODON_00001002,stop un-matched foods from reaching environmental
-
+Bilateria,NCBITaxon_33213
+Viridiplantae,NCBITaxon_33090
+Homo sapiens,NCBITaxon_9606
