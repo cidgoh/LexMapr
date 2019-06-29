@@ -128,22 +128,33 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "environmental" in ret and ret.intersection(environmental_categories):
         ret.remove("environmental")
 
-    plant_categories = {"vegetables", "fungi", "sprouts", "root/underground",
-                        "root/underground (roots)", "root/underground (tubers)",
-                        "root/underground (bulbs)", "root/underground (other)",
-                        "seeded vegetables", "seeded vegetables (vine-grown)",
-                        "seeded vegetables (solanaceous)", "seeded vegetables (legumes)",
-                        "seeded vegetables (other)", "herbs", "vegetable row crops (flower)",
-                        "vegetable row crops (stem)", "vegetable row crops (leafy)", "fruits",
-                        "melon fruit", "pome fruit", "stone fruit", "small fruit", "tropical fruit",
-                        "sub-tropical fruit", "grains", "beans", "nuts", "seeds"}
-    if "plant" in ret and ret.intersection(plant_categories):
-        ret.remove("plant")
+    root_underground_categories = {"root/underground (roots)", "root/underground (tubers)",
+                                   "root/underground (bulbs)", "root/underground (other)"}
+    seeded_vegetable_categories = {"seeded vegetables (vine-grown)",
+                                   "seeded vegetables (solanaceous)", "seeded vegetables (legumes)",
+                                   "seeded vegetables (other)"}
+    vegetable_categories = {"fungi", "sprouts", "root/underground", "seeded vegetables", "herbs",
+                            "vegetable row crops (flower)", "vegetable row crops (stem)",
+                            "vegetable row crops (leafy)"}
+    vegetable_categories |= root_underground_categories | seeded_vegetable_categories
 
     fruit_categories = {"melon fruit", "pome fruit", "stone fruit", "sub-tropical fruit",
                         "small fruit", "tropical fruit"}
+
+    plant_categories = {"oils", "sugars", "vegetables", "fruits", "grains", "beans", "nuts",
+                        "seeds"}
+    plant_categories |= vegetable_categories | fruit_categories
+
+    if "root/underground" in ret and ret.intersection(root_underground_categories):
+        ret.remove("root/underground")
+    if "seeded vegetables" in ret and ret.intersection(seeded_vegetable_categories):
+        ret.remove("seeded vegetables")
+    if "vegetables" in ret and ret.intersection(vegetable_categories):
+        ret.remove("vegetables")
     if "fruits" in ret and ret.intersection(fruit_categories):
         ret.remove("fruits")
+    if "plant" in ret and ret.intersection(plant_categories):
+        ret.remove("plant")
 
     if "animal feed" in ret:
         ret.clear()
