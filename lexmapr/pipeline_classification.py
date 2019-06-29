@@ -92,22 +92,31 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "meat" in ret and "clinical/research" in ret:
         ret.remove("meat")
 
-    animal_categories = {"human", "fish", "chicken", "turkey", "crustaceans", "pig", "cow", "avian",
-                         "companion animal", "shellfish", "mollusks (non-bi-valve)",
-                         "mollusks (bi-valve)", "aquatic animals", "other aquatic animals",
-                         "wild animal", "other poultry", "poultry", "pork", "beef", "other meat"}
+    mollusk_categories = {"mollusks (non-bi-valve)", "mollusks (bi-valve)"}
+    shellfish_categories = {"crustaceans", "mollusks"} | mollusk_categories
+    aquatic_animal_categories = {"fish", "other aquatic animals"} | shellfish_categories
+
+    poultry_categories = {"other poultry", "chicken", "turkey"}
+    avian_categories = {"game", "poultry"} | poultry_categories
+
+    animal_categories = {"human", "avian", "companion animal", "aquatic animals", "wild animal",
+                         "beef", "pork", "other meat", "cow", "pig", "other animal"}
+    animal_categories |= avian_categories | aquatic_animal_categories
+
+    if "mollusks" in ret and ret.intersection(mollusk_categories):
+        ret.remove("mollusks")
+    if "shellfish" in ret and ret.intersection(shellfish_categories):
+        ret.remove("shellfish")
+    if "aquatic animals" in ret and ret.intersection(aquatic_animal_categories):
+        ret.remove("aquatic animals")
+    if "poultry" in ret and ret.intersection(poultry_categories):
+        ret.remove("poultry")
+    if "avian" in ret and ret.intersection(avian_categories):
+        ret.remove("avian")
     if "animal" in ret and ret.intersection(animal_categories):
         ret.remove("animal")
     if "meat" in ret and ret.intersection(animal_categories):
         ret.remove("meat")
-
-    avian_categories = {"poultry", "other poultry", "chicken", "turkey", "game"}
-    if "avian" in ret and ret.intersection(avian_categories):
-        ret.remove("avian")
-
-    poultry_categories = {"other poultry", "chicken", "turkey"}
-    if "poultry" in ret and ret.intersection(poultry_categories):
-        ret.remove("poultry")
 
     environmental_categories = {"environmental-water", "environmental-farm",
                                 "environmental-restaurant", "environmental-store",
