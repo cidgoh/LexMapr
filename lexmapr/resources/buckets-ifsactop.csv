@@ -159,7 +159,6 @@ organism substance,UBERON_0000463,(Non-IFSAC) Clinical,,,,organism substance,UBE
 fungus,FOODON_03411261,Fungi,,,,fungus,FOODON_03411261,Fungi,,,,,
 nut producing plant,FOODON_03411213,Nut,,,,nut producing plant,FOODON_03411213,Nut,,,,,
 egg yolk,UBERON_0007378,Eggs,,,,egg yolk,UBERON_0007378,Eggs,,,,,
-cecum,NCIT_C43186,(Non-IFSAC) Anatomical Entity,,,,cecum,NCIT_C43186,(Non-IFSAC) Anatomical Entity,,,,,
 feces,ENVO_00002003,Clinical-Fecal,,,,feces,ENVO_00002003,Clinical-Fecal,,,,,
 fertilizer,CHEBI_33287,Clinical,,,,,,,,,,,
 dairy dessert food product,FOODON_00001800  ,Dairy,,,,,,,,,,,
