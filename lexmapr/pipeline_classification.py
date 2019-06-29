@@ -131,7 +131,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.add("beef")
 
     animal_categories = {"human", "fish", "chicken", "turkey", "crustaceans", "pig", "sheep", "cow",
-                         "avian", "companion animal", "shellfish", "non bi-valve mollusk",
+                         "avian", "companion animals", "shellfish", "non bi-valve mollusk",
                          "bi-valve mollusk", "aquatic animals", "other aquatic animals",
                          "wild animal", "other poultry"}
     if "animal" in ret and ret.intersection(animal_categories):
