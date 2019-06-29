@@ -147,7 +147,7 @@ CHEBI_15377,Environmental-Water,water,,,,,CHEBI_15377,Environmental-Water,water,
 PATO_0000047,Biological Sex,biological sex,,,,,PATO_0000047,Biological Sex,biological sex,,Biological Sex,(Non-IFSAC) Food Material,food material (vide food product type),,,,
 CHEBI_24431,Clinical/Research,chemical entity,,,,,CHEBI_24431,Clinical,chemical entity,,Clinical- Chemical Entity,,,,,,
 ENVO_00000070 ,Environmental-Factory/Production Facility/Abattoir,construction,,,,,ENVO_00000070 ,Environmental-Construction,construction,,Environmental - Construction,,,,,,
-ENVO_00002297,Clinical/Research,environmental feature,,,,,ENVO_00002297,Clinical-Anatomical,environmental feature,,Clinical- Environmental Feature,,,,,,
+ENVO_00002297,Environmental,environmental feature,,,,,ENVO_00002297,Clinical-Anatomical,environmental feature,,Clinical- Environmental Feature,,,,,,
 FOODON_00002147,FoodProduct-ByConsumerGroup,food product by consumer group,,,,,FOODON_00002147,FoodProduct-ByConsumerGroup,food product by consumer group,,Food Product - By Consumer Group,,,,,,
 NCBITaxon_9913,Cow,bos tuarus,,,,,,,,,,,,,,,
 UBERON_0001062,Clinical/Research,anatomical entity,,,,,UBERON_0001062,Clinical-Anatomical,anatomical entity,,Clinical-Anatomical Entity,,,,,,
@@ -208,3 +208,9 @@ FOODON_00001140,fruits
 FOODON_00001156,sub tropical fruit
 NCIT_C14201,Companion Animals
 FOODON_03414847,Companion Animals
+ENVO_01000159,clinical/research
+ENVO_01000549,clinical/research
+ENVO_01000009,clinical/research
+FOODON_00002403,food,stop un-matched foods from reaching environmental
+FOODON_03411564,food,stop un-matched foods from reaching environmental
+FOODON_00001002,food,stop un-matched foods from reaching environmental
