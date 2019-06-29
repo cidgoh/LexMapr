@@ -71,17 +71,17 @@ FOODON_03316257,Tropical Fruit,banana (food product),,,,,FOODON_03316257,Tropica
 FOODON_00002081,Tropical Fruit,papaya food product,,,,,FOODON_00002081,Tropical Fruit,papaya food product,,Tropical Fruit,,,,,,
 FOODON_00002020,Tropical Fruit,mango food product,,,,,FOODON_00002020,Tropical Fruit,mango food product,,Tropical Fruit,,,,,,
 FOODON_00002119,Tropical Fruit,pineapple food product,,,,,FOODON_00002119,Tropical Fruit,pineapple food product,,Tropical Fruit,,,,,,
-FOODON_00001625,Sub Tropical Fruit,avocado vegetable food product,,,,,FOODON_00001625,Sub Tropical Fruit,avocado vegetable food product,,Sub Tropical Fruit,,,,,,
-FOODON_00002071,Sub Tropical Fruit,orange food product,,,,,FOODON_00002071,Sub Tropical Fruit,orange food product,,Sub Tropical Fruit,,,,,,
-FOODON_00001929,Sub Tropical Fruit,grapefruit food product,,,,,FOODON_00001929,Sub Tropical Fruit,grapefruit food product,,Sub Tropical Fruit,,,,,,
-FOODON_00001995,Sub Tropical Fruit,lemon food product,,,,,FOODON_00001995,Sub Tropical Fruit,lemon food product,FOODON_00002099,Sub Tropical Fruit,,,,,,
-FOODON_03315108,Sub Tropical Fruit,tangerine,,,,,FOODON_03315108,Sub Tropical Fruit,tangerine,FOODON_00001709,Sub Tropical Fruit,,,,,,
-FOODON_00001990,Sub Tropical Fruit,kumquat food product,,,,,FOODON_00001990,Sub Tropical Fruit,kumquat food product,FOODON_00001185,Sub Tropical Fruit,,,,,,
-FOODON_00001803,Sub Tropical Fruit,date food product,,,,,FOODON_00001803,Sub Tropical Fruit,date food product,FOODON_00002303,Sub Tropical Fruit,,,,,,
-FOODON_00001851,Sub Tropical Fruit,fig food product,,,,,FOODON_00001851,Sub Tropical Fruit,fig food product,FOODON_03412114,Sub Tropical Fruit,,,,,,
-FOODON_00002006,Sub Tropical Fruit,lychee food product,,,,,FOODON_00002006,Sub Tropical Fruit,lychee food product,FOODON_03309997,Sub Tropical Fruit,,,,,,
-FOODON_03411447,Sub Tropical Fruit,persimmon plant (food source),,,,,FOODON_03411447,Sub Tropical Fruit,persimmon plant (food source),NCBITaxon_9823 ,Sub Tropical Fruit,,,,,,
-FOODON_03411162,Sub Tropical Fruit,pomegranate plant (food source),,,,,FOODON_03411162,Sub Tropical Fruit,pomegranate plant (food source),FOODON_03306867,Sub Tropical Fruit,,,,,,
+FOODON_00001625,Sub-tropical Fruit,avocado vegetable food product,,,,,FOODON_00001625,Sub-tropical Fruit,avocado vegetable food product,,Sub-tropical Fruit,,,,,,
+FOODON_00002071,Sub-tropical Fruit,orange food product,,,,,FOODON_00002071,Sub-tropical Fruit,orange food product,,Sub-tropical Fruit,,,,,,
+FOODON_00001929,Sub-tropical Fruit,grapefruit food product,,,,,FOODON_00001929,Sub-tropical Fruit,grapefruit food product,,Sub-tropical Fruit,,,,,,
+FOODON_00001995,Sub-tropical Fruit,lemon food product,,,,,FOODON_00001995,Sub-tropical Fruit,lemon food product,FOODON_00002099,Sub-tropical Fruit,,,,,,
+FOODON_03315108,Sub-tropical Fruit,tangerine,,,,,FOODON_03315108,Sub-tropical Fruit,tangerine,FOODON_00001709,Sub-tropical Fruit,,,,,,
+FOODON_00001990,Sub-tropical Fruit,kumquat food product,,,,,FOODON_00001990,Sub-tropical Fruit,kumquat food product,FOODON_00001185,Sub-tropical Fruit,,,,,,
+FOODON_00001803,Sub-tropical Fruit,date food product,,,,,FOODON_00001803,Sub-tropical Fruit,date food product,FOODON_00002303,Sub-tropical Fruit,,,,,,
+FOODON_00001851,Sub-tropical Fruit,fig food product,,,,,FOODON_00001851,Sub-tropical Fruit,fig food product,FOODON_03412114,Sub-tropical Fruit,,,,,,
+FOODON_00002006,Sub-tropical Fruit,lychee food product,,,,,FOODON_00002006,Sub-tropical Fruit,lychee food product,FOODON_03309997,Sub-tropical Fruit,,,,,,
+FOODON_03411447,Sub-tropical Fruit,persimmon plant (food source),,,,,FOODON_03411447,Sub-tropical Fruit,persimmon plant (food source),NCBITaxon_9823 ,Sub-tropical Fruit,,,,,,
+FOODON_03411162,Sub-tropical Fruit,pomegranate plant (food source),,,,,FOODON_03411162,Sub-tropical Fruit,pomegranate plant (food source),FOODON_03306867,Sub-tropical Fruit,,,,,,
 FOODON_03315395,Grains,flour product,,,,,FOODON_03315395,Flour-based Products ,flour product,FOODON_00001175 ,Flour-based Products ,,,,,,
 FOODON_00002153,Plant Seeds,plant seed vegetable food product,,,,,FOODON_00002153,Plant Seeds,plant seed vegetable food product,,Plant Seeds,,,,,,
 FOODON_00001709,Grains,cereal food product,,,,,FOODON_00001709,Grains,cereal food product,,Grains,,,,,,
@@ -205,7 +205,7 @@ uberon_0001913,dairy
 foodon_00001040,chicken
 FOODON_00001666,Vegetable Row Crops Flower
 FOODON_00001140,fruits
-FOODON_00001156,sub tropical fruit
+FOODON_00001156,Sub-tropical Fruit
 NCIT_C14201,Companion Animals
 FOODON_03414847,Companion Animals
 ENVO_01000159,clinical/research
