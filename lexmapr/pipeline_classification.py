@@ -44,8 +44,6 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
 
     if "equipment" in ret or "structure" in ret:
         ret.add("environmental")
-    if "poultry" in ret and ("other poultry" in ret or "chicken" in ret):
-        ret.remove("poultry")
     if "dairy" in ret and "cow" in ret:
         ret.remove("cow")
     if "beef" in ret and "dairy" in ret and "milk" in sample:
@@ -54,12 +52,6 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("beef")
     if ("shellfish" in ret or "siluriformes" in ret) and "fish" in ret:
         ret.remove("fish")
-    if "poultry" in ret and "chicken" in sample:
-        ret.remove("poultry")
-        ret.add("chicken")
-    if "environmental" in ret and ("environmental-water" in ret
-                                   or "environmental-factory/production facility/abattoir" in ret):
-        ret.remove("environmental")
     if "environmental" in ret and ("feces" in sample or "fecal" in sample or "stool" in sample):
         ret.remove("environmental")
         ret.add("clinical/research")  # "clinical-fecal"
@@ -71,22 +63,6 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "animal" in ret and ("homo sapiens" in sample or "human" in sample):
         ret.remove("organism")
         ret.add("human")
-
-    if ("other poultry" in ret or "game" in ret ) and "avian" in ret:
-        ret.remove("avian")
-    if "poultry" in ret and "avian" in ret:
-        ret.remove("poultry")
-    if ("human" in ret or "cattle" in ret or "crustaceans" in ret or "pig" in ret or "sheep" in ret
-        or "calf" in ret or "fish" in ret or "chicken" in ret or "beef" in ret or "pork" in ret
-        or "turkey" in ret or "calf" in ret or "cow" in ret or "pig" in ret):
-        if "organism" in ret:
-            ret.remove("organism")
-        if "poultry" in ret:
-            ret.remove("poultry")
-        if "other poultry" in ret:
-            ret.remove("other poultry")
-        if "avian" in ret:
-            ret.remove("avian")
 
     if "clinical/research" in ret and "environmental" in ret and "biological" in sample:
         ret.remove("environmental")
@@ -130,6 +106,14 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("animal")
     if "meats" in ret and ret.intersection(animal_categories):
         ret.remove("meats")
+
+    avian_categories = {"poultry", "other poultry", "chicken", "turkey", "game"}
+    if "avian" in ret and ret.intersection(avian_categories):
+        ret.remove("avian")
+
+    poultry_categories = {"other poultry", "chicken", "turkey"}
+    if "poultry" in ret and ret.intersection(poultry_categories):
+        ret.remove("poultry")
 
     environmental_categories = {"environmental-water", "environmental-farm",
                                 "environmental-restaurant", "environmental-store",
