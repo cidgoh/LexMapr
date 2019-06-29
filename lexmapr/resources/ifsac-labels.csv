@@ -31,9 +31,9 @@ FOODON_03411252,Other Aquatic Animals,frog (food source),,,,,FOODON_03411252,Oth
 FOODON_00001041,Beef,beef food product,,,,,FOODON_00001041,Beef,beef food product,,Beef,,,,,,
 FOODON_00001038,Pork,pork meat food product,,,,,FOODON_00001038,Pork,pork meat food product,,Pork,,,,,,
 FOODON_00002236,other meat,sheep meat food product,,,,,FOODON_00002236,other meat,sheep meat food product,Mutton,other meat,,,,,,
-FOODON_03411328,Other Animals,goat (food source),,,,,FOODON_03411328,other meat,goat (food source),Chevon,other meat,,,,,,
+FOODON_03411328,Other Animal,goat (food source),,,,,FOODON_03411328,other meat,goat (food source),Chevon,other meat,,,,,,
 FOODON_00001992 ,other meat,lamb meat food product,,,,,FOODON_00001992 ,other meat,lamb meat food product,"Lamb Chops, Rack of Lamb",other meat,,,,,,
-FOODON_03411229,Other Animals,horse (food source),,,,,FOODON_03411229,other meat,horse (food source),Horse ,other meat,,,,,,
+FOODON_03411229,Other Animal,horse (food source),,,,,FOODON_03411229,other meat,horse (food source),Horse ,other meat,,,,,,
 FOODON_03411457,Chicken,chicken (food source),,,,,FOODON_03411457,Chicken,chicken (food source),,Chicken,,,,,,
 FOODON_00001286,Turkey,turkey meat food product,,,,,FOODON_00001286,Turkey,turkey meat food product,,Turkey,,,,,,
 FOODON_03411316,Other Poultry,duck (food source),,,,,FOODON_03411316,Other Poultry,duck (food source),Ducks,Other Poultry,,,,,,
@@ -83,7 +83,7 @@ FOODON_00002006,Sub-tropical Fruit,lychee food product,,,,,FOODON_00002006,Sub-t
 FOODON_03411447,Sub-tropical Fruit,persimmon plant (food source),,,,,FOODON_03411447,Sub-tropical Fruit,persimmon plant (food source),NCBITaxon_9823 ,Sub-tropical Fruit,,,,,,
 FOODON_03411162,Sub-tropical Fruit,pomegranate plant (food source),,,,,FOODON_03411162,Sub-tropical Fruit,pomegranate plant (food source),FOODON_03306867,Sub-tropical Fruit,,,,,,
 FOODON_03315395,Grains,flour product,,,,,FOODON_03315395,Flour-based Products ,flour product,FOODON_00001175 ,Flour-based Products ,,,,,,
-FOODON_00002153,Plant Seeds,plant seed vegetable food product,,,,,FOODON_00002153,Plant Seeds,plant seed vegetable food product,,Plant Seeds,,,,,,
+FOODON_00002153,Seeds,plant seed vegetable food product,,,,,FOODON_00002153,Seeds,plant seed vegetable food product,,Seeds,,,,,,
 FOODON_00001709,Grains,cereal food product,,,,,FOODON_00001709,Grains,cereal food product,,Grains,,,,,,
 FOODON_00001175 ,vegetable row crops (flower),plant stem food product,,,,,FOODON_00001175 ,vegetable row crops (flower),plant stem food product,,vegetable row crops (flower),,,,,,
 FOODON_00002099,Nuts,peanut food product,,,,,FOODON_00002099,Nuts,peanut food product,,Nuts,,,,,,
@@ -105,7 +105,7 @@ FOODON_03411136,Pig,swine (food source),,,,,FOODON_03411136,Pork,swine (food sou
 FOODON_00001134,Beef,bovine meat food product,,,,,FOODON_00001134,Beef,bovine meat food product,NCBITaxon_9823 ,Beef,,,,,,
 FOODON_00001132,Pork,porcine meat food product,,,,,FOODON_00001132,Pork,porcine meat food product,FOODON_03309997,Pork,,,,,,
 NCBITaxon_9031,Chicken,gallus gallus,,,,,NCBITaxon_9031,Chicken,gallus gallus,,Chicken,,,,,,
-FOODON_03411183,Other Animals,sheep (food source),,,,,FOODON_03411183,other meat,sheep (food source),,other meat,,,,,,
+FOODON_03411183,Other Animal,sheep (food source),,,,,FOODON_03411183,other meat,sheep (food source),,other meat,,,,,,
 FOODON_03420113,Dairy,milk or milk component,,,,,FOODON_03420113,Dairy,milk or milk component,,Dairy,,,,,,
 FOODON_00001093 ,Grains,cereal grain food product,,,,,FOODON_00001093 ,Grains,cereal grain food product,,Grains,,,,,,
 FOODON_03304497,Seeds,edible seed (food product),,,,,FOODON_03304497,Seeds,edible seed (food product),,Seeds,,,,,,
@@ -120,13 +120,13 @@ FOODON_00002310,root/underground (other),taro food product,,,,,FOODON_00002310,r
 FOODON_00002150,root/underground,plant root vegetable food product,,,,,FOODON_00002150,root/underground,plant root vegetable food product,,root/underground,,,,,,
 FOODON_03317076,root/underground (roots),root vegetable product,,,,,FOODON_03317076,Root Vegetables,root vegetable product,,Root Vegetables,,,,,,
 FOODON_00001771,Dairy,cow milk based food product,,,,,FOODON_00001771,Dairy,cow milk based food product,,Dairy,,,,,,
-FOODON_03301484,Fluid Milk,skim milk (food product),,,,,FOODON_03301484,Fluid milk,skim milk (food product),,Fluid milk,,,,,,
-FOODON_03306581,Fluid Milk,whole milk (food product),,,,,FOODON_03306581,Fluid milk,whole milk (food product),,Fluid milk,,,,,,
+FOODON_03301484,Dairy,skim milk (food product),,,,,FOODON_03301484,Dairy,skim milk (food product),,Dairy,,,,,,
+FOODON_03306581,Dairy,whole milk (food product),,,,,FOODON_03306581,Dairy,whole milk (food product),,Dairy,,,,,,
 FOODON_00002252,Dairy,soft cheese food product,,,,,FOODON_00002252,Solid/Semisolid Dairy Products,soft cheese food product,,Solid/semisolid dairy products,,Clinical-Chemical Entity,,,,
 FOODON_00001945,Dairy,hard cheese food product,,,,,FOODON_00001945,Solid/Semisolid Dairy Products,hard cheese food product,,Solid/semisolid dairy products,,,,,,
-FOODON_00002200,Wild Animals,amphibian or reptile food product,,Other Animal-Wild Animal,,,FOODON_00002200,Other Animal-Wild Animal,amphibian or reptile food product,,Other Animal ,,,,,,
+FOODON_00002200,Wild Animal,amphibian or reptile food product,,Other Animal-Wild Animal,,,FOODON_00002200,Other Animal-Wild Animal,amphibian or reptile food product,,Other Animal ,,,,,,
 FOODON_00001678,Cow,calf meat food product,,,,,FOODON_00001678,Calf,calf meat food product,,Calf,,,,,,
-FOODON_03411625 ,Wild Animals,reptile (food source),,Other Animal-Wild Animal,,,FOODON_03411625 ,Other Animal-Wild Animal,reptile (food source),,Other Animal ,,,,,,
+FOODON_03411625 ,Wild Animal,reptile (food source),,Other Animal-Wild Animal,,,FOODON_03411625 ,Other Animal-Wild Animal,reptile (food source),,Other Animal ,,,,,,
 ENVO_00002011,Environmental-Water,fresh water,,,,,ENVO_00002011,Environmental-Water,fresh water,,Environmental-Water,,,,,,
 CHEBI_15377,Environmental-Water,water,,,,,CHEBI_15377,Environmental-Water,water,,Environmental-Water,,,,,,
 ENVO_00000078 ,Environmental-Farm,farm,,,,,ENVO_00000078 ,Environmental-Farm,farm,,Environmental-Farm,,,,,,
@@ -167,17 +167,17 @@ FOODON_00001800  ,Dairy,dairy dessert food product,,,,,,,,,,,,,,,
 ENVO_02000020,Clinical/Research,blood,,,,,,,,,,Pork Meat case,,,,,
 FOODON_00001057,Fruits,plant fruit food product,,,,,,,,,,,,,,,
 ENVO_01000685,Environmental-Water,,,,,,,,,,,,,,,,
-NCBITaxon_9940,Sheep,ovis aries,,FOODON_03411229,Companion Animals,horse,,,,,,,,,,,
+NCBITaxon_9940,Sheep,ovis aries,,FOODON_03411229,Companion Animal,horse,,,,,,,,,,,
 ENVO_01000604,Environmental-Vehicle,vehicle,,,,,,,,,,,,,,,
 ENVO_02000047,Animal Feed,animal feed,,,,,,,,,,,,,,,
 FOODON_00001795,Seeded Vegetables (Vine-Grown),cucumber vegetable food product,,,,,,,,,,,,,,,
-NCBITaxon_112137,Other Animals,musculus,,,,,,,,,,,,,,,
-NCBITaxon_9615,Companion Animals,Canis lupus familiaris,dog,,:,,,,,,,,,,,,
-NCBITaxon_9685,Companion Animals,Felis catus,,,horse:,,,,,,,,,,,,
-NCBITaxon_9893,Wild Animals,Girrafa,,,,,,,,,,,,,,,
+NCBITaxon_112137,Other Animal,musculus,,,,,,,,,,,,,,,
+NCBITaxon_9615,Companion Animal,Canis lupus familiaris,dog,,:,,,,,,,,,,,,
+NCBITaxon_9685,Companion Animal,Felis catus,,,horse:,,,,,,,,,,,,
+NCBITaxon_9893,Wild Animal,Girrafa,,,,,,,,,,,,,,,
 NCIT_C17627,Clinical/Research,swab,,,,,,,,,,,,,,,
 NCBITaxon_9102,Turkey,meleagris,,,,,,,,,,,,,,,
-NCBITaxon_112137,Other Animals,musculus,,,,,,,,,,,,,,,
+NCBITaxon_112137,Other Animal,musculus,,,,,,,,,,,,,,,
 FOODON_00002232,Seeds,sesame food product,,,,,,,,,,,,,,,
 ENVO_00002006 ,Environmental-Water,liquid water,,,,,,,,,,,,,,,
 GENEPIO_0001732,Environmental,environmental (swab or sampling),,,,,,,,,,,,,,,
@@ -190,7 +190,7 @@ FOODON_03316042,Multi-Ingredient,salad,,,,,,,,,,,,,,,
 FOODON_03307643,Small Fruit,strawberry pie (food product),,,,,,,,,,,,,,,
 FOODON_03308735,Multi-Ingredient,tuna salad (food product),,,,,,,,,,,,,,,
 FOODON_00002111,Seeded Vegetables (Solanaceous),pepper vegetable food product (green or red),,,,,,,,,,,,,,,
-FOODON_03411624,Wild Animals,amphibian,,,,,,,,,,,,,,,
+FOODON_03411624,Wild Animal,amphibian,,,,,,,,,,,,,,,
 FOODON_03412113,mollusks (bi-valve)
 NCBITaxon_7898,Fish
 FOODON_00001180,Multi-Ingredient
@@ -206,8 +206,8 @@ foodon_00001040,chicken
 FOODON_00001666,vegetable row crops (flower)
 FOODON_00001140,fruits
 FOODON_00001156,Sub-tropical Fruit
-NCIT_C14201,Companion Animals
-FOODON_03414847,Companion Animals
+NCIT_C14201,Companion Animal
+FOODON_03414847,Companion Animal
 ENVO_01000159,clinical/research
 ENVO_01000549,clinical/research
 ENVO_01000009,clinical/research

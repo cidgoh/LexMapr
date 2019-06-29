@@ -75,15 +75,15 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "cow" in ret and "meat" in ret:
         ret.remove("cow")
         ret.add("beef")
-    if "other animals" in ret and "meat" in ret:
-        ret.remove("other animals")
+    if "other animal" in ret and "meat" in ret:
+        ret.remove("other animal")
         ret.add("other meat")
 
     if "beef" in ret and "cow" in ret:
         ret.remove("beef")
     if "pork" in ret and "pig" in ret:
         ret.remove("pork")
-    if "other meat" in ret and "other animals" in ret:
+    if "other meat" in ret and "other animal" in ret:
         ret.remove("other meat")
 
     if "pork" in ret and "clinical/research" in ret:
@@ -94,12 +94,12 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.add("cow")
     if "other meat" in ret and "clinical/research" in ret:
         ret.remove("other meat")
-        ret.add("other animals")
+        ret.add("other animal")
     if "meat" in ret and "clinical/research" in ret:
         ret.remove("meat")
 
     animal_categories = {"human", "fish", "chicken", "turkey", "crustaceans", "pig", "sheep", "cow",
-                         "avian", "companion animals", "shellfish", "mollusks (non-bi-valve)",
+                         "avian", "companion animal", "shellfish", "mollusks (non-bi-valve)",
                          "mollusks (bi-valve)", "aquatic animals", "other aquatic animals",
                          "wild animal", "other poultry", "poultry", "pork", "beef", "other meat"}
     if "animal" in ret and ret.intersection(animal_categories):
