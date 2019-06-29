@@ -50,19 +50,13 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("beef")
     if "beef" in ret and ("cow" in ret or "calf" in ret):
         ret.remove("beef")
-    if ("shellfish" in ret or "siluriformes" in ret) and "fish" in ret:
+    if "shellfish" in ret and "fish" in ret:
         ret.remove("fish")
     if "environmental" in ret and ("feces" in sample or "fecal" in sample or "stool" in sample):
         ret.remove("environmental")
         ret.add("clinical/research")  # "clinical-fecal"
     if "environmental-animal housing" in ret and "finished" in sample:
         ret.remove("environmental-animal housing")
-
-    if "herbs" in ret and "organism" in ret:
-        ret.remove("organism")
-    if "animal" in ret and ("homo sapiens" in sample or "human" in sample):
-        ret.remove("organism")
-        ret.add("human")
 
     if "clinical/research" in ret and "environmental" in ret and "biological" in sample:
         ret.remove("environmental")
@@ -98,8 +92,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "meat" in ret and "clinical/research" in ret:
         ret.remove("meat")
 
-    animal_categories = {"human", "fish", "chicken", "turkey", "crustaceans", "pig", "sheep", "cow",
-                         "avian", "companion animal", "shellfish", "mollusks (non-bi-valve)",
+    animal_categories = {"human", "fish", "chicken", "turkey", "crustaceans", "pig", "cow", "avian",
+                         "companion animal", "shellfish", "mollusks (non-bi-valve)",
                          "mollusks (bi-valve)", "aquatic animals", "other aquatic animals",
                          "wild animal", "other poultry", "poultry", "pork", "beef", "other meat"}
     if "animal" in ret and ret.intersection(animal_categories):
@@ -151,8 +145,6 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
 
     if "food" in ret:
         ret.remove("food")
-    if "organism" in ret:
-        ret.remove("organism")
 
     return list(ret)
 
