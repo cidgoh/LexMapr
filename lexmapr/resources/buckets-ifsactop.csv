@@ -219,3 +219,5 @@ vegetable-producing plant,FOODON_03411579
 spice or flavor-producing plant,FOODON_03411179
 leaf,PO_0025034
 plant feed,ENVO_02000055
+anatomical wall,UBERON_0000060
+anatomical junction,UBERON_0007651

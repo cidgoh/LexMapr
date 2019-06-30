@@ -92,8 +92,6 @@ def get_resource_id(resource_label, lookup_table):
         return lookup_table["resource_bracketed_permutation_terms"][resource_label]
     elif resource_label in lookup_table["processes"]:
         return lookup_table["processes"][resource_label]
-    elif resource_label in lookup_table["qualities"]:
-        return lookup_table["qualities"][resource_label]
     else:
         return ""
 
@@ -343,7 +341,6 @@ def create_lookup_table_skeleton():
             "non_english_words": {},
             "spelling_mistakes": {},
             "processes": {},
-            "qualities": {},
             "collocations": {},
             "inflection_exceptions": {},
             "stop_words": {},
@@ -380,8 +377,6 @@ def add_predefined_resources_to_lookup_table(lookup_table):
     lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
     # Terms corresponding to candidate processes
     lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
-    # Terms corresponding to semantic taggings
-    lookup_table["qualities"] = get_resource_dict("SemLex.csv")
     # Terms corresponding to wikipedia collocations
     lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
     # Terms excluded from inflection treatment
@@ -910,22 +905,12 @@ def find_component_matches(cleaned_sample, lookup_table, status_addendum):
                         component_match = find_component_match(joined_permutation, lookup_table,
                                                                status_addendum,
                                                                additional_processing=True)
-                elif i > 1:
-                    component_match = find_component_match(joined_permutation, lookup_table,
-                                                           status_addendum, consider_qualities=True)
-                    if not component_match:
-                        component_match = find_component_match(joined_permutation, lookup_table,
-                                                               status_addendum,
-                                                               consider_qualities=True,
-                                                               additional_processing=True)
                 else:
                     component_match = find_component_match(joined_permutation, lookup_table,
-                                                           status_addendum, consider_qualities=True,
-                                                           consider_processes=True)
+                                                           status_addendum, consider_processes=True)
                     if not component_match:
                         component_match = find_component_match(joined_permutation, lookup_table,
                                                                status_addendum,
-                                                               consider_qualities=True,
                                                                consider_processes=True,
                                                                additional_processing=True)
 
@@ -938,8 +923,8 @@ def find_component_matches(cleaned_sample, lookup_table, status_addendum):
     return ret
 
 
-def find_component_match(component, lookup_table, status_addendum, consider_qualities=False,
-                         consider_processes=False, additional_processing=False):
+def find_component_match(component, lookup_table, status_addendum, consider_processes=False,
+                         additional_processing=False):
     """Attempt to match component with a term from lookup_table.
 
     Modifies ``status_addendum``.
@@ -949,8 +934,6 @@ def find_component_match(component, lookup_table, status_addendum, consider_qual
         resources needed to find a component match
     :param list[str] status_addendum: Modifications made to sample in
         pre-processing
-    :param bool consider_qualities: Attempt to match component to
-        qualities
     :param bool consider_processes: Attempt to match component to
         processes
     :param bool additional_processing: Attempt abbreviation, acronym,
@@ -998,13 +981,6 @@ def find_component_match(component, lookup_table, status_addendum, consider_qual
             if component_with_suffix in lookup_table["resource_terms"]:
                 status_addendum.append("Suffix Addition- "+suffix+" to the Input")
                 return component_with_suffix
-
-        if consider_qualities:
-            # A full-term component match using semantic resources
-            # exists.
-            if component in lookup_table["qualities"]:
-                status_addendum.append("Using Semantic Tagging Resources")
-                return component
 
         if consider_processes:
             # A full-term 1-gram component match using candidate

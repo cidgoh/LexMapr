@@ -624,10 +624,9 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo.json")
 
         expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
-                         "processes", "qualities", "collocations", "inflection_exceptions",
-                         "stop_words", "suffixes", "parents", "resource_terms_id_based",
-                         "resource_terms", "resource_permutation_terms",
-                         "resource_bracketed_permutation_terms",
+                         "processes", "collocations", "inflection_exceptions", "stop_words",
+                         "suffixes", "parents", "resource_terms_id_based", "resource_terms",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
                          "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
                          "ifsac_default"]
 
@@ -638,10 +637,9 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_and_pizza.json")
 
         expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
-                         "processes", "qualities", "collocations", "inflection_exceptions",
-                         "stop_words", "suffixes", "parents", "resource_terms_id_based",
-                         "resource_terms", "resource_permutation_terms",
-                         "resource_bracketed_permutation_terms",
+                         "processes", "collocations", "inflection_exceptions", "stop_words",
+                         "suffixes", "parents", "resource_terms_id_based", "resource_terms",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
                          "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
                          "ifsac_default"]
 
@@ -1049,10 +1047,9 @@ class TestClassification(unittest.TestCase):
         classification_table = self.get_classification_lookup_table()
 
         expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
-                         "processes", "qualities", "collocations", "inflection_exceptions",
-                         "stop_words", "suffixes", "parents", "resource_terms_id_based",
-                         "resource_terms", "resource_permutation_terms",
-                         "resource_bracketed_permutation_terms",
+                         "processes", "collocations", "inflection_exceptions", "stop_words",
+                         "suffixes", "parents", "resource_terms_id_based", "resource_terms",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
                          "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
                          "ifsac_default"]
 

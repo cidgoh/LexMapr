@@ -224,3 +224,5 @@ FOODON_03411579,vegetables
 FOODON_03411179,herbs
 PO_0025034,herbs
 ENVO_02000055,Environmental-Farm
+UBERON_0000060,environmental,temporary fix to prevent "wall" from matching clinical/research
+UBERON_0007651,environmental,temporary fix to prevent "junction" from matching clinical/research
