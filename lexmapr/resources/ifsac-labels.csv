@@ -217,3 +217,8 @@ NCBITaxon_33090,Plant
 NCBITaxon_9606,Human
 NCBITaxon_4751,Fungi
 CHEBI_60004,multi-ingredient,this one is a bit risky but it seems to work well
+FOODON_00002140,vegetable row crops (flower)
+FOODON_03411347,plant
+FOODON_03411140,fruits
+FOODON_03411579,vegetables
+FOODON_03411179,herbs
