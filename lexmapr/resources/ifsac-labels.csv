@@ -90,7 +90,7 @@ FOODON_00002099,Nuts,peanut food product,,,,,FOODON_00002099,Nuts,peanut food pr
 FOODON_00001709,Grains,cereal food product,,,,,FOODON_00001709,Grains,cereal food product,,Grains,,,,,,
 FOODON_00001185,Grains,rice food product,,,,,FOODON_00001185,Grains,rice food product,,Grains,,,,,,
 FOODON_00001132,Pork,swine meat food product,,,,,FOODON_00001132,Pork,swine meat food product,,Pork,,,,,,
-FOODON_03412114,Crustaceans,snail food source,,,,,FOODON_03412114,Crustaceans,snail food source,,Crustaceans,,,,,,
+FOODON_03412114,mollusks (non-bi-valve),snail food source,,,,,FOODON_03412114,Crustaceans,snail food source,,Crustaceans,,,,,,
 FOODON_03306867,Nuts,peanut butter,,,,,FOODON_03306867,Nuts,peanut butter,,Nuts,,,,,,
 FOODON_03414374,Cow,bovine (food source),,,,,FOODON_03414374,Beef,bovine (food source),,Beef,,,,,,
 FOODON_03411201,Cow,cow (food source),,,,,FOODON_03411201,Beef,cow (food source),,Beef,,,,,,
@@ -216,3 +216,4 @@ NCBITaxon_33213,Animal
 NCBITaxon_33090,Plant
 NCBITaxon_9606,Human
 NCBITaxon_4751,Fungi
+CHEBI_60004,multi-ingredient,this one is a bit risky but it seems to work well
