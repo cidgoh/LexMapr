@@ -1,5 +1,5 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
 small_simple1	Chicken Breast	chicken breast	['chicken breast:candidateterm_foodon_1131']	Full Term Match	['A Direct Match']
 small_simple2	chicken manure	chicken manure	['chicken manure:candidateterm_foodon_1137']	Full Term Match	['A Direct Match']
-small_simple3	Canned. Corn's	canned corn	['corn (canned):foodon_03302665']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
+small_simple3	Canned. Corn's	canned corn	['canned:candidateterm_foodon_1655']	Component Match	[]
 small_simple4	banana. Leaf's	banana leaf	['banana leaf:foodon_candidateterm_wikipedia_5']	Full Term Match	['New Candidadte Terms -validated with Wikipedia Based Collocation Resource']

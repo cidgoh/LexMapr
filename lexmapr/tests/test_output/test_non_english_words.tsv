@@ -1,6 +1,6 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
 small_simple1	Breast	breast	['breast:candidateterm_foodon_1007']	Full Term Match	['A Direct Match']
-small_simple2	Baked Potato	baked potato	['potato (baked):foodon_03302196']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
+small_simple2	Baked Potato	baked potato	['baked:candidateterm_foodon_1647']	Component Match	[]
 small_simple3	aachar	indian pickle	['indian:ancestro_0487', 'pickle:candidateterm_foodon_1073']	Component Match	['Non English Language Words Treatment']
-small_simple4	aam aachar	mango indian pickle	['indian:ancestro_0487', 'mango food product:foodon_00002020', 'pickle:candidateterm_foodon_1073']	Component Match	['Non English Language Words Treatment', 'Suffix Addition- food product to the Input']
-small_simple5	aam apple	mango apple	['apple:foodon_03301710', 'mango food product:foodon_00002020']	Component Match	['Non English Language Words Treatment', 'Suffix Addition- food product to the Input']
+small_simple4	aam aachar	mango indian pickle	['indian:ancestro_0487', 'mango product:candidateterm_foodon_577', 'pickle:candidateterm_foodon_1073']	Component Match	['Non English Language Words Treatment', 'Suffix Addition- product to the Input']
+small_simple5	aam apple	mango apple	['mango product:candidateterm_foodon_577']	Component Match	['Non English Language Words Treatment', 'Suffix Addition- product to the Input']

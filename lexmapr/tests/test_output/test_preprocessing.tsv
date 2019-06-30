@@ -1,7 +1,7 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	Raw Chicken Breast	raw chicken breast	['chicken breast (raw):foodon_03303012']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
-small_simple2	Baked. Potato's	baked potato	['potato (baked):foodon_03302196']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
-small_simple3	Canned Field Corn's	canned field corn	['field corn (canned):foodon_03316777']	Full Term Match	['Permutation of Tokens in Bracketed Resource Term']
-small_simple4	Frozen Yogurt	frozen yogurt	['frozen yogurt:foodon_03307445']	Full Term Match	['A Direct Match']
-small_simple5	Apple Pie	apple pie	['apple pie:foodon_00002475']	Full Term Match	['A Direct Match']
-small_simple6	cow's	cow	['dairy cow:foodon_03411201']	Component Match	['Synonym Usage']
+small_simple1	Raw Chicken Breast	raw chicken breast	['chicken breast:candidateterm_foodon_1131', 'raw:quality-food']	Component Match	['Using Semantic Tagging Resources']
+small_simple2	Baked. Potato's	baked potato	['baked:candidateterm_foodon_1647']	Component Match	[]
+small_simple3	Canned Field Corn's	canned field corn	['canned:candidateterm_foodon_1655', 'field:envo_01000352']	Component Match	[]
+small_simple4	Frozen Yogurt	frozen yogurt	['frozen:pato_0001985']	Component Match	[]
+small_simple5	Apple Pie	apple pie	['pie:candidateterm_foodon_1074']	Component Match	[]
+small_simple6	cow's	cow	[]	No Match	[]
