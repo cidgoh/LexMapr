@@ -122,9 +122,9 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
                                 "environmental-restaurant", "environmental-store",
                                 "environmental-abbatoir", "environmental-warehouse",
                                 "environmental-factory", "environmental-researchfacility",
-                                "environmental-pasture",
+                                "environmental-pasture", "environmental-animal housing",
                                 "environmental-factory/production facility/abattoir",
-                                "environmental-vehicle"}
+                                "environmental-vehicle", "environmental-construction"}
     if "environmental" in ret and ret.intersection(environmental_categories):
         ret.remove("environmental")
 
