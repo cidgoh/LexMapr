@@ -1,5 +1,5 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	Svecia	svecia
+small_simple1	Svecia	svecia	[]	No Match	[]
 small_simple2	Cornflakes	cornflakes	['corn flakes:foodon_03302904']	Component Match	['Synonym Usage']
 small_simple3	Baked	baked	['baked:candidateterm_foodon_1647']	Full Term Match	['A Direct Match']
 small_simple4	Svecia Potato	svecia potato	['potato food product:foodon_00001148']	Component Match	['Suffix Addition- food product to the Input']

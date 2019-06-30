@@ -344,27 +344,29 @@ def run(args):
 
             final_status = set(status_addendum)
 
-            # In case it is for componet matching and we have at least one component matched
-            if (len(partial_matches) > 0):
-                if args.format == 'full':
-                    fw.write('\t' + str(sorted(list(retainedSet))) + '\t' + status + '\t'
-                             + str(sorted(list(final_status))))
+            if not partial_matches:
+                status = "No Match"
+                final_status = set()
 
-                if args.format != 'full':
-                    fw.write("\t" + str(sorted(list(retainedSet))))
+            if args.format == 'full':
+                fw.write('\t' + str(sorted(list(retainedSet))) + '\t' + status + '\t'
+                         + str(sorted(list(final_status))))
 
-                if args.bucket:
-                    matched_terms_with_ids = partial_matches_with_ids
-                    classification_result = classify_sample(sample, matched_terms_with_ids,
-                                                            lookup_table,
-                                                            classification_lookup_table)
-                    if args.format == "full":
-                        fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"])
-                                 + "\t" + str(classification_result["lexmapr_final_buckets"]) + "\t"
-                                 + str(classification_result["ifsac_final_buckets"]) + "\t"
-                                 + str(classification_result["ifsac_final_labels"]))
-                    else:
-                        fw.write("\t" + str(classification_result["ifsac_final_labels"]))
+            if args.format != 'full':
+                fw.write("\t" + str(sorted(list(retainedSet))))
+
+            if args.bucket:
+                matched_terms_with_ids = partial_matches_with_ids
+                classification_result = classify_sample(sample, matched_terms_with_ids,
+                                                        lookup_table,
+                                                        classification_lookup_table)
+                if args.format == "full":
+                    fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"])
+                             + "\t" + str(classification_result["lexmapr_final_buckets"]) + "\t"
+                             + str(classification_result["ifsac_final_buckets"]) + "\t"
+                             + str(classification_result["ifsac_final_labels"]))
+                else:
+                    fw.write("\t" + str(classification_result["ifsac_final_labels"]))
 
     fw.write('\n')
     #Output files closed
