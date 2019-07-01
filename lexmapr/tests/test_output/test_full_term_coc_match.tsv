@@ -1,0 +1,7 @@
+Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
+small_simple1	Baked Potato	baked potato	['baked:candidateterm_foodon_1647']	Component Match	[]
+small_simple2	Chicken Pie	chicken pie	['pie:candidateterm_foodon_1074']	Component Match	[]
+small_simple3	ameiurus catus	ameiurus catus	['ameiurus catus:ncbitaxon_66911']	Full Term Match	['A Direct Match']
+small_simple4	Baked Potatoes	baked potato	['baked:candidateterm_foodon_1647']	Component Match	['Inflection (Plural) Treatment']
+small_simple5	Chicken Pie's	chicken pie	['pie:candidateterm_foodon_1074']	Component Match	[]
+small_simple6	ameiurus. catus	ameiurus catus	['ameiurus catus:ncbitaxon_66911']	Full Term Match	['A Direct Match with Cleaned Sample']

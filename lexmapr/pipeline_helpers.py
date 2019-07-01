@@ -9,7 +9,6 @@ from dateutil.parser import parse
 import inflection
 from nltk.tokenize.moses import MosesDetokenizer
 from nltk.tokenize import word_tokenize
-from nltk import pos_tag
 from pkg_resources import resource_filename
 
 
@@ -76,35 +75,25 @@ def get_cleaned_sample(cleaned_sample,lemma, lookup_table):
     return cleaned_sample
 
 
-def get_component_match_withids(partial_matches, lookup_table):
-    # Matches in partial_matches, and their corresponding IDs
-    partial_matches_with_ids = []
-    # Decoding the partial matched set to get back resource ids
-    for matchstring in partial_matches:
-        if (matchstring in lookup_table["resource_terms"].keys()):
-            resourceId = lookup_table["resource_terms"][matchstring]
-            partial_matches_with_ids.append(matchstring + ":" + resourceId)
-        elif (matchstring in lookup_table["resource_permutation_terms"].keys()):
-            resourceId = lookup_table["resource_permutation_terms"][matchstring]
-            resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
-            partial_matches_with_ids.append(resourceOriginalTerm + ":" + resourceId)
-        elif (matchstring in lookup_table["resource_bracketed_permutation_terms"].keys()):
-            resourceId = lookup_table["resource_bracketed_permutation_terms"][matchstring]
-            resourceOriginalTerm = lookup_table["resource_terms_ID_based"][resourceId]
-            resourceOriginalTerm = resourceOriginalTerm.replace(",", "=")
-            partial_matches_with_ids.append(resourceOriginalTerm + ":" + resourceId)
-        elif (matchstring in lookup_table["processes"].keys()):
-            resourceId = lookup_table["processes"][matchstring]
-            partial_matches_with_ids.append(matchstring + ":" + resourceId)
-        elif (matchstring in lookup_table["qualities"].keys()):
-            resourceId = lookup_table["qualities"][matchstring]
-            partial_matches_with_ids.append(matchstring + ":" + resourceId)
-        elif ("==" in matchstring):
-            resList = matchstring.split("==")
-            entityPart = resList[0]
-            entityTag = resList[1]
-            partial_matches_with_ids.append(entityPart + ":" + entityTag)
-    return partial_matches_with_ids
+def get_resource_id(resource_label, lookup_table):
+    """Translate a resource label to a resource ID.
+
+    :param str resource_label: Resource label to translate
+    :param dict[str, dict] lookup_table: Nested dictionary containing
+        data needed to retrieve a resource ID
+    :returns: resource ID corresponding to ``resource_label``
+    :rtype: str
+    """
+    if resource_label in lookup_table["resource_terms"]:
+        return lookup_table["resource_terms"][resource_label]
+    elif resource_label in lookup_table["resource_permutation_terms"]:
+        return lookup_table["resource_permutation_terms"][resource_label]
+    elif resource_label in lookup_table["resource_bracketed_permutation_terms"]:
+        return lookup_table["resource_bracketed_permutation_terms"][resource_label]
+    elif resource_label in lookup_table["processes"]:
+        return lookup_table["processes"][resource_label]
+    else:
+        return ""
 
 
 def remove_duplicate_tokens(input_string):
@@ -352,7 +341,6 @@ def create_lookup_table_skeleton():
             "non_english_words": {},
             "spelling_mistakes": {},
             "processes": {},
-            "qualities": {},
             "collocations": {},
             "inflection_exceptions": {},
             "stop_words": {},
@@ -361,7 +349,13 @@ def create_lookup_table_skeleton():
             "resource_terms_id_based": {},
             "resource_terms": {},
             "resource_permutation_terms": {},
-            "resource_bracketed_permutation_terms": {}}
+            "resource_bracketed_permutation_terms": {},
+            "buckets_ifsactop": {},
+            "buckets_lexmapr": {},
+            "ifsac_labels": {},
+            "ifsac_refinement": {},
+            "ifsac_default": {}
+            }
 
 
 def add_predefined_resources_to_lookup_table(lookup_table):
@@ -383,8 +377,6 @@ def add_predefined_resources_to_lookup_table(lookup_table):
     lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
     # Terms corresponding to candidate processes
     lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
-    # Terms corresponding to semantic taggings
-    lookup_table["qualities"] = get_resource_dict("SemLex.csv")
     # Terms corresponding to wikipedia collocations
     lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
     # Terms excluded from inflection treatment
@@ -523,10 +515,34 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 for permutation in bracketed_permutations:
                     lookup_table["resource_bracketed_permutation_terms"][permutation] = resource_id
 
-            if "synonyms" in resource:
-                synonyms = resource["synonyms"].split(";")
+            if "oboInOwl:hasSynonym" in resource:
+                synonyms = resource["oboInOwl:hasSynonym"]
                 for synonym in synonyms:
-                    #Standardize synonym
+                    # Standardize synonym
+                    synonym = synonym.lower()
+
+                    lookup_table["synonyms"][synonym] = resource_label
+
+            if "oboInOwl:hasBroadSynonym" in resource:
+                synonyms = resource["oboInOwl:hasBroadSynonym"]
+                for synonym in synonyms:
+                    # Standardize synonym
+                    synonym = synonym.lower()
+
+                    lookup_table["synonyms"][synonym] = resource_label
+
+            if "oboInOwl:hasNarrowSynonym" in resource:
+                synonyms = resource["oboInOwl:hasNarrowSynonym"]
+                for synonym in synonyms:
+                    # Standardize synonym
+                    synonym = synonym.lower()
+
+                    lookup_table["synonyms"][synonym] = resource_label
+
+            if "oboInOwl:hasExactSynonym" in resource:
+                synonyms = resource["oboInOwl:hasExactSynonym"]
+                for synonym in synonyms:
+                    # Standardize synonym
                     synonym = synonym.lower()
 
                     lookup_table["synonyms"][synonym] = resource_label
@@ -600,64 +616,53 @@ def merge_lookup_tables(lookup_table_one, lookup_table_two):
     return lookup_table_one
 
 
+def get_term_parent_hierarchies(term_id, lookup_table):
+    """Get the parent hierarchies for a resource.
+
+    ``term_id`` is included in each returned hierarchy.
+
+    :param str term_id: ID of some resource cached in ``lookup_table``
+    :param dict[str, dict] lookup_table: Nested dictionary containing
+        data needed to retrieve a parent hierarchy
+    :returns: parent hierarchies of resource with id value of
+        ``term_id``
+    :rtype: list[list[str]]
+
+    **TODO**: Expand this to return all hierarchies
+    """
+    hierarchies = [[term_id]]
+
+    i = 0
+
+    while i < len(hierarchies):
+        hierarchy = hierarchies[i]
+        node = hierarchy[-1]
+
+        if node in lookup_table["parents"]:
+            node_parents = lookup_table["parents"][node]
+            for node_parent in node_parents:
+                hierarchies.append(hierarchy + [node_parent])
+            hierarchies.pop(i)
+            continue
+        else:
+            i += 1
+
+    return hierarchies
+
+
 def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     """Retrieve an annotated, full-term match for a sample.
 
-    Also returns relevant information for empty samples.
-
-    Arguments:
-        * sample <"str">: Name of sample we want to find a full-term
-            match for.
-        * lookup_table <"dict">: Nested dictionary containing resources
-            needed to find a full_term_match. See
-            get_lookup_table_from_cache for details.
-        * cleaned_sample <"str">: Vleaned version of sample we will
-            use to look for a full-term match, if one for sample does
-            not exist.
-        * status_addendum <"list"> of <"str">: Modifications made to
-            sample in preprocessing.
-    Return values:
-        * <"dict">: Contains all relevant annotations for
-            output headers.
-            * key <"str">
-            * val <"str">
-    Restrictions:
-        * cleaned_sample and status_addendum makes this function
-            dependent on being called where it is called inside of run
-            right now
-    Exceptions raised:
-        * MatchNotFoundError: Full-term match not found
-
-    TODO:
-        * reduce number of parameters
-            * what we need, and makes sense as a parameter for this
-                type of function
-                * sample
-                * lookup_table
-                    * Rather than make lookup_table into a global
-                        variable, we should pass it as a parameter
-                        * It will allow us to more easily separate
-                            pipeline.py functions into different files
-                            in the future (if we choose to do so)
-            * what does not look good as a parameter
-                * cleaned_sample
-                    * if we can make a helper function that generates
-                        cleaned_sample, we can simply call it
-                    * we can also call find_full_term_match in run with
-                        sample, and then if nothing is found, with
-                        cleaned_sample
-                        * this would involve adjusting the outputted
-                            annotations of run, so sample and
-                            cleaned_sample outputs are more similar,
-                            and we just have to add something like
-                            "cleaned sample" to the beginning of
-                            cleaned_sample output annotations
-                * status_addendum
-                    * Call to some sort of a preprocessing method to
-                        get changes to status_addendum that occur
-                        before find_full_term_match
-                        * A function for component matching could have
-                            the same call
+    :param str sample: Sample to match
+    :param dict[str, dict] lookup_table: Nested dictionary containing
+        resources needed to find a component match
+    :param str cleaned_sample: Cleaned-up version of sample that may be
+        needed to find a match
+    :param list[str] status_addendum: Modifications made to sample in
+        pre-processing
+    :returns: Relevant match-annotations for pipeline output
+    :rtype: dict[str, str or list[str]]
+    :raises MatchNotFoundError: If a match is not found
     """
     # Tokens to retain for all_match_terms_with_resource_ids
     retained_tokens = []
@@ -814,11 +819,11 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
     # Update ret
     ret.update({
         "all_match_terms_with_resource_ids":
-            str(sorted(list(retained_tokens))),
+            sorted(list(retained_tokens)),
         "retained_terms_with_resource_ids":
-            str(sorted(list(retained_tokens))),
+            sorted(list(retained_tokens)),
         "match_status_macro_level": "Full Term Match",
-        "match_status_micro_level": str(sorted(list(final_status))),
+        "match_status_micro_level": sorted(list(final_status)),
     })
     # Return
     return ret
@@ -884,6 +889,10 @@ def find_component_matches(cleaned_sample, lookup_table, status_addendum):
             # Permutations of concatenated_gram_chunk
             permutations = all_permutations(concatenated_gram_chunk)
 
+            # Abort if all tokens already covered
+            if set(gram_tokens) <= set(ret["token_matches"]):
+                continue
+
             # Iterate over all permutations
             for permutation in permutations:
                 # Join elements of permutation into a single string
@@ -892,13 +901,18 @@ def find_component_matches(cleaned_sample, lookup_table, status_addendum):
                 if i >= 3:
                     component_match = find_component_match(joined_permutation, lookup_table,
                                                            status_addendum)
-                elif i > 1:
-                    component_match = find_component_match(joined_permutation, lookup_table,
-                                                           status_addendum, consider_qualities=True)
+                    if not component_match:
+                        component_match = find_component_match(joined_permutation, lookup_table,
+                                                               status_addendum,
+                                                               additional_processing=True)
                 else:
                     component_match = find_component_match(joined_permutation, lookup_table,
-                                                           status_addendum, consider_qualities=True,
-                                                           consider_processes=True)
+                                                           status_addendum, consider_processes=True)
+                    if not component_match:
+                        component_match = find_component_match(joined_permutation, lookup_table,
+                                                               status_addendum,
+                                                               consider_processes=True,
+                                                               additional_processing=True)
 
                 # Match found
                 if component_match:
@@ -909,8 +923,8 @@ def find_component_matches(cleaned_sample, lookup_table, status_addendum):
     return ret
 
 
-def find_component_match(component, lookup_table, status_addendum, consider_qualities=False,
-                         consider_processes=False, additional_processing=True):
+def find_component_match(component, lookup_table, status_addendum, consider_processes=False,
+                         additional_processing=False):
     """Attempt to match component with a term from lookup_table.
 
     Modifies ``status_addendum``.
@@ -920,8 +934,6 @@ def find_component_match(component, lookup_table, status_addendum, consider_qual
         resources needed to find a component match
     :param list[str] status_addendum: Modifications made to sample in
         pre-processing
-    :param bool consider_qualities: Attempt to match component to
-        qualities
     :param bool consider_processes: Attempt to match component to
         processes
     :param bool additional_processing: Attempt abbreviation, acronym,
@@ -969,13 +981,6 @@ def find_component_match(component, lookup_table, status_addendum, consider_qual
             if component_with_suffix in lookup_table["resource_terms"]:
                 status_addendum.append("Suffix Addition- "+suffix+" to the Input")
                 return component_with_suffix
-
-        if consider_qualities:
-            # A full-term component match using semantic resources
-            # exists.
-            if component in lookup_table["qualities"]:
-                status_addendum.append("Using Semantic Tagging Resources")
-                return component
 
         if consider_processes:
             # A full-term 1-gram component match using candidate

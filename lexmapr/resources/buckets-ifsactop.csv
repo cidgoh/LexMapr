@@ -6,19 +6,19 @@ dairy,ENVO_00003862,,,,,,,,,,,,Equine_Livestock
 environmental material,ENVO_00010483,(Non-IFSAC) Clinical,,,,environmental material,ENVO_00010483,(Non-IFSAC) Clinical,,,,,ND_Livestock
 crustacean food product,FOODON_00001792,Crustaceans,,,,crustacean food product,FOODON_00001792,Crustaceans,,,,,Ovine_Livestock
 shrimp (food source),FOODON_03411237,Crustaceans,,,,shrimp (food source),FOODON_03411237,Crustaceans,,,,,Swine_Livestock
-reptile (food source),FOODON_03411625 ,Other Animal ,,,,reptile (food source),FOODON_03411625 ,Other Animal ,,,,,Canine_Companion Animal
+reptile (food source),FOODON_03411625,Other Animal,,,,reptile (food source),FOODON_03411625,Other Animal,,,,,Canine_Companion Animal
 calf meat food product,FOODON_00001678,Calf,,,,calf meat food product,FOODON_00001678,Calf,,,,,Feline_Companion Animal
 skim milk (food product),FOODON_03301484,Fluid milk,,,,skim milk (food product),FOODON_03301484,Fluid milk,,,,,ND_Environment
 whole milk (food product),FOODON_03306581,Fluid milk,,,,whole milk (food product),FOODON_03306581,Fluid milk,,,,,Plant_Environment
 soft cheese food product,FOODON_00002252,Solid/semisolid dairy products,,,,soft cheese food product,FOODON_00002252,Solid/semisolid dairy products,,,,,Soil/Dust_Environment
 hard cheese food product,FOODON_00001945,Solid/semisolid dairy products,,,,hard cheese food product,FOODON_00001945,Solid/semisolid dairy products,,,,,Water_Environment
-amphibian or reptile food product,FOODON_00002200,Other Animal ,,,,amphibian or reptile food product,FOODON_00002200,Other Animal ,,,,,Human_Human
-cereal grain food product,FOODON_00001093 ,Grains,,,,cereal grain food product,FOODON_00001093 ,Grains,,,,,Laboratory_Laboratory
+amphibian or reptile food product,FOODON_00002200,Other Animal,,,,amphibian or reptile food product,FOODON_00002200,Other Animal,,,,,Human_Human
+cereal grain food product,FOODON_00001093,Grains,,,,cereal grain food product,FOODON_00001093,Grains,,,,,Laboratory_Laboratory
 edible seed (food product),FOODON_03304497,Seeds,,,,edible seed (food product),FOODON_03304497,Seeds,,,,,ND_ND
 grain based bakery food product,FOODON_00001917,Grains,,,,grain based bakery food product,FOODON_00001917,Grains,,,,,Avian_Poultry
-onion food product,FOODON_00002069 ,Bulbs (Root/Underground vegetables),,,,onion food product,FOODON_00002069 ,Bulbs (Root/Underground vegetables),,,,,Avian_Animal Feed
+onion food product,FOODON_00002069,Bulbs (Root/Underground vegetables),,,,onion food product,FOODON_00002069,Bulbs (Root/Underground vegetables),,,,,Avian_Animal Feed
 garlic food product,FOODON_00001895,Bulbs (Root/Underground vegetables),,,,garlic food product,FOODON_00001895,Bulbs (Root/Underground vegetables),,,,,Bovine_Animal Feed
-potato food product,FOODON_00001148  ,Tubers (Root/Underground vegetables),,,,potato food product,FOODON_00001148  ,Tubers (Root/Underground vegetables),,,,,Canine_Animal Feed
+potato food product,FOODON_00001148,Tubers (Root/Underground vegetables),,,,potato food product,FOODON_00001148,Tubers (Root/Underground vegetables),,,,,Canine_Animal Feed
 carrot food product,FOODON_00001687,Root Vegetables,,,,carrot food product,FOODON_00001687,Root Vegetables,,,,,Feline_Animal Feed
 beet food product,FOODON_00001638,Root Vegetables,,,,beet food product,FOODON_00001638,Root Vegetables,,,,,Fish_Animal Feed
 yam food product,FOODON_00002368,Tubers (Root/Underground vegetables),,,,yam food product,FOODON_00002368,Tubers (Root/Underground vegetables),,,,,ND_Animal Feed
@@ -39,21 +39,21 @@ snail (food source),FOODON_03412114,Non bi-valve Mollusks,,,,snail (food source)
 squid (food source),FOODON_03411205,Non bi-valve Mollusks,,,,squid (food source),FOODON_03411205,Non bi-valve Mollusks,squid,,,,Swine_Food
 whelk (food source),FOODON_03411633,Non bi-valve Mollusks,,,,whelk (food source),FOODON_03411633,Non bi-valve Mollusks,whelk,,,,_
 whale (food source),FOODON_03411343,Whales,,,,whale (food source),FOODON_03411343,Whales,Whales,,,,Amphibian_Wild Animal
-seal meat (raw) ,FOODON_03306461,seals,,,,seal meat (raw) ,FOODON_03306461,seals,seals,,,,Avian_Wild Animal
+seal meat (raw),FOODON_03306461,seals,,,,seal meat (raw),FOODON_03306461,seals,seals,,,,Avian_Wild Animal
 frog (food source),FOODON_03411252,frogs,,,,frog (food source),FOODON_03411252,frogs,frogs,,,,Bat_Wild Animal
 beef food product,FOODON_00001041,Beef,,,,beef food product,FOODON_00001041,Beef,Beef,,,,Bovine_Wild Animal
 pork meat food product,FOODON_00001038,Pork,,,,pork meat food product,FOODON_00001038,Pork,Pork,,,,Camelid_Wild Animal
 sheep meat food product,FOODON_00002236,Mutton,,,,sheep meat food product,FOODON_00002236,Mutton,Mutton,,,,Canine_Wild Animal
 goat (food source),FOODON_03411328,chevon,,,,goat (food source),FOODON_03411328,chevon,chevon,,,,Deer_Wild Animal
-lamb meat food product,FOODON_00001992 ,"lamb chops, rack of lamb",,,,lamb meat food product,FOODON_00001992 ,"lamb chops, rack of lamb","lamb chops, rack of lamb",,,,Equine_Wild Animal
-horse (food source),FOODON_03411229,horse ,,,,horse (food source),FOODON_03411229,horse ,horse ,,,,Feline_Wild Animal
+lamb meat food product,FOODON_00001992,"lamb chops, rack of lamb",,,,lamb meat food product,FOODON_00001992,"lamb chops, rack of lamb","lamb chops, rack of lamb",,,,Equine_Wild Animal
+horse (food source),FOODON_03411229,horse,,,,horse (food source),FOODON_03411229,horse,horse,,,,Feline_Wild Animal
 chicken (food source),FOODON_03411457,Chicken,,,,chicken (food source),FOODON_03411457,Chicken,Chicken,,,,Invertebrate_Wild Animal
 turkey meat food product,FOODON_00001286,Turkey,,,,turkey meat food product,FOODON_00001286,Turkey,Turkey,,,,Marsupial_Wild Animal
 duck (food source),FOODON_03411316,Ducks,,,,duck (food source),FOODON_03411316,Ducks,Ducks,,,,Other mammal_Wild Animal
 goose (food source),FOODON_03411253,geese,,,,goose (food source),FOODON_03411253,geese,geese,,,,Ovine_Wild Animal
 pigeon (food source),FOODON_03411304,squab,,,,pigeon (food source),FOODON_03411304,squab,squab,,,,Primate_Wild Animal
-ratite (food source),FOODON_03414362  ,"ratites (Ground, restructured, tenderized/injected, whole bird not stuffed and stuffed, carcass parts and other intact cuts)",,,,ratite (food source),FOODON_03414362  ,"ratites (Ground, restructured, tenderized/injected, whole bird not stuffed and stuffed, carcass parts and other intact cuts)","ratites (Ground, restructured, tenderized/injected, whole bird not stuffed and stuffed, carcass parts and other intact cuts)",,,,Rabbit_Wild Animal
-game animal food product,FOODON_00002477 ,,,,,game animal food product,FOODON_00002477 ,,,,,,Reptile_Wild Animal
+ratite (food source),FOODON_03414362,"ratites (Ground, restructured, tenderized/injected, whole bird not stuffed and stuffed, carcass parts and other intact cuts)",,,,ratite (food source),FOODON_03414362,"ratites (Ground, restructured, tenderized/injected, whole bird not stuffed and stuffed, carcass parts and other intact cuts)","ratites (Ground, restructured, tenderized/injected, whole bird not stuffed and stuffed, carcass parts and other intact cuts)",,,,Rabbit_Wild Animal
+game animal food product,FOODON_00002477,,,,,game animal food product,FOODON_00002477,,,,,,Reptile_Wild Animal
 antelope (food source),FOODON_03411481,antelope,,,,antelope (food source),FOODON_03411481,antelope,antelope,,,,Rodent_Wild Animal
 bison,NCBITaxon_9900,bison,,,,bison,NCBITaxon_9900,bison,bison,,,,Swine_Wild Animal
 buffalo (food source),FOODON_03411476,buffalo,,,,buffalo (food source),FOODON_03411476,buffalo,buffalo,,,,Fish_Aquatic Animal
@@ -95,7 +95,7 @@ fig food product,FOODON_00001851,figs,,,,fig food product,FOODON_00001851,figs,f
 lychee food product,FOODON_00002006,lychees,,,,lychee food product,FOODON_00002006,lychees,lychees,,,,
 persimmon plant (food source),FOODON_03411447,persimmons,,,,persimmon plant (food source),FOODON_03411447,persimmons,persimmons,,,,
 pomegranate plant (food source),FOODON_03411162,pomegranates,,,,pomegranate plant (food source),FOODON_03411162,pomegranates,pomegranates,,,,
-flour product,FOODON_03315395,flour-based products ,,,,flour product,FOODON_03315395,flour-based products ,flour-based products ,,,,
+flour product,FOODON_03315395,flour-based products,,,,flour product,FOODON_03315395,flour-based products,flour-based products,,,,
 cow milk based food product,FOODON_00001771,Dairy,,,,cow milk based food product,FOODON_00001771,Dairy,plant seeds,,,,
 plant seed vegetable food product,FOODON_00002153,plant seeds,,,,plant seed vegetable food product,FOODON_00002153,plant seeds,,,,,
 bovine (food source),FOODON_03414374,Beef,,,,bovine (food source),FOODON_03414374,Beef,,,,,
@@ -113,23 +113,23 @@ nut food product,FOODON_00001172,Nuts-seeds,,,,nut food product,FOODON_00001172,
 spice or herb,FOODON_00001242,Herbs,,,,spice or herb,FOODON_00001242,Herbs,,,,,
 plant seed food product,FOODON_00001173,Nuts-seeds,,,,plant seed food product,FOODON_00001173,Nuts-seeds,Herbs,,,,
 spice or herb product flavoring or seasoning,FOODON_00002268,Herbs,,,,spice or herb product flavoring or seasoning,FOODON_00002268,Herbs,fruits,,,,
-fruit food product,FOODON_03315615 ,fruits,,,,fruit food product,FOODON_03315615 ,fruits,,,,,
+fruit food product,FOODON_03315615,fruits,,,,fruit food product,FOODON_03315615,fruits,,,,,
 plant root vegetable food product,FOODON_00002150,Root/Underground vegetables,,,,plant root vegetable food product,FOODON_00002150,Root/Underground vegetables,,,,,
 root vegetable product,FOODON_03317076,Root Vegetables,,,,root vegetable product,FOODON_03317076,Root Vegetables,,,,,
-swine meat food product,FOODON_00001132 ,Pork,,,,swine meat food product,FOODON_00001132 ,Pork,,,,,
+swine meat food product,FOODON_00001132,Pork,,,,swine meat food product,FOODON_00001132,Pork,,,,,
 swine (food source),FOODON_03411136,Pork,,,,swine (food source),FOODON_03411136,Pork,,,,,
 bovine meat food product,FOODON_00001134,Beef,,,,bovine meat food product,FOODON_00001134,Beef,,,,,
 porcine meat food product,FOODON_00001132,Pork,,,,porcine meat food product,FOODON_00001132,Pork,,,,,
 gallus gallus,NCBITaxon_9031,Chicken,,,,gallus gallus,NCBITaxon_9031,Chicken,,,,,
 sheep (food source),FOODON_03411183,Other Meats,,,,sheep (food source),FOODON_03411183,Other Meats,,,,,
 milk or milk component,FOODON_03420113,Dairy,,,,milk or milk component,FOODON_03420113,Dairy,Grains,,,,
-cereal grain food product,FOODON_00001093 ,Grains,,,,cereal grain food product,FOODON_00001093 ,Grains,,,,,
-plant leaf vegetable food product,FOODON_00002143  ,Vegetable Row Crop (leafy),,,,plant leaf vegetable food product,FOODON_00002143  ,Vegetable Row Crop (leafy),,,,,
+cereal grain food product,FOODON_00001093,Grains,,,,cereal grain food product,FOODON_00001093,Grains,,,,,
+plant leaf vegetable food product,FOODON_00002143,Vegetable Row Crop (leafy),,,,plant leaf vegetable food product,FOODON_00002143,Vegetable Row Crop (leafy),,,,,
 plant stem or spear vegetable food product,FOODON_00002156,Stem Vegetable,,,,plant stem or spear vegetable food product,FOODON_00002156,Stem Vegetable,Vegetable Row Crops Flower,,,,
-plant stem food product,FOODON_00001175 ,Vegetable Row Crops Flower,,,,plant stem food product,FOODON_00001175 ,Vegetable Row Crops Flower,Swine,,,,
+plant stem food product,FOODON_00001175,Vegetable Row Crops Flower,,,,plant stem food product,FOODON_00001175,Vegetable Row Crops Flower,Swine,,,,
 sus scrofa,NCBITaxon_9823 ,Swine,,,,sus scrofa,NCBITaxon_9823 ,Swine,Feed,,,,
 food product for animal,FOODON_03309997,Animal Feed,,,,food product for animal,FOODON_03309997,Animal Feed,Fish,,,,
-"fish, siluriform",FOODON_03411598  ,Siluriformes,,,,"fish, siluriform",FOODON_03411598  ,Siluriformes,,,,,
+"fish, siluriform",FOODON_03411598,Siluriformes,,,,"fish, siluriform",FOODON_03411598,Siluriformes,,,,,
 fish (food source),FOODON_03411222,Fish,,,,fish (food source),FOODON_03411222,Fish,,,,,
 shellfish (food source),FOODON_03411433,Shellfish,,,,shellfish (food source),FOODON_03411433,Shellfish,,,,,
 fish food product,FOODON_00001248,Fish,,,,fish food product,FOODON_00001248,Fish,Shellfish,,,,
@@ -137,32 +137,29 @@ dairy food product,FOODON_00001256,Dairy,,,,dairy food product,FOODON_00001256,D
 egg food product,FOODON_00001274,Eggs,,,,egg food product,FOODON_00001274,Eggs,Eggs,,,,
 avian food product,FOODON_00001251,Poultry,,,,avian food product,FOODON_00001251,Poultry,,,,,
 meat food product,FOODON_00001006,Meat,,,,meat food product,FOODON_00001006,Meat,Meat,,,,
-restaurant,ENVO_01000934 ,,,,,restaurant,ENVO_01000934 ,,(Non-IFSAC) Environmental - Restaurant,,,,
+restaurant,ENVO_01000934,,,,,restaurant,ENVO_01000934,,(Non-IFSAC) Environmental - Restaurant,,,,
 shop,ENVO_00002221,,,,,shop,ENVO_00002221,,(Non-IFSAC) Environmental - Store,,,,
 warehouse,ENVO_00003963,,,,,warehouse,ENVO_00003963,,(Non-IFSAC) Environmental - Warehouse,,,,
 factory,ENVO_01000536,(Non-IFSAC) Environmental - Factory,,,,factory,ENVO_01000536,(Non-IFSAC) Environmental - Factory,,,,,
 abattoir,ENVO_01000925,(Non-IFSAC) Environmental - Abattoir,,,,abattoir,ENVO_01000925,(Non-IFSAC) Environmental - Abattoir,,,,,
 research facility,ENVO_00000469,(Non-IFSAC) Environmental - Research Facility,,,,research facility,ENVO_00000469,(Non-IFSAC) Environmental - Research Facility,,,,,
 pasture,ENVO_00000266,(Non-IFSAC) Environmental - Pasture,,,,pasture,ENVO_00000266,(Non-IFSAC) Environmental - Pasture,,,,,
-farm,ENVO_00000078 ,(Non-IFSAC) Environmental - Farm,,,,farm,ENVO_00000078 ,(Non-IFSAC) Environmental - Farm,,,,,
+farm,ENVO_00000078,(Non-IFSAC) Environmental - Farm,,,,farm,ENVO_00000078,(Non-IFSAC) Environmental - Farm,,,,,
 fresh water,ENVO_00002011,(Non-IFSAC) Environmental-Water,,,,fresh water,ENVO_00002011,(Non-IFSAC) Environmental-Water,,,,,
 water,CHEBI_15377,(Non-IFSAC) Environmental-Water,,,,water,CHEBI_15377,(Non-IFSAC) Environmental-Water,,,,,
-biological sex,PATO_0000047,(Non-IFSAC) Biological Sex,,,,biological sex,PATO_0000047,(Non-IFSAC) Biological Sex,,,,,
 chemical entity,CHEBI_24431,(Non-IFSAC) Clinical- Chemical Entity,,,,chemical entity,CHEBI_24431,(Non-IFSAC) Clinical- Chemical Entity,,,,,
 construction,ENVO_00000070 ,(Non-IFSAC) Environmental - Construction,,,,construction,ENVO_00000070 ,(Non-IFSAC) Environmental - Construction,,,,,
 environmental feature,ENVO_00002297,(Non-IFSAC) Environmental - Feature,,,,environmental feature,ENVO_00002297,(Non-IFSAC) Environmental - Feature,,,,,
 water mass,ENVO_01000685,,,,,,,,,,,,
 food product by consumer group,FOODON_00002147,(Non-IFSAC) Food Product - By Consumer Group,,,,food product by consumer group,FOODON_00002147,(Non-IFSAC) Food Product - By Consumer Group,,,,,
 anatomical entity,UBERON_0001062,(Non-IFSAC) Anatomical Entity,,,,anatomical entity,UBERON_0001062,(Non-IFSAC) Anatomical Entity,,,,,
-organism,OBI_0100026,(Non-IFSAC) Organism,,,,organism,OBI_0100026,(Non-IFSAC) Organism,,,,,
 organism substance,UBERON_0000463,(Non-IFSAC) Clinical,,,,organism substance,UBERON_0000463,(Non-IFSAC) Clinical,,,,,
 fungus,FOODON_03411261,Fungi,,,,fungus,FOODON_03411261,Fungi,,,,,
 nut producing plant,FOODON_03411213,Nut,,,,nut producing plant,FOODON_03411213,Nut,,,,,
 egg yolk,UBERON_0007378,Eggs,,,,egg yolk,UBERON_0007378,Eggs,,,,,
-cecum,NCIT_C43186,(Non-IFSAC) Anatomical Entity,,,,cecum,NCIT_C43186,(Non-IFSAC) Anatomical Entity,,,,,
 feces,ENVO_00002003,Clinical-Fecal,,,,feces,ENVO_00002003,Clinical-Fecal,,,,,
 fertilizer,CHEBI_33287,Clinical,,,,,,,,,,,
-dairy dessert food product,FOODON_00001800  ,Dairy,,,,,,,,,,,
+dairy dessert food product,FOODON_00001800,Dairy,,,,,,,,,,,
 blood,ENVO_02000020,Clinical,,,,,,,,,,,
 plant fruit food product,FOODON_00001057,Plant Fruit,,,,,,,,,,,
 vehicle,ENVO_01000604,Environmental-Vehicle,,,,,,,,,,,
@@ -180,10 +177,47 @@ sesame food product,FOODON_00002232,,,,,,,,,,,,
 liquid water,ENVO_00002006 ,,,,,,,,,,,,
 environmental (swab or sampling),GENEPIO_0001732,,,,,,,,,,,,
 ginger food product,FOODON_00001901,,,,,,,,,,,,
-bodily fluid material,ENVO_02000019 ,,,,,,,,,,,,
+bodily fluid material,ENVO_02000019,,,,,,,,,,,,
 leguminous vegetable food product,FOODON_00001994,Legumes,,,,,,,,,,,
 pet treat,GENEPIO_0001056,,,,,,,,,,,,
 salad,FOODON_03316042,,,,,,,,,,,,
 strawberry pie (food product),FOODON_03307643,,,,,,,,,,,,
 tuna salad (food product),FOODON_03308735,,,,,,,,,,,,
 amphibian,FOODON_03411624,Wild Animals,,Wild Animals,,,,,,,,,
+bivalve,FOODON_03412113
+Actinopterygii,NCBITaxon_7898
+prepared food product,FOODON_00001180
+vertebrate animal food product,FOODON_00001092,needed because envo is missing its correct parents
+vertebrate animal food source,FOODON_03411297,needed because envo is missing its correct parents
+cattle,FOODON_03411161,needed because foodon has this subclassed under beef food product
+biological product,ENVO_02000043
+gull,foodon_03413503
+breast,uberon_0000310
+liver,uberon_0002107
+milk,uberon_0001913
+chicken meat food product,foodon_00001040
+broccoli vegetable food product,FOODON_00001666
+fruit juice food product,FOODON_00001140
+citrus fruit juice,FOODON_00001156
+dog,NCIT_C14201
+dog,FOODON_03414847
+organic feature,ENVO_01000159
+mass of biological material,ENVO_01000549
+biotic mesoscopic physical object,ENVO_01000009
+food material,FOODON_00002403,stop un-matched foods from reaching environmental
+food source,FOODON_03411564,stop un-matched foods from reaching environmental
+foodon product type,FOODON_00001002,stop un-matched foods from reaching environmental
+Bilateria,NCBITaxon_33213
+Viridiplantae,NCBITaxon_33090
+Homo sapiens,NCBITaxon_9606
+Fungi,NCBITaxon_4751
+mixture,CHEBI_60004
+plant floret vegetable food product,FOODON_00002140
+plant,FOODON_03411347
+fruit-producing plant,FOODON_03411140
+vegetable-producing plant,FOODON_03411579
+spice or flavor-producing plant,FOODON_03411179
+leaf,PO_0025034
+plant feed,ENVO_02000055
+anatomical wall,UBERON_0000060
+anatomical junction,UBERON_0007651

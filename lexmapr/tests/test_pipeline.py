@@ -343,6 +343,22 @@ class TestPipelineHelpers(unittest.TestCase):
                                  {"a": {"b": "c", "d": "l", "n": "o"}, "f": {"h": "i", "j": "k"}},
                                  {"a": {"b": "c", "d": "e"}, "f": {"h": "m", "j": "k", "p": "q"}}))
 
+    def test_get_term_parent_hierarchies(self):
+        lookup_table = {"parents": {"a": ["b"], "b": ["c"], "d": ["e", "f"], "g": ["h", "i"],
+                                    "i": ["j"]}}
+        self.assertCountEqual([["z"]],
+                              pipeline_helpers.get_term_parent_hierarchies("z", lookup_table))
+        self.assertCountEqual([["c"]],
+                              pipeline_helpers.get_term_parent_hierarchies("c", lookup_table))
+        self.assertCountEqual([["b", "c"]],
+                              pipeline_helpers.get_term_parent_hierarchies("b", lookup_table))
+        self.assertCountEqual([["a", "b", "c"]],
+                              pipeline_helpers.get_term_parent_hierarchies("a", lookup_table))
+        self.assertCountEqual([["d", "e"], ["d", "f"]],
+                              pipeline_helpers.get_term_parent_hierarchies("d", lookup_table))
+        self.assertCountEqual([["g", "h"], ["g", "i", "j"]],
+                              pipeline_helpers.get_term_parent_hierarchies("g", lookup_table))
+
 
 class TestPipeline(unittest.TestCase):
     """Unit test suite for pipeline.run.
@@ -398,64 +414,71 @@ class TestPipeline(unittest.TestCase):
     
     maxDiff = None
 
-    # Dictionary containing the names of input and expected output
-    # file test cases without extensions. The keys are expected
-    # output files, and the values are a list with two values: the
-    # input file, and format value. It is assumed input and output
-    # files have .csv and .tsv extensions, and are in
-    # ./lexmapr/tests/input and ./lexmapr/tests/input respectively.
-    # All future test cases must be added here.
+    # Dictionary containing pipeline arguments (values), and the names
+    # of their expected output files (keys). These are not technically
+    # valid arguments because we should supply the paths of input
+    # files, but we will convert the values for input to paths later,
+    # to avoid long strings here.
     test_files = {
         # Empty file without "full" format argument
-        "empty_not_full": ["empty", "not full"],
+        "empty_not_full": {"input": "empty", "format": "not full"},
         # Empty file with "full" format argument
-        "empty": ["empty", "full"],
+        "empty": {"input": "empty"},
         # Non-empty file without "full" format argument
-        "small_simple_not_full": ["small_simple", "not full"],
+        "small_simple_not_full": {"input": "small_simple", "format": "not full"},
         # Non-empty file with "full" format argument
-        "small_simple": ["small_simple", "full"],
+        "small_simple": {"input": "small_simple"},
         # Some rows requires punctuation treatment
-        "test_punctuation": ["test_punctuation", "full"],
+        "test_punctuation": {"input": "test_punctuation"},
         # Some rows require extra inner spaces to be removed--
         # some due to punctuation treatment.
-        "test_extra_inner_spaces": ["test_extra_inner_spaces", "full"],
+        "test_extra_inner_spaces": {"input": "test_extra_inner_spaces"},
         # Varying number of tokens per row
-        "test_tokenization": ["test_tokenization", "full"],
+        "test_tokenization": {"input": "test_tokenization"},
         # Some tokens require preprocessing
-        "test_preprocessing": ["test_preprocessing", "full"],
+        "test_preprocessing": {"input": "test_preprocessing"},
         # Some tokens require inflection treatment
-        "test_pluralization": ["test_pluralization", "full"],
+        "test_pluralization": {"input": "test_pluralization"},
         # Some tokens require spelling corrections
-        "test_spelling_corrections": ["test_spelling_corrections", "full"],
+        "test_spelling_corrections": {"input": "test_spelling_corrections"},
         # Some tokens require abbreviation or acronym translation
-        "test_abbreviations": ["test_abbreviations", "full"],
+        "test_abbreviations": {"input": "test_abbreviations"},
         # Some tokens require non-english to english translation
         # TODO: We must add capitalized non-english words to
         #       ../resources/NefLex, and then makes tests for potential
         #       translations from nonEnglishWordsLowerDict.
-        "test_non_english_words": ["test_non_english_words", "full"],
+        "test_non_english_words": {"input": "test_non_english_words"},
         # Some tokens are stop-words
-        "test_stop_word_handling": ["test_stop_word_handling", "full"],
+        "test_stop_word_handling": {"input": "test_stop_word_handling"},
         # Varying paths of candidate phrase creations
-        "test_candidate_phrase": ["test_candidate_phrase", "full"],
+        "test_candidate_phrase": {"input": "test_candidate_phrase"},
         # Some Sample_Id's are missing a sample
-        "test_sample_id_only": ["test_sample_id_only", "full"],
+        "test_sample_id_only": {"input": "test_sample_id_only"},
         # Some samples are a full-term direct match
-        "test_full_term_dir_match": ["test_full_term_dir_match", "full"],
+        "test_full_term_dir_match": {"input": "test_full_term_dir_match"},
         # Some samples are a full-term match, provided a change-of-case
         # in input or resource data.
-        "test_full_term_coc_match": ["test_full_term_coc_match", "full"],
+        "test_full_term_coc_match": {"input": "test_full_term_coc_match"},
         # Some samples are a full-term match, if permutated
-        "test_full_term_perm_match": ["test_full_term_perm_match", "full"],
+        "test_full_term_perm_match": {"input": "test_full_term_perm_match"},
         # Some samples are a full-term match, if given an added suffix
-        "test_full_term_sfx_match": ["test_full_term_sfx_match", "full"],
+        "test_full_term_sfx_match": {"input": "test_full_term_sfx_match"},
         # Some samples are a full-term match, based on a
         # Wikipedia-based collocation resource.
-        "test_full_term_wiki_match": ["test_full_term_wiki_match", "full"],
+        "test_full_term_wiki_match": {"input": "test_full_term_wiki_match"},
+        # Bucket classification
+        "empty_buckets_not_full": {"input": "empty", "format": "not full", "bucket": True},
+        "empty_buckets": {"input": "empty", "bucket": True},
     }
 
     @classmethod
     def setUpClass(cls):
+        # Convert input file names to paths in test_files.
+        for expected_output_filename, pipeline_args in cls.test_files.items():
+            input_path = pkg_resources.resource_filename("lexmapr.tests.test_input",
+                                                         pipeline_args["input"] + ".csv")
+            cls.test_files[expected_output_filename]["input"] = input_path
+
         # Change working directory to temporary directory
         cls.tmp_dir = tempfile.mkdtemp()
         os.chdir(cls.tmp_dir)
@@ -478,20 +501,20 @@ class TestPipeline(unittest.TestCase):
         # outputs that are not equal to their actual outputs.
         failures = []
         # Iterate over all expected outputs
-        for expected_output in self.test_files:
+        for expected_output_filename, pipeline_args in self.test_files.items():
             # Path of expected output file
-            expected_output_path = pkg_resources.resource_filename("lexmapr.tests.output",
-                                                                   expected_output + ".tsv")
-            # Path of input file
-            input = self.test_files[expected_output][0]
-            input_path = pkg_resources.resource_filename("lexmapr.tests.input", input + ".csv")
-            # Format value
-            format = self.test_files[expected_output][1]
+            expected_output_path = pkg_resources.resource_filename("lexmapr.tests.test_output",
+                                                                   expected_output_filename
+                                                                   + ".tsv")
             # File path to store actual output of input file
             actual_output_path = "actual_output.tsv"
             # Run pipeline.run using input_path and actual_output_path
-            pipeline.run(type("",(object,),{"input_file": input_path,
-                "output": actual_output_path, "format": format, "config": None})())
+            default_args = {"format": "full", "bucket": False}
+            default_args.update(pipeline_args)
+            pipeline.run(argparse.Namespace(input_file=default_args["input"], config=None,
+                                            format=default_args["format"],
+                                            output=actual_output_path, version=False,
+                                            bucket=default_args["bucket"]))
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
@@ -503,7 +526,7 @@ class TestPipeline(unittest.TestCase):
                 self.assertMultiLineEqual(expected_output_contents, actual_output_contents)
             except AssertionError as e:
                 print(e)
-                failures += [expected_output]
+                failures += [expected_output_path]
         if failures:
             print("Failed files:")
             for failure in failures:
@@ -536,16 +559,18 @@ class TestOntologyMapping(unittest.TestCase):
 
         # Path to input file used in all tests
         small_simple_path =\
-            pkg_resources.resource_filename("lexmapr.tests.input", "small_simple.csv")
+            pkg_resources.resource_filename("lexmapr.tests.test_input", "small_simple.csv")
 
         if config_file_name:
-            config_file_path = pkg_resources.resource_filename("lexmapr.tests.config",
+            config_file_path = pkg_resources.resource_filename("lexmapr.tests.test_config",
                                                                config_file_name)
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=config_file_path,
-                                            format="basic", output=None, version=False))
+                                            format="basic", output=None, version=False,
+                                            bucket=False))
         else:
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
-                                            format="basic", output=None, version=False))
+                                            format="basic", output=None, version=False,
+                                            bucket=False))
 
     @staticmethod
     def get_fetched_ontology(file_name):
@@ -562,16 +587,16 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertFalse(os.path.exists("fetched_ontologies/pizza.json"))
 
         self.run_pipeline_with_args(config_file_name="pizza.json")
-        self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+        self.assertTrue(os.path.exists("fetched_ontologies/pizza.json"))
 
     def test_fetch_ontologies(self):
         self.run_pipeline_with_args()
-        self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/bfo.json")))
-        self.assertFalse(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+        self.assertFalse(os.path.exists("fetched_ontologies/bfo.json"))
+        self.assertFalse(os.path.exists("fetched_ontologies/pizza.json"))
 
         self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
-        self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/bfo.json")))
-        self.assertTrue(os.path.exists(os.path.abspath("fetched_ontologies/pizza.json")))
+        self.assertTrue(os.path.exists("fetched_ontologies/bfo.json"))
+        self.assertTrue(os.path.exists("fetched_ontologies/pizza.json"))
 
     def test_fetch_ontology_specify_no_root(self):
         self.run_pipeline_with_args(config_file_name="bfo.json")
@@ -584,25 +609,26 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertEqual(3, len(bfo_process_fetched_ontology["specifications"]))
 
     def test_ontology_table_creation(self):
-        self.assertFalse(os.path.exists(os.path.abspath("ontology_lookup_tables/lookup_bfo.json")))
+        self.assertFalse(os.path.exists("ontology_lookup_tables/lookup_bfo.json"))
         self.run_pipeline_with_args(config_file_name="bfo.json")
-        self.assertTrue(os.path.exists(os.path.abspath("ontology_lookup_tables/lookup_bfo.json")))
+        self.assertTrue(os.path.exists("ontology_lookup_tables/lookup_bfo.json"))
 
     def test_ontology_table_creation_with_multiple_ontologies(self):
         expected_lookup_table_rel_path = "ontology_lookup_tables/lookup_bfo_and_pizza.json"
-        self.assertFalse(os.path.exists(os.path.abspath(expected_lookup_table_rel_path)))
+        self.assertFalse(os.path.exists(expected_lookup_table_rel_path))
         self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
-        self.assertTrue(os.path.exists(os.path.abspath(expected_lookup_table_rel_path)))
+        self.assertTrue(os.path.exists(expected_lookup_table_rel_path))
 
     def test_ontology_table_keys(self):
         self.run_pipeline_with_args(config_file_name="bfo.json")
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo.json")
 
         expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
-                         "processes", "qualities", "collocations", "inflection_exceptions",
-                         "stop_words", "suffixes", "parents", "resource_terms_id_based",
-                         "resource_terms", "resource_permutation_terms",
-                         "resource_bracketed_permutation_terms"]
+                         "processes", "collocations", "inflection_exceptions", "stop_words",
+                         "suffixes", "parents", "resource_terms_id_based", "resource_terms",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
+                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
+                         "ifsac_default"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
@@ -611,10 +637,11 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_and_pizza.json")
 
         expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
-                         "processes", "qualities", "collocations", "inflection_exceptions",
-                         "stop_words", "suffixes", "parents", "resource_terms_id_based",
-                         "resource_terms", "resource_permutation_terms",
-                         "resource_bracketed_permutation_terms"]
+                         "processes", "collocations", "inflection_exceptions", "stop_words",
+                         "suffixes", "parents", "resource_terms_id_based", "resource_terms",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
+                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
+                         "ifsac_default"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
@@ -699,6 +726,27 @@ class TestOntologyMapping(unittest.TestCase):
         expected_synonyms = {
             "temporal instant.": "zero-dimensional temporal region",
             "lonely-dimensional continuant fiat boundary.":
+                "two-dimensional continuant fiat boundary",
+            "lonelier-dimensional continuant fiat boundary.":
+                "one-dimensional continuant fiat boundary",
+            "loneliest-dimensional continuant fiat boundary.":
+                "zero-dimensional continuant fiat boundary",
+            "loneliestest-dimensional continuant fiat boundary.":
+                "zero-dimensional continuant fiat boundary",
+        }
+        actual_synonyms = ontology_lookup_table["synonyms"]
+        self.assertDictEqual(expected_synonyms, actual_synonyms)
+
+    def test_ontology_table_varying_synonyms(self):
+        self.run_pipeline_with_args(config_file_name="bfo_varying_synonyms.json")
+        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_varying_synonyms.json")
+
+        expected_synonyms = {
+            "temporal instant.": "zero-dimensional temporal region",
+            "temporal instant..": "zero-dimensional temporal region",
+            "lonely-dimensional continuant fiat boundary.":
+                "two-dimensional continuant fiat boundary",
+            "lonely-dimensional continuant fiat boundary..":
                 "two-dimensional continuant fiat boundary",
             "lonelier-dimensional continuant fiat boundary.":
                 "one-dimensional continuant fiat boundary",
@@ -947,6 +995,65 @@ class TestOntologyMapping(unittest.TestCase):
         }
         actual_resource_terms = ontology_lookup_table["resource_terms"]
         self.assertDictEqual(expected_resource_terms, actual_resource_terms)
+
+
+class TestClassification(unittest.TestCase):
+    """Tests processes of classification of samples into buckets.
+
+    This differs from the black-box approach taken in TestPipeline, as
+    we are concerned with the mechanics behind the classification.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        # Change working directory to temporary directory
+        cls.tmp_dir = tempfile.mkdtemp()
+        os.chdir(cls.tmp_dir)
+
+    @classmethod
+    def tearDownClass(cls):
+        # Remove temporary directory
+        shutil.rmtree(cls.tmp_dir)
+
+    def tearDown(self):
+        # Remove cached classification lookup table between tests
+        os.remove("classification_lookup_table.json")
+
+    @staticmethod
+    def run_pipeline_with_args(bucket=False):
+        """Run pipeline with some default arguments."""
+
+        # Path to input file used in all tests
+        small_simple_path =\
+            pkg_resources.resource_filename("lexmapr.tests.test_input", "small_simple.csv")
+
+        pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None, format="basic",
+                                        output=None, version=False, bucket=bucket))
+
+    @staticmethod
+    def get_classification_lookup_table():
+        with open("classification_lookup_table.json") as fp:
+            return json.load(fp)
+
+    def test_generate_classification_table(self):
+        self.run_pipeline_with_args()
+        self.assertFalse(os.path.exists("classification_lookup_table.json"))
+
+        self.run_pipeline_with_args(bucket=True)
+        self.assertTrue(os.path.exists("classification_lookup_table.json"))
+
+    def test_classification_table_keys(self):
+        self.run_pipeline_with_args(bucket=True)
+        classification_table = self.get_classification_lookup_table()
+
+        expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
+                         "processes", "collocations", "inflection_exceptions", "stop_words",
+                         "suffixes", "parents", "resource_terms_id_based", "resource_terms",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
+                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
+                         "ifsac_default"]
+
+        self.assertCountEqual(expected_keys, classification_table.keys())
 
 
 if __name__ == '__main__':

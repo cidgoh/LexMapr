@@ -9,9 +9,10 @@ import re
 import sys
 
 from nltk.tokenize import word_tokenize
-from nltk import pos_tag
 
 from lexmapr.ontofetch import Ontology
+from lexmapr.pipeline_classification import (add_classification_resources_to_lookup_table,
+                                             classify_sample)
 import lexmapr.pipeline_helpers as helpers
 
 
@@ -72,9 +73,9 @@ def run(args):
                 (ontology_iri, root_entity_iri), = json_object.items()
                 # Arguments for ontofetch.py
                 if root_entity_iri == "":
-                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies"]
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies/"]
                 else:
-                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies", "-r", root_entity_iri]
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies/", "-r", root_entity_iri]
                 # Call ontofetch.py
                 ontofetch = Ontology()
                 ontofetch.__main__()
@@ -112,7 +113,33 @@ def run(args):
         OUTPUT_FIELDS += [
             "Matched_Components"
         ]
-    
+
+    if args.bucket:
+        if args. format == "full":
+            OUTPUT_FIELDS += [
+                "LexMapr Classification (Full List)",
+                "LexMapr Bucket",
+                "Third Party Bucket",
+                "Third Party Classification"
+            ]
+        else:
+            OUTPUT_FIELDS += [
+                "Third Party Classification"
+            ]
+
+        # Cache (or get from cache) the lookup table containing pre-defined
+        # resources used for **classification**.
+        classification_lookup_table_path = os.path.abspath("classification_lookup_table.json")
+        if os.path.exists(classification_lookup_table_path):
+            with open(classification_lookup_table_path) as fp:
+                classification_lookup_table = json.load(fp)
+        else:
+            classification_lookup_table = helpers.create_lookup_table_skeleton()
+            classification_lookup_table =\
+                add_classification_resources_to_lookup_table(classification_lookup_table)
+            with open(classification_lookup_table_path, "w") as fp:
+                json.dump(classification_lookup_table, fp)
+
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
     fw.write('\t'.join(OUTPUT_FIELDS))
     
@@ -188,18 +215,30 @@ def run(args):
 
             # Write to all headers
             if args.format == "full":
-                fw.write("\t"+ full_term_match["retained_terms_with_resource_ids"]
+                fw.write("\t"+ str(full_term_match["retained_terms_with_resource_ids"])
                     + "\t" + full_term_match["match_status_macro_level"] + "\t"
-                    + full_term_match["match_status_micro_level"])
+                    + str(full_term_match["match_status_micro_level"]))
             # Write to some headers
             else:
-                fw.write("\t" + full_term_match["all_match_terms_with_resource_ids"])
+                fw.write("\t" + str(full_term_match["all_match_terms_with_resource_ids"]))
             # Tokenize sample
             sample_tokens = word_tokenize(sample)
             # Add all tokens to covered_tokens
             [covered_tokens.append(token) for token in sample_tokens]
             # Remove all tokens from remaining_tokens
             [remaining_tokens.remove(token) for token in sample_tokens]
+
+            if args.bucket:
+                matched_terms_with_ids = full_term_match["retained_terms_with_resource_ids"]
+                classification_result = classify_sample(sample, matched_terms_with_ids,
+                                                        lookup_table, classification_lookup_table)
+                if args.format == "full":
+                    fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"]) + "\t"
+                             + str(classification_result["lexmapr_final_buckets"]) + "\t"
+                             + str(classification_result["ifsac_final_buckets"]) + "\t"
+                             + str(classification_result["ifsac_final_labels"]))
+                else:
+                    fw.write("\t" + str(classification_result["ifsac_final_labels"]))
 
             # Set trigger to True
             trigger = True
@@ -241,10 +280,10 @@ def run(args):
                 for eachTkn in strTokens:
                     if ("==" in eachTkn):
                         resList = eachTkn.split("==")
-                        entityPart = resList[0]
-                        entityTag = resList[1]
-                        coveredTSet.append(entityPart)
-                        covered_tokens.append(entityPart)
+                        entity_part = resList[0]
+                        entity_tag = resList[1]
+                        coveredTSet.append(entity_part)
+                        covered_tokens.append(entity_part)
                     else:
                         coveredTSet.append(eachTkn)
                         covered_tokens.append(eachTkn)
@@ -256,7 +295,44 @@ def run(args):
                 if (chktkn not in covered_tokens):
                     remainingTokenSet.append(chktkn)
 
-            partial_matches_with_ids=helpers.get_component_match_withids(partial_matches, lookup_table)
+            partial_matches_with_ids_dict = {}
+            for partial_match in partial_matches:
+                partial_match_id = helpers.get_resource_id(partial_match, lookup_table)
+                if partial_match_id:
+                    try:
+                        # The partial match may be a permutated term, so we
+                        # get the original.
+                        true_label = lookup_table["resource_terms_id_based"][partial_match_id]
+                    except KeyError:
+                        true_label = partial_match
+
+                    partial_matches_with_ids_dict[true_label] = partial_match_id
+                elif "==" in partial_match:
+                    res_list = partial_match.split("==")
+                    entity_part = res_list[0]
+                    entity_tag = res_list[1]
+                    partial_matches_with_ids_dict[entity_part] = entity_tag
+
+            # We need to eventually remove partial matches that are
+            # ancestral to other partial matches.
+            ancestors = set()
+            for _, partial_match_id in partial_matches_with_ids_dict.items():
+                partial_match_hierarchies = helpers.get_term_parent_hierarchies(partial_match_id,
+                                                                                lookup_table)
+
+                for partial_match_hierarchy in partial_match_hierarchies:
+                    # We do not need the first element
+                    partial_match_hierarchy.pop(0)
+
+                    ancestors |= set(partial_match_hierarchy)
+
+            # Add non-ancestral values from
+            # partial_matches_with_ids_dict to form required for
+            # output.
+            partial_matches_with_ids = []
+            for partial_match, partial_match_id in partial_matches_with_ids_dict.items():
+                if partial_match_id not in ancestors:
+                    partial_matches_with_ids.append(partial_match + ":" + partial_match_id)
 
             partialMatchedResourceListSet = set(partial_matches_with_ids)   # Makes a set from list of all matched components with resource ids
             retainedSet = []
@@ -268,14 +344,29 @@ def run(args):
 
             final_status = set(status_addendum)
 
-            # In case it is for componet matching and we have at least one component matched
-            if (len(partial_matches) > 0):
-                if args.format == 'full':
-                    fw.write('\t' + str(sorted(list(retainedSet))) + '\t' + status + '\t'
-                             + str(sorted(list(final_status))))
+            if not partial_matches:
+                status = "No Match"
+                final_status = set()
 
-                if args.format != 'full':
-                    fw.write("\t" + str(sorted(list(retainedSet))))
+            if args.format == 'full':
+                fw.write('\t' + str(sorted(list(retainedSet))) + '\t' + status + '\t'
+                         + str(sorted(list(final_status))))
+
+            if args.format != 'full':
+                fw.write("\t" + str(sorted(list(retainedSet))))
+
+            if args.bucket:
+                matched_terms_with_ids = partial_matches_with_ids
+                classification_result = classify_sample(sample, matched_terms_with_ids,
+                                                        lookup_table,
+                                                        classification_lookup_table)
+                if args.format == "full":
+                    fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"])
+                             + "\t" + str(classification_result["lexmapr_final_buckets"]) + "\t"
+                             + str(classification_result["ifsac_final_buckets"]) + "\t"
+                             + str(classification_result["ifsac_final_labels"]))
+                else:
+                    fw.write("\t" + str(classification_result["ifsac_final_labels"]))
 
     fw.write('\n')
     #Output files closed

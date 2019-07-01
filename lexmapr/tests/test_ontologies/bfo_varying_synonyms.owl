@@ -3,6 +3,7 @@
      xml:base="http://purl.obolibrary.org/obo/bfo.owl"
      xmlns:dc="http://purl.org/dc/elements/1.1/"
      xmlns:obo="http://purl.obolibrary.org/obo/"
+     xmlns:oboInOwl="http://www.geneontology.org/formats/oboInOwl#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -1491,7 +1492,10 @@
         <obo:IAO_0000112 xml:lang="en">the line separating the outer surface of the mucosa of the lower lip from the outer surface of the skin of the chin.</obo:IAO_0000112>
         <obo:IAO_0000112 xml:lang="en">the median sulcus of your tongue</obo:IAO_0000112>
         <obo:IAO_0000600 xml:lang="en">a one-dimensional continuant fiat boundary is a continuous fiat line whose location is defined in relation to some material entity. (axiom label in BFO2 Reference: [032-001])</obo:IAO_0000600>
-        <obo:IAO_0000118 xml:lang="en">lonelier-dimensional continuant fiat boundary.</obo:IAO_0000118>
+        <oboInOwl:hasSynonym xml:lang="en">lonelier-dimensional continuant fiat boundary.</oboInOwl:hasSynonym>
+        <oboInOwl:hasExactSynonym xml:lang="en">lonelier-dimensional continuant fiat boundary.</oboInOwl:hasExactSynonym>
+        <oboInOwl:hasNarrowSynonym xml:lang="en">lonelier-dimensional continuant fiat boundary.</oboInOwl:hasNarrowSynonym>
+        <oboInOwl:hasBroadSynonym xml:lang="en">lonelier-dimensional continuant fiat boundary.</oboInOwl:hasBroadSynonym>
         <obo:IAO_0000602>(iff (OneDimensionalContinuantFiatBoundary a) (and (ContinuantFiatBoundary a) (exists (b) (and (OneDimensionalSpatialRegion b) (forall (t) (locatedInAt a b t)))))) // axiom label in BFO2 CLIF: [032-001] </obo:IAO_0000602>
         <rdfs:isDefinedBy rdf:resource="http://purl.obolibrary.org/obo/bfo.owl"/>
         <rdfs:label xml:lang="en">one-dimensional continuant fiat boundary</rdfs:label>
@@ -1589,7 +1593,8 @@
         <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000140"/>
         <obo:BFO_0000179>2d-cf-boundary</obo:BFO_0000179>
         <obo:BFO_0000180>TwoDimensionalContinuantFiatBoundary</obo:BFO_0000180>
-        <obo:IAO_0000118 xml:lang="en">lonely-dimensional continuant fiat boundary.</obo:IAO_0000118>
+        <oboInOwl:hasExactSynonym xml:lang="en">lonely-dimensional continuant fiat boundary.</oboInOwl:hasExactSynonym>
+        <oboInOwl:hasExactSynonym xml:lang="en">lonely-dimensional continuant fiat boundary..</oboInOwl:hasExactSynonym>
         <obo:IAO_0000600 xml:lang="en">a two-dimensional continuant fiat boundary (surface) is a self-connected fiat surface whose location is defined in relation to some material entity. (axiom label in BFO2 Reference: [033-001])</obo:IAO_0000600>
         <obo:IAO_0000602>(iff (TwoDimensionalContinuantFiatBoundary a) (and (ContinuantFiatBoundary a) (exists (b) (and (TwoDimensionalSpatialRegion b) (forall (t) (locatedInAt a b t)))))) // axiom label in BFO2 CLIF: [033-001] </obo:IAO_0000602>
         <rdfs:isDefinedBy rdf:resource="http://purl.obolibrary.org/obo/bfo.owl"/>
@@ -1620,8 +1625,8 @@
         <obo:IAO_0000112 xml:lang="en">the point of origin of some spatial coordinate system.</obo:IAO_0000112>
         <obo:IAO_0000112 xml:lang="en">the quadripoint where the boundaries of Colorado, Utah, New Mexico, and Arizona meet</obo:IAO_0000112>
         <obo:IAO_0000116 xml:lang="en">zero dimension continuant fiat boundaries are not spatial points. Considering the example &apos;the quadripoint where the boundaries of Colorado, Utah, New Mexico, and Arizona meet&apos; : There are many frames in which that point is zooming through many points in space. Whereas, no matter what the frame, the quadripoint is always in the same relation to the boundaries of Colorado, Utah, New Mexico, and Arizona.</obo:IAO_0000116>
-        <obo:IAO_0000118 xml:lang="en">loneliest-dimensional continuant fiat boundary.</obo:IAO_0000118>
-        <obo:IAO_0000118 xml:lang="en">loneliestest-dimensional continuant fiat boundary.</obo:IAO_0000118>
+        <oboInOwl:hasNarrowSynonym xml:lang="en">loneliest-dimensional continuant fiat boundary.</oboInOwl:hasNarrowSynonym>
+        <oboInOwl:hasNarrowSynonym xml:lang="en">loneliestest-dimensional continuant fiat boundary.</oboInOwl:hasNarrowSynonym>
         <obo:IAO_0000600 xml:lang="en">a zero-dimensional continuant fiat boundary is a fiat point whose location is defined in relation to some material entity. (axiom label in BFO2 Reference: [031-001])</obo:IAO_0000600>
         <obo:IAO_0000602>(iff (ZeroDimensionalContinuantFiatBoundary a) (and (ContinuantFiatBoundary a) (exists (b) (and (ZeroDimensionalSpatialRegion b) (forall (t) (locatedInAt a b t)))))) // axiom label in BFO2 CLIF: [031-001] </obo:IAO_0000602>
         <rdfs:isDefinedBy rdf:resource="http://purl.obolibrary.org/obo/bfo.owl"/>
@@ -1661,7 +1666,8 @@
         <obo:IAO_0000112 xml:lang="en">the moment at which a child is born</obo:IAO_0000112>
         <obo:IAO_0000112 xml:lang="en">the moment at which a finger is detached in an industrial accident</obo:IAO_0000112>
         <obo:IAO_0000112 xml:lang="en">the moment of death.</obo:IAO_0000112>
-        <obo:IAO_0000118 xml:lang="en">temporal instant.</obo:IAO_0000118>
+        <oboInOwl:hasBroadSynonym xml:lang="en">temporal instant.</oboInOwl:hasBroadSynonym>
+        <oboInOwl:hasBroadSynonym xml:lang="en">temporal instant..</oboInOwl:hasBroadSynonym>
         <obo:IAO_0000600 xml:lang="en">A zero-dimensional temporal region is a temporal region that is without extent. (axiom label in BFO2 Reference: [102-001])</obo:IAO_0000600>
         <obo:IAO_0000602>(forall (x) (if (ZeroDimensionalTemporalRegion x) (TemporalRegion x))) // axiom label in BFO2 CLIF: [102-001] </obo:IAO_0000602>
         <rdfs:isDefinedBy rdf:resource="http://purl.obolibrary.org/obo/bfo.owl"/>
