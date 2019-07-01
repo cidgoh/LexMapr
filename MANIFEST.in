@@ -2,7 +2,6 @@ include lexmapr/resources/AbbLex.csv
 include lexmapr/resources/CombinedResourceTerms.csv
 include lexmapr/resources/NefLex.csv
 include lexmapr/resources/ScorLex.csv
-include lexmapr/resources/SemLex.csv
 include lexmapr/resources/SynLex.csv
 include lexmapr/resources/candidateProcesses.csv
 include lexmapr/resources/inflection-exceptions.csv
