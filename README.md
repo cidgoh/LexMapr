@@ -20,20 +20,26 @@ The main script file for processing is `bin/lexmapr`
 ## Usage
 
 ```
-usage: lexmapr [-h] [-o [OUTPUT]] [--format FORMAT] input_file [log_file]
+usage: lexmapr [-h] [-o [OUTPUT]] [-f FORMAT] [--version] [-c CONFIG] [-b]
+               [input_file]
 
 positional arguments:
   input_file            Input csv file
-  log_file              Log file
 
 optional arguments:
   -h, --help            show this help message and exit
   -o [OUTPUT], --output [OUTPUT]
                         Output file
-  --format FORMAT       Output format
+  -f FORMAT, --format FORMAT
+                        Output format
+  --version             Prints version information
+  -c CONFIG, --config CONFIG
+                        Path to JSON file containing the IRI of ontologies to
+                        fetch terms from
+  -b, --bucket          Classify samples into pre-defined buckets
 ```
 
-### Example input files (in `lexmapr/tests/input`)
+### Example input files (in `lexmapr/tests/test_input`)
 
 | Filename                   | Description                      |
 |----------------------------|----------------------------------|
@@ -53,7 +59,6 @@ optional arguments:
 | `AbbLex.csv`                  | Abbreviation/Acronym Lexicon                                                                         |
 | `NefLex.csv`                  | Non English FoodNames Lexicon                                                                        |
 | `ScorLex.csv`                 | Spellings correction Lexicon                                                                         |
-| `SemLex.csv`                  | Semantic Tagging Lexicon                                                                             |
 | `inflection-exceptions.csv`   | Exception list for avoiding false positives during inflection treatment                              |
 | `candidateProcesses.csv`      | Additional processes which are candidates for inclusion                                              |
 | `wikipediaCollocations.csv`   | Additional compound terms (collocations) detected out of datasets which are candidates for inclusion |
