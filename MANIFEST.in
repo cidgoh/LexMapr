@@ -9,3 +9,9 @@ include lexmapr/resources/mining-stopwords.csv
 include lexmapr/resources/qualities.csv
 include lexmapr/resources/wikipediaCollocations.csv
 include lexmapr/resources/suffixes.csv
+include lexmapr/resources/buckets.csv
+include lexmapr/resources/buckets-ifsactop.csv
+include lexmapr/resources/buckets-lexmapr.csv
+include lexmapr/resources/ifsac-default.csv
+include lexmapr/resources/ifsac-labels.csv
+include lexmapr/resources/ifsac-refinement.csv
