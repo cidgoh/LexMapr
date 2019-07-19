@@ -1,6 +1,5 @@
 """Helper functions for lexmapr.pipeline."""
 
-import collections
 import csv
 import itertools
 from itertools import combinations
@@ -107,22 +106,6 @@ def remove_duplicate_tokens(input_string):
     return refined_string
 
 
-def read_input_file(input_file):
-    sample_list=[]
-    sample_dict = collections.OrderedDict()
-    with open(input_file) as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        ctr = 0
-        for row in readCSV:
-            if ctr > 0:  # skips the first row in CSV file as header row
-                sample_list.append(row[1])
-                samid = row[0]
-                samp = row[1]
-                # termFreq=row[2]               #NN To be removed
-                sample_dict[samid.strip()] = samp.strip()
-            ctr += 1
-    return sample_dict
-
 # 1-Method to determine  whether a string is a number (Used for Cardinal-Ordinal Tagging)
 def is_number(inputstring):
     try:
@@ -144,7 +127,7 @@ def is_date(inputstring):
     try:
         parse(inputstring)
         return True
-    except ValueError:
+    except (ValueError, OverflowError):
         return False
 
 
@@ -552,12 +535,16 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 parent_id = resource["parent_id"].replace(":", "_")
                 parent_id = parent_id.lower()
 
+                # Bug in ``ontofetch.py``--sometimes a resource is
+                # parent to itself. Remove when fixed.
+                if resource_id == parent_id:
+                    break
                 # Instead of overwriting parents like we do with
                 # synonyms, we will concatenate parents from different
                 # fetches.
-                if resource_id in lookup_table["parents"]:
+                elif resource_id in lookup_table["parents"]:
                     # Prevent duplicates
-                    if not parent_id in lookup_table["parents"][resource_id]:
+                    if parent_id not in lookup_table["parents"][resource_id]:
                         lookup_table["parents"][resource_id] += [parent_id]
                 else:
                     lookup_table["parents"][resource_id] = [parent_id]
@@ -570,6 +557,10 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                     # Prevent duplicates
                     other_parents = list(filter(
                         lambda x: x not in lookup_table["parents"][resource_id], other_parents))
+
+                    # Bug in ``ontofetch.py``--sometimes a resource is
+                    # parent to itself. Remove when fixed.
+                    other_parents = list(filter(lambda x: x != resource_id, other_parents))
 
                     lookup_table["parents"][resource_id] += other_parents
 
