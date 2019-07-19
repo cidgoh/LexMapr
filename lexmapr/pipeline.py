@@ -146,14 +146,14 @@ def run(args):
 
     # Input file
     fr = open(args.input_file, "r")
-    fr_reader = csv.reader(fr)
+    fr_reader = csv.reader(fr, delimiter=",")
     # Skip header
     next(fr_reader)
 
     # Iterate over samples for matching to ontology terms
     for row in fr_reader:
-        sampleid = row[0]
-        sample = row[1]
+        sampleid = row[0].strip()
+        sample = row[1].strip()
         trigger = False
         status = ""  # variable reflecting status of Matching to be displayed for evry rule/section
         status_addendum = []
