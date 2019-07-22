@@ -202,9 +202,8 @@ def punctuationTreatment(inputstring, punctuationList):
     sampleTokens = word_tokenize(inputstring)
     for token in sampleTokens:
         withoutPunctuation = ""
-        number_result = is_number(token)
-        date_result = is_date(token)
-        if (number_result is True or date_result is True):   #Skips the punctuation treatment for date and number
+        # Skip punctuation treatment for numbers
+        if is_number(token):
             withoutPunctuation = token
         else:
             for char in token:

@@ -182,6 +182,10 @@ def run(args):
         # ===Few preliminary things- Inflection,spelling mistakes, Abbreviations, acronyms, foreign words, Synonyms taken care of
         for tkn in sampleTokens:
 
+            # Ignore dates
+            if helpers.is_date(tkn):
+                continue
+
             # Some preprocessing (only limited or controlled) Steps
             tkn = helpers.preprocess(tkn)
 
