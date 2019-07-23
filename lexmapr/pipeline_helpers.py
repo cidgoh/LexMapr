@@ -537,7 +537,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 # Bug in ``ontofetch.py``--sometimes a resource is
                 # parent to itself. Remove when fixed.
                 if resource_id == parent_id:
-                    break
+                    continue
                 # Instead of overwriting parents like we do with
                 # synonyms, we will concatenate parents from different
                 # fetches.
