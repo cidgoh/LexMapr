@@ -89,8 +89,6 @@ def get_resource_id(resource_label, lookup_table):
         return lookup_table["resource_permutation_terms"][resource_label]
     elif resource_label in lookup_table["resource_bracketed_permutation_terms"]:
         return lookup_table["resource_bracketed_permutation_terms"][resource_label]
-    elif resource_label in lookup_table["processes"]:
-        return lookup_table["processes"][resource_label]
     else:
         return ""
 
@@ -743,19 +741,6 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
-    # A full-term cleaned sample match with multi-word
-    # collocation from Wikipedia exists.
-    elif cleaned_sample in lookup_table["collocations"]:
-        # Term we found a full-term match for
-        matched_term = cleaned_sample
-        # Resource ID for matched_term
-        resource_id = lookup_table["collocations"][matched_term]
-        # Update retained_tokens
-        retained_tokens.append(matched_term + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append(
-            "New Candidadte Terms -validated with Wikipedia Based Collocation Resource"
-        )
     # Full-term match not found
     else:
         resource_terms = lookup_table["resource_terms"]
