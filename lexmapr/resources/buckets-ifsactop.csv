@@ -222,3 +222,6 @@ plant feed,ENVO_02000055
 anatomical wall,UBERON_0000060
 anatomical junction,UBERON_0007651
 material entity,BFO_0000040
+invertebrate animal,FOODON_00002452
+invertebrate animal food product,FOODON_00001176
+food,CHEBI_33290

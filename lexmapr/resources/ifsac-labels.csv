@@ -227,3 +227,6 @@ ENVO_02000055,Environmental-Farm
 UBERON_0000060,environmental,temporary fix to prevent "wall" from matching clinical/research
 UBERON_0007651,environmental,temporary fix to prevent "junction" from matching clinical/research
 BFO_0000040,environmental
+FOODON_00002452,Animal
+FOODON_00001176,Animal
+CHEBI_33290,food
