@@ -213,7 +213,7 @@ def punctuationTreatment(inputstring, punctuationList):
             finalSample = finalSample + " " + withoutPunctuation
         else:
             finalSample = withoutPunctuation
-    return finalSample
+    return finalSample.strip()
 
 
 # 22-Method to get the final retained set of matched terms
