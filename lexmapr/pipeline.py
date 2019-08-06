@@ -3,6 +3,7 @@
 """Point-of-entry script."""
 
 import collections
+import csv
 import json
 import os
 import re
@@ -142,13 +143,17 @@ def run(args):
 
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
     fw.write('\t'.join(OUTPUT_FIELDS))
-    
-    samples_dict = helpers.read_input_file(args.input_file)
-    
+
+    # Input file
+    fr = open(args.input_file, "r")
+    fr_reader = csv.reader(fr, delimiter=",")
+    # Skip header
+    next(fr_reader)
+
     # Iterate over samples for matching to ontology terms
-    for k, v in samples_dict.items():
-        sampleid = k
-        sample = v
+    for row in fr_reader:
+        sampleid = row[0].strip()
+        sample = row[1].strip()
         trigger = False
         status = ""  # variable reflecting status of Matching to be displayed for evry rule/section
         status_addendum = []
@@ -176,6 +181,10 @@ def run(args):
 
         # ===Few preliminary things- Inflection,spelling mistakes, Abbreviations, acronyms, foreign words, Synonyms taken care of
         for tkn in sampleTokens:
+
+            # Ignore dates
+            if helpers.is_date(tkn):
+                continue
 
             # Some preprocessing (only limited or controlled) Steps
             tkn = helpers.preprocess(tkn)
@@ -372,3 +381,5 @@ def run(args):
     #Output files closed
     if fw is not sys.stdout:
         fw.close()
+    # Input file closed
+    fr.close()

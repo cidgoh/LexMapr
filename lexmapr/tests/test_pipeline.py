@@ -199,15 +199,15 @@ class TestPipelineHelpers(unittest.TestCase):
         # Single-token input string with punctuation
         self.assertEqual(
             pipeline_helpers.punctuationTreatment("_foo-bar_", punctuationList),
-            " foo bar ")
+            "foo bar")
         # Multi-token input string with punctuation
         self.assertEqual(
             pipeline_helpers.punctuationTreatment("_foo;ba r_", punctuationList),
-            " foo   ba r ")
-        # Multi-token input string with number, date and punctuation
+            "foo   ba r")
+        # Multi-token input string with number and punctuation
         self.assertEqual(
-            pipeline_helpers.punctuationTreatment("a-b 12/22/78 -1", punctuationList),
-            "a b 12/22/78 -1")
+            pipeline_helpers.punctuationTreatment("a-b -1", punctuationList),
+            "a b -1")
 
     def test_retainedPhrase(self):
         """Tests retainedPhrase.

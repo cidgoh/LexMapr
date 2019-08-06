@@ -1,6 +1,5 @@
 """Helper functions for lexmapr.pipeline."""
 
-import collections
 import csv
 import itertools
 from itertools import combinations
@@ -90,8 +89,6 @@ def get_resource_id(resource_label, lookup_table):
         return lookup_table["resource_permutation_terms"][resource_label]
     elif resource_label in lookup_table["resource_bracketed_permutation_terms"]:
         return lookup_table["resource_bracketed_permutation_terms"][resource_label]
-    elif resource_label in lookup_table["processes"]:
-        return lookup_table["processes"][resource_label]
     else:
         return ""
 
@@ -106,22 +103,6 @@ def remove_duplicate_tokens(input_string):
     refined_string=refined_string.strip()
     return refined_string
 
-
-def read_input_file(input_file):
-    sample_list=[]
-    sample_dict = collections.OrderedDict()
-    with open(input_file) as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        ctr = 0
-        for row in readCSV:
-            if ctr > 0:  # skips the first row in CSV file as header row
-                sample_list.append(row[1])
-                samid = row[0]
-                samp = row[1]
-                # termFreq=row[2]               #NN To be removed
-                sample_dict[samid.strip()] = samp.strip()
-            ctr += 1
-    return sample_dict
 
 # 1-Method to determine  whether a string is a number (Used for Cardinal-Ordinal Tagging)
 def is_number(inputstring):
@@ -144,7 +125,7 @@ def is_date(inputstring):
     try:
         parse(inputstring)
         return True
-    except ValueError:
+    except (ValueError, OverflowError):
         return False
 
 
@@ -219,9 +200,8 @@ def punctuationTreatment(inputstring, punctuationList):
     sampleTokens = word_tokenize(inputstring)
     for token in sampleTokens:
         withoutPunctuation = ""
-        number_result = is_number(token)
-        date_result = is_date(token)
-        if (number_result is True or date_result is True):   #Skips the punctuation treatment for date and number
+        # Skip punctuation treatment for numbers
+        if is_number(token):
             withoutPunctuation = token
         else:
             for char in token:
@@ -233,7 +213,7 @@ def punctuationTreatment(inputstring, punctuationList):
             finalSample = finalSample + " " + withoutPunctuation
         else:
             finalSample = withoutPunctuation
-    return finalSample
+    return finalSample.strip()
 
 
 # 22-Method to get the final retained set of matched terms
@@ -552,12 +532,16 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 parent_id = resource["parent_id"].replace(":", "_")
                 parent_id = parent_id.lower()
 
+                # Bug in ``ontofetch.py``--sometimes a resource is
+                # parent to itself. Remove when fixed.
+                if resource_id == parent_id:
+                    continue
                 # Instead of overwriting parents like we do with
                 # synonyms, we will concatenate parents from different
                 # fetches.
-                if resource_id in lookup_table["parents"]:
+                elif resource_id in lookup_table["parents"]:
                     # Prevent duplicates
-                    if not parent_id in lookup_table["parents"][resource_id]:
+                    if parent_id not in lookup_table["parents"][resource_id]:
                         lookup_table["parents"][resource_id] += [parent_id]
                 else:
                     lookup_table["parents"][resource_id] = [parent_id]
@@ -570,6 +554,10 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                     # Prevent duplicates
                     other_parents = list(filter(
                         lambda x: x not in lookup_table["parents"][resource_id], other_parents))
+
+                    # Bug in ``ontofetch.py``--sometimes a resource is
+                    # parent to itself. Remove when fixed.
+                    other_parents = list(filter(lambda x: x != resource_id, other_parents))
 
                     lookup_table["parents"][resource_id] += other_parents
 
@@ -753,19 +741,6 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
-    # A full-term cleaned sample match with multi-word
-    # collocation from Wikipedia exists.
-    elif cleaned_sample in lookup_table["collocations"]:
-        # Term we found a full-term match for
-        matched_term = cleaned_sample
-        # Resource ID for matched_term
-        resource_id = lookup_table["collocations"][matched_term]
-        # Update retained_tokens
-        retained_tokens.append(matched_term + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append(
-            "New Candidadte Terms -validated with Wikipedia Based Collocation Resource"
-        )
     # Full-term match not found
     else:
         resource_terms = lookup_table["resource_terms"]
