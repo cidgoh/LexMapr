@@ -94,15 +94,14 @@ def get_resource_id(resource_label, lookup_table):
 
 
 def remove_duplicate_tokens(input_string):
-    refined_string=""
     new_phrase_set = []
-    string_tokens = word_tokenize(input_string)
-    for tkn in string_tokens:
-        new_phrase_set.append(tkn)
+    new_phrase_list = input_string.split(' ')
+    for token in new_phrase_list:
+        if token not in new_phrase_set:
+            new_phrase_set.append(token)
     refined_string = MosesDetokenizer().detokenize(new_phrase_set, return_str=True)
     refined_string=refined_string.strip()
     return refined_string
-
 
 # 1-Method to determine  whether a string is a number (Used for Cardinal-Ordinal Tagging)
 def is_number(inputstring):
@@ -705,6 +704,16 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
+    elif sample in lookup_table["synonyms"]:
+        # Translate component to synonym
+        matched_term = lookup_table["synonyms"][sample]
+        if matched_term in lookup_table["resource_terms"]:
+            # Resource ID for matched_term
+            resource_id = lookup_table["resource_terms"][matched_term]
+            # Update retained_tokens
+            retained_tokens.append(matched_term + ":" + resource_id)
+            # Update status_addendum
+            status_addendum.append("Synonym Usage")
     # Full-term cleaned sample match without any treatment
     elif cleaned_sample in lookup_table["resource_terms"]:
         # Term with we found a full-term match for
@@ -741,6 +750,17 @@ def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
         retained_tokens.append(matched_permutation + ":" + resource_id)
         # Update status_addendum
         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
+
+    elif cleaned_sample in lookup_table["synonyms"]:
+        # Translate component to synonym
+        matched_term = lookup_table["synonyms"][cleaned_sample]
+        if matched_term in lookup_table["resource_terms"]:
+            # Resource ID for matched_term
+            resource_id = lookup_table["resource_terms"][matched_term]
+            # Update retained_tokens
+            retained_tokens.append(matched_term + ":" + resource_id)
+            # Update status_addendum
+            status_addendum.append("Synonym Usage")
     # Full-term match not found
     else:
         resource_terms = lookup_table["resource_terms"]
@@ -922,32 +942,38 @@ def find_component_match(component, lookup_table, status_addendum, consider_proc
     * In the future, we may want find_full_term_match and this method
       to have the same functionality, and then we do not need both
     """
+    matched_component=component
     if additional_processing:
         # component is an abbreviation or acronym
         if component in lookup_table["abbreviations"]:
             # Expand component
-            component = lookup_table["abbreviations"][component]
+            matched_component = lookup_table["abbreviations"][component]
             status_addendum.append("Abbreviation-Acronym Treatment")
         # component is a non-english word
         if component in lookup_table["non_english_words"]:
             # Translate component
-            component = lookup_table["non_english_words"][component]
+            matched_component = lookup_table["non_english_words"][component]
             status_addendum.append("Non English Language Words Treatment")
         # component is a synonym
         if component in lookup_table["synonyms"]:
             # Translate component to synonym
-            component = lookup_table["synonyms"][component]
+            matched_component = lookup_table["synonyms"][component]
             status_addendum.append("Synonym Usage")
 
     # There is a full-term component match with no treatment in
     # resource term.
-    if component in lookup_table["resource_terms"]:
-        return component
+    if matched_component in lookup_table["resource_terms"]:
+        return matched_component
     # There is a full-term component match with permutation of
     # bracketed resource term.
-    elif component in lookup_table["resource_bracketed_permutation_terms"]:
+    elif matched_component in lookup_table["resource_bracketed_permutation_terms"]:
         status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
-        return component
+        return matched_component
+    elif component in lookup_table["synonyms"]:
+        # Translate component to synonym
+        matched_component = lookup_table["synonyms"][component]
+        status_addendum.append("Synonym Usage")
+        return matched_component
     else:
         for suffix in lookup_table["suffixes"]:
             component_with_suffix = component+" "+suffix

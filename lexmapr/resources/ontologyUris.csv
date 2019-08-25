@@ -1,6 +1,0 @@
-Ontology,URI,,,1foodon,http://github.com/FoodOntology/foodon/blob/master/src/ontology/foodon-merged.owl,,,,,,
-uberon,http://purl.obolibrary.org/obo/uberon.owl,,,foodon,http://purl.obolibrary.org/obo/foodon.owl,,,,,chebi,http://purl.obolibrary.org/obo/chebi.owl
-genepio,http://purl.obolibrary.org/obo/genepio.owl,,,ncbitaxon,http://purl.obolibrary.org/obo/NCBITaxon_1,,,,,uo,http://purl.obolibrary.org/obo/uo.owl
-envo,http://purl.obolibrary.org/obo/envo.owl,,,ro,http://purl.obolibrary.org/obo/ro.owl,,,,,bfo,http://purl.obolibrary.org/obo/bfo
-,,,,pato,http://purl.obolibrary.org/obo/pato.owl,,,,,,
-,,,,ncit,http://purl.obolibrary.org/obo/ncit.owl,,,,,,
