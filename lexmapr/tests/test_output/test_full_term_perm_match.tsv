@@ -1,7 +1,7 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
 small_simple1	asfdsdf	asfdsdf	[]	No Match	[]
 small_simple2	gastric vein	gastric vein	['gastric vein:uberon_0004450']	Full Term Match	['A Direct Match']
-small_simple3	proximal epiphysis of manual digit 1 proximal phalanx of	proximal epiphysi of manual digit proximal phalanx of	['manual digit:uberon_0002389', 'proximal phalanx:uberon_0004302']	Component Match	['Inflection (Plural) Treatment']
+small_simple3	proximal epiphysis of manual digit 1 proximal phalanx of	proximal epiphysi of manual digit phalanx	['manual digit:uberon_0002389', 'proximal phalanx:uberon_0004302']	Component Match	['Inflection (Plural) Treatment']
 small_simple4	enterica Salmonella	enterica salmonella	['salmonella enterica:ncbitaxon_28901']	Component Match	[]
 small_simple5	dong kard pak	dong kard pak	[]	No Match	[]
 small_simple6	anatomical fruit seed part	anatomical fruit seed part	['fruit:po_0009001', 'seed:po_0009010']	Component Match	[]

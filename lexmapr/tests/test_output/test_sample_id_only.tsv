@@ -1,6 +1,6 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
 small_simple1					Empty Sample
-small_simple2	Baked Potato	baked potato	[]	Component Match	['Using Candidate Processes']
-small_simple3	Canned Corn	canned corn	[]	Component Match	['Using Candidate Processes']
+small_simple2	Baked Potato	baked potato	[]	Component Match	['Synonym Usage']
+small_simple3	Canned Corn	canned corn	[]	Component Match	['Synonym Usage']
 small_simple4					Empty Sample
 small_simple5	Apple Pie	apple pie	[]	No Match	[]
