@@ -4,3 +4,5 @@ omit =
     # them in remotely
     lexmapr/ontofetch.py
     lexmapr/ontohelper.py
+[report]
+fail_under = 50
