@@ -43,7 +43,7 @@ def abbreviation_normalization_token(lemma, lookup_table, status_addendum):
 def abbreviation_normalization_phrase(phrase, lookup_table, status_addendum):
     if (phrase in lookup_table[
         "abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
-        cleaned_sample = lookup_table["abbreviations"][phrase]
+        phrase = lookup_table["abbreviations"][phrase]
         status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
     return phrase
 
