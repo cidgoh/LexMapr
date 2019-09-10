@@ -548,6 +548,10 @@ class TestOntologyMapping(unittest.TestCase):
 
     @staticmethod
     def remove_cached_resources():
+        lookup_table_path = os.path.join(ROOT, "cache",  "lookup_table.json")
+        if os.path.exists(lookup_table_path):
+            os.remove(lookup_table_path)
+
         for path in glob.glob(os.path.join(ROOT, "cache", "fetched_ontologies", "pizza*")):
             os.remove(path)
         for path in glob.glob(os.path.join(ROOT, "cache", "fetched_ontologies", "bfo*")):
@@ -650,7 +654,7 @@ class TestOntologyMapping(unittest.TestCase):
                          "suffixes", "parents", "resource_terms_id_based", "resource_terms",
                          "resource_permutation_terms", "resource_bracketed_permutation_terms",
                          "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
-                         "ifsac_default"]
+                         "ifsac_default", "ontology_classifications"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
@@ -663,7 +667,7 @@ class TestOntologyMapping(unittest.TestCase):
                          "suffixes", "parents", "resource_terms_id_based", "resource_terms",
                          "resource_permutation_terms", "resource_bracketed_permutation_terms",
                          "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
-                         "ifsac_default"]
+                         "ifsac_default", "ontology_classifications"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
@@ -1028,34 +1032,61 @@ class TestClassification(unittest.TestCase):
     classification_table_path = os.path.join(ROOT, "cache", "classification_lookup_table.json")
 
     @classmethod
-    def setUp(cls):
-        # Remove classification lookup table
-        if os.path.exists(cls.classification_table_path):
-            os.remove(cls.classification_table_path)
+    def setUpClass(cls):
+        cls.remove_cached_resources()
+
+    def tearDown(self):
+        self.remove_cached_resources()
 
     @staticmethod
-    def run_pipeline_with_args(bucket=False):
+    def remove_cached_resources():
+        TestOntologyMapping.remove_cached_resources()
+
+        if os.path.exists(TestClassification.classification_table_path):
+            os.remove(TestClassification.classification_table_path)
+
+        for path in glob.glob(os.path.join(
+                ROOT, "cache", "ontology_classification_tables","classification_pizza*")):
+            os.remove(path)
+        for path in glob.glob(os.path.join(
+                ROOT, "cache", "ontology_classification_tables","classification_bfo*")):
+            os.remove(path)
+
+    @staticmethod
+    def run_pipeline_with_args(bucket=True, config_file_name=None):
         """Run pipeline with some default arguments."""
 
         # Path to input file used in all tests
         small_simple_path = os.path.join(ROOT, "tests", "test_input", "small_simple.csv")
 
-        pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None, format="basic",
-                                        output=None, version=False, bucket=bucket))
+        if config_file_name:
+            config_file_path = os.path.join(ROOT, "tests", "test_config", config_file_name)
+            pipeline.run(argparse.Namespace(input_file=small_simple_path, config=config_file_path,
+                                            format="basic", output=None, version=False,
+                                            bucket=bucket))
+        else:
+            pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
+                                            format="basic", output=None, version=False,
+                                            bucket=bucket))
 
     def get_classification_lookup_table(self):
         with open(self.classification_table_path) as fp:
             return json.load(fp)
 
+    @staticmethod
+    def get_ontology_classification_table(file_name):
+        with open(os.path.join(ROOT, "cache", "ontology_classification_tables", file_name)) as fp:
+            return json.load(fp)
+
     def test_generate_classification_table(self):
-        self.run_pipeline_with_args()
+        self.run_pipeline_with_args(bucket=False)
         self.assertFalse(os.path.exists(self.classification_table_path))
 
-        self.run_pipeline_with_args(bucket=True)
+        self.run_pipeline_with_args()
         self.assertTrue(os.path.exists(self.classification_table_path))
 
     def test_classification_table_keys(self):
-        self.run_pipeline_with_args(bucket=True)
+        self.run_pipeline_with_args()
         classification_table = self.get_classification_lookup_table()
 
         expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
@@ -1063,10 +1094,55 @@ class TestClassification(unittest.TestCase):
                          "suffixes", "parents", "resource_terms_id_based", "resource_terms",
                          "resource_permutation_terms", "resource_bracketed_permutation_terms",
                          "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
-                         "ifsac_default"]
+                         "ifsac_default", "ontology_classifications"]
 
         self.assertCountEqual(expected_keys, classification_table.keys())
 
+    def test_ontology_classification_table_creation(self):
+        self.assertFalse(os.path.exists(os.path.join(
+            ROOT, "cache", "ontology_classification_tables","classification_bfo.json")
+        ))
+        self.run_pipeline_with_args(config_file_name="bfo.json")
+        self.assertTrue(os.path.exists(os.path.join(
+            ROOT, "cache", "ontology_classification_tables","classification_bfo.json")
+        ))
+
+    def test_ontology_classification_table_creation_with_multiple_ontologies(self):
+        self.assertFalse(os.path.exists(os.path.join(
+            ROOT, "cache", "ontology_classification_tables","classification_bfo_and_pizza.json")
+        ))
+        self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
+        self.assertTrue(os.path.exists(os.path.join(
+            ROOT, "cache", "ontology_classification_tables","classification_bfo_and_pizza.json")
+        ))
+
+    def test_ontology_classification_keys(self):
+        self.run_pipeline_with_args(config_file_name="bfo.json")
+        ontology_classification_table =\
+            self.get_ontology_classification_table("classification_bfo.json")
+
+        expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
+                         "processes", "collocations", "inflection_exceptions", "stop_words",
+                         "suffixes", "parents", "resource_terms_id_based", "resource_terms",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
+                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
+                         "ifsac_default", "ontology_classifications"]
+
+        self.assertCountEqual(expected_keys, ontology_classification_table.keys())
+
+    def test_ontology_classification_keys_with_multiple_ontologies(self):
+        self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
+        ontology_classification_table =\
+            self.get_ontology_classification_table("classification_bfo_and_pizza.json")
+
+        expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
+                         "processes", "collocations", "inflection_exceptions", "stop_words",
+                         "suffixes", "parents", "resource_terms_id_based", "resource_terms",
+                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
+                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
+                         "ifsac_default", "ontology_classifications"]
+
+        self.assertCountEqual(expected_keys, ontology_classification_table.keys())
 
 if __name__ == '__main__':
     unittest.main()

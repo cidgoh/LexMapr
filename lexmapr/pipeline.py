@@ -147,6 +147,42 @@ def run(args):
             with open(classification_lookup_table_path, "w") as fp:
                 json.dump(classification_lookup_table, fp)
 
+    if args.config and args.bucket:
+        # Make ontology_classification_tables folder if it does not
+        # already exist.
+        ontology_classification_tables_dir_path = os.path.join(ROOT, "cache",
+                                                               "ontology_classification_tables")
+        if not os.path.isdir(ontology_classification_tables_dir_path):
+            os.makedirs(ontology_classification_tables_dir_path)
+
+        config_file_name = os.path.basename(args.config).rsplit('.', 1)[0]
+        ontology_classification_table_path = os.path.join(
+            ontology_classification_tables_dir_path,
+            "classification_%s.json" % config_file_name
+        )
+
+        # Retrieve ontology classification table from cache
+        try:
+            with open(ontology_classification_table_path) as file:
+                ontology_classification_table = json.load(file)
+        # Generate new ontology classification table
+        except FileNotFoundError:
+            # Create empty ontology classification table
+            ontology_classification_table = helpers.create_lookup_table_skeleton()
+
+            # # Populate it
+            # ontology_classification_table =\
+            #     helpers.add_ontology_classifications_to_lookup_table(ontology_classification_table, lookup_table)
+
+            # Cache ontology classification table
+            with open(ontology_classification_table_path, "w") as fp:
+                json.dump(ontology_classification_table, fp)
+
+        # Merge ontology_classification_table into
+        # classification_lookup_table.
+        classification_lookup_table = helpers.merge_lookup_tables(classification_lookup_table,
+                                                                  ontology_classification_table)
+
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
     fw.write('\t'.join(OUTPUT_FIELDS))
 
