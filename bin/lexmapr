@@ -23,6 +23,8 @@ if __name__ == '__main__':
                              "from"),
     parser.add_argument('-b', '--bucket', action='store_true',
                         help="Classify samples into pre-defined buckets")
+    parser.add_argument('--no-cache', action='store_true',
+                        help="Ignore or replace cached resources, if there are any.")
     args = parser.parse_args()
     
     if args.version:

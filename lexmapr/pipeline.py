@@ -34,7 +34,7 @@ def run(args):
     # Cache (or get from cache) the lookup table containing pre-defined
     # resources used for matching.
     lookup_table_path = os.path.join(ROOT, "cache", "lookup_table.json")
-    if os.path.exists(lookup_table_path):
+    if os.path.exists(lookup_table_path) and not args.no_cache:
         with open(lookup_table_path) as fp:
             lookup_table = json.load(fp)
     else:
@@ -60,11 +60,11 @@ def run(args):
                                                   "lookup_%s.json" % config_file_name)
 
         # Retrieve lookup table for fetched ontology from cache
-        try:
+        if os.path.exists(ontology_lookup_table_path) and not args.no_cache:
             with open(ontology_lookup_table_path) as file:
                 ontology_lookup_table = json.load(file)
         # Generate new ontology lookup table
-        except FileNotFoundError:
+        else:
             # Load user-specified config file into an OrderedDict
             with open(args.config) as file:
                 config_json = json.load(file)
@@ -137,7 +137,7 @@ def run(args):
         # resources used for **classification**.
         classification_lookup_table_path = os.path.join(ROOT, "cache",
                                                         "classification_lookup_table.json")
-        if os.path.exists(classification_lookup_table_path):
+        if os.path.exists(classification_lookup_table_path) and not args.no_cache:
             with open(classification_lookup_table_path) as fp:
                 classification_lookup_table = json.load(fp)
         else:
