@@ -481,11 +481,6 @@ class TestPipeline(unittest.TestCase):
         # Temporary directory for output files
         cls.tmp_dir = tempfile.mkdtemp()
 
-        # Remove lookup table
-        lookup_table_path = os.path.join(ROOT, "cache",  "lookup_table.json")
-        if os.path.exists(lookup_table_path):
-            os.remove(lookup_table_path)
-
     @classmethod
     def tearDownClass(cls):
         # Remove temporary directory
@@ -516,7 +511,7 @@ class TestPipeline(unittest.TestCase):
             pipeline.run(argparse.Namespace(input_file=default_args["input"], config=None,
                                             format=default_args["format"],
                                             output=actual_output_path, version=False,
-                                            bucket=default_args["bucket"]))
+                                            bucket=default_args["bucket"], no_cache=True))
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
@@ -539,9 +534,8 @@ class TestPipeline(unittest.TestCase):
 class TestOntologyMapping(unittest.TestCase):
     """Test fetching and use of resources from online ontologies."""
 
-    @classmethod
-    def setUpClass(cls):
-        cls.remove_cached_resources()
+    def setUp(self):
+        self.remove_cached_resources()
 
     def tearDown(self):
         self.remove_cached_resources()
@@ -569,11 +563,11 @@ class TestOntologyMapping(unittest.TestCase):
             config_file_path = os.path.join(ROOT, "tests", "test_config", config_file_name)
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=config_file_path,
                                             format="basic", output=None, version=False,
-                                            bucket=False))
+                                            bucket=False, no_cache=True))
         else:
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
                                             format="basic", output=None, version=False,
-                                            bucket=False))
+                                            bucket=False, no_cache=True))
 
     @staticmethod
     def get_fetched_ontology(file_name):
@@ -1041,7 +1035,7 @@ class TestClassification(unittest.TestCase):
         small_simple_path = os.path.join(ROOT, "tests", "test_input", "small_simple.csv")
 
         pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None, format="basic",
-                                        output=None, version=False, bucket=bucket))
+                                        output=None, version=False, bucket=bucket, no_cache=True))
 
     def get_classification_lookup_table(self):
         with open(self.classification_table_path) as fp:
