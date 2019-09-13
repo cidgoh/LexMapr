@@ -41,6 +41,8 @@ python -m nltk.downloader all
 
 ## Usage
 
+#### Files
+
 `small_simple.csv`
 ```
 SampleId,Sample
@@ -52,11 +54,13 @@ small_simple5,Apple Pie
 ```
 
 `small_simple_config.json`
-```json
+```javascript
 [
   {"http://purl.obolibrary.org/obo/foodon.owl": "http://purl.obolibrary.org/obo/BFO_0000001"}
 ]
 ```
+
+#### Command line
 
 ```console
 (LexMapr) foo@bar:~$ lexmapr small_simple.csv -c small_simple_config.json
