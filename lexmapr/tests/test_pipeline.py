@@ -478,6 +478,31 @@ class TestPipeline(unittest.TestCase):
             input_path = os.path.join(ROOT, "tests", "test_input", pipeline_args["input"] + ".csv")
             cls.test_files[expected_output_filename]["input"] = input_path
 
+        # Add some tsv files
+        cls.test_files["empty_not_full_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
+            "format": "not full"
+        }
+        cls.test_files["empty_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
+        }
+        cls.test_files["small_simple_not_full_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "small_simple_with_tsv_input.tsv"),
+            "format": "not full"
+        }
+        cls.test_files["small_simple_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "small_simple_with_tsv_input.tsv"),
+        }
+        cls.test_files["empty_buckets_not_full_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
+            "format": "not full",
+            "bucket": True
+        }
+        cls.test_files["empty_buckets_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
+            "bucket": True
+        }
+
         # Temporary directory for output files
         cls.tmp_dir = tempfile.mkdtemp()
 

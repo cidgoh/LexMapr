@@ -152,7 +152,11 @@ def run(args):
 
     # Input file
     fr = open(args.input_file, "r")
-    fr_reader = csv.reader(fr, delimiter=",")
+    _, ext = os.path.splitext(args.input_file)
+    if ext == ".csv":
+        fr_reader = csv.reader(fr, delimiter=",")
+    elif ext == ".tsv":
+        fr_reader = csv.reader(fr, delimiter="\t")
     # Skip header
     next(fr_reader)
 
