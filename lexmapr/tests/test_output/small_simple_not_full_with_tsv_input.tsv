@@ -1,0 +1,6 @@
+Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components
+small_simple1	Chicken Breast	chicken breast	['breast:uberon_0000310']
+small_simple2	Baked Potato	baked potato	[]
+small_simple3	Canned Corn	canned corn	[]
+small_simple4	Frozen Yogurt	frozen yogurt	['frozen:pato_0001985']
+small_simple5	Apple Pie	apple pie	[]
