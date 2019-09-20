@@ -11,7 +11,6 @@ import sys
 
 from nltk.tokenize import word_tokenize
 
-from lexmapr.definitions import ROOT
 from lexmapr.ontofetch import Ontology
 from lexmapr.pipeline_classification import (add_classification_resources_to_lookup_table,
                                              classify_sample)
@@ -33,7 +32,7 @@ def run(args):
 
     # Cache (or get from cache) the lookup table containing pre-defined
     # resources used for matching.
-    lookup_table_path = os.path.join(ROOT, "cache", "lookup_table.json")
+    lookup_table_path = os.path.abspath("lookup_table.json")
     if os.path.exists(lookup_table_path):
         with open(lookup_table_path) as fp:
             lookup_table = json.load(fp)
@@ -45,28 +44,26 @@ def run(args):
 
     # Lookup table will also consist of terms fetched from an online
     # ontology.
-    if args.config:
+    if args.config is not None:
         # Make fetched_ontologies folder if it does not already exist
-        fetched_ontologies_dir_path = os.path.join(ROOT, "cache", "fetched_ontologies")
-        if not os.path.isdir(fetched_ontologies_dir_path):
-            os.mkdir(fetched_ontologies_dir_path)
+        if not os.path.isdir(os.path.abspath("fetched_ontologies")):
+            os.makedirs("fetched_ontologies")
         # Make ontology_lookup_tables folder if it does not already exist
-        ontology_lookup_tables_dir_path = os.path.join(ROOT, "cache", "ontology_lookup_tables")
-        if not os.path.isdir(ontology_lookup_tables_dir_path):
-            os.makedirs(ontology_lookup_tables_dir_path)
+        if not os.path.isdir(os.path.abspath("ontology_lookup_tables")):
+            os.makedirs("ontology_lookup_tables")
 
         config_file_name = os.path.basename(args.config).rsplit('.', 1)[0]
-        ontology_lookup_table_path = os.path.join(ontology_lookup_tables_dir_path,
-                                                  "lookup_%s.json" % config_file_name)
+        ontology_lookup_table_abs_path = os.path.abspath("ontology_lookup_tables/lookup_%s.json")
+        ontology_lookup_table_abs_path = ontology_lookup_table_abs_path % config_file_name
 
         # Retrieve lookup table for fetched ontology from cache
         try:
-            with open(ontology_lookup_table_path) as file:
+            with open(ontology_lookup_table_abs_path) as file:
                 ontology_lookup_table = json.load(file)
         # Generate new ontology lookup table
         except FileNotFoundError:
             # Load user-specified config file into an OrderedDict
-            with open(args.config) as file:
+            with open(os.path.abspath(args.config)) as file:
                 config_json = json.load(file)
 
             # Create empty ontology lookup table
@@ -77,26 +74,24 @@ def run(args):
                 (ontology_iri, root_entity_iri), = json_object.items()
                 # Arguments for ontofetch.py
                 if root_entity_iri == "":
-                    sys.argv = ["", ontology_iri, "-o", fetched_ontologies_dir_path + "/"]
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies/"]
                 else:
-                    sys.argv = ["", ontology_iri, "-o", fetched_ontologies_dir_path + "/", "-r",
-                                root_entity_iri]
+                    sys.argv = ["", ontology_iri, "-o", "fetched_ontologies/", "-r", root_entity_iri]
                 # Call ontofetch.py
                 ontofetch = Ontology()
                 ontofetch.__main__()
                 # Load fetched_ontology from JSON, and add the
                 # appropriate terms to lookup_table.
                 ontology_file_name = os.path.basename(ontology_iri).rsplit('.', 1)[0]
-                fetched_ontology_path = os.path.join(fetched_ontologies_dir_path,
-                                                     "%s.json" % ontology_file_name)
-                with open(fetched_ontology_path) as file:
+                fetched_ontology_rel_path = "fetched_ontologies/%s.json" % ontology_file_name
+                with open(os.path.abspath(fetched_ontology_rel_path)) as file:
                     fetched_ontology = json.load(file)
                 ontology_lookup_table =\
                     helpers.add_fetched_ontology_to_lookup_table(ontology_lookup_table,
                                                                  fetched_ontology)
 
             # Add ontology_lookup_table to cache
-            with open(ontology_lookup_table_path, "w") as file:
+            with open(ontology_lookup_table_abs_path, "w") as file:
                 json.dump(ontology_lookup_table, file)
 
         # Merge ontology_lookup_table into lookup_table
@@ -135,8 +130,7 @@ def run(args):
 
         # Cache (or get from cache) the lookup table containing pre-defined
         # resources used for **classification**.
-        classification_lookup_table_path = os.path.join(ROOT, "cache",
-                                                        "classification_lookup_table.json")
+        classification_lookup_table_path = os.path.abspath("classification_lookup_table.json")
         if os.path.exists(classification_lookup_table_path):
             with open(classification_lookup_table_path) as fp:
                 classification_lookup_table = json.load(fp)
