@@ -333,8 +333,7 @@ def create_lookup_table_skeleton():
             "buckets_lexmapr": {},
             "ifsac_labels": {},
             "ifsac_refinement": {},
-            "ifsac_default": {},
-            "ontology_classifications": {}
+            "ifsac_default": {}
             }
 
 
