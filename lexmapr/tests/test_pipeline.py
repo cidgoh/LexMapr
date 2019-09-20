@@ -6,14 +6,14 @@ Requires environmental variable ``PYTHONHASHSEED=0`` for tests to pass.
 """
 
 import argparse
+import glob
 import json
 import os
 import shutil
 import tempfile
 import unittest
 
-import pkg_resources
-
+from lexmapr.definitions import ROOT
 import lexmapr.pipeline as pipeline
 import lexmapr.pipeline_helpers as pipeline_helpers
 
@@ -475,13 +475,36 @@ class TestPipeline(unittest.TestCase):
     def setUpClass(cls):
         # Convert input file names to paths in test_files.
         for expected_output_filename, pipeline_args in cls.test_files.items():
-            input_path = pkg_resources.resource_filename("lexmapr.tests.test_input",
-                                                         pipeline_args["input"] + ".csv")
+            input_path = os.path.join(ROOT, "tests", "test_input", pipeline_args["input"] + ".csv")
             cls.test_files[expected_output_filename]["input"] = input_path
 
-        # Change working directory to temporary directory
+        # Add some tsv files
+        cls.test_files["empty_not_full_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
+            "format": "not full"
+        }
+        cls.test_files["empty_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
+        }
+        cls.test_files["small_simple_not_full_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "small_simple_with_tsv_input.tsv"),
+            "format": "not full"
+        }
+        cls.test_files["small_simple_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "small_simple_with_tsv_input.tsv"),
+        }
+        cls.test_files["empty_buckets_not_full_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
+            "format": "not full",
+            "bucket": True
+        }
+        cls.test_files["empty_buckets_with_tsv_input"] = {
+            "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
+            "bucket": True
+        }
+
+        # Temporary directory for output files
         cls.tmp_dir = tempfile.mkdtemp()
-        os.chdir(cls.tmp_dir)
 
     @classmethod
     def tearDownClass(cls):
@@ -503,18 +526,17 @@ class TestPipeline(unittest.TestCase):
         # Iterate over all expected outputs
         for expected_output_filename, pipeline_args in self.test_files.items():
             # Path of expected output file
-            expected_output_path = pkg_resources.resource_filename("lexmapr.tests.test_output",
-                                                                   expected_output_filename
-                                                                   + ".tsv")
+            expected_output_path = os.path.join(ROOT, "tests", "test_output",
+                                                expected_output_filename + ".tsv")
             # File path to store actual output of input file
-            actual_output_path = "actual_output.tsv"
+            actual_output_path = os.path.join(self.tmp_dir, "actual_output.tsv")
             # Run pipeline.run using input_path and actual_output_path
             default_args = {"format": "full", "bucket": False}
             default_args.update(pipeline_args)
             pipeline.run(argparse.Namespace(input_file=default_args["input"], config=None,
                                             format=default_args["format"],
                                             output=actual_output_path, version=False,
-                                            bucket=default_args["bucket"]))
+                                            bucket=default_args["bucket"], no_cache=True))
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
@@ -537,66 +559,78 @@ class TestPipeline(unittest.TestCase):
 class TestOntologyMapping(unittest.TestCase):
     """Test fetching and use of resources from online ontologies."""
 
-    @classmethod
-    def setUpClass(cls):
-        # Change working directory to temporary directory
-        cls.tmp_dir = tempfile.mkdtemp()
-        os.chdir(cls.tmp_dir)
-
-    @classmethod
-    def tearDownClass(cls):
-        # Remove temporary directory
-        shutil.rmtree(cls.tmp_dir)
+    def setUp(self):
+        self.remove_cached_resources()
 
     def tearDown(self):
-        # Remove cached ontology resources between tests
-        shutil.rmtree("fetched_ontologies/")
-        shutil.rmtree("ontology_lookup_tables/")
+        self.remove_cached_resources()
+
+    @staticmethod
+    def remove_cached_resources():
+        for path in glob.glob(os.path.join(ROOT, "cache", "fetched_ontologies", "pizza*")):
+            os.remove(path)
+        for path in glob.glob(os.path.join(ROOT, "cache", "fetched_ontologies", "bfo*")):
+            os.remove(path)
+        for path in glob.glob(os.path.join(
+                ROOT, "cache", "ontology_lookup_tables","lookup_pizza*")):
+            os.remove(path)
+        for path in glob.glob(os.path.join(ROOT, "cache", "ontology_lookup_tables", "lookup_bfo*")):
+            os.remove(path)
 
     @staticmethod
     def run_pipeline_with_args(config_file_name=None):
         """Run pipeline with some default arguments."""
 
         # Path to input file used in all tests
-        small_simple_path =\
-            pkg_resources.resource_filename("lexmapr.tests.test_input", "small_simple.csv")
+        small_simple_path = os.path.join(ROOT, "tests", "test_input", "small_simple.csv")
 
         if config_file_name:
-            config_file_path = pkg_resources.resource_filename("lexmapr.tests.test_config",
-                                                               config_file_name)
+            config_file_path = os.path.join(ROOT, "tests", "test_config", config_file_name)
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=config_file_path,
                                             format="basic", output=None, version=False,
-                                            bucket=False))
+                                            bucket=False, no_cache=True))
         else:
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
                                             format="basic", output=None, version=False,
-                                            bucket=False))
+                                            bucket=False, no_cache=True))
 
     @staticmethod
     def get_fetched_ontology(file_name):
-        with open("fetched_ontologies/%s" % file_name) as file:
-            return json.load(file)
+        with open(os.path.join(ROOT, "cache", "fetched_ontologies", file_name)) as fp:
+            return json.load(fp)
 
     @staticmethod
     def get_ontology_lookup_table(file_name):
-        with open("ontology_lookup_tables/%s" % file_name) as file:
-            return json.load(file)
+        with open(os.path.join(ROOT, "cache", "ontology_lookup_tables", file_name)) as fp:
+            return json.load(fp)
 
     def test_fetch_ontology(self):
         self.run_pipeline_with_args()
-        self.assertFalse(os.path.exists("fetched_ontologies/pizza.json"))
+        self.assertFalse(os.path.exists(os.path.join(
+            ROOT, "cache", "fetched_ontologies","pizza.json")
+        ))
 
         self.run_pipeline_with_args(config_file_name="pizza.json")
-        self.assertTrue(os.path.exists("fetched_ontologies/pizza.json"))
+        self.assertTrue(os.path.exists(os.path.join(
+            ROOT, "cache", "fetched_ontologies","pizza.json")
+        ))
 
     def test_fetch_ontologies(self):
         self.run_pipeline_with_args()
-        self.assertFalse(os.path.exists("fetched_ontologies/bfo.json"))
-        self.assertFalse(os.path.exists("fetched_ontologies/pizza.json"))
+        self.assertFalse(os.path.exists(os.path.join(
+            ROOT, "cache", "fetched_ontologies","bfo.json")
+        ))
+        self.assertFalse(os.path.exists(os.path.join(
+            ROOT, "cache", "fetched_ontologies","pizza.json")
+        ))
 
         self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
-        self.assertTrue(os.path.exists("fetched_ontologies/bfo.json"))
-        self.assertTrue(os.path.exists("fetched_ontologies/pizza.json"))
+        self.assertTrue(os.path.exists(os.path.join(
+            ROOT, "cache", "fetched_ontologies","bfo.json")
+        ))
+        self.assertTrue(os.path.exists(os.path.join(
+            ROOT, "cache", "fetched_ontologies","pizza.json")
+        ))
 
     def test_fetch_ontology_specify_no_root(self):
         self.run_pipeline_with_args(config_file_name="bfo.json")
@@ -609,15 +643,22 @@ class TestOntologyMapping(unittest.TestCase):
         self.assertEqual(3, len(bfo_process_fetched_ontology["specifications"]))
 
     def test_ontology_table_creation(self):
-        self.assertFalse(os.path.exists("ontology_lookup_tables/lookup_bfo.json"))
+        self.assertFalse(os.path.exists(os.path.join(
+            ROOT, "cache", "ontology_lookup_tables","lookup_bfo.json")
+        ))
         self.run_pipeline_with_args(config_file_name="bfo.json")
-        self.assertTrue(os.path.exists("ontology_lookup_tables/lookup_bfo.json"))
+        self.assertTrue(os.path.exists(os.path.join(
+            ROOT, "cache", "ontology_lookup_tables","lookup_bfo.json")
+        ))
 
     def test_ontology_table_creation_with_multiple_ontologies(self):
-        expected_lookup_table_rel_path = "ontology_lookup_tables/lookup_bfo_and_pizza.json"
-        self.assertFalse(os.path.exists(expected_lookup_table_rel_path))
+        self.assertFalse(os.path.exists(os.path.join(
+            ROOT, "cache", "ontology_lookup_tables","lookup_bfo_and_pizza.json")
+        ))
         self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
-        self.assertTrue(os.path.exists(expected_lookup_table_rel_path))
+        self.assertTrue(os.path.exists(os.path.join(
+            ROOT, "cache", "ontology_lookup_tables","lookup_bfo_and_pizza.json")
+        ))
 
     def test_ontology_table_keys(self):
         self.run_pipeline_with_args(config_file_name="bfo.json")
@@ -1003,44 +1044,34 @@ class TestClassification(unittest.TestCase):
     This differs from the black-box approach taken in TestPipeline, as
     we are concerned with the mechanics behind the classification.
     """
+    classification_table_path = os.path.join(ROOT, "cache", "classification_lookup_table.json")
 
     @classmethod
-    def setUpClass(cls):
-        # Change working directory to temporary directory
-        cls.tmp_dir = tempfile.mkdtemp()
-        os.chdir(cls.tmp_dir)
-
-    @classmethod
-    def tearDownClass(cls):
-        # Remove temporary directory
-        shutil.rmtree(cls.tmp_dir)
-
-    def tearDown(self):
-        # Remove cached classification lookup table between tests
-        os.remove("classification_lookup_table.json")
+    def setUp(cls):
+        # Remove classification lookup table
+        if os.path.exists(cls.classification_table_path):
+            os.remove(cls.classification_table_path)
 
     @staticmethod
     def run_pipeline_with_args(bucket=False):
         """Run pipeline with some default arguments."""
 
         # Path to input file used in all tests
-        small_simple_path =\
-            pkg_resources.resource_filename("lexmapr.tests.test_input", "small_simple.csv")
+        small_simple_path = os.path.join(ROOT, "tests", "test_input", "small_simple.csv")
 
         pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None, format="basic",
-                                        output=None, version=False, bucket=bucket))
+                                        output=None, version=False, bucket=bucket, no_cache=True))
 
-    @staticmethod
-    def get_classification_lookup_table():
-        with open("classification_lookup_table.json") as fp:
+    def get_classification_lookup_table(self):
+        with open(self.classification_table_path) as fp:
             return json.load(fp)
 
     def test_generate_classification_table(self):
         self.run_pipeline_with_args()
-        self.assertFalse(os.path.exists("classification_lookup_table.json"))
+        self.assertFalse(os.path.exists(self.classification_table_path))
 
         self.run_pipeline_with_args(bucket=True)
-        self.assertTrue(os.path.exists("classification_lookup_table.json"))
+        self.assertTrue(os.path.exists(self.classification_table_path))
 
     def test_classification_table_keys(self):
         self.run_pipeline_with_args(bucket=True)

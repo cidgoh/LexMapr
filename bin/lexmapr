@@ -11,9 +11,34 @@ logger = logging.getLogger("lexmapr")
 
 script_name = os.path.basename(os.path.realpath(sys.argv[0]))
 
+
+class InputFileNotFoundError(FileNotFoundError):
+    """Exception raised when input file does not exist."""
+    pass
+
+
+def valid_input_file(path):
+    """Raises appropriate errors if input file is invalid.
+
+    Called by argparse parser when validating arguments.
+
+    :param str path: Input file path
+    :return: path
+    :rtype: str
+    """
+    _, ext = os.path.splitext(path)
+    if ext != ".csv" and ext != ".tsv":
+        raise argparse.ArgumentTypeError("Please supply a csv or tsv input file")
+
+    if not os.path.exists(path):
+        raise InputFileNotFoundError(path + " not found")
+
+    return path
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('input_file', help='Input csv file', nargs='?')
+    parser.add_argument('input_file', help='Input csv or tsv file', nargs='?',
+                        type=valid_input_file)
     parser.add_argument('-o', '--output', nargs='?', help='Output file')
     parser.add_argument('-f', '--format', default='basic', help='Output format')
     parser.add_argument('--version', action='store_true', dest='version',
@@ -23,6 +48,8 @@ if __name__ == '__main__':
                              "from"),
     parser.add_argument('-b', '--bucket', action='store_true',
                         help="Classify samples into pre-defined buckets")
+    parser.add_argument('--no-cache', action='store_true',
+                        help="Ignore or replace cached resources, if there are any.")
     args = parser.parse_args()
     
     if args.version:
