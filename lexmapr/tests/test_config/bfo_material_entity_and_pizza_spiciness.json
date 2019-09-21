@@ -1,0 +1,4 @@
+[
+  {"https://raw.githubusercontent.com/Public-Health-Bioinformatics/LexMapr/master/lexmapr/tests/test_ontologies/bfo.owl": "http://purl.obolibrary.org/obo/BFO_0000040"},
+  {"https://raw.githubusercontent.com/Public-Health-Bioinformatics/LexMapr/master/lexmapr/tests/test_ontologies/pizza.owl": "http://www.co-ode.org/ontologies/pizza/pizza.owl#Spiciness"}
+]

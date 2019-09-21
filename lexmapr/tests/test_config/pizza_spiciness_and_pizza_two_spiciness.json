@@ -1,0 +1,4 @@
+[
+  {"https://raw.githubusercontent.com/Public-Health-Bioinformatics/LexMapr/master/lexmapr/tests/test_ontologies/pizza.owl": "http://www.co-ode.org/ontologies/pizza/pizza.owl#Spiciness"},
+  {"https://raw.githubusercontent.com/Public-Health-Bioinformatics/LexMapr/master/lexmapr/tests/test_ontologies/pizza_two.owl": "http://www.co-ode.org/ontologies/pizza/pizza.owl#Spiciness"}
+]

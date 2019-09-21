@@ -1,0 +1,10 @@
+Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
+small_simple1	Breast	breast	['breast:uberon_0000310']	Full Term Match	['A Direct Match']
+small_simple2	Baked Potato	baked potato	[]	Component Match	['Synonym Usage']
+small_simple3	fld	fluid	[]	No Match	[]
+small_simple4	froz fld	frozen fluid	['frozen:pato_0001985']	Component Match	['Abbreviation-Acronym Treatment']
+small_simple5	fld apple	fluid apple	[]	No Match	[]
+small_simple6	csf	cerebrospinal fluid	['cerebrospinal fluid:envo_02000029']	Full Term Match	['A Direct Match with Cleaned Sample', 'Abbreviation-Acronym Treatment']
+small_simple7	csf f	cerebrospinal fluid fahrenheit	['cerebrospinal fluid:envo_02000029']	Component Match	['Abbreviation-Acronym Treatment']
+small_simple8	Pie csf	pie cerebrospinal fluid	['cerebrospinal fluid:envo_02000029']	Component Match	['Abbreviation-Acronym Treatment']
+small_simple9	csf fld	cerebrospinal fluid	['cerebrospinal fluid:envo_02000029']	Full Term Match	['A Direct Match with Cleaned Sample', 'Abbreviation-Acronym Treatment']

@@ -1,60 +1,77 @@
 # LexMapr
+
 A Lexicon and Rule-Based Tool for Translating Short Biomedical Specimen Descriptions into Semantic Web Ontology Terms
 
-## Build status
-
-[![Build Status](https://travis-ci.org/lexmapr/LexMapr.svg?branch=master)](https://travis-ci.org/lexmapr/LexMapr)
-[![Coverage Status](https://coveralls.io/repos/github/lexmapr/LexMapr/badge.svg?branch=master)](https://coveralls.io/github/lexmapr/LexMapr?branch=master)
+[![Build Status](https://travis-ci.org/Public-Health-Bioinformatics/LexMapr.svg?branch=master)](https://travis-ci.org/Public-Health-Bioinformatics/LexMapr)
+[![Coverage Status](https://coveralls.io/repos/github/Public-Health-Bioinformatics/LexMapr/badge.svg?branch=master)](https://coveralls.io/github/Public-Health-Bioinformatics/LexMapr?branch=master)
 [![bioconda-badge](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square)](http://bioconda.github.io)
 
-The main script file for processing is `bin/lexmapr`
+![alt text](./logo.png)
 
-## Dependencies
+## Installation
 
-- [nltk](https://pypi.org/project/nltk/)
-- [inflection](https://pypi.org/project/inflection/)
-- [wikipedia](https://pypi.org/project/wikipedia/)
-- [python-dateutil](https://pypi.org/project/python-dateutil/)
-- [rdflib](https://pypi.org/project/rdflib/)
+### With Bioconda
+
+Set up [Bioconda](https://bioconda.github.io/), if you haven't already!
+
+Then:
+
+```
+conda create -n LexMapr python=3.6 lexmapr
+```
+
+### Without Bioconda
+
+Install [Conda](https://docs.conda.io/en/latest/miniconda.html).
+
+Create a LexMapr environment:
+
+```
+conda create --name LexMapr python=3.6
+```
+
+Install LexMapr into your conda environment:
+```
+conda activate LexMapr
+git clone https://github.com/Public-Health-Bioinformatics/LexMapr.git
+cd LexMapr
+pip install .
+python -m nltk.downloader all
+```
 
 ## Usage
 
+#### Files
+
+`small_simple.csv`
 ```
-usage: lexmapr [-h] [-o [OUTPUT]] [--format FORMAT] input_file [log_file]
-
-positional arguments:
-  input_file            Input csv file
-  log_file              Log file
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -o [OUTPUT], --output [OUTPUT]
-                        Output file
-  --format FORMAT       Output format
+SampleId,Sample
+small_simple1,Chicken Breast
+small_simple2,Baked Potato
+small_simple3,Canned Corn
+small_simple4,Frozen Yogurt
+small_simple5,Apple Pie
 ```
 
-### Example input files (in `lexmapr/tests/input`)
+`small_simple_config.json`
+```javascript
+[
+  {"http://purl.obolibrary.org/obo/foodon.owl": "http://purl.obolibrary.org/obo/BFO_0000001"}
+]
+```
 
-| Filename                   | Description                      |
-|----------------------------|----------------------------------|
-| `small_simple.csv`          | A small simple test dataset      |
-| `enteroForFreq.csv`        | Dataset from EnteroBase          |
-| `genomeTrackerMaster.csv`  | Dataset from GenomeTrakr         |
-| `bccdcsample.csv`          | Dataset from BCCDC               |
-| `zheminSamples.csv`        | Zhemin's samples from EnteroBase |
-| `GRDI-UniqueSamples.csv`   | Dataset from GRDI                |
+#### Command line
 
-### Resources Files (in `lexmapr/resources`)
+```console
+(LexMapr) foo@bar:~$ lexmapr small_simple.csv -c small_simple_config.json
+Sample_Id       Sample_Desc     Cleaned_Sample  Matched_Components
+small_simple1   Chicken Breast  chicken breast  ['chicken breast:foodon_00002703']
+small_simple2   Baked Potato    baked potato    ['potato (whole, baked):foodon_03302196']
+small_simple3   Canned Corn     canned corn     ['corn (canned):foodon_03302665']
+small_simple4   Frozen Yogurt   frozen yogurt   ['frozen yogurt:foodon_03307445']
+small_simple5   Apple Pie       apple pie       ['apple pie:foodon_00002475']
+```
 
-| Filename                      | Description                                                                                          |
-|-------------------------------|------------------------------------------------------------------------------------------------------|
-| `CombinedResourceTerms.csv`   | All the ontology terms with their ids extracted and combined in a single file                        |
-| `SynLex.csv`                  | Synonym Lexicon                                                                                      |
-| `AbbLex.csv`                  | Abbreviation/Acronym Lexicon                                                                         |
-| `NefLex.csv`                  | Non English FoodNames Lexicon                                                                        |
-| `ScorLex.csv`                 | Spellings correction Lexicon                                                                         |
-| `SemLex.csv`                  | Semantic Tagging Lexicon                                                                             |
-| `inflection-exceptions.csv`   | Exception list for avoiding false positives during inflection treatment                              |
-| `candidateProcesses.csv`      | Additional processes which are candidates for inclusion                                              |
-| `wikipediaCollocations.csv`   | Additional compound terms (collocations) detected out of datasets which are candidates for inclusion |
-| `mining-stopwords.csv`        | Stop Words list for treatment refined for domian under consideration                                 |
+## More Documentation
+
+[Tutorial slides for people with little or no experience with command line](./tutorial_slides.pdf)

@@ -1,0 +1,10 @@
+Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
+small_simple1	avocado	avocado	[]	No Match	[]
+small_simple2	Baked Potato	baked potato	[]	Component Match	['Synonym Usage']
+small_simple3	avocaco	avocado	[]	No Match	[]
+small_simple4	desicated avocaco	desiccated avocado	[]	Component Match	['Spelling Correction Treatment', 'Using Candidate Processes']
+small_simple5	desiccated avocaco	desiccated avocado	[]	Component Match	['Spelling Correction Treatment', 'Using Candidate Processes']
+small_simple6	laboratroy	laboratory	[]	No Match	[]
+small_simple7	enlish laboratroy	english, enlist laboratory	[]	No Match	[]
+small_simple8	Pie enlish	pie english, enlist	[]	No Match	[]
+small_simple9	enlish avocaco	english, enlist avocado	[]	No Match	[]

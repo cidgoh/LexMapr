@@ -1,17 +1,34 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+# 
 
 """ **************************************************************************
- 
+	This collects a set of commonly used python functions into the OntoHelper class
+	
+	Call from another class init routine. 
+
+	import python.ontohelper as oh
+
+	class Ontology(object):
+
+		self.onto_helper = oh.OntoHelper()
+		...
+
+	Instance of onto_helper has:
+
+		self.graph: holds a triple store graph
+
+		self.struct: an OrderedDict() of
+			.@context: OrderedDict() of prefix:url key values.
+			.metadata: Holds metadata (dc:title etc) for loaded ontology
+			.specifications Holds term details or other derived datastructures
+
 """
 
-from __future__ import print_function
 import os
 import json
 import sys
 import rdflib
 from rdflib.plugins.sparql import prepareQuery
-import lexmapr.pipeline
 
 # Do this, otherwise a warning appears on stdout: No handlers could be 
 #found for logger "rdflib.term"
@@ -30,6 +47,7 @@ def stop_err(msg, exit_code = 1):
 class OntoHelper(object):
 
 	CODE_VERSION = '0.0.3'
+	SYNONYM_FIELDS = ['oboInOwl_hasSynonym','oboInOwl_hasBroadSynonym','oboInOwl_hasExactSynonym','oboInOwl_hasNarrowSynonym','IAO_0000118']
 
 	def __init__(self):
 
@@ -49,6 +67,7 @@ class OntoHelper(object):
 		self.struct['@context'] = OrderedDict({
 			'owl': 'http://www.w3.org/2002/07/owl#',
 			'rdfs': 'http://www.w3.org/2000/01/rdf-schema#', 
+			'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
 			'oboInOwl': 'http://www.geneontology.org/formats/oboInOwl#',
 			'xmls': 'http://www.w3.org/2001/XMLSchema#',
 			'vcard': 'http://www.w3.org/2006/vcard/ns#',
@@ -65,6 +84,7 @@ class OntoHelper(object):
 		self.struct['specifications'] = {}
 
 		# Namespace is for rdflib sparql querries
+		# FUTURE: DEPRECATE?.  QUERY ENGINE SHOULD USE @CONTEXT.
 		self.namespace = { 
 			'owl': rdflib.URIRef('http://www.w3.org/2002/07/owl#'),
 			'rdfs': rdflib.URIRef('http://www.w3.org/2000/01/rdf-schema#'),
@@ -77,7 +97,8 @@ class OntoHelper(object):
 			'IAO':	rdflib.URIRef('http://purl.obolibrary.org/obo/IAO_'),
 			'GENEPIO':rdflib.URIRef('http://purl.obolibrary.org/obo/GENEPIO_'), # Still needed for a few GEEM relations
 			'RO':	rdflib.URIRef('http://purl.obolibrary.org/obo/RO_'),
-			'OBI':	rdflib.URIRef('http://purl.obolibrary.org/obo/OBI_')
+			'OBI':	rdflib.URIRef('http://purl.obolibrary.org/obo/OBI_'),
+			'AGENCY': rdflib.URIRef('http://genepio.org/ontology/lexmapr/')
 		}
 
 		self.queries = {
@@ -105,8 +126,35 @@ class OntoHelper(object):
 				OPTIONAL {?resource (dc:license|terms:license) ?license.}
 				OPTIONAL {?resource (dc:date|terms:date) ?date.}
 			}
-			""", initNs = self.namespace)
+			""", initNs = self.namespace),
 
+			# ################################################################
+			# Terms are augmented with synonyms in order for type-as-you-go inputs
+			# to return appropriately filtered phrases
+			#
+			# INPUT
+			# 	?datum : id of term to get labels for
+			# OUTPUT
+			#   ?Synonym ?ExactSynonym ?NarrowSynonym
+			#
+			'entity_synonyms': prepareQuery("""
+
+				SELECT DISTINCT ?datum 
+					?oboInOwl_hasSynonym 
+					?oboInOwl_hasBroadSynonym 
+					?oboInOwl_hasExactSynonym 
+					?oboInOwl_hasNarrowSynonym 
+					?IAO_0000118
+				WHERE {  
+					{?datum rdf:type owl:Class} UNION {?datum rdf:type owl:NamedIndividual}.
+					{?datum oboInOwl:hasSynonym ?oboInOwl_hasSynonym.} 
+					UNION {?datum oboInOwl:hasBroadSynonym ?oboInOwl_hasBroadSynonym.}
+					UNION {?datum oboInOwl:hasExactSynonym ?oboInOwl_hasExactSynonym.}
+					UNION {?datum oboInOwl:hasNarrowSynonym ?oboInOwl_hasNarrowSynonym.}
+					UNION {?datum IAO:0000118 ?IAO_0000118.}
+				}
+			""", initNs = self.namespace),
+			
 		}
 
 	def __main__(self):
@@ -144,7 +192,7 @@ class OntoHelper(object):
 			for arg in args:
 				focus = focus[arg]
 		except:
-			print("ERROR: in get_struct(), couldn't find '%s' key or struct in %s" % (str(arg), str(args) ))
+			print ("ERROR: in get_struct(), couldn't find '%s' key or struct in %s" % (str(arg), str(args) ) )
 			return None
 		return focus
 
@@ -162,7 +210,7 @@ class OntoHelper(object):
 		path.
 		"""
 		if not focus:
-			print( "ERROR: in set_entity_default(), no focus for setting: %s" % str(args[0:-1]) )
+			print ( "ERROR: in set_entity_default(), no focus for setting: %s" % str(args[0:-1]) )
 			return None
 
 		value = args[-1]
@@ -175,7 +223,7 @@ class OntoHelper(object):
 				return focus[arg]
 
 			elif not arg in focus: 
-				print( "ERROR: in set_entity_default(), couldn't find %s" % str(args[0:-1]) )
+				print ( "ERROR: in set_entity_default(), couldn't find %s" % str(args[0:-1]) )
 				return False
 			else:
 				focus = focus[arg]
@@ -226,7 +274,7 @@ class OntoHelper(object):
 			# table, so add it to @context 
 			prefix = path.rsplit('/',1)[1]
 
-			# At least 2 characters in namespace prefix required to avoid
+			# At least 2 characters in @context prefix required to avoid
 			# exception to rule below, as no namespace begins with number
 			# and following is a URI but not an ontology term reference.
 			#	<owl:versionIRI rdf:resource="http://purl.obolibrary.org/obo/obi/2018-05-23/obi.owl"/>
@@ -243,9 +291,12 @@ class OntoHelper(object):
 		# If a URI has a recognized prefix, create full version
 		if ':' in myURI: 
 			(prefix, myid) = myURI.rsplit(':',1)
-			for key, value in self.struct['@context'].items():
-				if key == prefix: return value + myid
-			
+
+			if prefix in self.struct['@context']:
+				return self.struct['@context'][prefix] + myid
+			else:
+				print ('ERROR in get_expanded_id(): No @context prefix for: ', myURI, ">" + prefix + "<")
+
 		return myURI 
 
 
@@ -277,18 +328,19 @@ class OntoHelper(object):
 			ORDER BY (?import_file)
 		""")		
 
-		print("It has %s import files ..." % len(imports), file=sys.stderr)
+		print ("It has %s import files ..." % len(imports))
 
 		for result_row in imports:
 
 			import_file = result_row.import_file
-
+			print (import_file)
 			# If main file supplied as a URI, then process imports likewise
 			if main_ontology_file[0:4] == 'http':
 				try:
-					self.graph.parse(import_file)	
-				except rdflib.exceptions.ParserError as e:
-					print('WARNING:' + import_file + " could not be loaded!\n")		
+					self.graph.parse(import_file, format='xml')	
+				#except rdflib.exceptions.ParserError as e:
+				except Exception as e:
+					print ('WARNING:' + import_file + " could not be loaded!\n", e)		
 
 			# Ontology given as file path, so only check its ./imports/ folder
 			# since, as a local resource, its imports should be local too.
@@ -296,14 +348,14 @@ class OntoHelper(object):
 
 				file_path = os.path.dirname(main_ontology_file) + '/imports/' + import_file.rsplit('/',1)[1]
 
-			try:
-				if os.path.isfile( file_path):
-					self.graph.parse(file_path)	
-				else:
-					print('WARNING:' + file_path + " could not be loaded!  Does its ontology include purl have a corresponding local file? \n")
+				try:
+					if os.path.isfile( file_path):
+						self.graph.parse(file_path)	
+					else:
+						print ('WARNING:' + file_path + " could not be loaded!  Does its ontology include purl have a corresponding local file? \n")
 
-			except rdflib.exceptions.ParserError as e:
-				print(file_path + " needs to be in RDF OWL format!")			
+				except rdflib.exceptions.ParserError as e:
+					print (file_path + " needs to be in RDF OWL format!")			
 
 
 	def set_ontology_metadata(self, query):
@@ -353,7 +405,7 @@ class OntoHelper(object):
 		try:
 			result = self.graph.query(query, initBindings=initBinds)
 		except Exception as e:
-			print("\nSparql query [%s] parsing problem: %s \n" % (query_name, str(e) ))
+			print ("\nSparql query [%s] parsing problem: %s \n" % (query, str(e) ))
 			return None
 
 		# Can't get columns by row.asdict().keys() because columns with null results won't be included in a row.
@@ -376,13 +428,8 @@ class OntoHelper(object):
 					newrowdict[column] = self.get_entity_id(value)  # a plain string
 
 				elif valType is rdflib.term.Literal :
-					# Python 3
-					if sys.version_info[0] >= 3:
-						# Text may include carriage returns; escape to json
-						literal = {'value': value.replace('\n', r'\n')}
-					# Python 2
-					else:
-						literal = {'value': value.replace('\n', r'\n').encode('utf-8') }
+					# Text may include carriage returns; escape to json
+					literal = {'value': value.replace('\n', r'\n')} 
 					#_invalid_uri_chars = '<>" {}|\\^`'
 
 					if hasattr(value, 'datatype'): #rdf:datatype
@@ -465,13 +512,13 @@ class OntoHelper(object):
 			output_folder = options.output_folder 
 		else:
 			output_folder = os.path.dirname(os.path.realpath(sys.argv[0]))
-		output_file_basename = output_folder + '/' + ontology_filename
+		output_file_basename = output_folder + ontology_filename
 
 		return (main_ontology_file, output_file_basename)
 
 
 	def do_output_json(self, struct, output_file_basename):
-		with (open(lexmapr.pipeline.get_path(output_file_basename + '.json'), 'w')) as output_handle:
+		with (open(output_file_basename + '.json', 'w')) as output_handle:
 			# DO NOT USE sort_keys=True on piclists etc. because this overrides
 			# OrderedDict() sort order.
 			output_handle.write(json.dumps(struct, sort_keys = False, indent = 4, separators = (',', ': ')))
@@ -494,18 +541,17 @@ class OntoHelper(object):
 			row = []
 			for field in fields:
 				value = entity[field] if field in entity else ''
-				if isinstance(value, list): # Constructed parent_id list.
-					value = ','.join(value)
-				# Python 3
-				if sys.version_info[0] >= 3:
-					row.append(value.replace('\t',' '))  # str() handles other_parents array
-				# Python 2
-				else:
-					row.append(value.replace('\t',' ').encode('utf-8'))  # str() handles other_parents array
+
+				# A list gets popped into a field as |-separated items
+				if isinstance(value, list):
+					value = '|'.join(value)
+
+				# Ensure tab and\n value isn't in field
+				row.append(value.replace('\t',' ').replace('\n',' ') )
 
 			output.append('\t'.join(row))
 
-		with (open(lexmapr.pipeline.get_path(output_file_basename + '.tsv'), 'w')) as output_handle:
+		with (open(output_file_basename + '.tsv', 'w')) as output_handle:
 			output_handle.write('\n'.join(output))
 
 

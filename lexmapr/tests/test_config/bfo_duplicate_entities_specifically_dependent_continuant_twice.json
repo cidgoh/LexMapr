@@ -1,0 +1,4 @@
+[
+  {"https://raw.githubusercontent.com/Public-Health-Bioinformatics/LexMapr/master/lexmapr/tests/test_ontologies/bfo_duplicate_entities.owl": "http://purl.obolibrary.org/obo/BFO_0000020"},
+  {"https://raw.githubusercontent.com/Public-Health-Bioinformatics/LexMapr/master/lexmapr/tests/test_ontologies/bfo_duplicate_entities.owl": "http://purl.obolibrary.org/obo/BFO_0000020"}
+]

@@ -1,0 +1,4 @@
+[
+  {"https://raw.githubusercontent.com/Public-Health-Bioinformatics/LexMapr/master/lexmapr/tests/test_ontologies/bfo.owl": "http://purl.obolibrary.org/obo/BFO_0000015"},
+  {"https://raw.githubusercontent.com/Public-Health-Bioinformatics/LexMapr/master/lexmapr/tests/test_ontologies/bfo.owl": "http://purl.obolibrary.org/obo/BFO_0000040"}
+]
