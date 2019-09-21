@@ -154,7 +154,7 @@ def get_gram_chunks(input, num):
     # List of tokens from input
     input_tokens = word_tokenize(input)
     # input_tokens has less than 7 tokens
-    if len(input_tokens) < 7:
+    if len(input_tokens) < 15:
         # Return all num-token combinations of input_tokens
         return list(combi(input_tokens, num))
     # input_tokens has 7 or more tokens
