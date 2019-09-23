@@ -1,4 +1,4 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
+Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
 small_simple1	Svecia	svecia	[]	No Match	[]
 small_simple2	Cornflakes	cornflakes	[]	Full Term Match	[]
 small_simple3	Baked	baked	[]	Full Term Match	[]

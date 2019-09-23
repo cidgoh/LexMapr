@@ -106,22 +106,18 @@ def run(args):
     OUTPUT_FIELDS = [
         "Sample_Id",
         "Sample_Desc",
-        "Cleaned_Sample"
+        "Cleaned_Sample",
+        "Matched_Components"
     ]
 
     if args.format == 'full':
         OUTPUT_FIELDS += [
-            "Final_Refined_Terms_with_Resource_IDs",
             "Match_Status(Macro Level)",
             "Match_Status(Micro Level)"
         ]
-    else:
-        OUTPUT_FIELDS += [
-            "Matched_Components"
-        ]
 
     if args.bucket:
-        if args. format == "full":
+        if args.format == "full":
             OUTPUT_FIELDS += [
                 "LexMapr Classification (Full List)",
                 "LexMapr Bucket",
