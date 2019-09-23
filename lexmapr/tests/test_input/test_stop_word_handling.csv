@@ -1,6 +1,6 @@
 SampleId,Sample
-small_simple1,Breast,single-token word not in stopWordsList
-small_simple2,Baked Potato,multi-token word not in stopWordsList
-small_simple3,by,single-token word in stopWordsList
-small_simple4,been does,multi-token word with all tokens in stopWordsList
-small_simple5,does Pie,multi-token word with one token in stopWordsList
+small_simple1,Breast
+small_simple2,Baked Potato
+small_simple3,by
+small_simple4,been does
+small_simple5,does Pie

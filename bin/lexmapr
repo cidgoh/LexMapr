@@ -11,12 +11,6 @@ logger = logging.getLogger("lexmapr")
 
 script_name = os.path.basename(os.path.realpath(sys.argv[0]))
 
-
-class InputFileNotFoundError(FileNotFoundError):
-    """Exception raised when input file does not exist."""
-    pass
-
-
 def valid_input_file(path):
     """Raises appropriate errors if input file is invalid.
 
@@ -31,7 +25,7 @@ def valid_input_file(path):
         raise argparse.ArgumentTypeError("Please supply a csv or tsv input file")
 
     if not os.path.exists(path):
-        raise InputFileNotFoundError(path + " not found")
+        raise FileNotFoundError(path + " not found")
 
     return path
 

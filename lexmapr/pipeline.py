@@ -157,13 +157,15 @@ def run(args):
         fr_reader = csv.reader(fr, delimiter=",")
     elif ext == ".tsv":
         fr_reader = csv.reader(fr, delimiter="\t")
+    else:
+        raise ValueError("Should not reach here")
     # Skip header
     next(fr_reader)
 
     # Iterate over samples for matching to ontology terms
     for row in fr_reader:
         sampleid = row[0].strip()
-        sample = row[1].strip()
+        sample = " ".join(row[1:]).strip()
         trigger = False
         status = ""  # variable reflecting status of Matching to be displayed for evry rule/section
         status_addendum = []
