@@ -171,7 +171,7 @@ def run(args):
         sample = re.sub(' +', ' ', sample)
         sample_tokens = word_tokenize(sample)
 
-        # Preliminary treatments
+        # Get ``cleaned_sample``
         for tkn in sample_tokens:
             # Ignore dates
             if helpers.is_date(tkn):
@@ -193,38 +193,27 @@ def run(args):
 
         cleaned_sample = helpers.remove_duplicate_tokens(cleaned_sample)
 
-        #---------------------------STARTS APPLICATION OF RULES-----------------------------------------------
-        try:
-            # full_term_match = helpers.map_term(sample, lookup_table)
-            # if not full_term_match and sample in lookup_table["synonyms"]:
-            #     full_term_match = helpers.map_term(lookup_table["synonyms"][sample], lookup_table)
+        # Attempt full term match
+        full_term_match = helpers.map_term(sample, lookup_table)
+        if not full_term_match:
+            full_term_match = helpers.map_term(cleaned_sample, lookup_table)
+            if full_term_match:
+                micro_status.append("Used Cleaned Sample")
 
+        if full_term_match:
+            matched_components.append(full_term_match["term"] + ":" + full_term_match["id"])
+            macro_status = "Full Term Match"
+            micro_status += full_term_match["status"]
 
-            # Find full-term match for sample
-            full_term_match = helpers.find_full_term_match(sample, lookup_table, cleaned_sample,
-                                                           micro_status)
-
-            if full_term_match["retained_terms_with_resource_ids"]:
-                matched_components = full_term_match["retained_terms_with_resource_ids"]
-                macro_status = "Full Term Match"
-                micro_status = full_term_match["match_status_micro_level"]
-
-                if args.bucket:
-                    classification_result = classify_sample(
-                        sample, matched_components, lookup_table, classification_lookup_table
-                    )
-                    lexmapr_classification = classification_result["lexmapr_hierarchy_buckets"]
-                    lexmapr_bucket = classification_result["lexmapr_final_buckets"]
-                    third_party_bucket = classification_result["ifsac_final_buckets"]
-                    third_party_classification = classification_result["ifsac_final_labels"]
-
-            trigger = True
-        # Full-term match not found
-        except helpers.MatchNotFoundError:
-            trigger = False
-
-        # Component Matches Section
-        if not trigger:
+            if args.bucket:
+                classification_result = classify_sample(
+                    sample, matched_components, lookup_table, classification_lookup_table
+                )
+                lexmapr_classification = classification_result["lexmapr_hierarchy_buckets"]
+                lexmapr_bucket = classification_result["lexmapr_final_buckets"]
+                third_party_bucket = classification_result["ifsac_final_buckets"]
+                third_party_classification = classification_result["ifsac_final_labels"]
+        else:
             # 1-5 gram component matches for cleaned_sample, and
             # tokens covered by said matches. See find_component_match
             # docstring for details.

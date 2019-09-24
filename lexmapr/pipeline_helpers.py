@@ -1016,3 +1016,60 @@ class MatchNotFoundError(Exception):
         return repr(self.message)
 
 
+def map_term(term, lookup_table):
+    """TODO:..."""
+    mapping = _map_term_helper(term, lookup_table)
+
+    if mapping:
+        return mapping
+    else:
+        for suffix in lookup_table["suffixes"]:
+            mapping = _map_term_helper(term + " " + suffix, lookup_table)
+            if mapping:
+                mapping["status"].append("Suffix Addition")
+                return mapping
+
+    # Still no mapping
+    if term in lookup_table["synonyms"]:
+        synonym = lookup_table["synonyms"][term]
+
+        mapping = _map_term_helper(synonym, lookup_table)
+
+        if mapping:
+            mapping["status"].append("Synonym Usage")
+            return mapping
+
+        # Still no mapping
+        for suffix in lookup_table["suffixes"]:
+            mapping = _map_term_helper(synonym + " " + suffix, lookup_table)
+            if mapping:
+                mapping["status"].append("Synonym Usage")
+                mapping["status"].append("Suffix Addition")
+                return mapping
+
+    # No mapping
+    return None
+
+
+def _map_term_helper(term, lookup_table):
+    """TODO:..."""
+    if term in lookup_table["resource_terms"]:
+        return {
+            "term": term,
+            "id": lookup_table["resource_terms"][term],
+            "status": ["A Direct Match"]
+        }
+    elif term in lookup_table["resource_permutation_terms"]:
+        return {
+            "term": term,
+            "id": lookup_table["resource_permutation_terms"][term],
+            "status": ["Permutation of Tokens in Resource Term"]
+        }
+    elif term in lookup_table["resource_bracketed_permutation_terms"]:
+        return {
+            "term": term,
+            "id": lookup_table["resource_bracketed_permutation_terms"][term],
+            "status": ["Permutation of Tokens in Bracketed Resource Term"]
+        }
+    else:
+        return None
