@@ -1,6 +1,6 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1					Empty Sample
-small_simple2	Baked Potato	baked potato	[]	Component Match	['Synonym Usage']
-small_simple3	Canned Corn	canned corn	[]	Component Match	['Synonym Usage']
-small_simple4					Empty Sample
+small_simple1			[]	No Match	[]
+small_simple2	Baked Potato	baked potato	[]	No Match	[]
+small_simple3	Canned Corn	canned corn	[]	No Match	[]
+small_simple4			[]	No Match	[]
 small_simple5	Apple Pie	apple pie	[]	No Match	[]

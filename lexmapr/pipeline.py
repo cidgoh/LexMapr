@@ -22,14 +22,7 @@ def run(args):
     """
     Main text mining pipeline.
     """
-    punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']  # Current punctuations for basic treatment
-    covered_tokens = []
-    remainingAllTokensSet = []
-    remainingTokenSet = []
-    prioritizedRetainedSet=[]
-    samples_dict = collections.OrderedDict()
-    samplesList = []
-    samplesSet = []
+    punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']
 
     # Cache (or get from cache) the lookup table containing pre-defined
     # resources used for matching.
@@ -160,157 +153,86 @@ def run(args):
 
     # Iterate over samples for matching to ontology terms
     for row in fr_reader:
-        sampleid = row[0].strip()
-        sample = " ".join(row[1:]).strip()
-        trigger = False
-        status = ""  # variable reflecting status of Matching to be displayed for evry rule/section
-        status_addendum = []
-        final_status = []
-        del final_status [:]
-        remaining_tokens = []
-        #Writing in the output file with sampleid and sample to start with
-        # output fields:
-        #   sample_id:   sampleid
-        #   sample_desc: sample
-        fw.write('\n' + sampleid + '\t' + sample)
+        sample_id = row[0].strip()
+        original_sample = " ".join(row[1:]).strip()
+        cleaned_sample = ""
+        matched_components = []
+        macro_status = "No Match"
+        micro_status = []
+        lexmapr_classification = []
+        lexmapr_bucket = []
+        third_party_bucket = []
+        third_party_classification = []
 
         # Standardize sample to lowercase
-        sample = sample.lower()
+        sample = original_sample.lower()
 
-        sample = helpers.punctuationTreatment(sample, punctuations)  # Sample gets simple punctuation treatment
-        sample = re.sub(' +', ' ', sample)  # Extra innner spaces are removed
-        sampleTokens = word_tokenize(sample)    #Sample is tokenized into tokenList
+        sample = helpers.punctuation_treatment(sample, punctuations)
+        sample = re.sub(' +', ' ', sample)
+        sample_tokens = word_tokenize(sample)
 
-        cleaned_sample = ""  # Phrase that will be used for cleaned sample
-        lemma = ""
-
-        for tkn in sampleTokens:
-            remaining_tokens.append(tkn)  # To start with all remaining tokens in set
-
-        # ===Few preliminary things- Inflection,spelling mistakes, Abbreviations, acronyms, foreign words, Synonyms taken care of
-        for tkn in sampleTokens:
-
+        # Preliminary treatments
+        for tkn in sample_tokens:
             # Ignore dates
             if helpers.is_date(tkn):
                 continue
-
-            # Some preprocessing (only limited or controlled) Steps
+            # Some preprocessing
             tkn = helpers.preprocess(tkn)
 
-            # Plurals are converted to singulars with exceptions
-            lemma = helpers.singularize_token(tkn, lookup_table, status_addendum)
+            lemma = helpers.singularize_token(tkn, lookup_table, micro_status)
+            lemma = helpers.spelling_correction(lemma, lookup_table, micro_status)
+            lemma = helpers.abbreviation_normalization_token(lemma, lookup_table, micro_status)
+            lemma = helpers.non_English_normalization_token(lemma, lookup_table, micro_status)
 
-            # Misspellings are dealt with  here
-            lemma = helpers.spelling_correction(lemma, lookup_table, status_addendum)
-
-            # Abbreviations, acronyms, taken care of- need rule for abbreviation e.g. if lemma is Abbreviation
-            lemma = helpers.abbreviation_normalization_token(lemma, lookup_table, status_addendum)
-
-            # non-EngLish language words taken care of
-            lemma = helpers.non_English_normalization_token(lemma, lookup_table, status_addendum)
-
-            # ===This will create a cleaned sample after above treatments
             cleaned_sample = helpers.get_cleaned_sample(cleaned_sample, lemma, lookup_table)
             cleaned_sample = re.sub(' +', ' ', cleaned_sample)
-
-            # Phrase being cleaned for
             cleaned_sample = helpers.abbreviation_normalization_phrase(cleaned_sample, lookup_table,
-                                                                       status_addendum)
-
-            # Phrase being cleaned for
+                                                                       micro_status)
             cleaned_sample = helpers.non_English_normalization_phrase(cleaned_sample, lookup_table,
-                                                                      status_addendum)
+                                                                      micro_status)
 
         cleaned_sample = helpers.remove_duplicate_tokens(cleaned_sample)
-        fw.write('\t' + cleaned_sample)
 
         #---------------------------STARTS APPLICATION OF RULES-----------------------------------------------
         try:
+            # full_term_match = helpers.map_term(sample, lookup_table)
+            # if not full_term_match and sample in lookup_table["synonyms"]:
+            #     full_term_match = helpers.map_term(lookup_table["synonyms"][sample], lookup_table)
+
+
             # Find full-term match for sample
             full_term_match = helpers.find_full_term_match(sample, lookup_table, cleaned_sample,
-                                                           status_addendum)
+                                                           micro_status)
 
-            # Write to all headers
-            if args.format == "full":
-                fw.write("\t"+ str(full_term_match["retained_terms_with_resource_ids"])
-                    + "\t" + full_term_match["match_status_macro_level"] + "\t"
-                    + str(full_term_match["match_status_micro_level"]))
-            # Write to some headers
-            else:
-                fw.write("\t" + str(full_term_match["all_match_terms_with_resource_ids"]))
-            # Tokenize sample
-            sample_tokens = word_tokenize(sample)
-            # Add all tokens to covered_tokens
-            [covered_tokens.append(token) for token in sample_tokens]
-            # Remove all tokens from remaining_tokens
-            [remaining_tokens.remove(token) for token in sample_tokens]
+            if full_term_match["retained_terms_with_resource_ids"]:
+                matched_components = full_term_match["retained_terms_with_resource_ids"]
+                macro_status = "Full Term Match"
+                micro_status = full_term_match["match_status_micro_level"]
 
-            if args.bucket:
-                matched_terms_with_ids = full_term_match["retained_terms_with_resource_ids"]
-                classification_result = classify_sample(sample, matched_terms_with_ids,
-                                                        lookup_table, classification_lookup_table)
-                if args.format == "full":
-                    fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"]) + "\t"
-                             + str(classification_result["lexmapr_final_buckets"]) + "\t"
-                             + str(classification_result["ifsac_final_buckets"]) + "\t"
-                             + str(classification_result["ifsac_final_labels"]))
-                else:
-                    fw.write("\t" + str(classification_result["ifsac_final_labels"]))
+                if args.bucket:
+                    classification_result = classify_sample(
+                        sample, matched_components, lookup_table, classification_lookup_table
+                    )
+                    lexmapr_classification = classification_result["lexmapr_hierarchy_buckets"]
+                    lexmapr_bucket = classification_result["lexmapr_final_buckets"]
+                    third_party_bucket = classification_result["ifsac_final_buckets"]
+                    third_party_classification = classification_result["ifsac_final_labels"]
 
-            # Set trigger to True
             trigger = True
         # Full-term match not found
         except helpers.MatchNotFoundError:
-            # Continue on
-            pass
+            trigger = False
 
         # Component Matches Section
-        if (not trigger):
+        if not trigger:
             # 1-5 gram component matches for cleaned_sample, and
             # tokens covered by said matches. See find_component_match
             # docstring for details.
             component_and_token_matches = helpers.find_component_matches(cleaned_sample,
                                                                          lookup_table,
-                                                                         status_addendum)
+                                                                         micro_status)
 
             partial_matches = set(component_and_token_matches["component_matches"])  # Makes a set of all matched components from the above processing
-            status = "Component Match"
-
-            # Iterate over token_matches in component_and_token_matches
-            for token in component_and_token_matches["token_matches"]:
-                # Add token to covered_tokens
-                covered_tokens.append(token)
-                # Token is in remaining_tokens
-                if token in remaining_tokens:
-                    # Remove token from remaining_tokens
-                    remaining_tokens.remove(token)
-
-
-            remSetConv = set(remaining_tokens)
-            coveredAllTokensSetConv=set(covered_tokens)
-            remSetDiff = remSetConv.difference(coveredAllTokensSetConv)
-            # Checking of coverage of tokens for sample as well overall dataset
-            coveredTSet = []
-            remainingTSet = []
-            for tknstr in partial_matches:
-                strTokens = word_tokenize(tknstr)
-                for eachTkn in strTokens:
-                    if ("==" in eachTkn):
-                        resList = eachTkn.split("==")
-                        entity_part = resList[0]
-                        entity_tag = resList[1]
-                        coveredTSet.append(entity_part)
-                        covered_tokens.append(entity_part)
-                    else:
-                        coveredTSet.append(eachTkn)
-                        covered_tokens.append(eachTkn)
-
-            # To find the remaining unmatched token set (Currently has those ones also which otherwise are removed by lexicons such as - synonyms. So need to be removed)
-            for chktkn in sampleTokens:
-                if (chktkn not in coveredTSet):
-                    remainingTSet.append(chktkn)
-                if (chktkn not in covered_tokens):
-                    remainingTokenSet.append(chktkn)
 
             partial_matches_with_ids_dict = {}
             for partial_match in partial_matches:
@@ -351,7 +273,9 @@ def run(args):
                 if partial_match_id not in ancestors:
                     partial_matches_with_ids.append(partial_match + ":" + partial_match_id)
 
-            partialMatchedResourceListSet = set(partial_matches_with_ids)   # Makes a set from list of all matched components with resource ids
+            # Makes a set from list of all matched components with
+            # resource ids.
+            partialMatchedResourceListSet = set(partial_matches_with_ids)
             retainedSet = []
 
             # If size of set is more than one member, looks for the retained matched terms by defined criteria
@@ -359,31 +283,35 @@ def run(args):
                 retainedSet = helpers.retainedPhrase(list(partialMatchedResourceListSet))
                 # HERE SHOULD HAVE ANOTHER RETAING SET
 
-            final_status = set(status_addendum)
+            matched_components = sorted(list(retainedSet))
 
-            if not partial_matches:
-                status = "No Match"
-                final_status = set()
-
-            if args.format == 'full':
-                fw.write('\t' + str(sorted(list(retainedSet))) + '\t' + status + '\t'
-                         + str(sorted(list(final_status))))
-
-            if args.format != 'full':
-                fw.write("\t" + str(sorted(list(retainedSet))))
+            if retainedSet:
+                matched_components = sorted(list(retainedSet))
+                macro_status = "Component Match"
+                # https://stackoverflow.com/a/7961390/11472358
+                micro_status = list(collections.OrderedDict.fromkeys(micro_status))
+            else:
+                # TODO: remove the need for this
+                micro_status = []
 
             if args.bucket:
-                matched_terms_with_ids = partial_matches_with_ids
-                classification_result = classify_sample(sample, matched_terms_with_ids,
+                classification_result = classify_sample(sample, partial_matches_with_ids,
                                                         lookup_table,
                                                         classification_lookup_table)
-                if args.format == "full":
-                    fw.write("\t" + str(classification_result["lexmapr_hierarchy_buckets"])
-                             + "\t" + str(classification_result["lexmapr_final_buckets"]) + "\t"
-                             + str(classification_result["ifsac_final_buckets"]) + "\t"
-                             + str(classification_result["ifsac_final_labels"]))
-                else:
-                    fw.write("\t" + str(classification_result["ifsac_final_labels"]))
+                lexmapr_classification = classification_result["lexmapr_hierarchy_buckets"]
+                lexmapr_bucket = classification_result["lexmapr_final_buckets"]
+                third_party_bucket = classification_result["ifsac_final_buckets"]
+                third_party_classification = classification_result["ifsac_final_labels"]
+
+        fw.write("\n" + sample_id + "\t" + original_sample + "\t" + cleaned_sample + "\t"
+                 + str(matched_components))
+        if args.format == "full":
+            fw.write("\t" + macro_status + "\t" + str(micro_status))
+        if args.bucket:
+            if args.format == "full":
+                fw.write("\t" + str(lexmapr_classification) + "\t" + str(lexmapr_bucket) + "\t"
+                         + str(third_party_bucket))
+            fw.write("\t" + str(third_party_classification))
 
     fw.write('\n')
     #Output files closed

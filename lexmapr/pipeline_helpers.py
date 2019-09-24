@@ -11,7 +11,7 @@ from nltk.tokenize import word_tokenize
 from pkg_resources import resource_filename
 
 
-def singularize_token(tkn, lookup_table, status_addendum):
+def singularize_token(tkn, lookup_table, micro_status):
     lemma=tkn
     if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith(
             "ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
@@ -20,7 +20,7 @@ def singularize_token(tkn, lookup_table, status_addendum):
         "inflection_exceptions"]):  # Further Inflection Exception list is taken into account
         lemma = inflection.singularize(tkn)
     if (tkn != lemma):  # Only in case when inflection makes some changes in lemma
-        status_addendum.append("Inflection (Plural) Treatment")
+        micro_status.append("Inflection (Plural) Treatment")
 
     return lemma
 
@@ -194,7 +194,7 @@ def combi(input, n):
 
 
 # 10-Method to get the punctuation treatment of input string - removes some predetermined punctuation and replaces it with a space
-def punctuationTreatment(inputstring, punctuationList):
+def punctuation_treatment(inputstring, punctuationList):
     finalSample = ""
     sampleTokens = word_tokenize(inputstring)
     for token in sampleTokens:
