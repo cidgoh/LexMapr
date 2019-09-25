@@ -214,92 +214,80 @@ def run(args):
                 third_party_bucket = classification_result["ifsac_final_buckets"]
                 third_party_classification = classification_result["ifsac_final_labels"]
         else:
-            # 1-5 gram component matches for cleaned_sample, and
-            # tokens covered by said matches. See find_component_match
-            # docstring for details.
-            component_and_token_matches = helpers.find_component_matches(cleaned_sample,
-                                                                         lookup_table,
-                                                                         micro_status)
+            # Attempt various component matches
+            component_matches = []
+            covered_tokens = []
 
-            partial_matches = set(component_and_token_matches["component_matches"])  # Makes a set of all matched components from the above processing
+            for i in range(5, 0, -1):
+                for gram_chunk in helpers.get_gram_chunks(cleaned_sample, i):
+                    concat_gram_chunk = " ".join(gram_chunk)
+                    gram_tokens = word_tokenize(concat_gram_chunk)
+                    gram_permutations = helpers.all_permutations(concat_gram_chunk)
 
-            partial_matches_with_ids_dict = {}
-            for partial_match in partial_matches:
-                partial_match_id = helpers.get_resource_id(partial_match, lookup_table)
-                if partial_match_id:
-                    try:
-                        # The partial match may be a permutated term, so we
-                        # get the original.
-                        true_label = lookup_table["resource_terms_id_based"][partial_match_id]
-                    except KeyError:
-                        true_label = partial_match
+                    # gram_tokens covered in prior component match
+                    if set(gram_tokens) <= set(covered_tokens):
+                        continue
 
-                    partial_matches_with_ids_dict[true_label] = partial_match_id
-                elif "==" in partial_match:
-                    res_list = partial_match.split("==")
-                    entity_part = res_list[0]
-                    entity_tag = res_list[1]
-                    partial_matches_with_ids_dict[entity_part] = entity_tag
+                    for gram_permutation in gram_permutations:
+                        gram_permutation_str = " ".join(gram_permutation)
+                        component_match = helpers.map_term(gram_permutation_str, lookup_table)
+
+                        if component_match:
+                            component_matches.append(component_match)
+                            covered_tokens += gram_tokens
+                            break
 
             # We need to eventually remove partial matches that are
             # ancestral to other partial matches.
             ancestors = set()
-            for _, partial_match_id in partial_matches_with_ids_dict.items():
-                partial_match_hierarchies = helpers.get_term_parent_hierarchies(partial_match_id,
-                                                                                lookup_table)
+            for component_match in component_matches:
+                component_match_hierarchies =\
+                    helpers.get_term_parent_hierarchies(component_match["id"], lookup_table)
 
-                for partial_match_hierarchy in partial_match_hierarchies:
+                for component_match_hierarchy in component_match_hierarchies:
                     # We do not need the first element
-                    partial_match_hierarchy.pop(0)
+                    component_match_hierarchy.pop(0)
 
-                    ancestors |= set(partial_match_hierarchy)
+                    ancestors |= set(component_match_hierarchy)
 
             # Add non-ancestral values from
             # partial_matches_with_ids_dict to form required for
             # output.
-            partial_matches_with_ids = []
-            for partial_match, partial_match_id in partial_matches_with_ids_dict.items():
-                if partial_match_id not in ancestors:
-                    partial_matches_with_ids.append(partial_match + ":" + partial_match_id)
+            for component_match in component_matches:
+                if component_match["id"] not in ancestors:
+                    matched_components.append(component_match["term"] + ":" + component_match["id"])
 
-            # Makes a set from list of all matched components with
-            # resource ids.
-            partialMatchedResourceListSet = set(partial_matches_with_ids)
-            retainedSet = []
+            # If size of set is more than one member, looks for the
+            # retained matched terms by defined criteria.
+            if len(matched_components):
+                matched_components = list(helpers.retainedPhrase(matched_components))
 
-            # If size of set is more than one member, looks for the retained matched terms by defined criteria
-            if (len(partialMatchedResourceListSet) > 0):
-                retainedSet = helpers.retainedPhrase(list(partialMatchedResourceListSet))
-                # HERE SHOULD HAVE ANOTHER RETAING SET
-
-            matched_components = sorted(list(retainedSet))
-
-            if retainedSet:
-                matched_components = sorted(list(retainedSet))
+            if matched_components:
                 macro_status = "Component Match"
-                # https://stackoverflow.com/a/7961390/11472358
-                micro_status = list(collections.OrderedDict.fromkeys(micro_status))
-            else:
-                # TODO: remove the need for this
-                micro_status = []
 
             if args.bucket:
-                classification_result = classify_sample(sample, partial_matches_with_ids,
-                                                        lookup_table,
-                                                        classification_lookup_table)
+                classification_result = classify_sample(
+                    sample, matched_components, lookup_table, classification_lookup_table
+                )
                 lexmapr_classification = classification_result["lexmapr_hierarchy_buckets"]
                 lexmapr_bucket = classification_result["lexmapr_final_buckets"]
                 third_party_bucket = classification_result["ifsac_final_buckets"]
                 third_party_classification = classification_result["ifsac_final_labels"]
 
+        # Write to row
+        micro_status = list(collections.OrderedDict.fromkeys(micro_status))
         fw.write("\n" + sample_id + "\t" + original_sample + "\t" + cleaned_sample + "\t"
-                 + str(matched_components))
+                 + str(sorted(matched_components)))
+
+        # https://stackoverflow.com/a/7961390/11472358
+        micro_status = list(collections.OrderedDict.fromkeys(micro_status))
         if args.format == "full":
             fw.write("\t" + macro_status + "\t" + str(micro_status))
+
         if args.bucket:
             if args.format == "full":
-                fw.write("\t" + str(lexmapr_classification) + "\t" + str(lexmapr_bucket) + "\t"
-                         + str(third_party_bucket))
+                fw.write("\t" + str(lexmapr_classification) + "\t" + str(lexmapr_bucket)
+                         + "\t" + str(third_party_bucket))
             fw.write("\t" + str(third_party_classification))
 
     fw.write('\n')

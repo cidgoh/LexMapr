@@ -2,6 +2,6 @@ Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level
 small_simple1	Baked Potato	baked potato	[]	No Match	[]
 small_simple2	Chicken Pie	chicken pie	[]	No Match	[]
 small_simple3	ameiurus catus	ameiurus catus	['ameiurus catus:ncbitaxon_66911']	Full Term Match	['A Direct Match']
-small_simple4	Baked Potatoes	baked potato	[]	No Match	[]
+small_simple4	Baked Potatoes	baked potato	[]	No Match	['Inflection (Plural) Treatment']
 small_simple5	Chicken Pie's	chicken pie	[]	No Match	[]
 small_simple6	ameiurus. catus	ameiurus catus	['ameiurus catus:ncbitaxon_66911']	Full Term Match	['Used Cleaned Sample', 'A Direct Match']

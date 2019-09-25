@@ -3,4 +3,4 @@ small_simple1	Breast	breast	['breast:uberon_0000310']	Full Term Match	['A Direct
 small_simple2	Baked Potato	baked potato	[]	No Match	[]
 small_simple3	aachar	indian pickle	['indian:ancestro_0487']	Component Match	['Non English Language Words Treatment']
 small_simple4	aam aachar	mango indian pickle	['indian:ancestro_0487']	Component Match	['Non English Language Words Treatment']
-small_simple5	aam apple	mango apple	[]	No Match	[]
+small_simple5	aam apple	mango apple	[]	No Match	['Non English Language Words Treatment']
