@@ -619,7 +619,21 @@ def get_term_parent_hierarchies(term_id, lookup_table):
 
 
 def map_term(term, lookup_table):
-    """TODO:..."""
+    """Map ``term`` to some resource in ``lookup_table``.
+
+    Attempts to map to any resource term, or permutation a resource
+    term. Will attempt to map synonyms in case of failure.
+
+    If a mapping is found, returns a dictionary detailing the mapped
+    resource, the mapped resources's ontology ID and the work needed to
+    map the resource.
+
+    :param str term: To be mapped to resource
+    :param dict[str, dict] lookup_table: See
+        ``create_lookup_table_skeleton``
+    :returns: Mapping for ``term``, or ``None`` if mapping not found
+    :rtype: dict[str, str or list[str]] or None
+    """
     mapping = _map_term_helper(term, lookup_table)
 
     if mapping:
@@ -654,7 +668,7 @@ def map_term(term, lookup_table):
 
 
 def _map_term_helper(term, lookup_table):
-    """TODO:..."""
+    # Map ``term`` to ``lookup_table`` resource or resource permutation
     if term in lookup_table["resource_terms"]:
         return {
             "term": term,
