@@ -96,7 +96,7 @@ def run(args):
         lookup_table = helpers.merge_lookup_tables(lookup_table, ontology_lookup_table)
 
     # Output file Column Headings
-    OUTPUT_FIELDS = [
+    output_fields = [
         "Sample_Id",
         "Sample_Desc",
         "Cleaned_Sample",
@@ -104,21 +104,21 @@ def run(args):
     ]
 
     if args.format == 'full':
-        OUTPUT_FIELDS += [
+        output_fields += [
             "Match_Status(Macro Level)",
             "Match_Status(Micro Level)"
         ]
 
     if args.bucket:
         if args.format == "full":
-            OUTPUT_FIELDS += [
+            output_fields += [
                 "LexMapr Classification (Full List)",
                 "LexMapr Bucket",
                 "Third Party Bucket",
                 "Third Party Classification"
             ]
         else:
-            OUTPUT_FIELDS += [
+            output_fields += [
                 "Third Party Classification"
             ]
 
@@ -137,7 +137,7 @@ def run(args):
                 json.dump(classification_lookup_table, fp)
 
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
-    fw.write('\t'.join(OUTPUT_FIELDS))
+    fw.write('\t'.join(output_fields))
 
     # Input file
     fr = open(args.input_file, "r")
@@ -186,8 +186,8 @@ def run(args):
 
             cleaned_sample = helpers.get_cleaned_sample(cleaned_sample, lemma, lookup_table)
             cleaned_sample = re.sub(' +', ' ', cleaned_sample)
-            cleaned_sample = helpers.abbreviation_normalization_phrase(cleaned_sample, lookup_table,
-                                                                       micro_status)
+            cleaned_sample = helpers.abbreviation_normalization_phrase(cleaned_sample,
+                                                                       lookup_table, micro_status)
             cleaned_sample = helpers.non_English_normalization_phrase(cleaned_sample, lookup_table,
                                                                       micro_status)
 
@@ -195,8 +195,21 @@ def run(args):
 
         # Attempt full term match
         full_term_match = helpers.map_term(sample, lookup_table)
+
         if not full_term_match:
+            # Attempt full term match with cleaned sample
             full_term_match = helpers.map_term(cleaned_sample, lookup_table)
+            if full_term_match:
+                micro_status.append("Used Cleaned Sample")
+
+        if not full_term_match:
+            # Attempt full term match using suffixes
+            full_term_match = helpers.map_term(sample, lookup_table, consider_suffixes=True)
+
+        if not full_term_match:
+            # Attempt full term match with cleaned sample using suffixes
+            full_term_match =\
+                helpers.map_term(cleaned_sample, lookup_table, consider_suffixes=True)
             if full_term_match:
                 micro_status.append("Used Cleaned Sample")
 
@@ -232,6 +245,11 @@ def run(args):
                         gram_permutation_str = " ".join(gram_permutation)
                         component_match = helpers.map_term(gram_permutation_str, lookup_table)
 
+                        if not component_match:
+                            # Try again with suffixes
+                            component_match = helpers.map_term(gram_permutation_str, lookup_table,
+                                                               consider_suffixes=True)
+
                         if component_match:
                             component_matches.append(component_match)
                             covered_tokens += gram_tokens
@@ -255,7 +273,9 @@ def run(args):
             # output.
             for component_match in component_matches:
                 if component_match["id"] not in ancestors:
-                    matched_components.append(component_match["term"] + ":" + component_match["id"])
+                    matched_components.append(
+                        component_match["term"] + ":" + component_match["id"]
+                    )
 
             # If size of set is more than one member, looks for the
             # retained matched terms by defined criteria.
@@ -291,7 +311,7 @@ def run(args):
             fw.write("\t" + str(third_party_classification))
 
     fw.write('\n')
-    #Output files closed
+    # Output files closed
     if fw is not sys.stdout:
         fw.close()
     # Input file closed

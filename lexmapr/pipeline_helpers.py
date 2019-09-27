@@ -618,49 +618,54 @@ def get_term_parent_hierarchies(term_id, lookup_table):
     return hierarchies
 
 
-def map_term(term, lookup_table):
+def map_term(term, lookup_table, consider_suffixes=False):
     """Map ``term`` to some resource in ``lookup_table``.
 
     Attempts to map to any resource term, or permutation a resource
     term. Will attempt to map synonyms in case of failure.
 
     If a mapping is found, returns a dictionary detailing the mapped
-    resource, the mapped resources's ontology ID and the work needed to
-    map the resource.
+    resource label, mapped resource ontology ID and a status detailing
+    the work needs to perform the mapping.
 
     :param str term: To be mapped to resource
     :param dict[str, dict] lookup_table: See
         ``create_lookup_table_skeleton``
+    :param bool consider_suffixes: Try to match ``term`` using suffixes
+        in ``lookup_table``
     :returns: Mapping for ``term``, or ``None`` if mapping not found
     :rtype: dict[str, str or list[str]] or None
     """
-    mapping = _map_term_helper(term, lookup_table)
-
-    if mapping:
-        return mapping
-    else:
+    if consider_suffixes:
+        # Try mapping term with suffixes
         for suffix in lookup_table["suffixes"]:
             mapping = _map_term_helper(term + " " + suffix, lookup_table)
             if mapping:
                 mapping["status"].append("Suffix Addition")
                 return mapping
+    else:
+        # Try mapping term without suffixes
+        mapping = _map_term_helper(term, lookup_table)
+        if mapping:
+            return mapping
 
-    # Still no mapping
+    # No mapping yet
     if term in lookup_table["synonyms"]:
         synonym = lookup_table["synonyms"][term]
 
-        mapping = _map_term_helper(synonym, lookup_table)
-
-        if mapping:
-            mapping["status"].append("Synonym Usage")
-            return mapping
-
-        # Still no mapping
-        for suffix in lookup_table["suffixes"]:
-            mapping = _map_term_helper(synonym + " " + suffix, lookup_table)
+        if consider_suffixes:
+            # Try mapping synonym with suffixes
+            for suffix in lookup_table["suffixes"]:
+                mapping = _map_term_helper(synonym + " " + suffix, lookup_table)
+                if mapping:
+                    mapping["status"].append("Synonym Usage")
+                    mapping["status"].append("Suffix Addition")
+                    return mapping
+        else:
+            # Try mapping just the synonym
+            mapping = _map_term_helper(synonym, lookup_table)
             if mapping:
                 mapping["status"].append("Synonym Usage")
-                mapping["status"].append("Suffix Addition")
                 return mapping
 
     # No mapping
