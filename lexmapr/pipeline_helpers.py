@@ -11,7 +11,7 @@ from nltk.tokenize import word_tokenize
 from pkg_resources import resource_filename
 
 
-def singularize_token(tkn, lookup_table, status_addendum):
+def singularize_token(tkn, lookup_table, micro_status):
     lemma=tkn
     if (tkn.endswith("us") or tkn.endswith("ia") or tkn.endswith(
             "ta")):  # for inflection exception in general-takes into account both lower and upper case (apart from some inflection-exception list used also in next
@@ -20,7 +20,7 @@ def singularize_token(tkn, lookup_table, status_addendum):
         "inflection_exceptions"]):  # Further Inflection Exception list is taken into account
         lemma = inflection.singularize(tkn)
     if (tkn != lemma):  # Only in case when inflection makes some changes in lemma
-        status_addendum.append("Inflection (Plural) Treatment")
+        micro_status.append("Inflection (Plural) Treatment")
 
     return lemma
 
@@ -72,25 +72,6 @@ def get_cleaned_sample(cleaned_sample,lemma, lookup_table):
 
         cleaned_sample = cleaned_sample + " " + lemma
     return cleaned_sample
-
-
-def get_resource_id(resource_label, lookup_table):
-    """Translate a resource label to a resource ID.
-
-    :param str resource_label: Resource label to translate
-    :param dict[str, dict] lookup_table: Nested dictionary containing
-        data needed to retrieve a resource ID
-    :returns: resource ID corresponding to ``resource_label``
-    :rtype: str
-    """
-    if resource_label in lookup_table["resource_terms"]:
-        return lookup_table["resource_terms"][resource_label]
-    elif resource_label in lookup_table["resource_permutation_terms"]:
-        return lookup_table["resource_permutation_terms"][resource_label]
-    elif resource_label in lookup_table["resource_bracketed_permutation_terms"]:
-        return lookup_table["resource_bracketed_permutation_terms"][resource_label]
-    else:
-        return ""
 
 
 def remove_duplicate_tokens(input_string):
@@ -194,7 +175,7 @@ def combi(input, n):
 
 
 # 10-Method to get the punctuation treatment of input string - removes some predetermined punctuation and replaces it with a space
-def punctuationTreatment(inputstring, punctuationList):
+def punctuation_treatment(inputstring, punctuationList):
     finalSample = ""
     sampleTokens = word_tokenize(inputstring)
     for token in sampleTokens:
@@ -637,382 +618,81 @@ def get_term_parent_hierarchies(term_id, lookup_table):
     return hierarchies
 
 
-def find_full_term_match(sample, lookup_table, cleaned_sample, status_addendum):
-    """Retrieve an annotated, full-term match for a sample.
+def map_term(term, lookup_table, consider_suffixes=False):
+    """Map ``term`` to some resource in ``lookup_table``.
 
-    :param str sample: Sample to match
-    :param dict[str, dict] lookup_table: Nested dictionary containing
-        resources needed to find a component match
-    :param str cleaned_sample: Cleaned-up version of sample that may be
-        needed to find a match
-    :param list[str] status_addendum: Modifications made to sample in
-        pre-processing
-    :returns: Relevant match-annotations for pipeline output
-    :rtype: dict[str, str or list[str]]
-    :raises MatchNotFoundError: If a match is not found
+    Attempts to map to any resource term, or permutation a resource
+    term. Will attempt to map synonyms in case of failure.
+
+    If a mapping is found, returns a dictionary detailing the mapped
+    resource label, mapped resource ontology ID and a status detailing
+    the work needs to perform the mapping.
+
+    :param str term: To be mapped to resource
+    :param dict[str, dict] lookup_table: See
+        ``create_lookup_table_skeleton``
+    :param bool consider_suffixes: Try to match ``term`` using suffixes
+        in ``lookup_table``
+    :returns: Mapping for ``term``, or ``None`` if mapping not found
+    :rtype: dict[str, str or list[str]] or None
     """
-    # Tokens to retain for all_match_terms_with_resource_ids
-    retained_tokens = []
-    # Dictionary to return
-    ret = dict.fromkeys([
-        "all_match_terms_with_resource_ids",
-        "retained_terms_with_resource_ids",
-        "match_status_macro_level",
-        "match_status_micro_level"],
-        # Initialize values with empty string
-        "")
-    # Empty sample
-    if sample == "":
-        # Update ret
-        ret.update({
-            "all_match_terms_with_resource_ids": "--",
-            "match_status_micro_level": "Empty Sample",
-        })
-        # Return
-        return ret
-    # Full-term match without any treatment
-    elif sample in lookup_table["resource_terms"]:
-        # Term with we found a full-term match for
-        matched_term = sample
-        # Resource ID for matched_term
-        resource_id = lookup_table["resource_terms"][matched_term]
-        # Update retained_tokens
-        retained_tokens.append(matched_term + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append("A Direct Match")
-    # Full-term match with permutation of resource term
-    elif sample in lookup_table["resource_permutation_terms"]:
-        # Term we found a permutation for
-        matched_term = sample
-        # Resource ID for matched_term's permutation
-        resource_id = lookup_table["resource_permutation_terms"][matched_term]
-        # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
-        # Update retained_tokens
-        retained_tokens.append(matched_permutation + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append("Permutation of Tokens in Resource Term")
-    # Full-term match with permutation of bracketed resource term
-    elif sample in lookup_table["resource_bracketed_permutation_terms"]:
-        # Term we found a permutation for
-        matched_term = sample
-        # Resource ID for matched_term's permutation
-        resource_id = lookup_table["resource_bracketed_permutation_terms"][matched_term]
-        # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
-        # Update retained_tokens
-        retained_tokens.append(matched_permutation + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
-    elif sample in lookup_table["synonyms"]:
-        # Translate component to synonym
-        matched_term = lookup_table["synonyms"][sample]
-        if matched_term in lookup_table["resource_terms"]:
-            # Resource ID for matched_term
-            resource_id = lookup_table["resource_terms"][matched_term]
-            # Update retained_tokens
-            retained_tokens.append(matched_term + ":" + resource_id)
-            # Update status_addendum
-            status_addendum.append("Synonym Usage")
-    # Full-term cleaned sample match without any treatment
-    elif cleaned_sample in lookup_table["resource_terms"]:
-        # Term with we found a full-term match for
-        matched_term = cleaned_sample
-        # Resource ID for matched_term
-        resource_id = lookup_table["resource_terms"][matched_term]
-        # Update retained_tokens
-        retained_tokens.append(matched_term + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append("A Direct Match with Cleaned Sample")
-    # Full-term cleaned sample match with permutation of
-    # resource term.
-    elif cleaned_sample in lookup_table["resource_permutation_terms"]:
-        # Term we found a permutation for
-        matched_term = cleaned_sample
-        # Resource ID for matched_term's permutation
-        resource_id = lookup_table["resource_permutation_terms"][matched_term]
-        # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
-        # Update retained_tokens
-        retained_tokens.append(matched_permutation + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append("Permutation of Tokens in Resource Term")
-    # Full-term cleaned sample match with permutation of
-    # bracketed resource term.
-    elif cleaned_sample in lookup_table["resource_bracketed_permutation_terms"]:
-        # Term we found a permutation for
-        matched_term = cleaned_sample
-        # Resource ID for matched_term's permutation
-        resource_id = lookup_table["resource_bracketed_permutation_terms"][matched_term]
-        # Permutation corresponding to matched_term
-        matched_permutation = lookup_table["resource_terms_id_based"][resource_id]
-        # Update retained_tokens
-        retained_tokens.append(matched_permutation + ":" + resource_id)
-        # Update status_addendum
-        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
-    elif cleaned_sample in lookup_table["synonyms"]:
-        # Translate component to synonym
-        matched_term = lookup_table["synonyms"][cleaned_sample]
-        if matched_term in lookup_table["resource_terms"]:
-            # Resource ID for matched_term
-            resource_id = lookup_table["resource_terms"][matched_term]
-            # Update retained_tokens
-            retained_tokens.append(matched_term + ":" + resource_id)
-            # Update status_addendum
-            status_addendum.append("Synonym Usage")
-    # Full-term match not found
-    else:
-        resource_terms = lookup_table["resource_terms"]
-        # Find all suffixes that when appended to sample, are
-        # in resource_terms.
-        matched_suffixes = [
-            s for s in lookup_table["suffixes"] if sample+" "+s in resource_terms
-        ]
-        # Find all suffixes that when appended to cleaned
-        # sample, are in resource_terms.
-        matched_clean_suffixes = [
-            s for s in lookup_table["suffixes"] if cleaned_sample+" "+s in resource_terms
-        ]
-        # A full-term match with change of resource and suffix
-        # addition exists.
-        if matched_suffixes:
-            # Term with first suffix in suffixes that provides
-            # a full-term match.
-            term_with_suffix = sample + " " + matched_suffixes[0]
-            # Resource ID for matched_term
-            resource_id = resource_terms[term_with_suffix]
-            # Update retained_tokens
-            retained_tokens.append(term_with_suffix + ":" + resource_id)
-            # Update status_addendum
-            status_addendum.append(
-                "[Suffix Addition- " + matched_suffixes[0] + " to the Input]"
-            )
-        # A full-term cleaned sample match with change of resource and
-        # suffix addition exists.
-        elif matched_clean_suffixes:
-            # Term with first suffix in suffixes that provides
-            # a full-term match.
-            term_with_suffix = cleaned_sample + " " + matched_clean_suffixes[0]
-            # Resource ID for matched_term
-            resource_id = resource_terms[term_with_suffix]
-            # Update retained_tokens
-            retained_tokens.append(term_with_suffix + ":" + resource_id)
-            # Update status_addendum
-            status_addendum.append(
-                "[CleanedSample-Suffix Addition- " + matched_clean_suffixes[0] + " to the Input]"
-            )
-        # No full-term match possible with suffixes either
-        else:
-            raise MatchNotFoundError("Full-term match not found for: " + sample)
-
-    # If we reach here, we had a full-term match with a
-    # non-empty sample.
-
-    # status_addendum without duplicates
-    final_status = set(status_addendum)
-    # Update ret
-    ret.update({
-        "all_match_terms_with_resource_ids":
-            sorted(list(retained_tokens)),
-        "retained_terms_with_resource_ids":
-            sorted(list(retained_tokens)),
-        "match_status_macro_level": "Full Term Match",
-        "match_status_micro_level": sorted(list(final_status)),
-    })
-    # Return
-    return ret
-
-
-def find_component_matches(cleaned_sample, lookup_table, status_addendum):
-    """Finds 1-5 gram component matches of cleaned_sample.
-
-    Arguments:
-        * cleaned_sample <"str">: Sample that has been cleaned up in
-            run
-            * See TODO list about eventually using sample instead
-        * lookup_table <"dict">: Nested dictionary containing resources
-            needed to find a component match. See
-            get_lookup_table_from_cache for details.
-        * status_addendum <"list"> of <"str">: Modifications made to
-            sample in preprocessing.
-    Return values:
-        * <"dict">: Contains a list of 1-5 gram component matches, and
-            tokens covered by said matches.
-            * key <"str">
-            * val <"list" of "str">
-    Restrictions:
-        * cleaned_sample and status_addendum makes this function
-            dependent on being called where it is called inside of run
-            right now
-
-    TODO:
-        * discuss whether we should allow updating of status_addendum
-            when the permutatation does not get added as a component
-            match
-        * eliminate unneccessary parameters
-            * what we should keep
-                * cleaned_sample
-                    * this should really be sample, for greater
-                        function independence
-                * lookup_table
-            * what we should try to get rid of
-                * status_addendum
-                    * Suggest in find_full_term_match to call some sort
-                        of preprocessing method to get changes to
-                        status_addendum prior to find_full_term_match
-                        * Could do something similar in
-                            find_component_match
-                            * Would also allow use of sample instead of
-                                cleaned_sample as parameter
-    """
-    # Return value
-    ret = {
-        # Component matches made from cleaned_sample
-        "component_matches": [],
-        # Tokens covered in component matches
-        "token_matches": [],
-    }
-    # Iterate through numbers 5 to 1
-    for i in range(5, 0, -1):
-        # Iterate through i-gram chunks of cleaned_sample
-        for gram_chunk in get_gram_chunks(cleaned_sample, i):
-            # gram_chunk concatenated into a single string
-            concatenated_gram_chunk = " ".join(gram_chunk)
-            # Tokenized list of concatenated_gram_chunk
-            gram_tokens = word_tokenize(concatenated_gram_chunk)
-            # Permutations of concatenated_gram_chunk
-            permutations = all_permutations(concatenated_gram_chunk)
-
-            # Abort if all tokens already covered
-            if set(gram_tokens) <= set(ret["token_matches"]):
-                continue
-
-            # Iterate over all permutations
-            for permutation in permutations:
-                # Join elements of permutation into a single string
-                joined_permutation = " ".join(permutation)
-
-                if i >= 3:
-                    component_match = find_component_match(joined_permutation, lookup_table,
-                                                           status_addendum)
-                    if not component_match:
-                        component_match = find_component_match(joined_permutation, lookup_table,
-                                                               status_addendum,
-                                                               additional_processing=True)
-                else:
-                    component_match = find_component_match(joined_permutation, lookup_table,
-                                                           status_addendum, consider_processes=True)
-                    if not component_match:
-                        component_match = find_component_match(joined_permutation, lookup_table,
-                                                               status_addendum,
-                                                               consider_processes=True,
-                                                               additional_processing=True)
-
-                # Match found
-                if component_match:
-                    ret["component_matches"].append(component_match)
-                    ret["token_matches"] += gram_tokens
-                    break
-
-    return ret
-
-
-def find_component_match(component, lookup_table, status_addendum, consider_processes=False,
-                         additional_processing=False):
-    """Attempt to match component with a term from lookup_table.
-
-    Modifies ``status_addendum``.
-
-    :param str component: Component to match
-    :param dict[str, dict] lookup_table: Nested dictionary containing
-        resources needed to find a component match
-    :param list[str] status_addendum: Modifications made to sample in
-        pre-processing
-    :param bool consider_processes: Attempt to match component to
-        processes
-    :param bool additional_processing: Attempt abbreviation, acronym,
-        non-english and synonym translation before matching
-    :returns: Resource term matching ``component``, or None a match is
-        not found
-    :rtype: str or None
-
-    **TODO:**
-
-    * In the future, we may want find_full_term_match and this method
-      to have the same functionality, and then we do not need both
-    """
-    matched_component = component
-    if additional_processing:
-        # component is an abbreviation or acronym
-        if matched_component in lookup_table["abbreviations"]:
-            # Expand component
-            matched_component = lookup_table["abbreviations"][component]
-            status_addendum.append("Abbreviation-Acronym Treatment")
-        # component is a non-english word
-        if matched_component in lookup_table["non_english_words"]:
-            # Translate component
-            matched_component = lookup_table["non_english_words"][component]
-            status_addendum.append("Non English Language Words Treatment")
-    # There is a full-term component match with no treatment in
-    # resource term.
-    if matched_component in lookup_table["resource_terms"]:
-        return matched_component
-    # There is a full-term component match with permutation of
-    # bracketed resource term.
-    elif matched_component in lookup_table["resource_bracketed_permutation_terms"]:
-        status_addendum.append("Permutation of Tokens in Bracketed Resource Term")
-        return matched_component
-    elif matched_component in lookup_table["synonyms"]:
-        # Translate component to synonym
-        matched_component = lookup_table["synonyms"][matched_component]
-        status_addendum.append("Synonym Usage")
-        return matched_component
-    else:
+    if consider_suffixes:
+        # Try mapping term with suffixes
         for suffix in lookup_table["suffixes"]:
-            component_with_suffix = component+" "+suffix
-            # A full-term component match with change of resource and
-            # suffix addition exists.
-            if component_with_suffix in lookup_table["resource_terms"]:
-                status_addendum.append("Suffix Addition- "+suffix+" to the Input")
-                return component_with_suffix
+            mapping = _map_term_helper(term + " " + suffix, lookup_table)
+            if mapping:
+                mapping["status"].append("Suffix Addition")
+                return mapping
+    else:
+        # Try mapping term without suffixes
+        mapping = _map_term_helper(term, lookup_table)
+        if mapping:
+            return mapping
 
-        if consider_processes:
-            # A full-term 1-gram component match using candidate
-            # processes exists.
-            if component in lookup_table["processes"]:
-                status_addendum.append("Using Candidate Processes")
-                return component
+    # No mapping yet
+    if term in lookup_table["synonyms"]:
+        synonym = lookup_table["synonyms"][term]
 
-    # Component match not found
+        if consider_suffixes:
+            # Try mapping synonym with suffixes
+            for suffix in lookup_table["suffixes"]:
+                mapping = _map_term_helper(synonym + " " + suffix, lookup_table)
+                if mapping:
+                    mapping["status"].append("Synonym Usage")
+                    mapping["status"].append("Suffix Addition")
+                    return mapping
+        else:
+            # Try mapping just the synonym
+            mapping = _map_term_helper(synonym, lookup_table)
+            if mapping:
+                mapping["status"].append("Synonym Usage")
+                return mapping
+
+    # No mapping
     return None
 
 
-class MatchNotFoundError(Exception):
-    """Exception class for indicating failed full-term matches.
-
-    This subclass inherits it behaviour from the Exception class, and
-    should be raised when a full-term match for a sample is
-    not found.
-
-    Instance variables:
-        * message <class "str">
-
-    TODO:
-        * do we need this class?
-            * perhaps the try clause that relied on this exception
-                could instead use KeyError
-    """
-
-    def __init__(self, message):
-        """Creates instance variable used as error message.
-
-        Arguments:
-            * message: User-inputted error message to be raised
-        """
-        self.message = message
-
-    def __str__(self):
-        """Return message when this class is raised as an exception."""
-        return repr(self.message)
-
-
+def _map_term_helper(term, lookup_table):
+    # Map ``term`` to ``lookup_table`` resource or resource permutation
+    if term in lookup_table["resource_terms"]:
+        return {
+            "term": term,
+            "id": lookup_table["resource_terms"][term],
+            "status": ["A Direct Match"]
+        }
+    elif term in lookup_table["resource_permutation_terms"]:
+        term_id = lookup_table["resource_permutation_terms"][term]
+        return {
+            "term": lookup_table["resource_terms_id_based"][term_id],
+            "id": term_id,
+            "status": ["Permutation of Tokens in Resource Term"]
+        }
+    elif term in lookup_table["resource_bracketed_permutation_terms"]:
+        term_id = lookup_table["resource_bracketed_permutation_terms"][term]
+        return {
+            "term": lookup_table["resource_terms_id_based"][term_id],
+            "id": term_id,
+            "status": ["Permutation of Tokens in Bracketed Resource Term"]
+        }
+    else:
+        return None

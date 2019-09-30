@@ -186,27 +186,27 @@ class TestPipelineHelpers(unittest.TestCase):
         punctuationList = ["-", "_", "(", ")", ";", "/", ":", "%"]
         # Empty input string
         self.assertEqual(
-            pipeline_helpers.punctuationTreatment("", punctuationList),
+            pipeline_helpers.punctuation_treatment("", punctuationList),
             "")
         # Single-token input string with no punctuation
         self.assertEqual(
-            pipeline_helpers.punctuationTreatment("foo", punctuationList),
+            pipeline_helpers.punctuation_treatment("foo", punctuationList),
             "foo")
         # Multi-token input string with no punctuation
         self.assertEqual(
-            pipeline_helpers.punctuationTreatment("foo bar", punctuationList),
+            pipeline_helpers.punctuation_treatment("foo bar", punctuationList),
             "foo bar")
         # Single-token input string with punctuation
         self.assertEqual(
-            pipeline_helpers.punctuationTreatment("_foo-bar_", punctuationList),
+            pipeline_helpers.punctuation_treatment("_foo-bar_", punctuationList),
             "foo bar")
         # Multi-token input string with punctuation
         self.assertEqual(
-            pipeline_helpers.punctuationTreatment("_foo;ba r_", punctuationList),
+            pipeline_helpers.punctuation_treatment("_foo;ba r_", punctuationList),
             "foo   ba r")
         # Multi-token input string with number and punctuation
         self.assertEqual(
-            pipeline_helpers.punctuationTreatment("a-b -1", punctuationList),
+            pipeline_helpers.punctuation_treatment("a-b -1", punctuationList),
             "a b -1")
 
     def test_retainedPhrase(self):
