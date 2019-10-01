@@ -107,18 +107,6 @@ class TestPipelineHelpers(unittest.TestCase):
         # "'", "," and "."
         self.assertEqual(pipeline_helpers.preprocess("cow's, . "), "cow,")
 
-    def test_allPermutations(self):
-        """Tests allPermutations."""
-        # Empty input string
-        self.assertSetEqual(pipeline_helpers.all_permutations(""), set([()]))
-        # 1-gram input string
-        self.assertSetEqual(pipeline_helpers.all_permutations("a"), set([("a",)]))
-        # 2-gram input string
-        self.assertSetEqual(pipeline_helpers.all_permutations("a b"),
-            set([("a", "b"), ("b", "a")]))
-        # 4-gram input string
-        self.assertEqual(len(pipeline_helpers.all_permutations("a b c d")), 24)
-
     def test_get_resource_permutation_terms(self):
         self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms(""), [""])
         self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms("a"), ["a"])
@@ -145,26 +133,6 @@ class TestPipelineHelpers(unittest.TestCase):
                               ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
         self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a (b,c)"),
                               ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
-
-    def test_combi(self):
-        """Tests combi."""
-        # Empty input string and n=1
-        self.assertSetEqual(set(pipeline_helpers.combi("", 1)), set([]))
-        # Empty input string and n=2
-        self.assertSetEqual(set(pipeline_helpers.combi("", 2)), set([]))
-        # 1-char input string and n=1
-        self.assertSetEqual(set(pipeline_helpers.combi("a", 1)), set([("a",)]))
-        # 1-char input string and n=2
-        self.assertSetEqual(set(pipeline_helpers.combi("a", 2)), set([]))
-        # 3-char input string and n=1
-        self.assertSetEqual(set(pipeline_helpers.combi("bar", 1)),
-            set([("b",), ("a",), ("r",)]))
-        # 3-char input string and n=2
-        self.assertSetEqual(set(pipeline_helpers.combi("bar", 2)),
-            set([("b", "a"), ("a", "r"), ("b", "r")]))
-        # 3-char input string and n=3
-        self.assertSetEqual(set(pipeline_helpers.combi("bar", 3)),
-            set([("b", "a", "r")]))
 
     def test_punctuationTreatment(self):
         """Tests punctuationTreatment.

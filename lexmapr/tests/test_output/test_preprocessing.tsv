@@ -1,7 +1,7 @@
 Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	Raw Chicken Breast	raw chicken breast	['breast:uberon_0000310']	Component Match	[]
+small_simple1	Raw Chicken Breast	raw chicken breast	['breast:uberon_0000310']	Component Match	["{breast: ['A Direct Match']}"]
 small_simple2	Baked. Potato's	baked potato	[]	No Match	[]
-small_simple3	Canned Field Corn's	canned field corn	['field:envo_01000352']	Component Match	[]
-small_simple4	Frozen Yogurt	frozen yogurt	['frozen:pato_0001985']	Component Match	[]
+small_simple3	Canned Field Corn's	canned field corn	['field:envo_01000352']	Component Match	["{field: ['A Direct Match']}"]
+small_simple4	Frozen Yogurt	frozen yogurt	['frozen:pato_0001985']	Component Match	["{frozen: ['A Direct Match']}"]
 small_simple5	Apple Pie	apple pie	[]	No Match	[]
 small_simple6	cow's	cow	[]	No Match	[]
