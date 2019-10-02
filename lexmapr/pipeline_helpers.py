@@ -1,8 +1,8 @@
 """Helper functions for lexmapr.pipeline."""
 
+from collections import OrderedDict
 import csv
-import itertools
-from itertools import combinations
+from itertools import combinations, permutations
 
 from dateutil.parser import parse
 import inflection
@@ -20,7 +20,7 @@ def singularize_token(tkn, lookup_table, micro_status):
         "inflection_exceptions"]):  # Further Inflection Exception list is taken into account
         lemma = inflection.singularize(tkn)
     if (tkn != lemma):  # Only in case when inflection makes some changes in lemma
-        micro_status.append("Inflection (Plural) Treatment")
+        micro_status.append("Inflection (Plural) Treatment: " + tkn)
 
     return lemma
 
@@ -28,7 +28,7 @@ def singularize_token(tkn, lookup_table, micro_status):
 def spelling_correction(lemma, lookup_table, status_addendum):
     if (lemma in lookup_table["spelling_mistakes"].keys()):  # spelling mistakes taken care of
         lemma = lookup_table["spelling_mistakes"][lemma]
-        status_addendum.append("Spelling Correction Treatment")
+        status_addendum.append("Spelling Correction Treatment: " + lemma)
     return lemma
 
 
@@ -36,7 +36,7 @@ def abbreviation_normalization_token(lemma, lookup_table, status_addendum):
     if (lemma in lookup_table[
         "abbreviations"].keys()):
         lemma = lookup_table["abbreviations"][lemma]
-        status_addendum.append("Abbreviation-Acronym Treatment")
+        status_addendum.append("Abbreviation-Acronym Treatment: " + lemma)
     return lemma
 
 
@@ -44,21 +44,21 @@ def abbreviation_normalization_phrase(phrase, lookup_table, status_addendum):
     if (phrase in lookup_table[
         "abbreviations"].keys()):  # NEED HERE AGAIN ? Abbreviations, acronyms, non English words taken care of- need rule for abbreviation
         cleaned_sample = lookup_table["abbreviations"][phrase]
-        status_addendum.append("Cleaned Sample and Abbreviation-Acronym Treatment")
+        status_addendum.append("Abbreviation-Acronym Treatment: " + phrase)
     return phrase
 
 
 def non_English_normalization_token(lemma, lookup_table, status_addendum):
     if (lemma in lookup_table["non_english_words"].keys()):  # Non English language words taken care of
         lemma = lookup_table["non_english_words"][lemma]
-        status_addendum.append("Non English Language Words Treatment")
+        status_addendum.append("Non English Language Words Treatment: " + lemma)
     return lemma
 
 
 def non_English_normalization_phrase(phrase, lookup_table, status_addendum):
     if (phrase in lookup_table["non_english_words"].keys()):  # non English words taken care of
         phrase = lookup_table["non_english_words"][phrase]
-        status_addendum.append("Cleaned Sample and Non English Language Words Treatment")
+        status_addendum.append("Non English Language Words Treatment: " + phrase)
     return phrase
 
 
@@ -119,26 +119,24 @@ def ngrams(input, n):
 
 
 def get_gram_chunks(input, num):
-    """Make num-gram chunks from input.
+    """Make ``num``-gram chunks from ``input``.
 
-    If input contains less than seven tokens, this function returns all
-    num-length token combinations of input. Otherwise, this function
-    returns all num-length token combinations that form a substring of
-    input.
+    If ``input`` contains less than 15 tokens, returns all
+    ``num``-length token combinations. Otherwise, returns all tokenized
+    ``num``-length substrings of ``input``.
 
-    Arguments:
-        * input <"str">: String used to retrieve num-gram chunks
-        * num <"int">: Number of grams per returned chunks
-    Return values;
-        * <"list">: Contains num-gram chunks as described above
+    :param str input: Value to get ``num``-gram chunks of
+    :param int num: Size of gram chunks to return
+    :return: ``num``-gram chunks of ``input``
+    :rtype: list[tuple[str]]
     """
     # List of tokens from input
     input_tokens = word_tokenize(input)
     # input_tokens has less than 7 tokens
     if len(input_tokens) < 15:
         # Return all num-token combinations of input_tokens
-        return list(combi(input_tokens, num))
-    # input_tokens has 7 or more tokens
+        return list(combinations(input_tokens, num))
+    # input_tokens has 15 or more tokens
     else:
         # Return all num-length substrings of input
         return ngrams(input, num)
@@ -158,20 +156,6 @@ def preprocess(token):
     """
     # drop possessives, rightmost comma and rightmost period and return
     return token.replace("\'s", "").rstrip("', ").rstrip(". ")
-
-
-# 8-Method to get all permutations of input string          -has overhead so the size of the phrase has been limited to 4-grams
-def all_permutations(inputstring):
-    listOfPermutations = inputstring.split()
-    setPerm = set(itertools.permutations(listOfPermutations))
-    return setPerm
-
-
-# 9-Method to get all combinations of input string
-# TODO: This function seems unneccessary. Delete it.
-def combi(input, n):
-    output=combinations(input, n)
-    return output
 
 
 # 10-Method to get the punctuation treatment of input string - removes some predetermined punctuation and replaces it with a space
@@ -245,7 +229,7 @@ def retainedPhrase(termList):
             ky = termDictAdd[item]
             returnItem = item + ":" + ky
             returnedSet.append(returnItem)
-        returnedSetFinal = set(returnedSet)
+        returnedSetFinal = list(OrderedDict.fromkeys(returnedSet))
     return returnedSetFinal
 
 
@@ -388,9 +372,9 @@ def get_resource_permutation_terms(resource_label):
     :return: All permutations of resource_label
     :rtype: list
     """
-    # Set of tuples, where each tuple is a different permutation of
+    # List of tuples, where each tuple is a different permutation of
     # tokens from label
-    permutations_set = all_permutations(resource_label)
+    permutations_set = list(OrderedDict.fromkeys(permutations(resource_label.split())))
     # Return value
     ret = []
     # Generate a string from each tuple, and add it to ret
@@ -641,7 +625,7 @@ def map_term(term, lookup_table, consider_suffixes=False):
         for suffix in lookup_table["suffixes"]:
             mapping = _map_term_helper(term + " " + suffix, lookup_table)
             if mapping:
-                mapping["status"].append("Suffix Addition")
+                mapping["status"].insert(-2, "Suffix Addition")
                 return mapping
     else:
         # Try mapping term without suffixes
@@ -658,14 +642,14 @@ def map_term(term, lookup_table, consider_suffixes=False):
             for suffix in lookup_table["suffixes"]:
                 mapping = _map_term_helper(synonym + " " + suffix, lookup_table)
                 if mapping:
-                    mapping["status"].append("Synonym Usage")
-                    mapping["status"].append("Suffix Addition")
+                    mapping["status"].insert(-2, "Suffix Addition")
+                    mapping["status"].insert(-2, "Synonym Usage")
                     return mapping
         else:
             # Try mapping just the synonym
             mapping = _map_term_helper(synonym, lookup_table)
             if mapping:
-                mapping["status"].append("Synonym Usage")
+                mapping["status"].insert(-2, "Synonym Usage")
                 return mapping
 
     # No mapping

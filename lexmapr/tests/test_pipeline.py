@@ -107,18 +107,6 @@ class TestPipelineHelpers(unittest.TestCase):
         # "'", "," and "."
         self.assertEqual(pipeline_helpers.preprocess("cow's, . "), "cow,")
 
-    def test_allPermutations(self):
-        """Tests allPermutations."""
-        # Empty input string
-        self.assertSetEqual(pipeline_helpers.all_permutations(""), set([()]))
-        # 1-gram input string
-        self.assertSetEqual(pipeline_helpers.all_permutations("a"), set([("a",)]))
-        # 2-gram input string
-        self.assertSetEqual(pipeline_helpers.all_permutations("a b"),
-            set([("a", "b"), ("b", "a")]))
-        # 4-gram input string
-        self.assertEqual(len(pipeline_helpers.all_permutations("a b c d")), 24)
-
     def test_get_resource_permutation_terms(self):
         self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms(""), [""])
         self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms("a"), ["a"])
@@ -145,26 +133,6 @@ class TestPipelineHelpers(unittest.TestCase):
                               ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
         self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a (b,c)"),
                               ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
-
-    def test_combi(self):
-        """Tests combi."""
-        # Empty input string and n=1
-        self.assertSetEqual(set(pipeline_helpers.combi("", 1)), set([]))
-        # Empty input string and n=2
-        self.assertSetEqual(set(pipeline_helpers.combi("", 2)), set([]))
-        # 1-char input string and n=1
-        self.assertSetEqual(set(pipeline_helpers.combi("a", 1)), set([("a",)]))
-        # 1-char input string and n=2
-        self.assertSetEqual(set(pipeline_helpers.combi("a", 2)), set([]))
-        # 3-char input string and n=1
-        self.assertSetEqual(set(pipeline_helpers.combi("bar", 1)),
-            set([("b",), ("a",), ("r",)]))
-        # 3-char input string and n=2
-        self.assertSetEqual(set(pipeline_helpers.combi("bar", 2)),
-            set([("b", "a"), ("a", "r"), ("b", "r")]))
-        # 3-char input string and n=3
-        self.assertSetEqual(set(pipeline_helpers.combi("bar", 3)),
-            set([("b", "a", "r")]))
 
     def test_punctuationTreatment(self):
         """Tests punctuationTreatment.
@@ -239,33 +207,33 @@ class TestPipelineHelpers(unittest.TestCase):
                     returned
         """
         # Single-term list
-        self.assertSetEqual(
+        self.assertCountEqual(
             pipeline_helpers.retainedPhrase(['foo:bar']),
-            set(["foo:bar"]))
+            ["foo:bar"])
         # Multi-term list
-        self.assertSetEqual(
+        self.assertCountEqual(
             pipeline_helpers.retainedPhrase(['foo:bar', 'hello:world']),
-            set(["foo:bar", "hello:world"]))
+            ["foo:bar", "hello:world"])
         # Multi-term list with "="
-        self.assertSetEqual(
+        self.assertCountEqual(
             pipeline_helpers.retainedPhrase(['foo:b=ar', 'he=llo:world']),
-            set(["foo:b=ar", "he,llo:world"]))
+            ["foo:b=ar", "he,llo:world"])
         # Key substring of a key
-        self.assertSetEqual(
+        self.assertCountEqual(
             pipeline_helpers.retainedPhrase(['foo:bar', 'foofoo:bar']),
-            set(["foofoo:bar"]))
+            ["foofoo:bar"])
         # Key substring of a compound key (multi-word)
-        self.assertSetEqual(
+        self.assertCountEqual(
             pipeline_helpers.retainedPhrase(['foo:bar', 'foo bar:bar']),
-            set(["foo bar:bar"]))
+            ["foo bar:bar"])
         # Compound key substring of a compound key
-        self.assertSetEqual(
+        self.assertCountEqual(
             pipeline_helpers.retainedPhrase(['foo bar hello:world', 'foo bar:bar']),
-            set(["foo bar hello:world"]))
+            ["foo bar hello:world"])
         # Compound key overlapping, but not substring of a compound key
-        self.assertSetEqual(
+        self.assertCountEqual(
             pipeline_helpers.retainedPhrase(['foo hello:world', 'foo bar:bar']),
-            set(["foo hello:world", "foo bar:bar"]))
+            ["foo hello:world", "foo bar:bar"])
         # Compound key substring of a compound key (no differing words)
         self.assertEqual(
             pipeline_helpers.retainedPhrase(['foo bar:bar', 'foo bar bar:bar']),
@@ -273,10 +241,10 @@ class TestPipelineHelpers(unittest.TestCase):
         # Identical keys, but different values
         self.assertEqual(
             pipeline_helpers.retainedPhrase(['foo:bar', 'foo:foo']),
-            set(["foo:bar", "foo:foo"]))
+            ["foo:bar", "foo:foo"])
         self.assertEqual(
             pipeline_helpers.retainedPhrase(['foo bar:bar', 'foo bar:foo']),
-            set(["foo bar:bar", "foo bar:foo"]))
+            ["foo bar:bar", "foo bar:foo"])
 
     def test_merge_lookup_tables(self):
         self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {}, {"a": {}})

@@ -2,9 +2,10 @@
 
 """Point-of-entry script."""
 
-import collections
+from collections import OrderedDict
 import csv
 import json
+from itertools import permutations
 import os
 import re
 import sys
@@ -200,7 +201,7 @@ def run(args):
             # Attempt full term match with cleaned sample
             full_term_match = helpers.map_term(cleaned_sample, lookup_table)
             if full_term_match:
-                micro_status.append("Used Cleaned Sample")
+                micro_status.insert(0, "Used Cleaned Sample")
 
         if not full_term_match:
             # Attempt full term match using suffixes
@@ -211,7 +212,7 @@ def run(args):
             full_term_match =\
                 helpers.map_term(cleaned_sample, lookup_table, consider_suffixes=True)
             if full_term_match:
-                micro_status.append("Used Cleaned Sample")
+                micro_status.insert(0, "Used Cleaned Sample")
 
         if full_term_match:
             matched_components.append(full_term_match["term"] + ":" + full_term_match["id"])
@@ -229,16 +230,17 @@ def run(args):
         else:
             # Attempt various component matches
             component_matches = []
-            covered_tokens = []
+            covered_tokens = set()
 
             for i in range(5, 0, -1):
                 for gram_chunk in helpers.get_gram_chunks(cleaned_sample, i):
                     concat_gram_chunk = " ".join(gram_chunk)
                     gram_tokens = word_tokenize(concat_gram_chunk)
-                    gram_permutations = helpers.all_permutations(concat_gram_chunk)
+                    gram_permutations =\
+                        list(OrderedDict.fromkeys(permutations(concat_gram_chunk.split())))
 
                     # gram_tokens covered in prior component match
-                    if set(gram_tokens) <= set(covered_tokens):
+                    if set(gram_tokens) <= covered_tokens:
                         continue
 
                     for gram_permutation in gram_permutations:
@@ -252,11 +254,11 @@ def run(args):
 
                         if component_match:
                             component_matches.append(component_match)
-                            covered_tokens += gram_tokens
+                            covered_tokens.update(gram_tokens)
                             break
 
-            # We need to eventually remove partial matches that are
-            # ancestral to other partial matches.
+            # We need should not consider component matches that are
+            # ancestral to other component matches.
             ancestors = set()
             for component_match in component_matches:
                 component_match_hierarchies =\
@@ -268,19 +270,28 @@ def run(args):
 
                     ancestors |= set(component_match_hierarchy)
 
-            # Add non-ancestral values from
-            # partial_matches_with_ids_dict to form required for
-            # output.
             for component_match in component_matches:
                 if component_match["id"] not in ancestors:
-                    matched_components.append(
-                        component_match["term"] + ":" + component_match["id"]
-                    )
+                    matched_component = component_match["term"] + ":" + component_match["id"]
+                    matched_components.append(matched_component)
 
-            # If size of set is more than one member, looks for the
-            # retained matched terms by defined criteria.
+            # TODO: revisit this step.
+            # We do need it, but perhaps the function could be
+            #  simplified?
             if len(matched_components):
-                matched_components = list(helpers.retainedPhrase(matched_components))
+                matched_components = helpers.retainedPhrase(matched_components)
+
+            # Finalize micro_status
+            # TODO: This is ugly, so revisit after revisiting
+            #  ``retainedPhrase``.
+            micro_status_covered_matches = set()
+            for component_match in component_matches:
+                possible_matched_component = component_match["term"] + ":" + component_match["id"]
+                if possible_matched_component in matched_components:
+                    if possible_matched_component not in micro_status_covered_matches:
+                        micro_status_covered_matches.add(possible_matched_component)
+                        micro_status.append("{%s: %s}"
+                                            % (component_match["term"], component_match["status"]))
 
             if matched_components:
                 macro_status = "Component Match"
@@ -295,12 +306,9 @@ def run(args):
                 third_party_classification = classification_result["ifsac_final_labels"]
 
         # Write to row
-        micro_status = list(collections.OrderedDict.fromkeys(micro_status))
         fw.write("\n" + sample_id + "\t" + original_sample + "\t" + cleaned_sample + "\t"
-                 + str(sorted(matched_components)))
+                 + str(matched_components))
 
-        # https://stackoverflow.com/a/7961390/11472358
-        micro_status = list(collections.OrderedDict.fromkeys(micro_status))
         if args.format == "full":
             fw.write("\t" + macro_status + "\t" + str(micro_status))
 
@@ -308,7 +316,7 @@ def run(args):
             if args.format == "full":
                 fw.write("\t" + str(lexmapr_classification) + "\t" + str(lexmapr_bucket)
                          + "\t" + str(third_party_bucket))
-            fw.write("\t" + str(third_party_classification))
+            fw.write("\t" + str(sorted(third_party_classification)))
 
     fw.write('\n')
     # Output files closed
