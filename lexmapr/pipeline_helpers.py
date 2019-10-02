@@ -229,7 +229,7 @@ def retainedPhrase(termList):
             ky = termDictAdd[item]
             returnItem = item + ":" + ky
             returnedSet.append(returnItem)
-        returnedSetFinal = set(returnedSet)
+        returnedSetFinal = list(OrderedDict.fromkeys(returnedSet))
     return returnedSetFinal
 
 
