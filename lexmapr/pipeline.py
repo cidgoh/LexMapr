@@ -28,7 +28,7 @@ def run(args):
     # Cache (or get from cache) the lookup table containing pre-defined
     # resources used for matching.
     lookup_table_path = os.path.join(ROOT, "cache", "lookup_table.json")
-    if os.path.exists(lookup_table_path) and not args.no_cache:
+    if os.path.exists(lookup_table_path):
         with open(lookup_table_path) as fp:
             lookup_table = json.load(fp)
     else:
@@ -127,7 +127,7 @@ def run(args):
         # resources used for **classification**.
         classification_lookup_table_path = os.path.join(ROOT, "cache",
                                                         "classification_lookup_table.json")
-        if os.path.exists(classification_lookup_table_path) and not args.no_cache:
+        if os.path.exists(classification_lookup_table_path):
             with open(classification_lookup_table_path) as fp:
                 classification_lookup_table = json.load(fp)
         else:

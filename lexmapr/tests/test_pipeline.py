@@ -504,7 +504,7 @@ class TestPipeline(unittest.TestCase):
             pipeline.run(argparse.Namespace(input_file=default_args["input"], config=None,
                                             format=default_args["format"],
                                             output=actual_output_path, version=False,
-                                            bucket=default_args["bucket"], no_cache=True))
+                                            bucket=default_args["bucket"], no_cache=False))
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
@@ -1028,7 +1028,7 @@ class TestClassification(unittest.TestCase):
         small_simple_path = os.path.join(ROOT, "tests", "test_input", "small_simple.csv")
 
         pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None, format="basic",
-                                        output=None, version=False, bucket=bucket, no_cache=True))
+                                        output=None, version=False, bucket=bucket, no_cache=False))
 
     def get_classification_lookup_table(self):
         with open(self.classification_table_path) as fp:
