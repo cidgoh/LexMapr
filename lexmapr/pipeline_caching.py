@@ -14,7 +14,13 @@ from lexmapr.ontofetch import Ontology
 
 
 def get_predefined_resources():
-    """TODO: ..."""
+    """Get lookup table with resources from ``lexmapr.resources``.
+
+    Retrieves from cache if possible. Otherwise, creates from scratch
+    and adds to cache.
+
+    :rtype: dict[str, dict]
+    """
     lookup_table_path = os.path.join(ROOT, "cache", "lookup_table.json")
 
     if os.path.exists(lookup_table_path):
@@ -30,7 +36,18 @@ def get_predefined_resources():
 
 
 def get_config_resources(path, no_cache):
-    """TODO: ..."""
+    """Get lookup table with resources specified by config file.
+
+    These are resources fetched from online ontologies.
+
+    Retrieves from cache if possible. Otherwise, creates from scratch
+    and adds to cache.
+
+    :param str path: Config file path
+    :param bool no_cache: If ``True``, does not attempt to retrieve
+        from cache
+    :rtype: dict[str, dict]
+    """
     # Make fetched_ontologies folder if it does not already exist
     fetched_ontologies_dir_path = os.path.join(ROOT, "cache", "fetched_ontologies")
     if not os.path.isdir(fetched_ontologies_dir_path):
@@ -89,7 +106,13 @@ def get_config_resources(path, no_cache):
 
 
 def get_classification_resources():
-    """TODO:..."""
+    """Get lookup table with resources used in bucket classification.
+
+    Retrieves from cache if possible. Otherwise, creates from scratch
+    and adds to cache.
+
+    :rtype: dict[str, dict]
+    """
     classification_lookup_table_path =\
         os.path.join(ROOT, "cache", "classification_lookup_table.json")
 
