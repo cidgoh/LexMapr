@@ -13,6 +13,35 @@ from lexmapr.definitions import ROOT
 from lexmapr.ontofetch import Ontology
 
 
+def get_profile_args(args):
+    """TODO:..."""
+    profile_args_path =\
+        os.path.join(ROOT, "resources", "profiles", args.profile, args.profile + "_args.json")
+
+    with open(profile_args_path) as fp:
+        profile_args_dict = json.load(fp)
+
+    args_dict = vars(args)
+    for key, val in profile_args_dict.items():
+        # TODO: How do we allow user to overwrite bucket==True and
+        #  --no-cache==True?
+        if not args_dict[key]:
+            args_dict[key] = val
+
+    return args
+
+
+def get_profile_resources(profile):
+    """TODO:..."""
+    ontology_lookup_table_path =\
+        os.path.join(ROOT, "resources", "profiles", profile, profile + "_table.json")
+
+    with open(ontology_lookup_table_path) as fp:
+        ontology_lookup_table = json.load(fp)
+
+    return ontology_lookup_table
+
+
 def get_predefined_resources():
     """Get lookup table of ``lexmapr.predefined_resources``.
 

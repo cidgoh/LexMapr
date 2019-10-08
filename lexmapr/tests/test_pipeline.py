@@ -511,7 +511,8 @@ class TestPipeline(unittest.TestCase):
             pipeline.run(argparse.Namespace(input_file=default_args["input"], config=None,
                                             format=default_args["format"],
                                             output=actual_output_path, version=False,
-                                            bucket=default_args["bucket"], no_cache=False))
+                                            bucket=default_args["bucket"], no_cache=False,
+                                            profile=None))
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
@@ -564,11 +565,11 @@ class TestOntologyMapping(unittest.TestCase):
             config_file_path = os.path.join(ROOT, "tests", "test_config", config_file_name)
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=config_file_path,
                                             format="basic", output=None, version=False,
-                                            bucket=False, no_cache=True))
+                                            bucket=False, no_cache=True, profile=None))
         else:
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
                                             format="basic", output=None, version=False,
-                                            bucket=False, no_cache=True))
+                                            bucket=False, no_cache=True, profile=None))
 
     @staticmethod
     def get_fetched_ontology(file_name):
@@ -1029,14 +1030,15 @@ class TestClassification(unittest.TestCase):
             os.remove(cls.classification_table_path)
 
     @staticmethod
-    def run_pipeline_with_args(bucket=False):
+    def run_pipeline_with_args(bucket=None):
         """Run pipeline with some default arguments."""
 
         # Path to input file used in all tests
         small_simple_path = os.path.join(ROOT, "tests", "test_input", "small_simple.csv")
 
         pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None, format="basic",
-                                        output=None, version=False, bucket=bucket, no_cache=False))
+                                        output=None, version=False, bucket=bucket, no_cache=False,
+                                        profile=None))
 
     def get_classification_lookup_table(self):
         with open(self.classification_table_path) as fp:
@@ -1061,6 +1063,8 @@ class TestClassification(unittest.TestCase):
                          "ifsac_default"]
 
         self.assertCountEqual(expected_keys, classification_table.keys())
+
+
 
 
 if __name__ == '__main__':

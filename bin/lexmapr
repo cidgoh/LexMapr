@@ -32,7 +32,7 @@ def valid_input_file(path):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("input_file", help="Input csv or tsv file", type=valid_input_file)
     parser.add_argument("-o", "--output", nargs="?", help="Output file")
     parser.add_argument("-f", "--format", default="basic", help="Output format")
@@ -45,6 +45,13 @@ if __name__ == "__main__":
                         help="Ignore or replace online cached resources, if there are any.")
     parser.add_argument("-v", "--version", action="version",
                         version="%(prog)s " + lexmapr.__version__)
+    parser.add_argument("-p", "--profile", choices=["ifsac"],
+                        help="Pre-defined sets of command-line arguments for specialized purposes:"
+                             "\n\n"
+                             "* ifsac: \n"
+                             "  * maps samples to food and environmental resources\n"
+                             "  * classifies samples into ifsac labels\n"
+                             "  * outputs content to ``ifsac_output.tsv``")
     args = parser.parse_args()
-    
+
     lexmapr.pipeline.run(args)

@@ -22,6 +22,11 @@ def run(args):
     """
     punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']
 
+    # If the user specified a profile, we must retrieve args specified
+    # by the profile, unless they were explicitly overridden.
+    if args.profile:
+        args = pipeline_resources.get_profile_args(args)
+
     # To contain all resources, and their variations, that samples are
     # matched to.  Start by adding pre-defined resources from
     # lexmapr.predefined_resources.
@@ -37,6 +42,9 @@ def run(args):
     if args.config:
         # Fetch online ontology terms specified in config file.
         ontology_lookup_table = pipeline_resources.get_config_resources(args.config, args.no_cache)
+    elif args.profile:
+        # Fetch online ontology terms specified in profile.
+        ontology_lookup_table = pipeline_resources.get_profile_resources(args.profile)
 
     if ontology_lookup_table:
         # Merge ``ontology_lookup_table`` into ``lookup_table``
