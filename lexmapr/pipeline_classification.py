@@ -1,32 +1,9 @@
 """Functions used for bucket classification."""
 
 from inflection import singularize
+from nltk import word_tokenize
 
-from lexmapr.pipeline_helpers import get_resource_dict, get_term_parent_hierarchies, word_tokenize
-
-
-def add_classification_resources_to_lookup_table(classification_lookup_table):
-    """Add classification elements from ``resources/`` to lookup table.
-
-    :param classification_lookup_table: See
-        create_lookup_table_skeleton for the expected format of this
-        parameter
-    :type classification_lookup_table: dict
-    :return: Modified ``lookup_table``
-    :rtype: dict
-    """
-    # Some default buckets pre-defined by LexMapr
-    classification_lookup_table["buckets_lexmapr"] = get_resource_dict("buckets-lexmapr.csv")
-    # Buckets made with IFSAC in mind
-    classification_lookup_table["buckets_ifsactop"] = get_resource_dict("buckets-ifsactop.csv")
-    # IFSAC labels corresponding to IFSAC buckets
-    classification_lookup_table["ifsac_labels"] = get_resource_dict("ifsac-labels.csv")
-
-    # Default labels to consider with IFSAC in mind
-    classification_lookup_table["ifsac_default"] = get_resource_dict("ifsac-default.csv")
-    classification_lookup_table["ifsac_refinement"] = get_resource_dict("ifsac-refinement.csv")
-
-    return classification_lookup_table
+from lexmapr.pipeline_helpers import get_term_parent_hierarchies
 
 
 def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
