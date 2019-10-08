@@ -15,6 +15,7 @@ import unittest
 
 from lexmapr.definitions import ROOT
 import lexmapr.pipeline as pipeline
+import lexmapr.pipeline_caching as caching
 import lexmapr.pipeline_helpers as pipeline_helpers
 
 
@@ -108,30 +109,27 @@ class TestPipelineHelpers(unittest.TestCase):
         self.assertEqual(pipeline_helpers.preprocess("cow's, . "), "cow,")
 
     def test_get_resource_permutation_terms(self):
-        self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms(""), [""])
-        self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms("a"), ["a"])
-        self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms("a b"),
-                              ["a b", "b a"])
+        self.assertCountEqual(caching.get_resource_permutation_terms(""), [""])
+        self.assertCountEqual(caching.get_resource_permutation_terms("a"), ["a"])
+        self.assertCountEqual(caching.get_resource_permutation_terms("a b"), ["a b", "b a"])
 
-        self.assertCountEqual(pipeline_helpers.get_resource_permutation_terms("a (b)"),
-                              ["a (b)", "(b) a"])
+        self.assertCountEqual(caching.get_resource_permutation_terms("a (b)"), ["a (b)", "(b) a"])
 
     def test_get_resource_bracketed_permutation_terms(self):
-        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms(""), [])
-        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a"), [])
-        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a b"), [])
-        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a (b"), [])
-        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a b)"), [])
+        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms(""), [])
+        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a"), [])
+        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a b"), [])
+        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a (b"), [])
+        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a b)"), [])
 
-        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a (b)"),
+        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a (b)"),
                               ["a b", "b a"])
-        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("(a) b"),
-                              ["a"])
-        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("(a b)"),
+        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("(a) b"), ["a"])
+        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("(a b)"),
                               ["a b", "b a"])
-        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a (b c)"),
+        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a (b c)"),
                               ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
-        self.assertCountEqual(pipeline_helpers.get_resource_bracketed_permutation_terms("a (b,c)"),
+        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a (b,c)"),
                               ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
 
     def test_punctuationTreatment(self):
