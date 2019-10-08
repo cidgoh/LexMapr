@@ -11,6 +11,7 @@ logger = logging.getLogger("lexmapr")
 
 script_name = os.path.basename(os.path.realpath(sys.argv[0]))
 
+
 def valid_input_file(path):
     """Raises appropriate errors if input file is invalid.
 
@@ -29,26 +30,27 @@ def valid_input_file(path):
 
     return path
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('input_file', help='Input csv or tsv file', nargs='?',
+    parser.add_argument("input_file", help="Input csv or tsv file", nargs="?",
                         type=valid_input_file)
-    parser.add_argument('-o', '--output', nargs='?', help='Output file')
-    parser.add_argument('-f', '--format', default='basic', help='Output format')
-    parser.add_argument('--version', action='store_true', dest='version',
-                        help='Prints version information', required=False)
-    parser.add_argument('-c', '--config',
+    parser.add_argument("-o", "--output", nargs="?", help="Output file")
+    parser.add_argument("-f", "--format", default="basic", help="Output format")
+    parser.add_argument("--version", action="store_true", dest="version",
+                        help="Prints version information", required=False)
+    parser.add_argument("-c", "--config",
                         help="Path to JSON file containing the IRI of ontologies to fetch terms "
                              "from"),
-    parser.add_argument('-b', '--bucket', action='store_true',
+    parser.add_argument("-b", "--bucket", action="store_true",
                         help="Classify samples into pre-defined buckets")
-    parser.add_argument('--no-cache', action='store_true',
+    parser.add_argument("--no-cache", action="store_true",
                         help="Ignore or replace online cached resources, if there are any.")
     args = parser.parse_args()
     
     if args.version:
-        print(script_name + ' ' + lexmapr.__version__)
+        print(script_name + " " + lexmapr.__version__)
     elif not args.input_file:
-        parser.error('Please supply an input file')
+        parser.error("Please supply an input file")
     else:
         lexmapr.pipeline.run(args)
