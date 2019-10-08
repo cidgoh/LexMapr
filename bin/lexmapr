@@ -12,11 +12,6 @@ logger = logging.getLogger("lexmapr")
 script_name = os.path.basename(os.path.realpath(sys.argv[0]))
 
 
-class InputFileNotFoundError(FileNotFoundError):
-    """Exception raised when input file does not exist."""
-    pass
-
-
 def valid_input_file(path):
     """Raises appropriate errors if input file is invalid.
 
@@ -31,30 +26,32 @@ def valid_input_file(path):
         raise argparse.ArgumentTypeError("Please supply a csv or tsv input file")
 
     if not os.path.exists(path):
-        raise InputFileNotFoundError(path + " not found")
+        raise FileNotFoundError(path + " not found")
 
     return path
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('input_file', help='Input csv or tsv file', nargs='?',
-                        type=valid_input_file)
-    parser.add_argument('-o', '--output', nargs='?', help='Output file')
-    parser.add_argument('-f', '--format', default='basic', help='Output format')
-    parser.add_argument('--version', action='store_true', dest='version',
-                        help='Prints version information', required=False)
-    parser.add_argument('-c', '--config',
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("input_file", help="Input csv or tsv file", type=valid_input_file)
+    parser.add_argument("-o", "--output", nargs="?", help="Output file")
+    parser.add_argument("-f", "--format", default="basic", help="Output format")
+    parser.add_argument("-c", "--config",
                         help="Path to JSON file containing the IRI of ontologies to fetch terms "
                              "from"),
-    parser.add_argument('-b', '--bucket', action='store_true',
+    parser.add_argument("-b", "--bucket", action="store_true",
                         help="Classify samples into pre-defined buckets")
-    parser.add_argument('--no-cache', action='store_true',
-                        help="Ignore or replace cached resources, if there are any.")
+    parser.add_argument("--no-cache", action="store_true",
+                        help="Ignore or replace online cached resources, if there are any.")
+    parser.add_argument("-v", "--version", action="version",
+                        version="%(prog)s " + lexmapr.__version__)
+    parser.add_argument("-p", "--profile", choices=["ifsac"],
+                        help="Pre-defined sets of command-line arguments for specialized purposes:"
+                             "\n\n"
+                             "* ifsac: \n"
+                             "  * maps samples to food and environmental resources\n"
+                             "  * classifies samples into ifsac labels\n"
+                             "  * outputs content to ``ifsac_output.tsv``")
     args = parser.parse_args()
-    
-    if args.version:
-        print(script_name + ' ' + lexmapr.__version__)
-    elif not args.input_file:
-        parser.error('Please supply an input file')
-    else:
-        lexmapr.pipeline.run(args)
+
+    lexmapr.pipeline.run(args)

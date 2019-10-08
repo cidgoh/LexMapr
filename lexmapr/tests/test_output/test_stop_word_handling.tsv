@@ -1,6 +1,6 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
+Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
 small_simple1	Breast	breast	['breast:uberon_0000310']	Full Term Match	['A Direct Match']
-small_simple2	Baked Potato	baked potato	[]	Component Match	['Synonym Usage']
-small_simple3	by		[':']	Full Term Match	['A Direct Match with Cleaned Sample']
-small_simple4	been does		[':']	Full Term Match	['A Direct Match with Cleaned Sample', 'Inflection (Plural) Treatment']
-small_simple5	does Pie	pie	[]	No Match	[]
+small_simple2	Baked Potato	baked potato	[]	No Match	[]
+small_simple3	by		[]	No Match	[]
+small_simple4	been does		[]	No Match	['Inflection (Plural) Treatment: does']
+small_simple5	does Pie	pie	[]	No Match	['Inflection (Plural) Treatment: does']

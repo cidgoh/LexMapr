@@ -1,2 +1,4 @@
 include lexmapr/resources/*
-include lexmapr/cache/*
+include lexmapr/resources/profiles/*
+include lexmapr/resources/profiles/ifsac/*
+include lexmapr/predefined_resources/*

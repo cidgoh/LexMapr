@@ -1,10 +1,10 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
+Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
 small_simple1	Svecia	svecia	[]	No Match	[]
-small_simple2	Baked Potato	baked potato	[]	Component Match	['Synonym Usage']
-small_simple3	Ricotta Cheese	ricotta cheese	[]	Component Match	['Synonym Usage']
-small_simple4	Noodles	noodle	[]	No Match	[]
+small_simple2	Baked Potato	baked potato	[]	No Match	[]
+small_simple3	Ricotta Cheese	ricotta cheese	[]	No Match	[]
+small_simple4	Noodles	noodle	[]	No Match	['Inflection (Plural) Treatment: noodles']
 small_simple5	Apple Pie	apple pie	[]	No Match	[]
 small_simple6	Hummus	hummus	[]	No Match	[]
-small_simple7	Frosted Cornflakes	frosted cornflakes	[]	Component Match	['Synonym Usage']
-small_simple8	Mashed potatoes	mashed potato	[]	Component Match	['Inflection (Plural) Treatment', 'Using Candidate Processes']
-small_simple9	Apples	apple	[]	No Match	[]
+small_simple7	Frosted Cornflakes	frosted cornflakes	[]	No Match	[]
+small_simple8	Mashed potatoes	mashed potato	[]	No Match	['Inflection (Plural) Treatment: potatoes']
+small_simple9	Apples	apple	[]	No Match	['Inflection (Plural) Treatment: apples']
