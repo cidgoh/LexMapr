@@ -107,5 +107,5 @@ venv.bak/
 .idea
 
 # Cached resources
-lexmapr/cache/fetched_ontologies/
-lexmapr/cache/ontology_lookup_tables/
+lexmapr/resources/fetched_ontologies/
+lexmapr/resources/ontology_lookup_tables/

@@ -15,7 +15,7 @@ import unittest
 
 from lexmapr.definitions import ROOT
 import lexmapr.pipeline as pipeline
-import lexmapr.pipeline_caching as caching
+import lexmapr.pipeline_resources as pipeline_resources
 import lexmapr.pipeline_helpers as pipeline_helpers
 
 
@@ -109,28 +109,36 @@ class TestPipelineHelpers(unittest.TestCase):
         self.assertEqual(pipeline_helpers.preprocess("cow's, . "), "cow,")
 
     def test_get_resource_permutation_terms(self):
-        self.assertCountEqual(caching.get_resource_permutation_terms(""), [""])
-        self.assertCountEqual(caching.get_resource_permutation_terms("a"), ["a"])
-        self.assertCountEqual(caching.get_resource_permutation_terms("a b"), ["a b", "b a"])
+        self.assertCountEqual(pipeline_resources.get_resource_permutation_terms(""), [""])
+        self.assertCountEqual(pipeline_resources.get_resource_permutation_terms("a"), ["a"])
+        self.assertCountEqual(pipeline_resources.get_resource_permutation_terms("a b"),
+                              ["a b", "b a"])
 
-        self.assertCountEqual(caching.get_resource_permutation_terms("a (b)"), ["a (b)", "(b) a"])
+        self.assertCountEqual(pipeline_resources.get_resource_permutation_terms("a (b)"),
+                              ["a (b)", "(b) a"])
 
     def test_get_resource_bracketed_permutation_terms(self):
-        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms(""), [])
-        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a"), [])
-        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a b"), [])
-        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a (b"), [])
-        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a b)"), [])
+        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms(""), [])
+        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("a"), [])
+        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("a b"),
+                              [])
+        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("a (b"),
+                              [])
+        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("a b)"),
+                              [])
 
-        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a (b)"),
+        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("a (b)"),
                               ["a b", "b a"])
-        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("(a) b"), ["a"])
-        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("(a b)"),
+        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("(a) b"),
+                              ["a"])
+        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("(a b)"),
                               ["a b", "b a"])
-        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a (b c)"),
-                              ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
-        self.assertCountEqual(caching.get_resource_bracketed_permutation_terms("a (b,c)"),
-                              ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
+        self.assertCountEqual(
+            pipeline_resources.get_resource_bracketed_permutation_terms("a (b c)"),
+            ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
+        self.assertCountEqual(
+            pipeline_resources.get_resource_bracketed_permutation_terms("a (b,c)"),
+            ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
 
     def test_punctuationTreatment(self):
         """Tests punctuationTreatment.
@@ -411,8 +419,9 @@ class TestPipeline(unittest.TestCase):
         "test_abbreviations": {"input": "test_abbreviations"},
         # Some tokens require non-english to english translation
         # TODO: We must add capitalized non-english words to
-        #       ../resources/NefLex, and then makes tests for potential
-        #       translations from nonEnglishWordsLowerDict.
+        #       ../predefined_resources/NefLex, and then makes tests
+        #       for potential translations from
+        #       nonEnglishWordsLowerDict.
         "test_non_english_words": {"input": "test_non_english_words"},
         # Some tokens are stop-words
         "test_stop_word_handling": {"input": "test_stop_word_handling"},
@@ -533,14 +542,15 @@ class TestOntologyMapping(unittest.TestCase):
 
     @staticmethod
     def remove_cached_resources():
-        for path in glob.glob(os.path.join(ROOT, "cache", "fetched_ontologies", "pizza*")):
+        for path in glob.glob(os.path.join(ROOT, "resources", "fetched_ontologies", "pizza*")):
             os.remove(path)
-        for path in glob.glob(os.path.join(ROOT, "cache", "fetched_ontologies", "bfo*")):
+        for path in glob.glob(os.path.join(ROOT, "resources", "fetched_ontologies", "bfo*")):
             os.remove(path)
         for path in glob.glob(os.path.join(
-                ROOT, "cache", "ontology_lookup_tables","lookup_pizza*")):
+                ROOT, "resources", "ontology_lookup_tables","lookup_pizza*")):
             os.remove(path)
-        for path in glob.glob(os.path.join(ROOT, "cache", "ontology_lookup_tables", "lookup_bfo*")):
+        for path in glob.glob(os.path.join(ROOT, "resources", "ontology_lookup_tables",
+                                           "lookup_bfo*")):
             os.remove(path)
 
     @staticmethod
@@ -562,40 +572,40 @@ class TestOntologyMapping(unittest.TestCase):
 
     @staticmethod
     def get_fetched_ontology(file_name):
-        with open(os.path.join(ROOT, "cache", "fetched_ontologies", file_name)) as fp:
+        with open(os.path.join(ROOT, "resources", "fetched_ontologies", file_name)) as fp:
             return json.load(fp)
 
     @staticmethod
     def get_ontology_lookup_table(file_name):
-        with open(os.path.join(ROOT, "cache", "ontology_lookup_tables", file_name)) as fp:
+        with open(os.path.join(ROOT, "resources", "ontology_lookup_tables", file_name)) as fp:
             return json.load(fp)
 
     def test_fetch_ontology(self):
         self.run_pipeline_with_args()
         self.assertFalse(os.path.exists(os.path.join(
-            ROOT, "cache", "fetched_ontologies","pizza.json")
+            ROOT, "resources", "fetched_ontologies","pizza.json")
         ))
 
         self.run_pipeline_with_args(config_file_name="pizza.json")
         self.assertTrue(os.path.exists(os.path.join(
-            ROOT, "cache", "fetched_ontologies","pizza.json")
+            ROOT, "resources", "fetched_ontologies","pizza.json")
         ))
 
     def test_fetch_ontologies(self):
         self.run_pipeline_with_args()
         self.assertFalse(os.path.exists(os.path.join(
-            ROOT, "cache", "fetched_ontologies","bfo.json")
+            ROOT, "resources", "fetched_ontologies","bfo.json")
         ))
         self.assertFalse(os.path.exists(os.path.join(
-            ROOT, "cache", "fetched_ontologies","pizza.json")
+            ROOT, "resources", "fetched_ontologies","pizza.json")
         ))
 
         self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
         self.assertTrue(os.path.exists(os.path.join(
-            ROOT, "cache", "fetched_ontologies","bfo.json")
+            ROOT, "resources", "fetched_ontologies","bfo.json")
         ))
         self.assertTrue(os.path.exists(os.path.join(
-            ROOT, "cache", "fetched_ontologies","pizza.json")
+            ROOT, "resources", "fetched_ontologies","pizza.json")
         ))
 
     def test_fetch_ontology_specify_no_root(self):
@@ -610,20 +620,20 @@ class TestOntologyMapping(unittest.TestCase):
 
     def test_ontology_table_creation(self):
         self.assertFalse(os.path.exists(os.path.join(
-            ROOT, "cache", "ontology_lookup_tables","lookup_bfo.json")
+            ROOT, "resources", "ontology_lookup_tables","lookup_bfo.json")
         ))
         self.run_pipeline_with_args(config_file_name="bfo.json")
         self.assertTrue(os.path.exists(os.path.join(
-            ROOT, "cache", "ontology_lookup_tables","lookup_bfo.json")
+            ROOT, "resources", "ontology_lookup_tables","lookup_bfo.json")
         ))
 
     def test_ontology_table_creation_with_multiple_ontologies(self):
         self.assertFalse(os.path.exists(os.path.join(
-            ROOT, "cache", "ontology_lookup_tables","lookup_bfo_and_pizza.json")
+            ROOT, "resources", "ontology_lookup_tables","lookup_bfo_and_pizza.json")
         ))
         self.run_pipeline_with_args(config_file_name="bfo_and_pizza.json")
         self.assertTrue(os.path.exists(os.path.join(
-            ROOT, "cache", "ontology_lookup_tables","lookup_bfo_and_pizza.json")
+            ROOT, "resources", "ontology_lookup_tables","lookup_bfo_and_pizza.json")
         ))
 
     def test_ontology_table_keys(self):
@@ -1010,7 +1020,7 @@ class TestClassification(unittest.TestCase):
     This differs from the black-box approach taken in TestPipeline, as
     we are concerned with the mechanics behind the classification.
     """
-    classification_table_path = os.path.join(ROOT, "cache", "classification_lookup_table.json")
+    classification_table_path = os.path.join(ROOT, "resources", "classification_lookup_table.json")
 
     @classmethod
     def setUp(cls):

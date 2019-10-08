@@ -14,14 +14,14 @@ from lexmapr.ontofetch import Ontology
 
 
 def get_predefined_resources():
-    """Get lookup table with resources from ``lexmapr.resources``.
+    """Get lookup table of ``lexmapr.predefined_resources``.
 
-    Retrieves from cache if possible. Otherwise, creates from scratch
-    and adds to cache.
+    Retrieves from disk if possible. Otherwise, creates from scratch
+    and adds to disk.
 
     :rtype: dict[str, dict]
     """
-    lookup_table_path = os.path.join(ROOT, "cache", "lookup_table.json")
+    lookup_table_path = os.path.join(ROOT, "resources", "lookup_table.json")
 
     if os.path.exists(lookup_table_path):
         with open(lookup_table_path) as fp:
@@ -49,12 +49,12 @@ def get_config_resources(path, no_cache):
     :rtype: dict[str, dict]
     """
     # Make fetched_ontologies folder if it does not already exist
-    fetched_ontologies_dir_path = os.path.join(ROOT, "cache", "fetched_ontologies")
+    fetched_ontologies_dir_path = os.path.join(ROOT, "resources", "fetched_ontologies")
     if not os.path.isdir(fetched_ontologies_dir_path):
         os.mkdir(fetched_ontologies_dir_path)
 
     # Make ontology_lookup_tables folder if it does not already exist
-    ontology_lookup_tables_dir_path = os.path.join(ROOT, "cache", "ontology_lookup_tables")
+    ontology_lookup_tables_dir_path = os.path.join(ROOT, "resources", "ontology_lookup_tables")
     if not os.path.isdir(ontology_lookup_tables_dir_path):
         os.makedirs(ontology_lookup_tables_dir_path)
 
@@ -108,13 +108,13 @@ def get_config_resources(path, no_cache):
 def get_classification_resources():
     """Get lookup table with resources used in bucket classification.
 
-    Retrieves from cache if possible. Otherwise, creates from scratch
-    and adds to cache.
+    Retrieves from disk if possible. Otherwise, creates from scratch
+    and adds to disk.
 
     :rtype: dict[str, dict]
     """
     classification_lookup_table_path =\
-        os.path.join(ROOT, "cache", "classification_lookup_table.json")
+        os.path.join(ROOT, "resources", "classification_lookup_table.json")
 
     if os.path.exists(classification_lookup_table_path):
         with open(classification_lookup_table_path) as fp:
@@ -158,7 +158,7 @@ def create_lookup_table_skeleton():
 
 
 def add_predefined_resources_to_lookup_table(lookup_table):
-    """Add elements from lexmapr.resources to lookup table.
+    """Add elements from lexmapr.predefined_resources to lookup table.
 
     :param lookup_table: See create_lookup_table_skeleton for the
                          expected format of this parameter
@@ -220,12 +220,12 @@ def add_predefined_resources_to_lookup_table(lookup_table):
 
 
 def get_resource_dict(resource_file_name):
-    """Get dictionary containing data from a ``resources/`` csv file.
+    """Get dictionary of data from ``predefined_resources/`` csv file.
 
     The data is standardized to lowercase.
 
     :param resource_file_name: Name of file (with extension) in
-        ``resources/``
+        ``predefined_resources/``
     :type resource_file_name: str
     :return: data in ``resource_file_name``
     :rtype: dict
@@ -233,7 +233,7 @@ def get_resource_dict(resource_file_name):
     # Return value
     ret = {}
     # Open file_name
-    with open(os.path.join(ROOT, "resources", resource_file_name)) as fp:
+    with open(os.path.join(ROOT, "predefined_resources", resource_file_name)) as fp:
         # Skip first line
         next(fp)
         # Read file_name
@@ -422,7 +422,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
 
 
 def add_classification_resources_to_lookup_table(classification_lookup_table):
-    """Add classification elements from ``resources/`` to lookup table.
+    """Add classification elements to lookup table.
 
     :param classification_lookup_table: See
         create_lookup_table_skeleton for the expected format of this

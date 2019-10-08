@@ -11,7 +11,7 @@ import sys
 
 from nltk.tokenize import word_tokenize
 
-import lexmapr.pipeline_caching as caching
+import lexmapr.pipeline_resources as pipeline_resources
 from lexmapr.pipeline_classification import classify_sample
 import lexmapr.pipeline_helpers as helpers
 
@@ -24,18 +24,19 @@ def run(args):
 
     # To contain all resources, and their variations, that samples are
     # matched to.  Start by adding pre-defined resources from
-    # lexmapr.resources.
+    # lexmapr.predefined_resources.
     # TODO: These pre-defined resources are the remnants of early
     #  LexMapr development.  We should eventually move to only adding
     #  terms from online ontologies to lookup tables.
-    lookup_table = caching.get_predefined_resources()
+    lookup_table = pipeline_resources.get_predefined_resources()
 
     # To contain resources fetched from online ontologies, if any.
     # Will eventually be added to ``lookup_table``.
     ontology_lookup_table = None
+
     if args.config:
         # Fetch online ontology terms specified in config file.
-        ontology_lookup_table = caching.get_config_resources(args.config, args.no_cache)
+        ontology_lookup_table = pipeline_resources.get_config_resources(args.config, args.no_cache)
 
     if ontology_lookup_table:
         # Merge ``ontology_lookup_table`` into ``lookup_table``
@@ -44,7 +45,7 @@ def run(args):
     # To contain resources used in classification.
     classification_lookup_table = None
     if args.bucket:
-        classification_lookup_table = caching.get_classification_resources()
+        classification_lookup_table = pipeline_resources.get_classification_resources()
 
     # Output file Column Headings
     output_fields = [
