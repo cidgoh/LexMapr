@@ -14,7 +14,10 @@ from lexmapr.ontofetch import Ontology
 
 
 def get_profile_args(args):
-    """TODO:..."""
+    """Get args specified by ``args.profile``.
+
+    :rtype: argparse.Namespace
+    """
     profile_args_path =\
         os.path.join(ROOT, "resources", "profiles", args.profile, args.profile + "_args.json")
 
@@ -32,7 +35,10 @@ def get_profile_args(args):
 
 
 def get_profile_resources(profile):
-    """TODO:..."""
+    """Get lookup table of resources specified by ``profile``.
+
+    :rtype:  dict[str, dict]
+    """
     ontology_lookup_table_path =\
         os.path.join(ROOT, "resources", "profiles", profile, profile + "_table.json")
 
