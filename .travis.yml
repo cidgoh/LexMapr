@@ -25,8 +25,8 @@ install:
   - conda info -a
   - conda create -c bioconda -c conda-forge -q -y -n test-environment python=$TRAVIS_PYTHON_VERSION coveralls
   - source activate test-environment
-  - pip install .
-#  - python -m nltk.downloader all
+  - pip install -r requirements.txt
+  - python -m nltk.downloader all
   
 script: coverage run --source=lexmapr setup.py test
 
