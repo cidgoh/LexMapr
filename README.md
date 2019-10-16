@@ -17,7 +17,8 @@ Set up [Bioconda](https://bioconda.github.io/), if you haven't already!
 Then:
 
 ```
-conda create -n LexMapr python=3.6 lexmapr
+$ conda create -n LexMapr python=3.6 lexmapr
+$ python -m nltk.downloader all
 ```
 
 ### Without Bioconda
@@ -27,16 +28,16 @@ Install [Conda](https://docs.conda.io/en/latest/miniconda.html).
 Create a LexMapr environment:
 
 ```
-conda create --name LexMapr python=3.6
+$ conda create --name LexMapr python=3.6
 ```
 
 Install LexMapr into your conda environment:
 ```
-conda activate LexMapr
-git clone https://github.com/Public-Health-Bioinformatics/LexMapr.git
-cd LexMapr
-pip install .
-python -m nltk.downloader all
+$ conda activate LexMapr
+$ git clone https://github.com/Public-Health-Bioinformatics/LexMapr.git
+$ cd LexMapr
+$ pip install .
+$ python -m nltk.downloader all
 ```
 
 ## Usage
