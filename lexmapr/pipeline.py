@@ -63,14 +63,14 @@ def run(args):
         "Matched_Components"
     ]
 
-    if args.format == 'full':
+    if args.full:
         output_fields += [
             "Match_Status(Macro Level)",
             "Match_Status(Micro Level)"
         ]
 
     if args.bucket:
-        if args.format == "full":
+        if args.full:
             output_fields += [
                 "LexMapr Classification (Full List)",
                 "LexMapr Bucket",
@@ -254,11 +254,11 @@ def run(args):
         fw.write("\n" + sample_id + "\t" + original_sample + "\t" + cleaned_sample + "\t"
                  + str(matched_components))
 
-        if args.format == "full":
+        if args.full:
             fw.write("\t" + macro_status + "\t" + str(micro_status))
 
         if args.bucket:
-            if args.format == "full":
+            if args.full:
                 fw.write("\t" + str(lexmapr_classification) + "\t" + str(lexmapr_bucket)
                          + "\t" + str(third_party_bucket))
             fw.write("\t" + str(sorted(third_party_classification)))
