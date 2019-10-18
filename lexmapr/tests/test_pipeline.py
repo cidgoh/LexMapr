@@ -395,11 +395,11 @@ class TestPipeline(unittest.TestCase):
     # to avoid long strings here.
     test_files = {
         # Empty file without "full" format argument
-        "empty_not_full": {"input": "empty", "format": "not full"},
+        "empty_not_full": {"input": "empty", "full": False},
         # Empty file with "full" format argument
         "empty": {"input": "empty"},
         # Non-empty file without "full" format argument
-        "small_simple_not_full": {"input": "small_simple", "format": "not full"},
+        "small_simple_not_full": {"input": "small_simple", "full": False},
         # Non-empty file with "full" format argument
         "small_simple": {"input": "small_simple"},
         # Some rows requires punctuation treatment
@@ -442,7 +442,7 @@ class TestPipeline(unittest.TestCase):
         # Wikipedia-based collocation resource.
         "test_full_term_wiki_match": {"input": "test_full_term_wiki_match"},
         # Bucket classification
-        "empty_buckets_not_full": {"input": "empty", "format": "not full", "bucket": True},
+        "empty_buckets_not_full": {"input": "empty", "full": False, "bucket": True},
         "empty_buckets": {"input": "empty", "bucket": True},
     }
 
@@ -456,21 +456,21 @@ class TestPipeline(unittest.TestCase):
         # Add some tsv files
         cls.test_files["empty_not_full_with_tsv_input"] = {
             "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
-            "format": "not full"
+            "full": False
         }
         cls.test_files["empty_with_tsv_input"] = {
             "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
         }
         cls.test_files["small_simple_not_full_with_tsv_input"] = {
             "input": os.path.join(ROOT, "tests", "test_input", "small_simple_with_tsv_input.tsv"),
-            "format": "not full"
+            "full": False
         }
         cls.test_files["small_simple_with_tsv_input"] = {
             "input": os.path.join(ROOT, "tests", "test_input", "small_simple_with_tsv_input.tsv"),
         }
         cls.test_files["empty_buckets_not_full_with_tsv_input"] = {
             "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
-            "format": "not full",
+            "full": False,
             "bucket": True
         }
         cls.test_files["empty_buckets_with_tsv_input"] = {
@@ -506,10 +506,10 @@ class TestPipeline(unittest.TestCase):
             # File path to store actual output of input file
             actual_output_path = os.path.join(self.tmp_dir, "actual_output.tsv")
             # Run pipeline.run using input_path and actual_output_path
-            default_args = {"format": "full", "bucket": False}
+            default_args = {"full": True, "bucket": False}
             default_args.update(pipeline_args)
             pipeline.run(argparse.Namespace(input_file=default_args["input"], config=None,
-                                            format=default_args["format"],
+                                            full=default_args["full"],
                                             output=actual_output_path, version=False,
                                             bucket=default_args["bucket"], no_cache=False,
                                             profile=None))
@@ -564,11 +564,11 @@ class TestOntologyMapping(unittest.TestCase):
         if config_file_name:
             config_file_path = os.path.join(ROOT, "tests", "test_config", config_file_name)
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=config_file_path,
-                                            format="basic", output=None, version=False,
+                                            full=None, output=None, version=False,
                                             bucket=False, no_cache=True, profile=None))
         else:
             pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None,
-                                            format="basic", output=None, version=False,
+                                            full=None, output=None, version=False,
                                             bucket=False, no_cache=True, profile=None))
 
     @staticmethod
@@ -1036,7 +1036,7 @@ class TestClassification(unittest.TestCase):
         # Path to input file used in all tests
         small_simple_path = os.path.join(ROOT, "tests", "test_input", "small_simple.csv")
 
-        pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None, format="basic",
+        pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None, full=None,
                                         output=None, version=False, bucket=bucket, no_cache=False,
                                         profile=None))
 
