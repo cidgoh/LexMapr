@@ -35,7 +35,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("input_file", help="Input csv or tsv file", type=valid_input_file)
     parser.add_argument("-o", "--output", nargs="?", help="Output file")
-    parser.add_argument("-f", "--format", default="basic", help="Output format")
+    parser.add_argument("-f", "--full", action="store_true", help="Full output format")
     parser.add_argument("-c", "--config",
                         help="Path to JSON file containing the IRI of ontologies to fetch terms "
                              "from"),
