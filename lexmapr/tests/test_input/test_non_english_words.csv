@@ -1,6 +1,6 @@
 SampleId,Sample
-small_simple1,Breast,single-token word not in nonEnglishWordsDict
-small_simple2,Baked Potato,multi-token word not in nonEnglishWordsDict
-small_simple3,aachar,single-token word in nonEnglishWordsDict
-small_simple4,aam aachar,multi-token word with all tokens in nonEnglishWordsDict
-small_simple5,aam apple,multi-token word with one token in nonEnglishWordsDict
+small_simple1,Breast
+small_simple2,Baked Potato
+small_simple3,aachar
+small_simple4,aam aachar
+small_simple5,aam apple

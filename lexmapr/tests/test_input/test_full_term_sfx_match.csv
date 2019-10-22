@@ -1,10 +1,10 @@
 SampleId,Sample
-small_simple1,Chicken Breast,not a full-term match with any suffix
-small_simple2,taco food product,full-term match with already existing suffix
-small_simple3,taco,full-term match with addition of suffix
-small_simple4,swamp cabbage plant as food source,full-term match with already existing suffix
-small_simple5,swamp cabbage,full-term match with addition of suffix
-small_simple6,taco. food product,full-term match of cleaned sample with already existing suffix
-small_simple7,taco.,full-term match of cleaned sample with addition of suffix
-small_simple8,swamp cabbage's plant as food source,full-term match of cleaned sample with already existing suffix
-small_simple9,swamp cabbage's,full-term match of cleaned sample with addition of suffix
+small_simple1,Chicken Breast
+small_simple2,taco food product
+small_simple3,taco
+small_simple4,swamp cabbage plant as food source
+small_simple5,swamp cabbage
+small_simple6,taco. food product
+small_simple7,taco.
+small_simple8,swamp cabbage's plant as food source
+small_simple9,swamp cabbage's

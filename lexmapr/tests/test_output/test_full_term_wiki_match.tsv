@@ -1,5 +1,5 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Final_Refined_Terms_with_Resource_IDs	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	Chicken Breast	chicken breast	['breast:uberon_0000310']	Component Match	[]
+Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
+small_simple1	Chicken Breast	chicken breast	['breast:uberon_0000310']	Component Match	["{breast: ['A Direct Match']}"]
 small_simple2	chicken manure	chicken manure	[]	No Match	[]
-small_simple3	Canned. Corn's	canned corn	[]	Component Match	['Synonym Usage']
-small_simple4	banana. Leaf's	banana leaf	['leaf:po_0025034']	Component Match	[]
+small_simple3	Canned. Corn's	canned corn	[]	No Match	[]
+small_simple4	banana. Leaf's	banana leaf	['leaf:po_0025034']	Component Match	["{leaf: ['A Direct Match']}"]
