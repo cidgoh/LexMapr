@@ -17,7 +17,9 @@ Set up [Bioconda](https://bioconda.github.io/), if you haven't already!
 Then:
 
 ```
-conda create -n LexMapr python=3.6 lexmapr
+$ conda create -n LexMapr lexmapr
+$ conda activate LexMapr
+$ python -m nltk.downloader all
 ```
 
 ### Without Bioconda
@@ -27,16 +29,16 @@ Install [Conda](https://docs.conda.io/en/latest/miniconda.html).
 Create a LexMapr environment:
 
 ```
-conda create --name LexMapr python=3.6
+$ conda create --name LexMapr
 ```
 
 Install LexMapr into your conda environment:
 ```
-conda activate LexMapr
-git clone https://github.com/Public-Health-Bioinformatics/LexMapr.git
-cd LexMapr
-pip install .
-python -m nltk.downloader all
+$ conda activate LexMapr
+$ git clone https://github.com/Public-Health-Bioinformatics/LexMapr.git
+$ cd LexMapr
+$ pip install .
+$ python -m nltk.downloader all
 ```
 
 ## Usage
@@ -73,6 +75,8 @@ small_simple5   Apple Pie       apple pie       ['apple pie:foodon_00002475']
 ```
 
 ## More Documentation
+
+[Formal documentation](https://genepio.org/lexmapr-documentation/)
 
 [Tutorial slides for users with little or no experience with command line](./docs/tutorial_slides.pdf)
 
