@@ -76,6 +76,8 @@ small_simple5   Apple Pie       apple pie       ['apple pie:foodon_00002475']
 
 ## More Documentation
 
+[Formal documentation](https://genepio.org/lexmapr-documentation/)
+
 [Tutorial slides for users with little or no experience with command line](./docs/tutorial_slides.pdf)
 
 [Tutorial slides for **IFSAC users** with little or no experience with command line](./docs/ifsac_tutorial_slides.pdf)
