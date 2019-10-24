@@ -141,47 +141,19 @@ class TestPipelineHelpers(unittest.TestCase):
             ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
 
     def test_punctuationTreatment(self):
-        """Tests punctuationTreatment.
-
-        TODO:
-            * The tests follow the specifications, but some of expected
-                values may be unintended bugs. Consult with Gurinder.
-            * Potential bugs:
-                * Three spaces between words, if there is a token
-                    consisting of a single punctuation mark between
-                    the words
-                    * e.g., foo;bar -> ["foo", ";", "bar] -> foo   bar
-                * Spaces at the beginning and/or end of the the
-                    returned string, if the input string begins and/or
-                    ends with a punctuation mark
-                    * e.g., _foo_ -> ["_foo_"] -> " foo "
-        """
-        # Punctuation list used in pipeline_helpers
-        punctuationList = ["-", "_", "(", ")", ";", "/", ":", "%"]
+        """Tests punctuationTreatment."""
         # Empty input string
-        self.assertEqual(
-            pipeline_helpers.punctuation_treatment("", punctuationList),
-            "")
+        self.assertEqual(pipeline_helpers.punctuation_treatment(""), "")
         # Single-token input string with no punctuation
-        self.assertEqual(
-            pipeline_helpers.punctuation_treatment("foo", punctuationList),
-            "foo")
+        self.assertEqual(pipeline_helpers.punctuation_treatment("foo"), "foo")
         # Multi-token input string with no punctuation
-        self.assertEqual(
-            pipeline_helpers.punctuation_treatment("foo bar", punctuationList),
-            "foo bar")
+        self.assertEqual(pipeline_helpers.punctuation_treatment("foo bar"), "foo bar")
         # Single-token input string with punctuation
-        self.assertEqual(
-            pipeline_helpers.punctuation_treatment("_foo-bar_", punctuationList),
-            "foo bar")
+        self.assertEqual(pipeline_helpers.punctuation_treatment("_foo-bar_"), "foo bar")
         # Multi-token input string with punctuation
-        self.assertEqual(
-            pipeline_helpers.punctuation_treatment("_foo;ba r_", punctuationList),
-            "foo   ba r")
+        self.assertEqual(pipeline_helpers.punctuation_treatment("_foo;ba r_"), "foo ba r")
         # Multi-token input string with number and punctuation
-        self.assertEqual(
-            pipeline_helpers.punctuation_treatment("a-b -1", punctuationList),
-            "a b -1")
+        self.assertEqual(pipeline_helpers.punctuation_treatment("a-b -1"), "a b 1")
 
     def test_retainedPhrase(self):
         """Tests retainedPhrase.

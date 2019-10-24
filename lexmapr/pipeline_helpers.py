@@ -2,6 +2,7 @@
 
 from collections import OrderedDict
 from itertools import combinations
+import re
 
 from dateutil.parser import parse
 import inflection
@@ -156,26 +157,21 @@ def preprocess(token):
     return token.replace("\'s", "").rstrip("', ").rstrip(". ")
 
 
-# 10-Method to get the punctuation treatment of input string - removes some predetermined punctuation and replaces it with a space
-def punctuation_treatment(inputstring, punctuationList):
-    finalSample = ""
-    sampleTokens = word_tokenize(inputstring)
-    for token in sampleTokens:
-        withoutPunctuation = ""
-        # Skip punctuation treatment for numbers
-        if is_number(token):
-            withoutPunctuation = token
-        else:
-            for char in token:
-                if char in punctuationList:
-                    withoutPunctuation = withoutPunctuation + " "
-                else:
-                    withoutPunctuation = withoutPunctuation + char
-        if (finalSample):
-            finalSample = finalSample + " " + withoutPunctuation
-        else:
-            finalSample = withoutPunctuation
-    return finalSample.strip()
+def punctuation_treatment(term):
+    """Remove punctuations from ``term``.
+
+    These punctuations are ``-``, ``_``, ``(``, ``)``, ``;``, ``/``,
+    ``:`` and ``%``.
+
+    :type term: str
+    :returns: ``term`` with punctuations removed
+    :rtype: str
+    """
+    punctuations_regex_char_class = "[-_();/:%]"
+    ret = re.sub(punctuations_regex_char_class, " ", term)
+
+    # Remove excess white space and return
+    return " ".join(ret.split())
 
 
 # 22-Method to get the final retained set of matched terms
