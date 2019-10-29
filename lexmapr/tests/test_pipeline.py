@@ -117,29 +117,6 @@ class TestPipelineHelpers(unittest.TestCase):
         self.assertCountEqual(pipeline_resources.get_resource_permutation_terms("a (b)"),
                               ["a (b)", "(b) a"])
 
-    def test_get_resource_bracketed_permutation_terms(self):
-        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms(""), [])
-        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("a"), [])
-        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("a b"),
-                              [])
-        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("a (b"),
-                              [])
-        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("a b)"),
-                              [])
-
-        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("a (b)"),
-                              ["a b", "b a"])
-        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("(a) b"),
-                              ["a"])
-        self.assertCountEqual(pipeline_resources.get_resource_bracketed_permutation_terms("(a b)"),
-                              ["a b", "b a"])
-        self.assertCountEqual(
-            pipeline_resources.get_resource_bracketed_permutation_terms("a (b c)"),
-            ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
-        self.assertCountEqual(
-            pipeline_resources.get_resource_bracketed_permutation_terms("a (b,c)"),
-            ["a b c", "a c b", "b a c", "b c a", "c a b", "c b a"])
-
     def test_punctuationTreatment(self):
         """Tests punctuationTreatment."""
         # Empty input string
@@ -616,9 +593,8 @@ class TestOntologyMapping(unittest.TestCase):
         expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
                          "processes", "collocations", "inflection_exceptions", "stop_words",
                          "suffixes", "parents", "resource_terms_id_based", "resource_terms",
-                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
-                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
-                         "ifsac_default"]
+                         "resource_permutation_terms", "buckets_ifsactop", "buckets_lexmapr",
+                         "ifsac_labels", "ifsac_refinement", "ifsac_default"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
@@ -629,9 +605,8 @@ class TestOntologyMapping(unittest.TestCase):
         expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
                          "processes", "collocations", "inflection_exceptions", "stop_words",
                          "suffixes", "parents", "resource_terms_id_based", "resource_terms",
-                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
-                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
-                         "ifsac_default"]
+                         "resource_permutation_terms", "buckets_ifsactop", "buckets_lexmapr",
+                         "ifsac_labels", "ifsac_refinement", "ifsac_default"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
@@ -714,15 +689,15 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo.json")
 
         expected_synonyms = {
-            "temporal instant.": "zero-dimensional temporal region",
-            "lonely-dimensional continuant fiat boundary.":
-                "two-dimensional continuant fiat boundary",
-            "lonelier-dimensional continuant fiat boundary.":
-                "one-dimensional continuant fiat boundary",
-            "loneliest-dimensional continuant fiat boundary.":
-                "zero-dimensional continuant fiat boundary",
-            "loneliestest-dimensional continuant fiat boundary.":
-                "zero-dimensional continuant fiat boundary",
+            "temporal instant.": "zero dimensional temporal region",
+            "lonely dimensional continuant fiat boundary.":
+                "two dimensional continuant fiat boundary",
+            "lonelier dimensional continuant fiat boundary.":
+                "one dimensional continuant fiat boundary",
+            "loneliest dimensional continuant fiat boundary.":
+                "zero dimensional continuant fiat boundary",
+            "loneliestest dimensional continuant fiat boundary.":
+                "zero dimensional continuant fiat boundary",
         }
         actual_synonyms = ontology_lookup_table["synonyms"]
         self.assertDictEqual(expected_synonyms, actual_synonyms)
@@ -732,18 +707,18 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_varying_synonyms.json")
 
         expected_synonyms = {
-            "temporal instant.": "zero-dimensional temporal region",
-            "temporal instant..": "zero-dimensional temporal region",
-            "lonely-dimensional continuant fiat boundary.":
-                "two-dimensional continuant fiat boundary",
-            "lonely-dimensional continuant fiat boundary..":
-                "two-dimensional continuant fiat boundary",
-            "lonelier-dimensional continuant fiat boundary.":
-                "one-dimensional continuant fiat boundary",
-            "loneliest-dimensional continuant fiat boundary.":
-                "zero-dimensional continuant fiat boundary",
-            "loneliestest-dimensional continuant fiat boundary.":
-                "zero-dimensional continuant fiat boundary",
+            "temporal instant.": "zero dimensional temporal region",
+            "temporal instant..": "zero dimensional temporal region",
+            "lonely dimensional continuant fiat boundary.":
+                "two dimensional continuant fiat boundary",
+            "lonely dimensional continuant fiat boundary..":
+                "two dimensional continuant fiat boundary",
+            "lonelier dimensional continuant fiat boundary.":
+                "one dimensional continuant fiat boundary",
+            "loneliest dimensional continuant fiat boundary.":
+                "zero dimensional continuant fiat boundary",
+            "loneliestest dimensional continuant fiat boundary.":
+                "zero dimensional continuant fiat boundary",
         }
         actual_synonyms = ontology_lookup_table["synonyms"]
         self.assertDictEqual(expected_synonyms, actual_synonyms)
@@ -929,35 +904,6 @@ class TestOntologyMapping(unittest.TestCase):
         actual_resource_permutation_terms = ontology_lookup_table["resource_permutation_terms"]
         self.assertDictEqual(expected_resource_permutation_terms, actual_resource_permutation_terms)
 
-    def test_ontology_table_resource_bracketed_permutation_terms(self):
-        self.run_pipeline_with_args(config_file_name="bfo_spatial_region.json")
-        ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_spatial_region.json")
-
-        expected_resource_bracketed_permutation_terms = {
-            "one-dimensional region spatial": "bfo_0000026",
-            "one-dimensional spatial region": "bfo_0000026",
-            "region one-dimensional spatial": "bfo_0000026",
-            "region spatial one-dimensional": "bfo_0000026",
-            "spatial one-dimensional region": "bfo_0000026",
-            "spatial region one-dimensional": "bfo_0000026",
-            "two-dimensional region spatial": "bfo_0000009",
-            "two-dimensional spatial region": "bfo_0000009",
-            "region two-dimensional spatial": "bfo_0000009",
-            "region spatial two-dimensional": "bfo_0000009",
-            "spatial two-dimensional region": "bfo_0000009",
-            "spatial region two-dimensional": "bfo_0000009",
-            "three-dimensional region spatial": "bfo_0000028",
-            "three-dimensional spatial region": "bfo_0000028",
-            "region three-dimensional spatial": "bfo_0000028",
-            "region spatial three-dimensional": "bfo_0000028",
-            "spatial three-dimensional region": "bfo_0000028",
-            "spatial region three-dimensional": "bfo_0000028"
-        }
-        actual_resource_bracketed_permutation_terms =\
-            ontology_lookup_table["resource_bracketed_permutation_terms"]
-        self.assertDictEqual(expected_resource_bracketed_permutation_terms,
-                             actual_resource_bracketed_permutation_terms)
-
     def test_ontology_table_resource_terms_prioritisation_pizza_first(self):
         config_file_name = "pizza_spiciness_and_pizza_two_spiciness.json"
         expected_lookup_table_name = "lookup_" + config_file_name
@@ -1030,13 +976,10 @@ class TestClassification(unittest.TestCase):
         expected_keys = ["synonyms", "abbreviations", "non_english_words", "spelling_mistakes",
                          "processes", "collocations", "inflection_exceptions", "stop_words",
                          "suffixes", "parents", "resource_terms_id_based", "resource_terms",
-                         "resource_permutation_terms", "resource_bracketed_permutation_terms",
-                         "buckets_ifsactop", "buckets_lexmapr", "ifsac_labels", "ifsac_refinement",
-                         "ifsac_default"]
+                         "resource_permutation_terms", "buckets_ifsactop", "buckets_lexmapr",
+                         "ifsac_labels", "ifsac_refinement", "ifsac_default"]
 
         self.assertCountEqual(expected_keys, classification_table.keys())
-
-
 
 
 if __name__ == '__main__':

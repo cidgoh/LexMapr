@@ -370,12 +370,5 @@ def _map_term_helper(term, lookup_table):
             "id": term_id,
             "status": ["Permutation of Tokens in Resource Term"]
         }
-    elif term in lookup_table["resource_bracketed_permutation_terms"]:
-        term_id = lookup_table["resource_bracketed_permutation_terms"][term]
-        return {
-            "term": lookup_table["resource_terms_id_based"][term_id],
-            "id": term_id,
-            "status": ["Permutation of Tokens in Bracketed Resource Term"]
-        }
     else:
         return None

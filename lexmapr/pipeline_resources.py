@@ -11,6 +11,7 @@ from nltk import word_tokenize
 
 from lexmapr.definitions import ROOT
 from lexmapr.ontofetch import Ontology
+from lexmapr.pipeline_helpers import punctuation_treatment
 
 
 def get_profile_args(args):
@@ -183,7 +184,6 @@ def create_lookup_table_skeleton():
             "resource_terms_id_based": {},
             "resource_terms": {},
             "resource_permutation_terms": {},
-            "resource_bracketed_permutation_terms": {},
             "buckets_ifsactop": {},
             "buckets_lexmapr": {},
             "ifsac_labels": {},
@@ -226,10 +226,6 @@ def add_predefined_resources_to_lookup_table(lookup_table):
         v: k for k, v in lookup_table["resource_terms_id_based"].items()
     }
 
-    # Will contain permutations of resource terms
-    lookup_table["resource_permutation_terms"] = {}
-    # Will contain permutations of resource terms with brackets
-    lookup_table["resource_bracketed_permutation_terms"] = {}
     # Iterate across resource_terms
     for resource_term in lookup_table["resource_terms"]:
         # ID corresponding to resource_term
@@ -241,11 +237,6 @@ def add_predefined_resources_to_lookup_table(lookup_table):
         # costly. We also ignore NCBI taxon terms, as there are
         # ~160000 such terms.
         if len(resource_tokens)<7 and "ncbitaxon" not in resource_id:
-            # Add all bracketed permutations of resource_term to
-            # appropriate dictionary.
-            bracketed_perms = get_resource_bracketed_permutation_terms(resource_term)
-            for bracketed_perm in bracketed_perms:
-                lookup_table["resource_bracketed_permutation_terms"][bracketed_perm] = resource_id
             # Add all permutations of resource_term to appropriate
             # dictionary.
             permutations = get_resource_permutation_terms(resource_term)
@@ -313,36 +304,6 @@ def get_resource_permutation_terms(resource_label):
     return ret
 
 
-def get_resource_bracketed_permutation_terms(resource_label):
-    """Get bracketed permutations of some term.
-
-    Bracketed permutations follows the following definition:
-
-    * If a term has no bracketed content, it returns has no bracketed
-      permutations
-    * If a term has bracketed content, the bracketed permutations are
-      comprised of all permutations of the term with the bracket
-      characters removed
-
-    :param resource_label: Name of some resource
-    :type resource_label: str
-    :return: All bracketed permutations of resource_label
-    :rtype: list
-    """
-    if "(" not in resource_label or ")" not in resource_label:
-        return []
-
-    # Portion of label before brackets
-    unbracketed_component = resource_label.split("(")[0]
-    # Portion of label inside brackets
-    bracketed_component = resource_label.split("(")[1]
-    bracketed_component = bracketed_component.split(")")[0]
-    # Replace any commas in bracketed_component with spaces
-    bracketed_component = bracketed_component.replace(",", " ")
-
-    return get_resource_permutation_terms(bracketed_component + " " + unbracketed_component)
-
-
 def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
     """Add terms from fetched_ontology to lookup_table.
 
@@ -368,7 +329,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
             # Standardize values
             resource_id = resource_id.replace(":", "_")
             resource_id = resource_id.lower()
-            resource_label = resource_label.lower()
+            resource_label = punctuation_treatment(resource_label.lower())
 
             lookup_table["resource_terms_id_based"][resource_id] = resource_label
             lookup_table["resource_terms"][resource_label] = resource_id
@@ -383,15 +344,11 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 for permutation in permutations:
                     lookup_table["resource_permutation_terms"][permutation] = resource_id
 
-                bracketed_permutations = get_resource_bracketed_permutation_terms(resource_label)
-                for permutation in bracketed_permutations:
-                    lookup_table["resource_bracketed_permutation_terms"][permutation] = resource_id
-
             if "oboInOwl:hasSynonym" in resource:
                 synonyms = resource["oboInOwl:hasSynonym"]
                 for synonym in synonyms:
                     # Standardize synonym
-                    synonym = synonym.lower()
+                    synonym = punctuation_treatment(synonym.lower())
 
                     lookup_table["synonyms"][synonym] = resource_label
 
@@ -399,7 +356,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 synonyms = resource["oboInOwl:hasBroadSynonym"]
                 for synonym in synonyms:
                     # Standardize synonym
-                    synonym = synonym.lower()
+                    synonym = punctuation_treatment(synonym.lower())
 
                     lookup_table["synonyms"][synonym] = resource_label
 
@@ -407,7 +364,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 synonyms = resource["oboInOwl:hasNarrowSynonym"]
                 for synonym in synonyms:
                     # Standardize synonym
-                    synonym = synonym.lower()
+                    synonym = punctuation_treatment(synonym.lower())
 
                     lookup_table["synonyms"][synonym] = resource_label
 
@@ -415,7 +372,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 synonyms = resource["oboInOwl:hasExactSynonym"]
                 for synonym in synonyms:
                     # Standardize synonym
-                    synonym = synonym.lower()
+                    synonym = punctuation_treatment(synonym.lower())
 
                     lookup_table["synonyms"][synonym] = resource_label
 
