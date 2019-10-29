@@ -25,7 +25,7 @@ setup(name='lexmapr',
       license='GPL-3.0',
       classifiers=classifiers,
       install_requires=[
-          'nltk==3.2.5',
+          'nltk==3.4.5',
           'wikipedia==1.4.0',
           'inflection==0.3.1',
           'python-dateutil==2.7.3',
