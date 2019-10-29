@@ -250,7 +250,7 @@ def run(args):
 
         # Write to row
         fw.write("\n" + sample_id + "\t" + original_sample + "\t" + cleaned_sample + "\t"
-                 + str(matched_components))
+                 + str(matched_components).lower())
 
         if args.full:
             fw.write("\t" + macro_status + "\t" + str(micro_status))

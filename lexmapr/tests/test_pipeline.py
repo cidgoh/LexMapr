@@ -632,9 +632,9 @@ class TestOntologyMapping(unittest.TestCase):
             "bfo_0000024": "fiat object part",
             "bfo_0000027": "object aggregate",
             "bfo_0000030": "object",
-            "pizza.owl_hot": "picante",
-            "pizza.owl_medium": "media",
-            "pizza.owl_mild": "naopicante"
+            "pizza.owl_hot": "Picante",
+            "pizza.owl_medium": "Media",
+            "pizza.owl_mild": "NaoPicante"
         }
         actual_resource_terms_id_based = ontology_lookup_table["resource_terms_id_based"]
         self.assertDictEqual(expected_resource_terms_id_based, actual_resource_terms_id_based)

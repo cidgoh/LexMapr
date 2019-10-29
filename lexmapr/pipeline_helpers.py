@@ -161,13 +161,13 @@ def punctuation_treatment(term):
     """Remove punctuations from ``term``.
 
     These punctuations are ``-``, ``_``, ``(``, ``)``, ``;``, ``/``,
-    ``:`` and ``%``.
+    ``:``, ``%`` and ``,``.
 
     :type term: str
     :returns: ``term`` with punctuations removed
     :rtype: str
     """
-    punctuations_regex_char_class = "[-_();/:%]"
+    punctuations_regex_char_class = "[-_();/:%,]"
     ret = re.sub(punctuations_regex_char_class, " ", term)
 
     # Remove excess white space and return
@@ -358,9 +358,10 @@ def map_term(term, lookup_table, consider_suffixes=False):
 def _map_term_helper(term, lookup_table):
     # Map ``term`` to ``lookup_table`` resource or resource permutation
     if term in lookup_table["resource_terms"]:
+        term_id = lookup_table["resource_terms"][term]
         return {
-            "term": term,
-            "id": lookup_table["resource_terms"][term],
+            "term": lookup_table["resource_terms_id_based"][term_id],
+            "id": term_id,
             "status": ["A Direct Match"]
         }
     elif term in lookup_table["resource_permutation_terms"]:

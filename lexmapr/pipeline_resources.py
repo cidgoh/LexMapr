@@ -181,7 +181,9 @@ def create_lookup_table_skeleton():
             "stop_words": {},
             "suffixes": {},
             "parents": {},
+            # ID values of non-standardized resource terms
             "resource_terms_id_based": {},
+            # Standardized resource terms and their id values
             "resource_terms": {},
             "resource_permutation_terms": {},
             "buckets_ifsactop": {},
@@ -224,6 +226,16 @@ def add_predefined_resources_to_lookup_table(lookup_table):
     # Swap keys and values in resource_terms_id_based
     lookup_table["resource_terms"] = {
         v: k for k, v in lookup_table["resource_terms_id_based"].items()
+    }
+
+    # Standardize labels that need standardizing
+    lookup_table["synonyms"] = {
+        punctuation_treatment(k.lower()): punctuation_treatment(v.lower())
+        for k, v in lookup_table["synonyms"].items()
+    }
+    lookup_table["resource_terms"] = {
+        punctuation_treatment(k.lower()): v
+        for k, v in lookup_table["resource_terms"].items()
     }
 
     # Iterate across resource_terms
@@ -326,12 +338,13 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
             resource_id = resource["id"]
             resource_label = resource["label"]
 
-            # Standardize values
+            # Standardize ID value
             resource_id = resource_id.replace(":", "_")
             resource_id = resource_id.lower()
-            resource_label = punctuation_treatment(resource_label.lower())
-
             lookup_table["resource_terms_id_based"][resource_id] = resource_label
+
+            # Standardize label
+            resource_label = punctuation_treatment(resource_label.lower())
             lookup_table["resource_terms"][resource_label] = resource_id
 
             # List of tokens in resource_label
