@@ -357,17 +357,17 @@ def map_term(term, lookup_table, consider_suffixes=False):
 
 def _map_term_helper(term, lookup_table):
     # Map ``term`` to ``lookup_table`` resource or resource permutation
-    if term in lookup_table["resource_terms"]:
-        term_id = lookup_table["resource_terms"][term]
+    if term in lookup_table["standard_resource_labels"]:
+        term_id = lookup_table["standard_resource_labels"][term]
         return {
-            "term": lookup_table["resource_terms_id_based"][term_id],
+            "term": lookup_table["non_standard_resource_ids"][term_id],
             "id": term_id,
             "status": ["A Direct Match"]
         }
-    elif term in lookup_table["resource_permutation_terms"]:
-        term_id = lookup_table["resource_permutation_terms"][term]
+    elif term in lookup_table["standard_resource_label_permutations"]:
+        term_id = lookup_table["standard_resource_label_permutations"][term]
         return {
-            "term": lookup_table["resource_terms_id_based"][term_id],
+            "term": lookup_table["non_standard_resource_ids"][term_id],
             "id": term_id,
             "status": ["Permutation of Tokens in Resource Term"]
         }
