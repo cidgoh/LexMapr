@@ -77,7 +77,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     avian_categories = {"game", "poultry"} | poultry_categories
 
     animal_categories = {"human", "avian", "companion animal", "aquatic animals", "wild animal",
-                         "beef", "pork", "other meat", "cow", "pig", "other animal"}
+                         "beef", "pork", "meat", "other meat", "cow", "pig", "other animal"}
     animal_categories |= avian_categories | aquatic_animal_categories
 
     if "mollusks" in ret and ret.intersection(mollusk_categories):
