@@ -133,8 +133,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "plant" in ret and ret.intersection(plant_categories):
         ret.remove("plant")
 
-    if "food" in ret and ret.intersection(animal_categories | plant_categories):
-        ret.remove("food")
+    if "food" in ret and ret.intersection(animal_categories | plant_categories | {"meat"}):
+            ret.remove("food")
 
     if "animal feed" in ret:
         ret.clear()

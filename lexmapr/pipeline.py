@@ -20,8 +20,6 @@ def run(args):
     """
     Main text mining pipeline.
     """
-    punctuations = ['-', '_', '(', ')', ';', '/', ':', '%']
-
     # If the user specified a profile, we must retrieve args specified
     # by the profile, unless they were explicitly overridden.
     if args.profile:
@@ -110,17 +108,17 @@ def run(args):
         third_party_bucket = []
         third_party_classification = []
 
-        # Standardize sample to lowercase
+        # Standardize sample to lowercase and with punctuation
+        # treatment.
         sample = original_sample.lower()
+        sample = helpers.punctuation_treatment(sample)
 
-        sample = helpers.punctuation_treatment(sample, punctuations)
-        sample = re.sub(' +', ' ', sample)
         sample_tokens = word_tokenize(sample)
 
         # Get ``cleaned_sample``
         for tkn in sample_tokens:
             # Ignore dates
-            if helpers.is_date(tkn):
+            if helpers.is_date(tkn) or helpers.is_number(tkn):
                 continue
             # Some preprocessing
             tkn = helpers.preprocess(tkn)

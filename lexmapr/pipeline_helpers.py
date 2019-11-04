@@ -2,6 +2,7 @@
 
 from collections import OrderedDict
 from itertools import combinations
+import re
 
 from dateutil.parser import parse
 import inflection
@@ -156,26 +157,21 @@ def preprocess(token):
     return token.replace("\'s", "").rstrip("', ").rstrip(". ")
 
 
-# 10-Method to get the punctuation treatment of input string - removes some predetermined punctuation and replaces it with a space
-def punctuation_treatment(inputstring, punctuationList):
-    finalSample = ""
-    sampleTokens = word_tokenize(inputstring)
-    for token in sampleTokens:
-        withoutPunctuation = ""
-        # Skip punctuation treatment for numbers
-        if is_number(token):
-            withoutPunctuation = token
-        else:
-            for char in token:
-                if char in punctuationList:
-                    withoutPunctuation = withoutPunctuation + " "
-                else:
-                    withoutPunctuation = withoutPunctuation + char
-        if (finalSample):
-            finalSample = finalSample + " " + withoutPunctuation
-        else:
-            finalSample = withoutPunctuation
-    return finalSample.strip()
+def punctuation_treatment(term):
+    """Remove punctuations from ``term``.
+
+    These punctuations are ``-``, ``_``, ``(``, ``)``, ``;``, ``/``,
+    ``:``, ``%`` and ``,``.
+
+    :type term: str
+    :returns: ``term`` with punctuations removed
+    :rtype: str
+    """
+    punctuations_regex_char_class = "[-_();/:%,]"
+    ret = re.sub(punctuations_regex_char_class, " ", term)
+
+    # Remove excess white space and return
+    return " ".join(ret.split())
 
 
 # 22-Method to get the final retained set of matched terms
@@ -361,25 +357,19 @@ def map_term(term, lookup_table, consider_suffixes=False):
 
 def _map_term_helper(term, lookup_table):
     # Map ``term`` to ``lookup_table`` resource or resource permutation
-    if term in lookup_table["resource_terms"]:
+    if term in lookup_table["standard_resource_labels"]:
+        term_id = lookup_table["standard_resource_labels"][term]
         return {
-            "term": term,
-            "id": lookup_table["resource_terms"][term],
+            "term": lookup_table["non_standard_resource_ids"][term_id],
+            "id": term_id,
             "status": ["A Direct Match"]
         }
-    elif term in lookup_table["resource_permutation_terms"]:
-        term_id = lookup_table["resource_permutation_terms"][term]
+    elif term in lookup_table["standard_resource_label_permutations"]:
+        term_id = lookup_table["standard_resource_label_permutations"][term]
         return {
-            "term": lookup_table["resource_terms_id_based"][term_id],
+            "term": lookup_table["non_standard_resource_ids"][term_id],
             "id": term_id,
             "status": ["Permutation of Tokens in Resource Term"]
-        }
-    elif term in lookup_table["resource_bracketed_permutation_terms"]:
-        term_id = lookup_table["resource_bracketed_permutation_terms"][term]
-        return {
-            "term": lookup_table["resource_terms_id_based"][term_id],
-            "id": term_id,
-            "status": ["Permutation of Tokens in Bracketed Resource Term"]
         }
     else:
         return None

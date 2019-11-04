@@ -11,6 +11,7 @@ from nltk import word_tokenize
 
 from lexmapr.definitions import ROOT
 from lexmapr.ontofetch import Ontology
+from lexmapr.pipeline_helpers import punctuation_treatment
 
 
 def get_profile_args(args):
@@ -170,26 +171,32 @@ def create_lookup_table_skeleton():
     :return: Empty lookup table
     :rtype: dict
     """
-    return {"synonyms": {},
-            "abbreviations": {},
-            "non_english_words": {},
-            "spelling_mistakes": {},
-            "processes": {},
-            "collocations": {},
-            "inflection_exceptions": {},
-            "stop_words": {},
-            "suffixes": {},
-            "parents": {},
-            "resource_terms_id_based": {},
-            "resource_terms": {},
-            "resource_permutation_terms": {},
-            "resource_bracketed_permutation_terms": {},
-            "buckets_ifsactop": {},
-            "buckets_lexmapr": {},
-            "ifsac_labels": {},
-            "ifsac_refinement": {},
-            "ifsac_default": {}
-            }
+    return {
+        # ontology_resource_id:ontology_resource_label
+        "non_standard_resource_ids": {},
+        # standardized_ontology_resource_label:ontology_resource_id
+        "standard_resource_labels": {},
+        # Keys are some permutation of a standardized ontology resource
+        # label, and values are the corresponding ontology resource id.
+        "standard_resource_label_permutations": {},
+        # Keys are some synonym of an ontology resource, and values are
+        # the corresponding standardized ontology resource label.
+        "synonyms": {},
+        # Keys are some ontology resource id, and values are an array
+        # of immediate ontology parent ids.
+        "parents": {},
+        "abbreviations": {},
+        "non_english_words": {},
+        "spelling_mistakes": {},
+        "inflection_exceptions": {},
+        "stop_words": {},
+        "suffixes": {},
+        "buckets_ifsactop": {},
+        "buckets_lexmapr": {},
+        "ifsac_labels": {},
+        "ifsac_refinement": {},
+        "ifsac_default": {}
+        }
 
 
 def add_predefined_resources_to_lookup_table(lookup_table):
@@ -201,56 +208,43 @@ def add_predefined_resources_to_lookup_table(lookup_table):
     :return: Modified ``lookup_table``
     :rtype: dict
     """
-    # Synonyms of resource terms
-    lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
     # Abbreviations of resource terms
     lookup_table["abbreviations"] = get_resource_dict("AbbLex.csv")
     # Non-english translations of resource terms
     lookup_table["non_english_words"] = get_resource_dict("NefLex.csv")
     # Common misspellings of resource terms
     lookup_table["spelling_mistakes"] = get_resource_dict("ScorLex.csv")
-    # Terms corresponding to candidate processes
-    lookup_table["processes"] = get_resource_dict("candidateProcesses.csv")
-    # Terms corresponding to wikipedia collocations
-    lookup_table["collocations"] = get_resource_dict("wikipediaCollocations.csv")
     # Terms excluded from inflection treatment
     lookup_table["inflection_exceptions"] = get_resource_dict("inflection-exceptions.csv")
     # Constrained list of stop words considered to be meaningless
     lookup_table["stop_words"] = get_resource_dict("mining-stopwords.csv")
     # Suffixes to consider appending to terms when mining ontologies
     lookup_table["suffixes"] = get_resource_dict("suffixes.csv")
-    # ID-resource combinations
-    lookup_table["resource_terms_id_based"] = get_resource_dict("CombinedResourceTerms.csv")
-    # Swap keys and values in resource_terms_id_based
-    lookup_table["resource_terms"] = {
-        v: k for k, v in lookup_table["resource_terms_id_based"].items()
+
+    lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
+    lookup_table["synonyms"] = {
+        punctuation_treatment(k): punctuation_treatment(v)
+        for k, v in lookup_table["synonyms"].items()
     }
 
-    # Will contain permutations of resource terms
-    lookup_table["resource_permutation_terms"] = {}
-    # Will contain permutations of resource terms with brackets
-    lookup_table["resource_bracketed_permutation_terms"] = {}
-    # Iterate across resource_terms
-    for resource_term in lookup_table["resource_terms"]:
-        # ID corresponding to resource_term
-        resource_id = lookup_table["resource_terms"][resource_term]
-        # List of tokens in resource_term
-        resource_tokens = word_tokenize(resource_term)
-        # To limit performance overhead, we ignore resource_terms with
+    lookup_table["non_standard_resource_ids"] = get_resource_dict("CombinedResourceTerms.csv")
+
+    lookup_table["standard_resource_labels"] = {
+        punctuation_treatment(v): k
+        for k, v in lookup_table["non_standard_resource_ids"].items()
+    }
+
+    for label in lookup_table["standard_resource_labels"]:
+        resource_id = lookup_table["standard_resource_labels"][label]
+        label_tokens = word_tokenize(label)
+        # To limit performance overhead, we ignore resource labels with
         # more than 7 tokens, as permutating too many tokens can be
         # costly. We also ignore NCBI taxon terms, as there are
         # ~160000 such terms.
-        if len(resource_tokens)<7 and "ncbitaxon" not in resource_id:
-            # Add all bracketed permutations of resource_term to
-            # appropriate dictionary.
-            bracketed_perms = get_resource_bracketed_permutation_terms(resource_term)
-            for bracketed_perm in bracketed_perms:
-                lookup_table["resource_bracketed_permutation_terms"][bracketed_perm] = resource_id
-            # Add all permutations of resource_term to appropriate
-            # dictionary.
-            permutations = get_resource_permutation_terms(resource_term)
-            for permutation in permutations:
-                lookup_table["resource_permutation_terms"][permutation] = resource_id
+        if len(label_tokens)<7 and "ncbitaxon" not in resource_id:
+            label_permutations = get_resource_label_permutations(label)
+            for permutation in label_permutations:
+                lookup_table["standard_resource_label_permutations"][permutation] = resource_id
     return lookup_table
 
 
@@ -292,7 +286,7 @@ def get_resource_dict(resource_file_name):
     return ret
 
 
-def get_resource_permutation_terms(resource_label):
+def get_resource_label_permutations(resource_label):
     """Get permutations of some term.
 
     :param resource_label: Name of some resource
@@ -311,36 +305,6 @@ def get_resource_permutation_terms(resource_label):
         ret = ret + [permutation_string]
 
     return ret
-
-
-def get_resource_bracketed_permutation_terms(resource_label):
-    """Get bracketed permutations of some term.
-
-    Bracketed permutations follows the following definition:
-
-    * If a term has no bracketed content, it returns has no bracketed
-      permutations
-    * If a term has bracketed content, the bracketed permutations are
-      comprised of all permutations of the term with the bracket
-      characters removed
-
-    :param resource_label: Name of some resource
-    :type resource_label: str
-    :return: All bracketed permutations of resource_label
-    :rtype: list
-    """
-    if "(" not in resource_label or ")" not in resource_label:
-        return []
-
-    # Portion of label before brackets
-    unbracketed_component = resource_label.split("(")[0]
-    # Portion of label inside brackets
-    bracketed_component = resource_label.split("(")[1]
-    bracketed_component = bracketed_component.split(")")[0]
-    # Replace any commas in bracketed_component with spaces
-    bracketed_component = bracketed_component.replace(",", " ")
-
-    return get_resource_permutation_terms(bracketed_component + " " + unbracketed_component)
 
 
 def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
@@ -362,16 +326,16 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
     # Parse content from fetched_ontology and add it to lookup_table
     for resource in fetched_ontology["specifications"].values():
         if "id" in resource and "label" in resource:
-            resource_id = resource["id"]
-            resource_label = resource["label"]
+            resource_id = resource["id"].lower()
+            resource_label = resource["label"].lower()
 
-            # Standardize values
+            # ID value should match format of pre-defined resources
             resource_id = resource_id.replace(":", "_")
-            resource_id = resource_id.lower()
-            resource_label = resource_label.lower()
+            lookup_table["non_standard_resource_ids"][resource_id] = resource_label
 
-            lookup_table["resource_terms_id_based"][resource_id] = resource_label
-            lookup_table["resource_terms"][resource_label] = resource_id
+            # Standardize label
+            resource_label = punctuation_treatment(resource_label)
+            lookup_table["standard_resource_labels"][resource_label] = resource_id
 
             # List of tokens in resource_label
             resource_tokens = word_tokenize(resource_label)
@@ -379,19 +343,15 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
             # Permutating more tokens than this can lead to performance
             # issues.
             if len(resource_tokens) < 7:
-                permutations = get_resource_permutation_terms(resource_label)
+                permutations = get_resource_label_permutations(resource_label)
                 for permutation in permutations:
-                    lookup_table["resource_permutation_terms"][permutation] = resource_id
-
-                bracketed_permutations = get_resource_bracketed_permutation_terms(resource_label)
-                for permutation in bracketed_permutations:
-                    lookup_table["resource_bracketed_permutation_terms"][permutation] = resource_id
+                    lookup_table["standard_resource_label_permutations"][permutation] = resource_id
 
             if "oboInOwl:hasSynonym" in resource:
                 synonyms = resource["oboInOwl:hasSynonym"]
                 for synonym in synonyms:
                     # Standardize synonym
-                    synonym = synonym.lower()
+                    synonym = punctuation_treatment(synonym.lower())
 
                     lookup_table["synonyms"][synonym] = resource_label
 
@@ -399,7 +359,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 synonyms = resource["oboInOwl:hasBroadSynonym"]
                 for synonym in synonyms:
                     # Standardize synonym
-                    synonym = synonym.lower()
+                    synonym = punctuation_treatment(synonym.lower())
 
                     lookup_table["synonyms"][synonym] = resource_label
 
@@ -407,7 +367,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 synonyms = resource["oboInOwl:hasNarrowSynonym"]
                 for synonym in synonyms:
                     # Standardize synonym
-                    synonym = synonym.lower()
+                    synonym = punctuation_treatment(synonym.lower())
 
                     lookup_table["synonyms"][synonym] = resource_label
 
@@ -415,7 +375,7 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
                 synonyms = resource["oboInOwl:hasExactSynonym"]
                 for synonym in synonyms:
                     # Standardize synonym
-                    synonym = synonym.lower()
+                    synonym = punctuation_treatment(synonym.lower())
 
                     lookup_table["synonyms"][synonym] = resource_label
 
