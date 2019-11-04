@@ -118,7 +118,7 @@ def run(args):
         # Get ``cleaned_sample``
         for tkn in sample_tokens:
             # Ignore dates
-            if helpers.is_date(tkn):
+            if helpers.is_date(tkn) or helpers.is_number(tkn):
                 continue
             # Some preprocessing
             tkn = helpers.preprocess(tkn)
