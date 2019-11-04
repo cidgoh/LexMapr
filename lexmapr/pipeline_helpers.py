@@ -5,7 +5,7 @@ from itertools import combinations
 
 from dateutil.parser import parse
 import inflection
-from nltk.tokenize.moses import MosesDetokenizer
+from mosestokenizer import MosesDetokenizer
 from nltk.tokenize import word_tokenize
 
 
@@ -78,7 +78,8 @@ def remove_duplicate_tokens(input_string):
     for token in new_phrase_list:
         if token not in refined_phrase_list:
             refined_phrase_list.append(token)
-    refined_string = MosesDetokenizer().detokenize(refined_phrase_list, return_str=True)
+    with MosesDetokenizer() as detokenize:
+        refined_string = detokenize(refined_phrase_list)
     refined_string=refined_string.strip()
     return refined_string
 
