@@ -223,14 +223,14 @@ def add_predefined_resources_to_lookup_table(lookup_table):
 
     lookup_table["synonyms"] = get_resource_dict("SynLex.csv")
     lookup_table["synonyms"] = {
-        punctuation_treatment(k.lower()): punctuation_treatment(v.lower())
+        punctuation_treatment(k): punctuation_treatment(v)
         for k, v in lookup_table["synonyms"].items()
     }
 
     lookup_table["non_standard_resource_ids"] = get_resource_dict("CombinedResourceTerms.csv")
 
     lookup_table["standard_resource_labels"] = {
-        punctuation_treatment(v.lower()): k
+        punctuation_treatment(v): k
         for k, v in lookup_table["non_standard_resource_ids"].items()
     }
 
@@ -326,15 +326,15 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
     # Parse content from fetched_ontology and add it to lookup_table
     for resource in fetched_ontology["specifications"].values():
         if "id" in resource and "label" in resource:
-            resource_id = resource["id"]
-            resource_label = resource["label"]
+            resource_id = resource["id"].lower()
+            resource_label = resource["label"].lower()
 
             # ID value should match format of pre-defined resources
-            resource_id = resource_id.replace(":", "_").lower()
+            resource_id = resource_id.replace(":", "_")
             lookup_table["non_standard_resource_ids"][resource_id] = resource_label
 
             # Standardize label
-            resource_label = punctuation_treatment(resource_label.lower())
+            resource_label = punctuation_treatment(resource_label)
             lookup_table["standard_resource_labels"][resource_label] = resource_id
 
             # List of tokens in resource_label
