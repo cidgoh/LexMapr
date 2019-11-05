@@ -6,8 +6,8 @@ import re
 
 from dateutil.parser import parse
 import inflection
-from mosestokenizer import MosesDetokenizer
 from nltk.tokenize import word_tokenize
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 
 def singularize_token(tkn, lookup_table, micro_status):
@@ -79,8 +79,7 @@ def remove_duplicate_tokens(input_string):
     for token in new_phrase_list:
         if token not in refined_phrase_list:
             refined_phrase_list.append(token)
-    with MosesDetokenizer() as detokenize:
-        refined_string = detokenize(refined_phrase_list)
+    refined_string = TreebankWordDetokenizer().detokenize(refined_phrase_list)
     refined_string=refined_string.strip()
     return refined_string
 
