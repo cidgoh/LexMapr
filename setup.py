@@ -25,7 +25,6 @@ setup(name='lexmapr',
       license='GPL-3.0',
       classifiers=classifiers,
       install_requires=[
-          'mosestokenizer==1.1.0',
           'nltk==3.4.5',
           'wikipedia==1.4.0',
           'inflection==0.3.1',
