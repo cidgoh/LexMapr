@@ -1,0 +1,963 @@
+[URI of the OWL(RDF/XML) output file]
+http://purl.obolibrary.org/obo/lexmapr/imports/obo_import.owl
+
+# http://purl.obolibrary.org/obo/BFO_0000001 # entity
+# http://purl.obolibrary.org/obo/BFO_0000002 # continuant
+# http://purl.obolibrary.org/obo/BFO_0000004 # independent continuant
+# http://purl.obolibrary.org/obo/BFO_0000024 # fiat object part
+# http://purl.obolibrary.org/obo/BFO_0000030 # object
+# http://purl.obolibrary.org/obo/BFO_0000040 # material entity
+
+
+[Source ontology]
+CHEBI
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/CHEBI_15377 # water
+http://purl.obolibrary.org/obo/CHEBI_17029 # chitin
+http://purl.obolibrary.org/obo/CHEBI_21638 # N-acylglucosamine
+http://purl.obolibrary.org/obo/CHEBI_21656 # N-acyl-hexosamine
+http://purl.obolibrary.org/obo/CHEBI_22506 # aminoglycan
+http://purl.obolibrary.org/obo/CHEBI_23367 # molecular entity
+http://purl.obolibrary.org/obo/CHEBI_24271 # glucosamines
+http://purl.obolibrary.org/obo/CHEBI_24431 # chemical entity
+http://purl.obolibrary.org/obo/CHEBI_24586 # hexosamine
+http://purl.obolibrary.org/obo/CHEBI_24651 # hydroxides
+http://purl.obolibrary.org/obo/CHEBI_24835 # inorganic molecular entity
+http://purl.obolibrary.org/obo/CHEBI_25806 # oxygen molecular entity
+http://purl.obolibrary.org/obo/CHEBI_28963 # amino sugar
+http://purl.obolibrary.org/obo/CHEBI_33232 # application
+http://purl.obolibrary.org/obo/CHEBI_33242 # inorganic hydride
+http://purl.obolibrary.org/obo/CHEBI_33285 # heteroorganic entity
+http://purl.obolibrary.org/obo/CHEBI_33286 # agrochemical
+http://purl.obolibrary.org/obo/CHEBI_33287 # fertilizer
+http://purl.obolibrary.org/obo/CHEBI_33302 # pnictogen molecular entity
+http://purl.obolibrary.org/obo/CHEBI_33304 # chalcogen molecular entity
+http://purl.obolibrary.org/obo/CHEBI_33579 # main group molecular entity
+http://purl.obolibrary.org/obo/CHEBI_33582 # carbon group molecular entity
+http://purl.obolibrary.org/obo/CHEBI_33608 # hydrogen molecular entity
+http://purl.obolibrary.org/obo/CHEBI_33674 # s-block molecular entity
+http://purl.obolibrary.org/obo/CHEBI_33675 # p-block molecular entity
+http://purl.obolibrary.org/obo/CHEBI_33692 # hydrides
+http://purl.obolibrary.org/obo/CHEBI_33693 # oxygen hydride
+http://purl.obolibrary.org/obo/CHEBI_33694 # biomacromolecule
+http://purl.obolibrary.org/obo/CHEBI_33839 # macromolecule
+http://purl.obolibrary.org/obo/CHEBI_35352 # organonitrogen compound
+http://purl.obolibrary.org/obo/CHEBI_36357 # polyatomic entity
+http://purl.obolibrary.org/obo/CHEBI_36902 # chalcogen hydride
+http://purl.obolibrary.org/obo/CHEBI_36962 # organochalcogen compound
+http://purl.obolibrary.org/obo/CHEBI_36963 # organooxygen compound
+http://purl.obolibrary.org/obo/CHEBI_37176 # mononuclear parent hydride
+http://purl.obolibrary.org/obo/CHEBI_37577 # heteroatomic molecular entity
+http://purl.obolibrary.org/obo/CHEBI_50860 # organic molecular entity
+http://purl.obolibrary.org/obo/CHEBI_50906 # role
+http://purl.obolibrary.org/obo/CHEBI_51143 # nitrogen molecular entity
+http://purl.obolibrary.org/obo/CHEBI_52625 # inorganic hydroxy compound
+http://purl.obolibrary.org/obo/CHEBI_60926 # amino monosaccharide
+http://purl.obolibrary.org/obo/CHEBI_63299 # carbohydrate derivative
+http://purl.obolibrary.org/obo/CHEBI_65212 # polysaccharide derivative
+http://purl.obolibrary.org/obo/CHEBI_78616 # carbohydrates and carbohydrate derivatives
+
+
+[Top level source term URIs and target direct superclass URIs]
+http://purl.obolibrary.org/obo/CHEBI_23367 # molecular entity
+subClassOf http://purl.obolibrary.org/obo/BFO_0000040 # material entity
+
+http://purl.obolibrary.org/obo/CHEBI_24432 # biological role 
+subClassOf http://purl.obolibrary.org/obo/BFO_0000023 # role
+
+[Source term retrieval setting]
+includeAllIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+http://purl.obolibrary.org/obo/IAO_0000115 
+http://purl.obolibrary.org/obo/IAO_0000111
+http://purl.obolibrary.org/obo/IAO_0000114
+http://purl.obolibrary.org/obo/IAO_0000119
+http://purl.obolibrary.org/obo/OBI_0001886
+
+########################################
+
+[Source ontology]
+CHMO
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/CHMO_0000993 # portion of material
+
+[Top level source term URIs and target direct superclass URIs]
+http://purl.obolibrary.org/obo/BFO_0000015 # process
+http://purl.obolibrary.org/obo/BFO_0000040 # material entity
+
+
+[Source term retrieval setting]
+includeAllIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+http://purl.obolibrary.org/obo/IAO_0000115 
+http://purl.obolibrary.org/obo/IAO_0000111
+http://purl.obolibrary.org/obo/IAO_0000114
+http://purl.obolibrary.org/obo/IAO_0000119
+http://purl.obolibrary.org/obo/OBI_0001886
+
+########################################
+
+[Source ontology]
+ENVO
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/ENVO_00000000 # geographic feature
+http://purl.obolibrary.org/obo/ENVO_00000002 # anthropogenic geographic feature
+http://purl.obolibrary.org/obo/ENVO_00000070 # construction
+http://purl.obolibrary.org/obo/ENVO_00000073 # building
+http://purl.obolibrary.org/obo/ENVO_00000078 # farm
+http://purl.obolibrary.org/obo/ENVO_00000106 # grassland area
+http://purl.obolibrary.org/obo/ENVO_00000266 # pasture
+http://purl.obolibrary.org/obo/ENVO_00000469 # research facility
+http://purl.obolibrary.org/obo/ENVO_00002003 # fecal material
+http://purl.obolibrary.org/obo/ENVO_00002004 # mesoscopic physical object
+http://purl.obolibrary.org/obo/ENVO_00002006 # liquid water
+http://purl.obolibrary.org/obo/ENVO_00002011 # fresh water
+http://purl.obolibrary.org/obo/ENVO_00002221 # shop
+http://purl.obolibrary.org/obo/ENVO_00002264 # waste material
+http://purl.obolibrary.org/obo/ENVO_00002297 # environmental feature
+http://purl.obolibrary.org/obo/ENVO_00003074 # manufactured product
+http://purl.obolibrary.org/obo/ENVO_00003075 # anthropogenic abiotic mesoscopic feature
+http://purl.obolibrary.org/obo/ENVO_00003861 # industrial building
+http://purl.obolibrary.org/obo/ENVO_00003862 # dairy
+http://purl.obolibrary.org/obo/ENVO_00003963 # warehouse
+http://purl.obolibrary.org/obo/ENVO_00010483 # environmental material
+http://purl.obolibrary.org/obo/ENVO_01000009 # biotic mesoscopic physical object
+http://purl.obolibrary.org/obo/ENVO_01000010 # abiotic mesoscopic physical object
+http://purl.obolibrary.org/obo/ENVO_01000155 # organic material
+http://purl.obolibrary.org/obo/ENVO_01000254 # environmental system
+http://purl.obolibrary.org/obo/ENVO_01000408 # environmental zone
+http://purl.obolibrary.org/obo/ENVO_01000536 # factory
+http://purl.obolibrary.org/obo/ENVO_01000604 # vehicle
+http://purl.obolibrary.org/obo/ENVO_01000685 # water mass
+http://purl.obolibrary.org/obo/ENVO_01000813 # astronomical body part
+http://purl.obolibrary.org/obo/ENVO_01000815 # liquid environmental material
+http://purl.obolibrary.org/obo/ENVO_01000925 # abattoir
+http://purl.obolibrary.org/obo/ENVO_01000934 # restaurant
+http://purl.obolibrary.org/obo/ENVO_01001199 # terrestrial environmental zone
+http://purl.obolibrary.org/obo/ENVO_01001200 # anthropised terrestrial environmental zone
+http://purl.obolibrary.org/obo/ENVO_01001222 # commercial building
+http://purl.obolibrary.org/obo/ENVO_01001305 # vegetated area
+http://purl.obolibrary.org/obo/ENVO_01001476 # body of liquid
+http://purl.obolibrary.org/obo/ENVO_01001477 # liquid astronomical body part
+http://purl.obolibrary.org/obo/ENVO_01001479 # fluid astronomical body part
+http://purl.obolibrary.org/obo/ENVO_02000019 # bodily fluid material
+http://purl.obolibrary.org/obo/ENVO_02000020 # blood material
+http://purl.obolibrary.org/obo/ENVO_02000022 # excreta material
+http://purl.obolibrary.org/obo/ENVO_02000047 # animal feed
+
+
+[Top level source term URIs and target direct superclass URIs]
+http://purl.obolibrary.org/obo/BFO_0000040 # material entity
+http://purl.obolibrary.org/obo/BFO_0000015 # process
+http://purl.obolibrary.org/obo/ENVO_00002297 # populated place
+
+[Source term retrieval setting]
+includeAllIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+http://www.w3.org/2000/01/rdf-schema#comment
+
+http://purl.obolibrary.org/obo/IAO_0000111 # editor prefered label
+http://purl.obolibrary.org/obo/IAO_0000114 # curation status
+http://purl.obolibrary.org/obo/IAO_0000115 # definition
+http://purl.obolibrary.org/obo/IAO_0000117 # term editor
+http://purl.obolibrary.org/obo/IAO_0000118 # alternate terms
+http://purl.obolibrary.org/obo/IAO_0000119 # definition source
+
+########################################
+
+[Source ontology]
+FOODON
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/FOODON_00001002 # foodon product type
+http://purl.obolibrary.org/obo/FOODON_00001006 # meat food product
+http://purl.obolibrary.org/obo/FOODON_00001013 # cheese food product
+http://purl.obolibrary.org/obo/FOODON_00001015 # plant food product
+http://purl.obolibrary.org/obo/FOODON_00001038 # pork meat food product
+http://purl.obolibrary.org/obo/FOODON_00001040 # chicken meat food product
+http://purl.obolibrary.org/obo/FOODON_00001041 # beef food product
+http://purl.obolibrary.org/obo/FOODON_00001046 # seafood product
+http://purl.obolibrary.org/obo/FOODON_00001057 # plant fruit food product
+http://purl.obolibrary.org/obo/FOODON_00001092 # vertebrate animal food product
+http://purl.obolibrary.org/obo/FOODON_00001093 # cereal grain food product
+http://purl.obolibrary.org/obo/FOODON_00001107 # bovine dairy food product
+http://purl.obolibrary.org/obo/FOODON_00001118 # cattle dairy food product
+http://purl.obolibrary.org/obo/FOODON_00001126 # bovine cheese food product
+http://purl.obolibrary.org/obo/FOODON_00001127 # cow milk cheese
+http://purl.obolibrary.org/obo/FOODON_00001131 # poultry meat food product
+http://purl.obolibrary.org/obo/FOODON_00001132 # swine meat food product
+http://purl.obolibrary.org/obo/FOODON_00001133 # condiment food product
+http://purl.obolibrary.org/obo/FOODON_00001134 # bovine meat food product
+http://purl.obolibrary.org/obo/FOODON_00001138 # tea based beverage
+http://purl.obolibrary.org/obo/FOODON_00001143 # fungal food product
+http://purl.obolibrary.org/obo/FOODON_00001146 # solanaceous root food product
+http://purl.obolibrary.org/obo/FOODON_00001147 # plant root food product
+http://purl.obolibrary.org/obo/FOODON_00001148 # potato food product
+http://purl.obolibrary.org/obo/FOODON_00001150 # cucurbit fruit food product
+http://purl.obolibrary.org/obo/FOODON_00001151 # citrus fruit food product
+http://purl.obolibrary.org/obo/FOODON_00001152 # melon fruit food product
+http://purl.obolibrary.org/obo/FOODON_00001158 # pomaceous fruit food product
+http://purl.obolibrary.org/obo/FOODON_00001163 # solanaceous fruit food product
+http://purl.obolibrary.org/obo/FOODON_00001165 # solanaceous food product
+http://purl.obolibrary.org/obo/FOODON_00001170 # grape fruit food product
+http://purl.obolibrary.org/obo/FOODON_00001172 # nut food product
+http://purl.obolibrary.org/obo/FOODON_00001173 # plant seed food product
+http://purl.obolibrary.org/obo/FOODON_00001175 # plant stem food product
+http://purl.obolibrary.org/obo/FOODON_00001185 # rice food product
+http://purl.obolibrary.org/obo/FOODON_00001242 # spice or herb
+http://purl.obolibrary.org/obo/FOODON_00001248 # fish food product
+http://purl.obolibrary.org/obo/FOODON_00001251 # avian food product
+http://purl.obolibrary.org/obo/FOODON_00001253 # plant derived beverage
+http://purl.obolibrary.org/obo/FOODON_00001255 # nonfermented plant derived beverage
+http://purl.obolibrary.org/obo/FOODON_00001256 # dairy food product
+http://purl.obolibrary.org/obo/FOODON_00001257 # milk or milk based food product
+http://purl.obolibrary.org/obo/FOODON_00001261 # vegetable food product
+http://purl.obolibrary.org/obo/FOODON_00001262 # botanical fruit food product
+http://purl.obolibrary.org/obo/FOODON_00001264 # legume food product
+http://purl.obolibrary.org/obo/FOODON_00001274 # egg food product
+http://purl.obolibrary.org/obo/FOODON_00001283 # poultry food product
+http://purl.obolibrary.org/obo/FOODON_00001286 # turkey meat food product
+http://purl.obolibrary.org/obo/FOODON_00001291 # clam food product
+http://purl.obolibrary.org/obo/FOODON_00001292 # oyster food product
+http://purl.obolibrary.org/obo/FOODON_00001293 # shellfish food product
+http://purl.obolibrary.org/obo/FOODON_00001625 # avocado vegetable food product
+http://purl.obolibrary.org/obo/FOODON_00001628 # banana food product
+http://purl.obolibrary.org/obo/FOODON_00001635 # bean (vegetable) food product
+http://purl.obolibrary.org/obo/FOODON_00001638 # beet food product
+http://purl.obolibrary.org/obo/FOODON_00001640 # berry food product
+http://purl.obolibrary.org/obo/FOODON_00001653 # blackberry food product
+http://purl.obolibrary.org/obo/FOODON_00001656 # blueberry food product
+http://purl.obolibrary.org/obo/FOODON_00001678 # calf meat food product
+http://purl.obolibrary.org/obo/FOODON_00001687 # carrot food product
+http://purl.obolibrary.org/obo/FOODON_00001709 # cereal food product
+http://purl.obolibrary.org/obo/FOODON_00001714 # food component product
+http://purl.obolibrary.org/obo/FOODON_00001756 # common banana food product
+http://purl.obolibrary.org/obo/FOODON_00001765 # corn (vegetable) food product
+http://purl.obolibrary.org/obo/FOODON_00001771 # cow milk based food product
+http://purl.obolibrary.org/obo/FOODON_00001786 # cranberry food product
+http://purl.obolibrary.org/obo/FOODON_00001792 # crustacean food product
+http://purl.obolibrary.org/obo/FOODON_00001795 # cucumber vegetable food product
+http://purl.obolibrary.org/obo/FOODON_00001800 # dairy dessert food product
+http://purl.obolibrary.org/obo/FOODON_00001803 # date food product
+http://purl.obolibrary.org/obo/FOODON_00001851 # fig food product
+http://purl.obolibrary.org/obo/FOODON_00001857 # food flavoring or seasoning product
+http://purl.obolibrary.org/obo/FOODON_00001895 # garlic food product
+http://purl.obolibrary.org/obo/FOODON_00001901 # ginger food product
+http://purl.obolibrary.org/obo/FOODON_00001917 # grain based bakery food product
+http://purl.obolibrary.org/obo/FOODON_00001929 # grapefruit food product
+http://purl.obolibrary.org/obo/FOODON_00001945 # hard cheese food product
+http://purl.obolibrary.org/obo/FOODON_00001990 # kumquat food product
+http://purl.obolibrary.org/obo/FOODON_00001992 # lamb meat food product
+http://purl.obolibrary.org/obo/FOODON_00001995 # lemon food product
+http://purl.obolibrary.org/obo/FOODON_00002006 # lychee food product
+http://purl.obolibrary.org/obo/FOODON_00002018 # mandarin orange food product
+http://purl.obolibrary.org/obo/FOODON_00002020 # mango food product
+http://purl.obolibrary.org/obo/FOODON_00002029 # melon food product
+http://purl.obolibrary.org/obo/FOODON_00002044 # mollusc food product
+http://purl.obolibrary.org/obo/FOODON_00002051 # mussel food product
+http://purl.obolibrary.org/obo/FOODON_00002064 # okra vegetable food product
+http://purl.obolibrary.org/obo/FOODON_00002069 # onion food product
+http://purl.obolibrary.org/obo/FOODON_00002071 # orange food product
+http://purl.obolibrary.org/obo/FOODON_00002081 # papaya food product
+http://purl.obolibrary.org/obo/FOODON_00002099 # peanut food product
+http://purl.obolibrary.org/obo/FOODON_00002119 # pineapple food product
+http://purl.obolibrary.org/obo/FOODON_00002131 # plant based refined or partially-refined food product
+http://purl.obolibrary.org/obo/FOODON_00002141 # plant fruit vegetable food product
+http://purl.obolibrary.org/obo/FOODON_00002143 # plant leaf vegetable food product
+http://purl.obolibrary.org/obo/FOODON_00002145 # plant product based flavoring or seasoning
+http://purl.obolibrary.org/obo/FOODON_00002147 # food product by consumer group
+http://purl.obolibrary.org/obo/FOODON_00002150 # plant root vegetable food product
+http://purl.obolibrary.org/obo/FOODON_00002151 # plant seed based bakery food product
+http://purl.obolibrary.org/obo/FOODON_00002153 # plant seed vegetable food product
+http://purl.obolibrary.org/obo/FOODON_00002156 # plant stem or spear vegetable food product
+http://purl.obolibrary.org/obo/FOODON_00002190 # raspberry food product
+http://purl.obolibrary.org/obo/FOODON_00002196 # refined or partially-refined food product
+http://purl.obolibrary.org/obo/FOODON_00002200 # amphibian or reptile food product
+http://purl.obolibrary.org/obo/FOODON_00002227 # scallop food product
+http://purl.obolibrary.org/obo/FOODON_00002232 # sesame food product
+http://purl.obolibrary.org/obo/FOODON_00002236 # sheep meat food product
+http://purl.obolibrary.org/obo/FOODON_00002252 # soft cheese food product
+http://purl.obolibrary.org/obo/FOODON_00002268 # spice or herb product flavoring or seasoning
+http://purl.obolibrary.org/obo/FOODON_00002275 # steeped beverage product
+http://purl.obolibrary.org/obo/FOODON_00002277 # stone fruit food product
+http://purl.obolibrary.org/obo/FOODON_00002282 # strawberry food product
+http://purl.obolibrary.org/obo/FOODON_00002310 # taro food product
+http://purl.obolibrary.org/obo/FOODON_00002368 # yam food product
+http://purl.obolibrary.org/obo/FOODON_00002373 # food product by culinary role
+http://purl.obolibrary.org/obo/FOODON_00002381 # food product by organism
+http://purl.obolibrary.org/obo/FOODON_00002403 # food material
+http://purl.obolibrary.org/obo/FOODON_00002448 # zucchini food product
+http://purl.obolibrary.org/obo/FOODON_00002452 # invertebrate animal
+http://purl.obolibrary.org/obo/FOODON_00002477 # game animal food product
+http://purl.obolibrary.org/obo/FOODON_00002505 # dairy cattle
+http://purl.obolibrary.org/obo/FOODON_00002507 # taurine cattle
+http://purl.obolibrary.org/obo/FOODON_03301484 # skim milk (food product)
+http://purl.obolibrary.org/obo/FOODON_03301977 # beverage
+http://purl.obolibrary.org/obo/FOODON_03303220 # dessert (food product)
+http://purl.obolibrary.org/obo/FOODON_03304497 # edible seed (food product)
+http://purl.obolibrary.org/obo/FOODON_03306461 # seal meat (raw)
+http://purl.obolibrary.org/obo/FOODON_03306581 # whole milk (food product)
+http://purl.obolibrary.org/obo/FOODON_03306867 # peanut butter
+http://purl.obolibrary.org/obo/FOODON_03309997 # food product for animal
+http://purl.obolibrary.org/obo/FOODON_03311737 # processed food product
+http://purl.obolibrary.org/obo/FOODON_03315081 # tea food product
+http://purl.obolibrary.org/obo/FOODON_03315108 # tangerine
+http://purl.obolibrary.org/obo/FOODON_03315395 # flour product
+http://purl.obolibrary.org/obo/FOODON_03315615 # fruit food product
+http://purl.obolibrary.org/obo/FOODON_03316257 # banana (food product)
+http://purl.obolibrary.org/obo/FOODON_03317076 # root vegetable product
+http://purl.obolibrary.org/obo/FOODON_03400361 # food product type
+http://purl.obolibrary.org/obo/FOODON_03411002 # archaeogastropod
+http://purl.obolibrary.org/obo/FOODON_03411010 # neogastropod
+http://purl.obolibrary.org/obo/FOODON_03411024 # tropical or subtropical fruit producing plant
+http://purl.obolibrary.org/obo/FOODON_03411047 # grain or seed-producing plant
+http://purl.obolibrary.org/obo/FOODON_03411057 # vegetable-producing plant, above-ground parts
+http://purl.obolibrary.org/obo/FOODON_03411122 # marine mammal
+http://purl.obolibrary.org/obo/FOODON_03411134 # animal (mammal)
+http://purl.obolibrary.org/obo/FOODON_03411136 # swine
+http://purl.obolibrary.org/obo/FOODON_03411140 # fruit-producing plant
+http://purl.obolibrary.org/obo/FOODON_03411161 # cattle
+http://purl.obolibrary.org/obo/FOODON_03411162 # pomegranate plant
+http://purl.obolibrary.org/obo/FOODON_03411183 # sheep
+http://purl.obolibrary.org/obo/FOODON_03411201 # dairy cow
+http://purl.obolibrary.org/obo/FOODON_03411205 # squid
+http://purl.obolibrary.org/obo/FOODON_03411213 # nut producing plant
+http://purl.obolibrary.org/obo/FOODON_03411222 # fish
+http://purl.obolibrary.org/obo/FOODON_03411223 # mussel
+http://purl.obolibrary.org/obo/FOODON_03411224 # oyster
+http://purl.obolibrary.org/obo/FOODON_03411229 # horse
+http://purl.obolibrary.org/obo/FOODON_03411231 # berry plant
+http://purl.obolibrary.org/obo/FOODON_03411237 # shrimp
+http://purl.obolibrary.org/obo/FOODON_03411252 # frog
+http://purl.obolibrary.org/obo/FOODON_03411253 # goose
+http://purl.obolibrary.org/obo/FOODON_03411261 # fungus
+http://purl.obolibrary.org/obo/FOODON_03411292 # elk
+http://purl.obolibrary.org/obo/FOODON_03411295 # snake
+http://purl.obolibrary.org/obo/FOODON_03411297 # vertebrate animal
+http://purl.obolibrary.org/obo/FOODON_03411304 # pigeon
+http://purl.obolibrary.org/obo/FOODON_03411316 # duck
+http://purl.obolibrary.org/obo/FOODON_03411323 # rabbit
+http://purl.obolibrary.org/obo/FOODON_03411324 # grain plant
+http://purl.obolibrary.org/obo/FOODON_03411328 # goat
+http://purl.obolibrary.org/obo/FOODON_03411331 # clam
+http://purl.obolibrary.org/obo/FOODON_03411335 # crab
+http://purl.obolibrary.org/obo/FOODON_03411343 # whale
+http://purl.obolibrary.org/obo/FOODON_03411347 # plant
+http://purl.obolibrary.org/obo/FOODON_03411365 # fish, bony
+http://purl.obolibrary.org/obo/FOODON_03411374 # crustacean
+http://purl.obolibrary.org/obo/FOODON_03411408 # abalone
+http://purl.obolibrary.org/obo/FOODON_03411433 # shellfish
+http://purl.obolibrary.org/obo/FOODON_03411447 # persimmon plant
+http://purl.obolibrary.org/obo/FOODON_03411457 # chicken
+http://purl.obolibrary.org/obo/FOODON_03411460 # pheasant
+http://purl.obolibrary.org/obo/FOODON_03411476 # buffalo
+http://purl.obolibrary.org/obo/FOODON_03411481 # antelope
+http://purl.obolibrary.org/obo/FOODON_03411489 # scallop
+http://purl.obolibrary.org/obo/FOODON_03411500 # deer family
+http://purl.obolibrary.org/obo/FOODON_03411514 # octopus
+http://purl.obolibrary.org/obo/FOODON_03411539 # stone fruit
+http://purl.obolibrary.org/obo/FOODON_03411563 # poultry or game bird
+http://purl.obolibrary.org/obo/FOODON_03411564 # food source
+http://purl.obolibrary.org/obo/FOODON_03411566 # leafy vegetable
+http://purl.obolibrary.org/obo/FOODON_03411579 # vegetable-producing plant
+http://purl.obolibrary.org/obo/FOODON_03411583 # deer
+http://purl.obolibrary.org/obo/FOODON_03411598 # fish, siluriform
+http://purl.obolibrary.org/obo/FOODON_03411607 # nut or edible seed producing plant
+http://purl.obolibrary.org/obo/FOODON_03411624 # amphibian
+http://purl.obolibrary.org/obo/FOODON_03411625 # reptile
+http://purl.obolibrary.org/obo/FOODON_03411633 # whelk
+http://purl.obolibrary.org/obo/FOODON_03411998 # decapod
+http://purl.obolibrary.org/obo/FOODON_03412111 # gastropod
+http://purl.obolibrary.org/obo/FOODON_03412112 # molluscs
+http://purl.obolibrary.org/obo/FOODON_03412113 # bivalve
+http://purl.obolibrary.org/obo/FOODON_03412114 # snail
+http://purl.obolibrary.org/obo/FOODON_03412116 # cephalopod
+http://purl.obolibrary.org/obo/FOODON_03412279 # limpet
+http://purl.obolibrary.org/obo/FOODON_03413391 # tropical or subtropical fruit - inedible peel plant
+http://purl.obolibrary.org/obo/FOODON_03414164 # cetacean marine mammal
+http://purl.obolibrary.org/obo/FOODON_03414362 # ratite
+http://purl.obolibrary.org/obo/FOODON_03414374 # bovine
+http://purl.obolibrary.org/obo/FOODON_03414381 # bovid
+http://purl.obolibrary.org/obo/FOODON_03414849 # equine
+http://purl.obolibrary.org/obo/FOODON_03415177 # actinidia plant
+http://purl.obolibrary.org/obo/FOODON_03415178 # kiwifruit plant (A. deliciosa)
+http://purl.obolibrary.org/obo/FOODON_03420108 # sugar
+http://purl.obolibrary.org/obo/FOODON_03420113 # milk or milk component
+http://purl.obolibrary.org/obo/FOODON_03420116 # part of plant or animal
+http://purl.obolibrary.org/obo/FOODON_03420122 # nonmeat part of animal
+http://purl.obolibrary.org/obo/FOODON_03420127 # animal body or body part
+http://purl.obolibrary.org/obo/FOODON_03420144 # plant above surface, excluding fruit and seed
+http://purl.obolibrary.org/obo/FOODON_03420148 # root, stem, leaf or flower
+http://purl.obolibrary.org/obo/FOODON_03420152 # carbohydrate extract, concentrate, or isolate
+http://purl.obolibrary.org/obo/FOODON_03420164 # part of animal
+http://purl.obolibrary.org/obo/FOODON_03420174 # part of plant
+http://purl.obolibrary.org/obo/FOODON_03420183 # sprout
+http://purl.obolibrary.org/obo/FOODON_03420228 # extract, concentrate or isolate of plant or animal
+
+[Top level source term URIs and target direct superclass URIs]
+http://purl.obolibrary.org/obo/BFO_0000001 # entity
+
+[Source term retrieval setting]
+includeAllIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+http://www.geneontology.org/formats/oboInOwl#hasDbXref
+
+http://purl.obolibrary.org/obo/IAO_0000111 # editor prefered label
+http://purl.obolibrary.org/obo/IAO_0000114 # curation status
+http://purl.obolibrary.org/obo/IAO_0000115 # definition
+http://purl.obolibrary.org/obo/IAO_0000117 # term editor
+http://purl.obolibrary.org/obo/IAO_0000118 # alternate terms
+http://purl.obolibrary.org/obo/IAO_0000119 # definition source
+
+########################################
+
+[Source ontology]
+GENEPIO
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/GENEPIO_0001237 # specimen source material category
+http://purl.obolibrary.org/obo/GENEPIO_0001246 # environmental specimen
+
+
+[Top level source term URIs and target direct superclass URIs]
+http://purl.obolibrary.org/obo/BFO_0000001 # entity
+
+[Source term retrieval setting]
+includeAllIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+http://www.geneontology.org/formats/oboInOwl#hasDbXref
+
+http://purl.obolibrary.org/obo/IAO_0000111 # editor prefered label
+http://purl.obolibrary.org/obo/IAO_0000114 # curation status
+http://purl.obolibrary.org/obo/IAO_0000115 # definition
+http://purl.obolibrary.org/obo/IAO_0000117 # term editor
+http://purl.obolibrary.org/obo/IAO_0000118 # alternate terms
+http://purl.obolibrary.org/obo/IAO_0000119 # definition source
+
+########################################
+
+[Source ontology]
+HANCESTRO
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/HANCESTRO_0004 # ancestry category
+http://purl.obolibrary.org/obo/HANCESTRO_0005 # European
+http://purl.obolibrary.org/obo/HANCESTRO_0006 # South Asian
+http://purl.obolibrary.org/obo/HANCESTRO_0007 # South East Asian
+http://purl.obolibrary.org/obo/HANCESTRO_0008 # Asian
+http://purl.obolibrary.org/obo/HANCESTRO_0009 # East Asian
+http://purl.obolibrary.org/obo/HANCESTRO_0010 # African
+http://purl.obolibrary.org/obo/HANCESTRO_0011 # Sub-Saharan African
+http://purl.obolibrary.org/obo/HANCESTRO_0013 # Native American
+http://purl.obolibrary.org/obo/HANCESTRO_0014 # Hispanic or Latin American
+http://purl.obolibrary.org/obo/HANCESTRO_0015 # Greater Middle Eastern  (Middle Eastern, North African or Persian)
+http://purl.obolibrary.org/obo/HANCESTRO_0016 # African American or Afro-Caribbean
+http://purl.obolibrary.org/obo/HANCESTRO_0017 # Oceanian
+http://purl.obolibrary.org/obo/HANCESTRO_0018 # uncategorised population
+http://purl.obolibrary.org/obo/HANCESTRO_0019 # Japanese
+http://purl.obolibrary.org/obo/HANCESTRO_0020 # Taiwanese
+http://purl.obolibrary.org/obo/HANCESTRO_0021 # Chinese
+http://purl.obolibrary.org/obo/HANCESTRO_0022 # Korean
+http://purl.obolibrary.org/obo/HANCESTRO_0023 # Mongolian
+http://purl.obolibrary.org/obo/HANCESTRO_0024 # Macanese
+http://purl.obolibrary.org/obo/HANCESTRO_0025 # Singaporean Chinese
+http://purl.obolibrary.org/obo/HANCESTRO_0026 # Hong Kong Chinese
+http://purl.obolibrary.org/obo/HANCESTRO_0027 # Han Chinese
+http://purl.obolibrary.org/obo/HANCESTRO_0286 # Central Asian
+http://purl.obolibrary.org/obo/HANCESTRO_0290 # genetically isolated population
+http://purl.obolibrary.org/obo/HANCESTRO_0307 # Italian
+http://purl.obolibrary.org/obo/HANCESTRO_0309 # Sardinian
+http://purl.obolibrary.org/obo/HANCESTRO_0310 # Val Borbera
+http://purl.obolibrary.org/obo/HANCESTRO_0311 # Friuli Venezia Giulia
+http://purl.obolibrary.org/obo/HANCESTRO_0312 # Carlantino
+http://purl.obolibrary.org/obo/HANCESTRO_0313 # Old Order Amish
+http://purl.obolibrary.org/obo/HANCESTRO_0314 # Sorbian
+http://purl.obolibrary.org/obo/HANCESTRO_0315 # Hutterite
+http://purl.obolibrary.org/obo/HANCESTRO_0316 # Amish
+http://purl.obolibrary.org/obo/HANCESTRO_0317 # Erasmus Rucphen
+http://purl.obolibrary.org/obo/HANCESTRO_0318 # Orcadian
+http://purl.obolibrary.org/obo/HANCESTRO_0319 # Korculan
+http://purl.obolibrary.org/obo/HANCESTRO_0320 # Dutch
+http://purl.obolibrary.org/obo/HANCESTRO_0321 # Finnish
+http://purl.obolibrary.org/obo/HANCESTRO_0322 # Finish founder
+http://purl.obolibrary.org/obo/HANCESTRO_0323 # Dutch founder
+http://purl.obolibrary.org/obo/HANCESTRO_0324 # Ashkenazi Jew
+http://purl.obolibrary.org/obo/HANCESTRO_0331 # Sudanese
+http://purl.obolibrary.org/obo/HANCESTRO_0332 # Sahrawi
+http://purl.obolibrary.org/obo/HANCESTRO_0333 # Anguillan
+http://purl.obolibrary.org/obo/HANCESTRO_0334 # Antiguan or Barbudan
+http://purl.obolibrary.org/obo/HANCESTRO_0335 # Barbadian
+http://purl.obolibrary.org/obo/HANCESTRO_0336 # Haitian
+http://purl.obolibrary.org/obo/HANCESTRO_0337 # Jamaican
+http://purl.obolibrary.org/obo/HANCESTRO_0338 # Tajikistani
+http://purl.obolibrary.org/obo/HANCESTRO_0339 # Turkmen
+http://purl.obolibrary.org/obo/HANCESTRO_0340 # Uzbekistani
+http://purl.obolibrary.org/obo/HANCESTRO_0341 # Afghan
+http://purl.obolibrary.org/obo/HANCESTRO_0342 # Kazakhstani
+http://purl.obolibrary.org/obo/HANCESTRO_0343 # Kyrgyzstani
+http://purl.obolibrary.org/obo/HANCESTRO_0344 # Albanian
+http://purl.obolibrary.org/obo/HANCESTRO_0345 # Andorran
+http://purl.obolibrary.org/obo/HANCESTRO_0346 # Australian
+http://purl.obolibrary.org/obo/HANCESTRO_0347 # Austrian
+http://purl.obolibrary.org/obo/HANCESTRO_0348 # Belarusian
+http://purl.obolibrary.org/obo/HANCESTRO_0349 # Belgian
+http://purl.obolibrary.org/obo/HANCESTRO_0350 # Bermudian
+http://purl.obolibrary.org/obo/HANCESTRO_0351 # Bosnian or Herzegovinian
+http://purl.obolibrary.org/obo/HANCESTRO_0352 # Brazilian
+http://purl.obolibrary.org/obo/HANCESTRO_0353 # Bulgarian
+http://purl.obolibrary.org/obo/HANCESTRO_0354 # Canadian
+http://purl.obolibrary.org/obo/HANCESTRO_0355 # Channel Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0356 # Chilean
+http://purl.obolibrary.org/obo/HANCESTRO_0357 # Croatian
+http://purl.obolibrary.org/obo/HANCESTRO_0358 # Czech
+http://purl.obolibrary.org/obo/HANCESTRO_0359 # Danish
+http://purl.obolibrary.org/obo/HANCESTRO_0360 # Estonian
+http://purl.obolibrary.org/obo/HANCESTRO_0361 # Faroese
+http://purl.obolibrary.org/obo/HANCESTRO_0362 # Falkland Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0363 # French
+http://purl.obolibrary.org/obo/HANCESTRO_0364 # German
+http://purl.obolibrary.org/obo/HANCESTRO_0365 # Gibraltarian
+http://purl.obolibrary.org/obo/HANCESTRO_0366 # Greek
+http://purl.obolibrary.org/obo/HANCESTRO_0367 # Greenlander
+http://purl.obolibrary.org/obo/HANCESTRO_0368 # Hungrian
+http://purl.obolibrary.org/obo/HANCESTRO_0369 # Icelandic
+http://purl.obolibrary.org/obo/HANCESTRO_0370 # Manx
+http://purl.obolibrary.org/obo/HANCESTRO_0371 # Latvian
+http://purl.obolibrary.org/obo/HANCESTRO_0372 # Liechtensteiner
+http://purl.obolibrary.org/obo/HANCESTRO_0373 # Lithuanian
+http://purl.obolibrary.org/obo/HANCESTRO_0374 # Luxembourgish
+http://purl.obolibrary.org/obo/HANCESTRO_0375 # Maltese
+http://purl.obolibrary.org/obo/HANCESTRO_0376 # Monegasque
+http://purl.obolibrary.org/obo/HANCESTRO_0377 # Montenegrin
+http://purl.obolibrary.org/obo/HANCESTRO_0378 # New Zealandish
+http://purl.obolibrary.org/obo/HANCESTRO_0379 # Norfolk Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0380 # Norwegian
+http://purl.obolibrary.org/obo/HANCESTRO_0381 # Polish
+http://purl.obolibrary.org/obo/HANCESTRO_0382 # Portugese
+http://purl.obolibrary.org/obo/HANCESTRO_0383 # Irish
+http://purl.obolibrary.org/obo/HANCESTRO_0384 # Moldovan
+http://purl.obolibrary.org/obo/HANCESTRO_0385 # Romanian
+http://purl.obolibrary.org/obo/HANCESTRO_0386 # Russian
+http://purl.obolibrary.org/obo/HANCESTRO_0387 # Saint-Pierrais or Miquelonnais
+http://purl.obolibrary.org/obo/HANCESTRO_0388 # Sammarinese
+http://purl.obolibrary.org/obo/HANCESTRO_0389 # Serb
+http://purl.obolibrary.org/obo/HANCESTRO_0390 # Slovak
+http://purl.obolibrary.org/obo/HANCESTRO_0391 # Slovene
+http://purl.obolibrary.org/obo/HANCESTRO_0392 # Spanish
+http://purl.obolibrary.org/obo/HANCESTRO_0393 # Swedish
+http://purl.obolibrary.org/obo/HANCESTRO_0394 # Swiss
+http://purl.obolibrary.org/obo/HANCESTRO_0395 # Macedonian
+http://purl.obolibrary.org/obo/HANCESTRO_0396 # Ukrainian
+http://purl.obolibrary.org/obo/HANCESTRO_0397 # Argentine
+http://purl.obolibrary.org/obo/HANCESTRO_0398 # Bahamian
+http://purl.obolibrary.org/obo/HANCESTRO_0399 # Belizean
+http://purl.obolibrary.org/obo/HANCESTRO_0400 # Bolivian
+http://purl.obolibrary.org/obo/HANCESTRO_0401 # British Virgin Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0402 # Caymanian
+http://purl.obolibrary.org/obo/HANCESTRO_0403 # Colombian
+http://purl.obolibrary.org/obo/HANCESTRO_0404 # Costa Rican
+http://purl.obolibrary.org/obo/HANCESTRO_0405 # Cuban
+http://purl.obolibrary.org/obo/HANCESTRO_0406 # Dominican
+http://purl.obolibrary.org/obo/HANCESTRO_0407 # Ecuadorian
+http://purl.obolibrary.org/obo/HANCESTRO_0408 # Salvadoran
+http://purl.obolibrary.org/obo/HANCESTRO_0409 # French Guianese
+http://purl.obolibrary.org/obo/HANCESTRO_0410 # Grenadian
+http://purl.obolibrary.org/obo/HANCESTRO_0411 # Guatemalan
+http://purl.obolibrary.org/obo/HANCESTRO_0412 # Guyanese
+http://purl.obolibrary.org/obo/HANCESTRO_0413 # Honduran
+http://purl.obolibrary.org/obo/HANCESTRO_0414 # Martinican
+http://purl.obolibrary.org/obo/HANCESTRO_0415 # Mexican
+http://purl.obolibrary.org/obo/HANCESTRO_0416 # Montserratian
+http://purl.obolibrary.org/obo/HANCESTRO_0417 # Nicaraguan
+http://purl.obolibrary.org/obo/HANCESTRO_0418 # Panamanian
+http://purl.obolibrary.org/obo/HANCESTRO_0419 # Paraguayan
+http://purl.obolibrary.org/obo/HANCESTRO_0420 # Peruvian
+http://purl.obolibrary.org/obo/HANCESTRO_0421 # Puerto Rican
+http://purl.obolibrary.org/obo/HANCESTRO_0422 # Kittitian or Nevisian
+http://purl.obolibrary.org/obo/HANCESTRO_0423 # Saint Lucian
+http://purl.obolibrary.org/obo/HANCESTRO_0424 # Saint Vincentian
+http://purl.obolibrary.org/obo/HANCESTRO_0425 # Surinamese
+http://purl.obolibrary.org/obo/HANCESTRO_0426 # Trinidadian or Tobagonian
+http://purl.obolibrary.org/obo/HANCESTRO_0427 # Turks and Caicos Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0428 # Virgin Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0429 # Uruguayan
+http://purl.obolibrary.org/obo/HANCESTRO_0430 # Venezuelan
+http://purl.obolibrary.org/obo/HANCESTRO_0431 # Algerian
+http://purl.obolibrary.org/obo/HANCESTRO_0432 # Armenian
+http://purl.obolibrary.org/obo/HANCESTRO_0433 # Azerbaijani
+http://purl.obolibrary.org/obo/HANCESTRO_0434 # Bahraini
+http://purl.obolibrary.org/obo/HANCESTRO_0435 # Cypriote
+http://purl.obolibrary.org/obo/HANCESTRO_0436 # Egyptian
+http://purl.obolibrary.org/obo/HANCESTRO_0437 # Georgian
+http://purl.obolibrary.org/obo/HANCESTRO_0438 # Iranian
+http://purl.obolibrary.org/obo/HANCESTRO_0439 # Iraqi
+http://purl.obolibrary.org/obo/HANCESTRO_0440 # Israeli
+http://purl.obolibrary.org/obo/HANCESTRO_0441 # Jordanian
+http://purl.obolibrary.org/obo/HANCESTRO_0442 # Kuwaiti
+http://purl.obolibrary.org/obo/HANCESTRO_0443 # Lebanese
+http://purl.obolibrary.org/obo/HANCESTRO_0444 # Libyan
+http://purl.obolibrary.org/obo/HANCESTRO_0445 # Moroccan
+http://purl.obolibrary.org/obo/HANCESTRO_0446 # Palestinian
+http://purl.obolibrary.org/obo/HANCESTRO_0447 # Omani
+http://purl.obolibrary.org/obo/HANCESTRO_0448 # Qatari
+http://purl.obolibrary.org/obo/HANCESTRO_0449 # Saudi
+http://purl.obolibrary.org/obo/HANCESTRO_0450 # Tunisian
+http://purl.obolibrary.org/obo/HANCESTRO_0451 # Turkish
+http://purl.obolibrary.org/obo/HANCESTRO_0452 # Emirati
+http://purl.obolibrary.org/obo/HANCESTRO_0453 # Yemeni
+http://purl.obolibrary.org/obo/HANCESTRO_0454 # Aruban
+http://purl.obolibrary.org/obo/HANCESTRO_0455 # Christmas Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0456 # Cocos Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0457 # Curacaoan
+http://purl.obolibrary.org/obo/HANCESTRO_0458 # Kosovar
+http://purl.obolibrary.org/obo/HANCESTRO_0459 # Northern Mariana Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0460 # South Sudanese
+http://purl.obolibrary.org/obo/HANCESTRO_0461 # Syrian
+http://purl.obolibrary.org/obo/HANCESTRO_0462 # British
+http://purl.obolibrary.org/obo/HANCESTRO_0463 # American
+http://purl.obolibrary.org/obo/HANCESTRO_0464 # American Samoan
+http://purl.obolibrary.org/obo/HANCESTRO_0465 # Cook Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0466 # Fijian
+http://purl.obolibrary.org/obo/HANCESTRO_0467 # French Polynesian
+http://purl.obolibrary.org/obo/HANCESTRO_0468 # Guamanian
+http://purl.obolibrary.org/obo/HANCESTRO_0469 # I-Kiribati
+http://purl.obolibrary.org/obo/HANCESTRO_0470 # Marshallese
+http://purl.obolibrary.org/obo/HANCESTRO_0471 # Micronesian
+http://purl.obolibrary.org/obo/HANCESTRO_0472 # Nauruan
+http://purl.obolibrary.org/obo/HANCESTRO_0473 # New Caledonian
+http://purl.obolibrary.org/obo/HANCESTRO_0474 # Niuean
+http://purl.obolibrary.org/obo/HANCESTRO_0475 # Palauan
+http://purl.obolibrary.org/obo/HANCESTRO_0476 # Papua New Guinean
+http://purl.obolibrary.org/obo/HANCESTRO_0477 # Pitcairn Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0478 # Samoan
+http://purl.obolibrary.org/obo/HANCESTRO_0479 # Solomon Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0480 # Tokelauan
+http://purl.obolibrary.org/obo/HANCESTRO_0481 # Tongan
+http://purl.obolibrary.org/obo/HANCESTRO_0482 # Tuvaluan
+http://purl.obolibrary.org/obo/HANCESTRO_0483 # Ni-Vanuato
+http://purl.obolibrary.org/obo/HANCESTRO_0484 # Wallis and Futuna Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0485 # Bangladeshi
+http://purl.obolibrary.org/obo/HANCESTRO_0486 # Bhutanese
+http://purl.obolibrary.org/obo/HANCESTRO_0487 # Indian
+http://purl.obolibrary.org/obo/HANCESTRO_0488 # Maldivian
+http://purl.obolibrary.org/obo/HANCESTRO_0489 # Nepalese
+http://purl.obolibrary.org/obo/HANCESTRO_0490 # Pakistani
+http://purl.obolibrary.org/obo/HANCESTRO_0491 # Sri Lankan
+http://purl.obolibrary.org/obo/HANCESTRO_0492 # Bruneian
+http://purl.obolibrary.org/obo/HANCESTRO_0493 # Cambodian
+http://purl.obolibrary.org/obo/HANCESTRO_0494 # Indonesian
+http://purl.obolibrary.org/obo/HANCESTRO_0495 # Lao
+http://purl.obolibrary.org/obo/HANCESTRO_0496 # Malaysian
+http://purl.obolibrary.org/obo/HANCESTRO_0497 # Burmese
+http://purl.obolibrary.org/obo/HANCESTRO_0498 # Filipino
+http://purl.obolibrary.org/obo/HANCESTRO_0500 # Thai
+http://purl.obolibrary.org/obo/HANCESTRO_0501 # Timorese
+http://purl.obolibrary.org/obo/HANCESTRO_0502 # Vietnamese
+http://purl.obolibrary.org/obo/HANCESTRO_0503 # Cameroonian
+http://purl.obolibrary.org/obo/HANCESTRO_0504 # Cape Verdean
+http://purl.obolibrary.org/obo/HANCESTRO_0505 # Chadian
+http://purl.obolibrary.org/obo/HANCESTRO_0506 # Ethiopian
+http://purl.obolibrary.org/obo/HANCESTRO_0507 # Kenyan
+http://purl.obolibrary.org/obo/HANCESTRO_0508 # Liberian
+http://purl.obolibrary.org/obo/HANCESTRO_0509 # Malagasy
+http://purl.obolibrary.org/obo/HANCESTRO_0510 # Mauritanian
+http://purl.obolibrary.org/obo/HANCESTRO_0511 # Mauritian
+http://purl.obolibrary.org/obo/HANCESTRO_0512 # Mahoran
+http://purl.obolibrary.org/obo/HANCESTRO_0513 # Namibian
+http://purl.obolibrary.org/obo/HANCESTRO_0514 # Sao Tomean
+http://purl.obolibrary.org/obo/HANCESTRO_0515 # Senegalese
+http://purl.obolibrary.org/obo/HANCESTRO_0516 # Seychellois
+http://purl.obolibrary.org/obo/HANCESTRO_0517 # Sierra Leonean
+http://purl.obolibrary.org/obo/HANCESTRO_0518 # Somali
+http://purl.obolibrary.org/obo/HANCESTRO_0519 # South African
+http://purl.obolibrary.org/obo/HANCESTRO_0520 # St. Helenian
+http://purl.obolibrary.org/obo/HANCESTRO_0521 # Ugandan
+http://purl.obolibrary.org/obo/HANCESTRO_0522 # Angolan
+http://purl.obolibrary.org/obo/HANCESTRO_0523 # Beninese
+http://purl.obolibrary.org/obo/HANCESTRO_0524 # Motswana
+http://purl.obolibrary.org/obo/HANCESTRO_0525 # Burkinabe
+http://purl.obolibrary.org/obo/HANCESTRO_0526 # Burundian
+http://purl.obolibrary.org/obo/HANCESTRO_0527 # Central African
+http://purl.obolibrary.org/obo/HANCESTRO_0528 # Comoran
+http://purl.obolibrary.org/obo/HANCESTRO_0529 # Congolese
+http://purl.obolibrary.org/obo/HANCESTRO_0530 # Ivoirian
+http://purl.obolibrary.org/obo/HANCESTRO_0531 # Djiboutian
+http://purl.obolibrary.org/obo/HANCESTRO_0532 # Equatorial Guinean
+http://purl.obolibrary.org/obo/HANCESTRO_0533 # Eritrean
+http://purl.obolibrary.org/obo/HANCESTRO_0534 # Gabonese
+http://purl.obolibrary.org/obo/HANCESTRO_0535 # Gambian
+http://purl.obolibrary.org/obo/HANCESTRO_0536 # Ghanaian
+http://purl.obolibrary.org/obo/HANCESTRO_0537 # Guinean
+http://purl.obolibrary.org/obo/HANCESTRO_0538 # Bissau-Guinean
+http://purl.obolibrary.org/obo/HANCESTRO_0539 # Mosotho
+http://purl.obolibrary.org/obo/HANCESTRO_0540 # Malawian
+http://purl.obolibrary.org/obo/HANCESTRO_0541 # Malian
+http://purl.obolibrary.org/obo/HANCESTRO_0542 # Mozambican
+http://purl.obolibrary.org/obo/HANCESTRO_0543 # Nigerien
+http://purl.obolibrary.org/obo/HANCESTRO_0544 # Nigerian
+http://purl.obolibrary.org/obo/HANCESTRO_0545 # Rwandan
+http://purl.obolibrary.org/obo/HANCESTRO_0546 # Swazi
+http://purl.obolibrary.org/obo/HANCESTRO_0547 # Togolese
+http://purl.obolibrary.org/obo/HANCESTRO_0548 # Tanzanian
+http://purl.obolibrary.org/obo/HANCESTRO_0549 # Zambian
+http://purl.obolibrary.org/obo/HANCESTRO_0550 # Zimbabweian
+http://purl.obolibrary.org/obo/HANCESTRO_0551 # genetically homogenous Irish
+http://purl.obolibrary.org/obo/HANCESTRO_0552 # Aboriginal Australian
+http://purl.obolibrary.org/obo/HANCESTRO_0554 # Silk Road founder
+http://purl.obolibrary.org/obo/HANCESTRO_0555 # Arab Israeli founder
+http://purl.obolibrary.org/obo/HANCESTRO_0556 # Cilento
+http://purl.obolibrary.org/obo/HANCESTRO_0557 # Costa Rican founder
+http://purl.obolibrary.org/obo/HANCESTRO_0558 # French Canadian founder
+http://purl.obolibrary.org/obo/HANCESTRO_0559 # Italian founder
+http://purl.obolibrary.org/obo/HANCESTRO_0560 # Northern Finnish founder
+http://purl.obolibrary.org/obo/HANCESTRO_0561 # Romanian founder
+http://purl.obolibrary.org/obo/HANCESTRO_0563 # South Tyrolean
+http://purl.obolibrary.org/obo/HANCESTRO_0564 # Vis founder
+http://purl.obolibrary.org/obo/HANCESTRO_0565 # Split founder
+http://purl.obolibrary.org/obo/HANCESTRO_0566 # undefined ancestry population
+http://purl.obolibrary.org/obo/HANCESTRO_0567 # Afro-Caribbean
+http://purl.obolibrary.org/obo/HANCESTRO_0568 # African American
+http://purl.obolibrary.org/obo/HANCESTRO_0569 # Talana
+http://purl.obolibrary.org/obo/HANCESTRO_0570 # Pima Indian
+http://purl.obolibrary.org/obo/HANCESTRO_0571 # Plains American Indian
+http://purl.obolibrary.org/obo/HANCESTRO_0572 # Kosraen
+http://purl.obolibrary.org/obo/HANCESTRO_0573 # Native Hawaiian
+http://purl.obolibrary.org/obo/HANCESTRO_0574 # Pacific Islander
+http://purl.obolibrary.org/obo/HANCESTRO_0575 # Yoruban
+http://purl.obolibrary.org/obo/HANCESTRO_0576 # West African
+http://purl.obolibrary.org/obo/HANCESTRO_0577 # Dai Chinese
+http://purl.obolibrary.org/obo/HANCESTRO_0578 # Hui Chinese
+http://purl.obolibrary.org/obo/HANCESTRO_0579 # Jingpo Chinese
+http://purl.obolibrary.org/obo/HANCESTRO_0580 # Malaysian Chinese
+http://purl.obolibrary.org/obo/HANCESTRO_0581 # Uygur Chinese
+http://purl.obolibrary.org/obo/HANCESTRO_0582 # Tibetan
+http://purl.obolibrary.org/obo/HANCESTRO_0583 # Taiwanese Han
+http://purl.obolibrary.org/obo/HANCESTRO_0584 # Sri Lankan Sinhalese
+http://purl.obolibrary.org/obo/HANCESTRO_0585 # Tatar
+http://purl.obolibrary.org/obo/HANCESTRO_0586 # Bashkir
+http://purl.obolibrary.org/obo/HANCESTRO_0587 # Martu Australian Aboriginal
+http://purl.obolibrary.org/obo/HANCESTRO_0588 # Jewish Israeli
+
+[Top level source term URIs and target direct superclass URIs]
+# http://purl.obolibrary.org/obo/HANCESTRO_0002 # region
+http://purl.obolibrary.org/obo/HANCESTRO_0004 # ancestry category
+
+[Source term retrieval setting]
+includeAllIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+http://www.geneontology.org/formats/oboInOwl#hasDbXref
+
+http://purl.obolibrary.org/obo/IAO_0000111 # editor prefered label
+http://purl.obolibrary.org/obo/IAO_0000114 # curation status
+http://purl.obolibrary.org/obo/IAO_0000115 # definition
+http://purl.obolibrary.org/obo/IAO_0000117 # term editor
+http://purl.obolibrary.org/obo/IAO_0000118 # alternate terms
+http://purl.obolibrary.org/obo/IAO_0000119 # definition source
+
+########################################
+
+[Source ontology]
+NCBITaxon
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/NCBITaxon_112137 # Musculus
+http://purl.obolibrary.org/obo/NCBITaxon_2 # Bacteria
+http://purl.obolibrary.org/obo/NCBITaxon_2157 # Archaea
+http://purl.obolibrary.org/obo/NCBITaxon_2759 # Eukaryota
+http://purl.obolibrary.org/obo/NCBITaxon_9031 # Gallus gallus
+http://purl.obolibrary.org/obo/NCBITaxon_9102 # Meleagris
+http://purl.obolibrary.org/obo/NCBITaxon_9615 # Canis lupus familiaris
+http://purl.obolibrary.org/obo/NCBITaxon_9685 # Felis catus
+http://purl.obolibrary.org/obo/NCBITaxon_9823 # Sus scrofa
+http://purl.obolibrary.org/obo/NCBITaxon_9893 # Giraffa
+http://purl.obolibrary.org/obo/NCBITaxon_9900 # Bison
+http://purl.obolibrary.org/obo/NCBITaxon_9913 # Bos taurus
+http://purl.obolibrary.org/obo/NCBITaxon_9940 # Ovis aries
+
+[Top level source term URIs and target direct superclass URIs]
+http://purl.obolibrary.org/obo/NCBITaxon_2157
+subClassOf http://purl.obolibrary.org/obo/OBI_0100026 #OBI:organism
+http://purl.obolibrary.org/obo/NCBITaxon_2
+subClassOf http://purl.obolibrary.org/obo/OBI_0100026 #OBI:organism
+http://purl.obolibrary.org/obo/NCBITaxon_2759
+subClassOf http://purl.obolibrary.org/obo/OBI_0100026 #OBI:organism
+http://purl.obolibrary.org/obo/NCBITaxon_10239
+subClassOf http://purl.obolibrary.org/obo/OBI_0100026 #OBI:organism
+
+
+[Source term retrieval setting]
+includeComputedIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+copyTo http://purl.obolibrary.org/obo/IAO_0000111
+http://www.geneontology.org/formats/oboInOwl#hasExactSynonym
+mapTo http://purl.obolibrary.org/obo/IAO_0000118 #iao:alternative term
+http://purl.obolibrary.org/obo/ncbitaxon#common_name
+
+
+########################################
+
+[Source ontology]
+NCIT
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/NCIT_C62103 # Device
+http://purl.obolibrary.org/obo/NCIT_C16830 # Medical Device
+http://purl.obolibrary.org/obo/NCIT_C17627 # swab
+http://purl.obolibrary.org/obo/NCIT_C43164 # Package Type
+http://purl.obolibrary.org/obo/NCIT_C43186 # Container
+
+[Top level source term URIs and target direct superclass URIs]
+
+[Source term retrieval setting]
+includeNoIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+http://purl.obolibrary.org/obo/IAO_0000115 #iao:definition
+http://www.geneontology.org/formats/oboInOwl#hasSynonym
+http://www.geneontology.org/formats/oboInOwl#hasExactSynonym
+http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym
+http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym
+
+
+########################################
+
+[Source ontology]
+OBI
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/OBI_0100026 # organism
+http://purl.obolibrary.org/obo/IAO_0000030 # information content entity 
+
+[Top level source term URIs and target direct superclass URIs]
+http://purl.obolibrary.org/obo/BFO_0000001 # entity
+
+[Source term retrieval setting]
+includeAllIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+http://www.w3.org/2000/01/rdf-schema#comment
+
+http://purl.obolibrary.org/obo/IAO_0000111 # editor prefered label
+http://purl.obolibrary.org/obo/IAO_0000114 # curation status
+http://purl.obolibrary.org/obo/IAO_0000115 # definition
+http://purl.obolibrary.org/obo/IAO_0000117 # term editor
+http://purl.obolibrary.org/obo/IAO_0000119 # definition source
+
+http://www.geneontology.org/formats/oboInOwl#hasDbXref
+http://www.geneontology.org/formats/oboInOwl#hasExactSynonym
+http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym
+http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym
+http://www.geneontology.org/formats/oboInOwl#inSubset
+http://www.geneontology.org/formats/oboInOwl#hasAlternativeId
+
+[Source annotation URIs to be excluded]
+#http://org.semanticweb.owlapi/error#Error1 # hide some errors coming through on sequencer organization records.
+#http://org.semanticweb.owlapi/error#Error2
+#http://org.semanticweb.owlapi/error#Error3
+#http://org.semanticweb.owlapi/error#Error4
+#http://org.semanticweb.owlapi/error#Error5
+#http://org.semanticweb.owlapi/error#Error6
+#http://org.semanticweb.owlapi/error#Error7
+#http://org.semanticweb.owlapi/error#Error8
+#http://org.semanticweb.owlapi/error#Error9
+
+########################################
+
+[Source ontology]
+PATO
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/PATO_0000001 # quality
+http://purl.obolibrary.org/obo/PATO_0000047 # biological sex
+http://purl.obolibrary.org/obo/PATO_0001241 # physical object quality
+http://purl.obolibrary.org/obo/PATO_0001995 # organismal quality
+
+[Top level source term URIs and target direct superclass URIs]
+http://purl.obolibrary.org/obo/PATO_0000068 # qualitative
+subClassOf http://purl.obolibrary.org/obo/BFO_0000019 # quality
+
+http://purl.obolibrary.org/obo/PATO_0001241 # physical object quality NORMALLY subclass of PATO_0000001 
+subClassOf http://purl.obolibrary.org/obo/BFO_0000019 # quality
+
+[Source term retrieval setting]
+includeAllIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+http://www.w3.org/2000/01/rdf-schema#comment
+
+http://purl.obolibrary.org/obo/IAO_0000111 # editor prefered label
+http://purl.obolibrary.org/obo/IAO_0000114 # curation status
+http://purl.obolibrary.org/obo/IAO_0000115 # definition
+http://purl.obolibrary.org/obo/IAO_0000117 # term editor
+http://purl.obolibrary.org/obo/IAO_0000119 # definition source
+http://purl.obolibrary.org/obo/OBI_0001886 # NIAID GSCID-BRC alternative term
+
+http://www.geneontology.org/formats/oboInOwl#hasDbXref
+http://www.geneontology.org/formats/oboInOwl#hasSynonym
+http://www.geneontology.org/formats/oboInOwl#hasExactSynonym
+http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym
+http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym
+http://www.geneontology.org/formats/oboInOwl#inSubset
+http://www.geneontology.org/formats/oboInOwl#hasAlternativeId
+
+########################################
+
+[Source ontology]
+UBERON
+
+[Low level source term URIs]
+http://purl.obolibrary.org/obo/UBERON_0000463 # organism substance
+http://purl.obolibrary.org/obo/UBERON_0000465 # material anatomical entity
+http://purl.obolibrary.org/obo/UBERON_0001062 # anatomical entity
+http://purl.obolibrary.org/obo/UBERON_0002050 # embryonic structure
+http://purl.obolibrary.org/obo/UBERON_0005423 # developing anatomical structure
+http://purl.obolibrary.org/obo/UBERON_0007378 # egg yolk
+
+[Top level source term URIs and target direct superclass URIs]
+# multi-homing is knocking some of these out?
+http://purl.obolibrary.org/obo/UBERON_0000061 # anatomical structure
+http://purl.obolibrary.org/obo/UBERON_0000062 # organ
+http://purl.obolibrary.org/obo/UBERON_0001062 # anatomical entity
+
+[Source term retrieval setting]
+includeAllIntermediates
+
+[Source annotation URIs]
+http://www.w3.org/2000/01/rdf-schema#label
+http://purl.obolibrary.org/obo/IAO_0000115 
+http://purl.obolibrary.org/obo/IAO_0000111
+http://purl.obolibrary.org/obo/IAO_0000114
+http://purl.obolibrary.org/obo/IAO_0000119
+http://purl.obolibrary.org/obo/OBI_0001886
+
+http://www.geneontology.org/formats/oboInOwl#hasDbXref
+http://www.geneontology.org/formats/oboInOwl#hasSynonym
+http://www.geneontology.org/formats/oboInOwl#hasExactSynonym
+http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym
+http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym
+http://www.geneontology.org/formats/oboInOwl#inSubset
+http://www.geneontology.org/formats/oboInOwl#hasAlternativeId
+
+[Source annotation URIs to be excluded]
+
+

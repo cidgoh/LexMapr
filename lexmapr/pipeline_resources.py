@@ -10,6 +10,7 @@ import sys
 from nltk import word_tokenize
 
 from lexmapr.definitions import ROOT
+from lexmapr.ontobucket import OntologyBuckets
 from lexmapr.ontofetch import Ontology
 from lexmapr.pipeline_helpers import punctuation_treatment
 
@@ -141,26 +142,70 @@ def get_config_resources(path, no_cache):
     return ontology_lookup_table
 
 
-def get_classification_resources():
-    """Get lookup table with resources used in bucket classification.
+def get_classification_resources(scheme, no_cache):
+    """TODO: document function"""
+    # Make fetched_ontologies folder if it does not already exist
+    fetched_ontologies_dir_path = os.path.join(ROOT, "resources", "fetched_ontologies")
+    if not os.path.isdir(fetched_ontologies_dir_path):
+        os.mkdir(fetched_ontologies_dir_path)
 
-    Retrieves from disk if possible. Otherwise, creates from scratch
-    and adds to disk.
+    # Make classifications_lookup_tables folder if it does not already exist
+    classification_lookup_tables_dir_path =\
+        os.path.join(ROOT, "resources", "classification_lookup_tables")
+    if not os.path.isdir(classification_lookup_tables_dir_path):
+        os.makedirs(classification_lookup_tables_dir_path)
 
-    :rtype: dict[str, dict]
-    """
-    classification_lookup_table_path =\
-        os.path.join(ROOT, "resources", "classification_lookup_table.json")
+    # Make fetched_rules folder if it does not already exist
+    fetched_rules_dir_path = os.path.join(ROOT, "resources", "fetched_rules")
+    if not os.path.isdir(fetched_rules_dir_path):
+        os.mkdir(fetched_rules_dir_path)
 
-    if os.path.exists(classification_lookup_table_path):
-        with open(classification_lookup_table_path) as fp:
-            classification_lookup_table = json.load(fp)
+    classification_lookup_table_path = \
+        os.path.join(classification_lookup_tables_dir_path, "lookup_%s.json" % scheme)
+
+    # Retrieve classification table from cache
+    if os.path.exists(classification_lookup_table_path) and not no_cache:
+        with open(classification_lookup_table_path) as file:
+            classification_lookup_table = json.load(file)
+    # Generate new classification table
     else:
         classification_lookup_table = create_lookup_table_skeleton()
-        classification_lookup_table = \
-            add_classification_resources_to_lookup_table(classification_lookup_table)
-        with open(classification_lookup_table_path, "w") as fp:
-            json.dump(classification_lookup_table, fp)
+
+        # Run ``ontofetch.py`` to fill ``bucket_labels``
+        lexmapr_ontology_path = os.path.join(ROOT, "resources", "lexmapr.owl")
+        narms_root = "http://genepio.org/ontology/LEXMAPR_0000001"
+        sys.argv = \
+            ["", lexmapr_ontology_path, "-o", fetched_ontologies_dir_path + "/", "-r", narms_root]
+        ontofetch = Ontology()
+        ontofetch.__main__()
+
+        # Load fetched_ontology from JSON, and add the appropriate
+        # terms to ``classification_lookup_table.``
+        fetched_ontology_path = os.path.join(fetched_ontologies_dir_path, "lexmapr.json")
+        with open(fetched_ontology_path) as file:
+            fetched_ontology = json.load(file)
+        for spec in fetched_ontology["specifications"].values():
+            if "id" in spec and "label" in spec:
+                spec_id = spec["id"].lower()
+                spec_id = spec_id.replace(":", "_")
+                spec_label = spec["label"].lower()
+                classification_lookup_table["bucket_labels"][spec_id] = spec_label
+
+        # Run ``ontobucket.py`` to fill ``bucket_rules``
+        sys.argv = \
+            ["", lexmapr_ontology_path, "-o", fetched_rules_dir_path + "/", "-r", narms_root]
+        ontobucket = OntologyBuckets()
+        ontobucket.__main__()
+
+        # Add fetched rules to ``classification_lookup_table``
+        fetched_rules_path = os.path.join(fetched_rules_dir_path, "lexmapr.json")
+        with open(fetched_rules_path) as file:
+            fetched_rules = json.load(file)
+            classification_lookup_table["bucket_rules"] = fetched_rules
+
+        # Add classification table to cache
+        with open(classification_lookup_table_path, "w") as file:
+            json.dump(classification_lookup_table, file)
 
     return classification_lookup_table
 
@@ -195,7 +240,9 @@ def create_lookup_table_skeleton():
         "buckets_lexmapr": {},
         "ifsac_labels": {},
         "ifsac_refinement": {},
-        "ifsac_default": {}
+        "ifsac_default": {},
+        "bucket_labels": {},
+        "bucket_rules": {}
         }
 
 

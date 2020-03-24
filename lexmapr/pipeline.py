@@ -51,7 +51,9 @@ def run(args):
     # To contain resources used in classification.
     classification_lookup_table = None
     if args.bucket:
-        classification_lookup_table = pipeline_resources.get_classification_resources()
+        classification_lookup_table = \
+            pipeline_resources.get_classification_resources(args.bucket, args.no_cache)
+        # TODO: merge lookup and classification tables
 
     # Output file Column Headings
     output_fields = [

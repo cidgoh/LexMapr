@@ -109,3 +109,5 @@ venv.bak/
 # Cached resources
 lexmapr/resources/fetched_ontologies/
 lexmapr/resources/ontology_lookup_tables/
+lexmapr/resources/fetched_rules
+lexmapr/resources/classification_lookup_tables
