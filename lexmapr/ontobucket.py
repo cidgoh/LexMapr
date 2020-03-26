@@ -249,7 +249,7 @@ class OntologyBuckets(object):
                 # Output rule file takes on ontology name + .json
                 json_file_path = output_file_basename + '.json'
 
-                if os.path.isfile('./' + json_file_path):
+                if os.path.isfile(json_file_path):
                     with (open(json_file_path)) as input_handle:
                         self.log("Using cached file:", json_file_path)
                         bucket_rules = json.load(input_handle);
@@ -299,10 +299,13 @@ class OntologyBuckets(object):
             # against.
             self.comparison_set = set(options.comparison_ids.split(','))
 
+            ret = []
             for bucket_id, rule in bucket_rules.items():
                 output = self.do_bucket_rule(rule)
                 if output != {False}:
                     print("RULE:", bucket_id, output)
+                    ret += [bucket_id]
+            return ret
 
     """
     CARDINALITY SPECIFIES NUMBER OF ITEMS THAT CAN MATCH. USUALLY WITH 

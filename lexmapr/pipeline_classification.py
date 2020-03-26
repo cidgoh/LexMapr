@@ -1,8 +1,13 @@
 """Functions used for bucket classification."""
 
+import os
+import sys
+
 from inflection import singularize
 from nltk import word_tokenize
 
+from lexmapr.definitions import ROOT
+from lexmapr.ontobucket import OntologyBuckets
 from lexmapr.pipeline_helpers import get_term_parent_hierarchies
 
 
@@ -241,3 +246,21 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
         "ifsac_final_buckets": ifsac_final_buckets,
         "ifsac_final_labels": ifsac_final_labels
     }
+
+
+def classify_term(matched_component, scheme, lookup_table):
+    """TODO: document function"""
+    ret = []
+    matched_component_id = matched_component.split(":")[1].upper().replace("_", ":")
+    lexmapr_ontology_path = os.path.join(ROOT, "resources", "classification", "lexmapr.owl")
+
+    if scheme == "narms":
+        root = "http://genepio.org/ontology/LEXMAPR_0000001"
+    scheme_dir_path = os.path.join(ROOT, "resources", "classification", scheme)
+
+
+    ontobucket = OntologyBuckets()
+    sys.argv = ["", lexmapr_ontology_path, "-o", scheme_dir_path + "/", "-r", root, "-c", "-i", matched_component_id]
+    ret += [lookup_table["bucket_labels"][x] for x in ontobucket.__main__()]
+
+    return ret
