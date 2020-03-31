@@ -156,7 +156,8 @@ def run(args):
             micro_status += full_term_match["status"]
 
             if args.bucket:
-                classification_result = classify_term(matched_component, args.bucket, lookup_table)
+                classification_result = \
+                    classify_term(full_term_match["id"], args.bucket, lookup_table)
                 third_party_classification = classification_result
         else:
             # Attempt various component matches
@@ -231,7 +232,7 @@ def run(args):
                 classification_result = []
                 for matched_component in matched_components:
                     classification_result += \
-                        classify_term(matched_component, args.bucket, lookup_table)
+                        classify_term(matched_component.split(":")[1], args.bucket, lookup_table)
                 third_party_classification = classification_result
 
         # Write to row

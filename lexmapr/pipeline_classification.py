@@ -1,5 +1,6 @@
 """Functions used for bucket classification."""
 
+from collections import OrderedDict
 import os
 import sys
 
@@ -9,6 +10,9 @@ from nltk import word_tokenize
 from lexmapr.definitions import ROOT
 from lexmapr.ontobucket import OntologyBuckets
 from lexmapr.pipeline_helpers import get_term_parent_hierarchies
+
+
+ontobucket = OntologyBuckets()
 
 
 def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
@@ -248,19 +252,42 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
     }
 
 
-def classify_term(matched_component, scheme, lookup_table):
+def classify_term(term_id, scheme, lookup_table):
     """TODO: document function"""
     ret = []
-    matched_component_id = matched_component.split(":")[1].upper().replace("_", ":")
     lexmapr_ontology_path = os.path.join(ROOT, "resources", "classification", "lexmapr.owl")
 
     if scheme == "narms":
         root = "http://genepio.org/ontology/LEXMAPR_0000001"
     scheme_dir_path = os.path.join(ROOT, "resources", "classification", scheme)
 
+    term_hierarchies = get_term_parent_hierarchies(term_id, lookup_table)
 
-    ontobucket = OntologyBuckets()
-    sys.argv = ["", lexmapr_ontology_path, "-o", scheme_dir_path + "/", "-r", root, "-c", "-i", matched_component_id]
-    ret += [lookup_table["bucket_labels"][x] for x in ontobucket.__main__()]
+    while not ret:
+        terms_to_try = []
+        for hierarchy in term_hierarchies:
+            if hierarchy:
+                terms_to_try += [hierarchy.pop(0)]
+
+        # No more terms to try
+        if not terms_to_try:
+            break
+
+        # Remove duplicates
+        terms_to_try = list(OrderedDict.fromkeys(terms_to_try))
+
+        for term_to_try in terms_to_try:
+            sys.argv = [
+                "", lexmapr_ontology_path,
+                "-o", scheme_dir_path + "/",
+                "-r", root,
+                "-i", term_to_try.upper().replace("_", ":"),
+                "-c"
+            ]
+            buckets = [lookup_table["bucket_labels"][x] for x in ontobucket.__main__()]
+            # Found a classification
+            if buckets:
+                ret += buckets
+                break
 
     return ret

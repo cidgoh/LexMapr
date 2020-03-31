@@ -219,7 +219,7 @@ class OntologyBuckets(object):
             Show log messages and differential time between calls
         """
         timestamp = datetime.datetime.now()
-        print("time delta: ", str(timestamp - self.timestamp), "\n", str(args))
+        # print("time delta: ", str(timestamp - self.timestamp), "\n", str(args))
         self.timestamp = timestamp
 
     def __main__(self):
@@ -303,7 +303,7 @@ class OntologyBuckets(object):
             for bucket_id, rule in bucket_rules.items():
                 output = self.do_bucket_rule(rule)
                 if output != {False}:
-                    print("RULE:", bucket_id, output)
+                    # print("RULE:", bucket_id, output)
                     ret += [bucket_id]
             return ret
 
@@ -426,7 +426,7 @@ class OntologyBuckets(object):
 
             # print ("Item:", item)
             if item in self.owl_rules:
-                print("RULE ITEM", item, rule[item])
+                # print("RULE ITEM", item, rule[item])
                 output.update(self.owl_rules[item](rule[item]))
 
             # Here we've hit expression that doesn't begin with a function

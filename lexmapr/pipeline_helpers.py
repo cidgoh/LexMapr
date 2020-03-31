@@ -278,8 +278,6 @@ def get_term_parent_hierarchies(term_id, lookup_table):
     :returns: parent hierarchies of resource with id value of
         ``term_id``
     :rtype: list[list[str]]
-
-    **TODO**: Expand this to return all hierarchies
     """
     hierarchies = [[term_id]]
 
