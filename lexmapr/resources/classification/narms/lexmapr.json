@@ -1,0 +1,580 @@
+{
+    "LEXMAPR:0000002": {
+        "owl:someValuesFrom": {
+            "FOODON:00001635": null
+        }
+    },
+    "LEXMAPR:0000003": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001041": null,
+                "FOODON:00001134": null,
+                "FOODON:03411161": null,
+                "FOODON:03414374": null
+            }
+        }
+    },
+    "LEXMAPR:0000004": {
+        "owl:someValuesFrom": {
+            "FOODON:00001251": null
+        }
+    },
+    "LEXMAPR:0000005": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001291": null,
+                "FOODON:00001292": null,
+                "FOODON:00002051": null,
+                "FOODON:00002227": null
+            }
+        }
+    },
+    "LEXMAPR:0000006": {
+        "owl:someValuesFrom": {
+            "PATO:0000047": null
+        }
+    },
+    "LEXMAPR:0000007": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "ENVO:02000047": null,
+                "FOODON:03309997": null
+            }
+        }
+    },
+    "LEXMAPR:0000008": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001895": null,
+                "FOODON:00002069": null
+            }
+        }
+    },
+    "LEXMAPR:0000009": {
+        "owl:someValuesFrom": {
+            "FOODON:00001678": null
+        }
+    },
+    "LEXMAPR:0000010": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001040": null,
+                "NCBITaxon:9031": null
+            }
+        }
+    },
+    "LEXMAPR:0000011": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "CHEBI:24431": null,
+                "CHEBI:33287": null,
+                "ENVO:00002003": null,
+                "ENVO:00002297": null,
+                "ENVO:02000019": null,
+                "ENVO:02000020": null,
+                "NCIT:C17627": null,
+                "UBERON:0000463": null,
+                "UBERON:0001062": null
+            }
+        }
+    },
+    "LEXMAPR:0000012": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "NCBITaxon:9615": null,
+                "NCBITaxon:9685": null
+            }
+        }
+    },
+    "LEXMAPR:0000013": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:03411161": null,
+                "NCBITaxon:9913": null
+            }
+        }
+    },
+    "LEXMAPR:0000014": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001792": null,
+                "FOODON:03411237": null,
+                "FOODON:03411335": null,
+                "FOODON:03411374": null,
+                "FOODON:03412114": null
+            }
+        }
+    },
+    "LEXMAPR:0000015": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001256": null,
+                "FOODON:00001771": null,
+                "FOODON:00001800": null,
+                "FOODON:03420113": null
+            }
+        }
+    },
+    "LEXMAPR:0000016": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001274": null,
+                "UBERON:0007378": null
+            }
+        }
+    },
+    "LEXMAPR:0000017": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "ENVO:00010483": null,
+                "GENEPIO:0001246": null
+            }
+        }
+    },
+    "LEXMAPR:0000018": {
+        "owl:someValuesFrom": {
+            "ENVO:01000925": null
+        }
+    },
+    "LEXMAPR:0000019": {
+        "owl:someValuesFrom": {
+            "ENVO:01000536": null
+        }
+    },
+    "LEXMAPR:0000020": {
+        "owl:someValuesFrom": {
+            "ENVO:00000070": null
+        }
+    },
+    "LEXMAPR:0000021": {
+        "owl:someValuesFrom": {
+            "ENVO:00000078": null
+        }
+    },
+    "LEXMAPR:0000022": {
+        "owl:someValuesFrom": {
+            "ENVO:00000266": null
+        }
+    },
+    "LEXMAPR:0000023": {
+        "owl:someValuesFrom": {
+            "ENVO:00000469": null
+        }
+    },
+    "LEXMAPR:0000024": {
+        "owl:someValuesFrom": {
+            "ENVO:01000934": null
+        }
+    },
+    "LEXMAPR:0000025": {
+        "owl:someValuesFrom": {
+            "ENVO:00002221": null
+        }
+    },
+    "LEXMAPR:0000026": {
+        "owl:someValuesFrom": {
+            "ENVO:01000604": null
+        }
+    },
+    "LEXMAPR:0000027": {
+        "owl:someValuesFrom": {
+            "ENVO:00003963": null
+        }
+    },
+    "LEXMAPR:0000028": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "CHEBI:15377": null,
+                "ENVO:00002006": null,
+                "ENVO:00002011": null,
+                "ENVO:01000685": null
+            }
+        }
+    },
+    "LEXMAPR:0000029": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001248": null,
+                "FOODON:03411222": null
+            }
+        }
+    },
+    "LEXMAPR:0000030": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:03301484": null,
+                "FOODON:03306581": null
+            }
+        }
+    },
+    "LEXMAPR:0000031": {
+        "owl:someValuesFrom": {
+            "FOODON:00002147": null
+        }
+    },
+    "LEXMAPR:0000032": {
+        "owl:someValuesFrom": {
+            "FOODON:00001057": null
+        }
+    },
+    "LEXMAPR:0000033": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001143": null,
+                "FOODON:03411261": null
+            }
+        }
+    },
+    "LEXMAPR:0000034": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00002477": null,
+                "FOODON:03411292": null,
+                "FOODON:03411295": null,
+                "FOODON:03411323": null,
+                "FOODON:03411460": null,
+                "FOODON:03411476": null,
+                "FOODON:03411481": null,
+                "NCBITaxon:9900": null
+            }
+        }
+    },
+    "LEXMAPR:0000035": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001093": null,
+                "FOODON:00001185": null,
+                "FOODON:00001709": null,
+                "FOODON:00001917": null,
+                "FOODON:03315395": null,
+                "FOODON:03411324": null
+            }
+        }
+    },
+    "LEXMAPR:0000036": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001242": null,
+                "FOODON:00002268": null,
+                "FOODON:03315081": null
+            }
+        }
+    },
+    "LEXMAPR:0000037": {
+        "owl:someValuesFrom": {
+            "FOODON:00001264": null
+        }
+    },
+    "LEXMAPR:0000038": {
+        "owl:someValuesFrom": {
+            "FOODON:00001006": null
+        }
+    },
+    "LEXMAPR:0000039": {
+        "owl:someValuesFrom": {
+            "FOODON:00002029": null
+        }
+    },
+    "LEXMAPR:0000040": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "CHEBI:17029": null,
+                "FOODON:03411205": null,
+                "FOODON:03411408": null,
+                "FOODON:03411514": null,
+                "FOODON:03411633": null,
+                "FOODON:03412114": null,
+                "FOODON:03412279": null
+            }
+        }
+    },
+    "LEXMAPR:0000041": {
+        "owl:intersectionOf": {
+            "owl:complementOf": {
+                "owl:onProperty": {
+                    "RO:0002351": null
+                },
+                "owl:someValuesFrom": {
+                    "FOODON:03306867": null
+                }
+            },
+            "owl:onProperty": {
+                "RO:0002351": null
+            },
+            "owl:someValuesFrom": {
+                "owl:unionOf": {
+                    "FOODON:00001172": null,
+                    "FOODON:00002099": null,
+                    "FOODON:03306867": null,
+                    "FOODON:03411213": null
+                }
+            }
+        }
+    },
+    "LEXMAPR:0000042": {
+        "owl:someValuesFrom": {
+            "FOODON:00002196": null
+        }
+    },
+    "LEXMAPR:0000043": {
+        "owl:someValuesFrom": {
+            "OBI:0100026": null
+        }
+    },
+    "LEXMAPR:0000044": {
+        "owl:someValuesFrom": {
+            "NCBITaxon:112137": null
+        }
+    },
+    "LEXMAPR:0000045": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:03306461": null,
+                "FOODON:03411252": null,
+                "FOODON:03411343": null
+            }
+        }
+    },
+    "LEXMAPR:0000046": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001992": null,
+                "FOODON:03411229": null,
+                "FOODON:03411328": null
+            }
+        }
+    },
+    "LEXMAPR:0000047": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:03411253": null,
+                "FOODON:03411304": null,
+                "FOODON:03411316": null,
+                "FOODON:03414362": null
+            }
+        }
+    },
+    "LEXMAPR:0000048": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001901": null,
+                "FOODON:00002310": null
+            }
+        }
+    },
+    "LEXMAPR:0000049": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:03411136": null,
+                "NCBITaxon:9823": null
+            }
+        }
+    },
+    "LEXMAPR:0000050": {
+        "owl:someValuesFrom": {
+            "FOODON:00001057": null
+        }
+    },
+    "LEXMAPR:0000051": {
+        "owl:someValuesFrom": {
+            "FOODON:00002153": null
+        }
+    },
+    "LEXMAPR:0000052": {
+        "owl:someValuesFrom": {
+            "FOODON:00001158": null
+        }
+    },
+    "LEXMAPR:0000053": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001038": null,
+                "FOODON:00001132": null
+            }
+        }
+    },
+    "LEXMAPR:0000054": {
+        "owl:someValuesFrom": {
+            "FOODON:00001283": null
+        }
+    },
+    "LEXMAPR:0000055": {
+        "owl:someValuesFrom": {
+            "FOODON:00002150": null
+        }
+    },
+    "LEXMAPR:0000056": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001638": null,
+                "FOODON:00001687": null,
+                "FOODON:03317076": null
+            }
+        }
+    },
+    "LEXMAPR:0000057": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001765": null,
+                "FOODON:00002064": null
+            }
+        }
+    },
+    "LEXMAPR:0000058": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001795": null,
+                "FOODON:00002448": null
+            }
+        }
+    },
+    "LEXMAPR:0000059": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001173": null,
+                "FOODON:00002232": null
+            }
+        }
+    },
+    "LEXMAPR:0000060": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00002236": null,
+                "FOODON:03411183": null,
+                "NCBITaxon:9940": null
+            }
+        }
+    },
+    "LEXMAPR:0000061": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001293": null,
+                "FOODON:03411433": null
+            }
+        }
+    },
+    "LEXMAPR:0000062": {
+        "owl:someValuesFrom": {
+            "FOODON:03411598": null
+        }
+    },
+    "LEXMAPR:0000063": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001170": null,
+                "FOODON:00001653": null,
+                "FOODON:00001656": null,
+                "FOODON:00001786": null,
+                "FOODON:00002190": null,
+                "FOODON:00002282": null,
+                "FOODON:03415178": null
+            }
+        }
+    },
+    "LEXMAPR:0000064": {
+        "owl:someValuesFrom": {
+            "FOODON:00001165": null
+        }
+    },
+    "LEXMAPR:0000065": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001945": null,
+                "FOODON:00002252": null
+            }
+        }
+    },
+    "LEXMAPR:0000066": {
+        "owl:someValuesFrom": {
+            "FOODON:03420183": null
+        }
+    },
+    "LEXMAPR:0000067": {
+        "owl:someValuesFrom": {
+            "FOODON:00002156": null
+        }
+    },
+    "LEXMAPR:0000068": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00002277": null,
+                "FOODON:03411539": null
+            }
+        }
+    },
+    "LEXMAPR:0000069": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001625": null,
+                "FOODON:00001803": null,
+                "FOODON:00001851": null,
+                "FOODON:00001929": null,
+                "FOODON:00001990": null,
+                "FOODON:00001995": null,
+                "FOODON:00002006": null,
+                "FOODON:00002071": null,
+                "FOODON:03315108": null,
+                "FOODON:03411162": null,
+                "FOODON:03411447": null
+            }
+        }
+    },
+    "LEXMAPR:0000070": {
+        "owl:someValuesFrom": {
+            "FOODON:03420108": null
+        }
+    },
+    "LEXMAPR:0000071": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001628": null,
+                "FOODON:00002020": null,
+                "FOODON:00002081": null,
+                "FOODON:00002119": null
+            }
+        }
+    },
+    "LEXMAPR:0000072": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001148": null,
+                "FOODON:00002368": null
+            }
+        }
+    },
+    "LEXMAPR:0000073": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00001286": null,
+                "NCBITaxon:9102": null
+            }
+        }
+    },
+    "LEXMAPR:0000074": {
+        "owl:someValuesFrom": {
+            "FOODON:00001261": null
+        }
+    },
+    "LEXMAPR:0000075": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00002143": null,
+                "FOODON:03411566": null
+            }
+        }
+    },
+    "LEXMAPR:0000076": {
+        "owl:someValuesFrom": {
+            "FOODON:00001175": null
+        }
+    },
+    "LEXMAPR:0000077": {
+        "owl:someValuesFrom": {
+            "owl:unionOf": {
+                "FOODON:00002200": null,
+                "FOODON:03411624": null,
+                "NCBITaxon:9893": null
+            }
+        }
+    }
+}
