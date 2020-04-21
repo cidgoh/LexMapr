@@ -391,8 +391,10 @@ class TestPipeline(unittest.TestCase):
         # Wikipedia-based collocation resource.
         "test_full_term_wiki_match": {"input": "test_full_term_wiki_match"},
         # Bucket classification
-        "empty_buckets_not_full": {"input": "empty", "full": False, "bucket": "narms"},
-        "empty_buckets": {"input": "empty", "bucket": "narms"},
+        "empty_buckets_not_full": {"input": "empty", "full": False, "profile": "ifsac"},
+        "empty_buckets": {"input": "empty", "profile": "ifsac"},
+        # Test some IFSAC rules
+        "test_ifsac_rules": {"input": "test_ifsac_rules", "full": False, "profile": "ifsac"}
     }
 
     @classmethod
@@ -420,11 +422,11 @@ class TestPipeline(unittest.TestCase):
         cls.test_files["empty_buckets_not_full_with_tsv_input"] = {
             "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
             "full": False,
-            "bucket": "narms"
+            "profile": "ifsac"
         }
         cls.test_files["empty_buckets_with_tsv_input"] = {
             "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
-            "bucket": "narms"
+            "profile": "ifsac"
         }
 
         # Temporary directory for output files
@@ -455,13 +457,13 @@ class TestPipeline(unittest.TestCase):
             # File path to store actual output of input file
             actual_output_path = os.path.join(self.tmp_dir, "actual_output.tsv")
             # Run pipeline.run using input_path and actual_output_path
-            default_args = {"full": True, "bucket": None}
+            default_args = {"full": True, "profile": None}
             default_args.update(pipeline_args)
             pipeline.run(argparse.Namespace(input_file=default_args["input"], config=None,
                                             full=default_args["full"],
                                             output=actual_output_path, version=False,
-                                            bucket=default_args["bucket"], no_cache=False,
-                                            profile=None))
+                                            bucket=None, no_cache=False,
+                                            profile=default_args["profile"]))
             # Get actual_output_path contents
             with open(actual_output_path, "r") as actual_output_file:
                 actual_output_contents = actual_output_file.read()
