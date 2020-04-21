@@ -391,8 +391,8 @@ class TestPipeline(unittest.TestCase):
         # Wikipedia-based collocation resource.
         "test_full_term_wiki_match": {"input": "test_full_term_wiki_match"},
         # Bucket classification
-        "empty_buckets_not_full": {"input": "empty", "full": False, "bucket": True},
-        "empty_buckets": {"input": "empty", "bucket": True},
+        "empty_buckets_not_full": {"input": "empty", "full": False, "bucket": "narms"},
+        "empty_buckets": {"input": "empty", "bucket": "narms"},
     }
 
     @classmethod
@@ -420,11 +420,11 @@ class TestPipeline(unittest.TestCase):
         cls.test_files["empty_buckets_not_full_with_tsv_input"] = {
             "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
             "full": False,
-            "bucket": True
+            "bucket": "narms"
         }
         cls.test_files["empty_buckets_with_tsv_input"] = {
             "input": os.path.join(ROOT, "tests", "test_input", "empty_with_tsv_input.tsv"),
-            "bucket": True
+            "bucket": "narms"
         }
 
         # Temporary directory for output files
@@ -455,7 +455,7 @@ class TestPipeline(unittest.TestCase):
             # File path to store actual output of input file
             actual_output_path = os.path.join(self.tmp_dir, "actual_output.tsv")
             # Run pipeline.run using input_path and actual_output_path
-            default_args = {"full": True, "bucket": False}
+            default_args = {"full": True, "bucket": None}
             default_args.update(pipeline_args)
             pipeline.run(argparse.Namespace(input_file=default_args["input"], config=None,
                                             full=default_args["full"],
@@ -594,7 +594,8 @@ class TestOntologyMapping(unittest.TestCase):
                          "standard_resource_label_permutations", "synonyms", "abbreviations",
                          "non_english_words", "spelling_mistakes", "inflection_exceptions",
                          "stop_words", "suffixes", "parents", "buckets_ifsactop",
-                         "buckets_lexmapr", "ifsac_labels", "ifsac_refinement", "ifsac_default"]
+                         "buckets_lexmapr", "ifsac_labels", "ifsac_refinement", "ifsac_default",
+                         "bucket_labels"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
@@ -606,7 +607,8 @@ class TestOntologyMapping(unittest.TestCase):
                          "standard_resource_label_permutations", "synonyms", "abbreviations",
                          "non_english_words", "spelling_mistakes", "inflection_exceptions",
                          "stop_words", "suffixes", "parents", "buckets_ifsactop",
-                         "buckets_lexmapr", "ifsac_labels", "ifsac_refinement", "ifsac_default"]
+                         "buckets_lexmapr", "ifsac_labels", "ifsac_refinement", "ifsac_default",
+                         "bucket_labels"]
 
         self.assertCountEqual(expected_keys, ontology_lookup_table.keys())
 
@@ -933,55 +935,6 @@ class TestOntologyMapping(unittest.TestCase):
         }
         actual_resource_labels = ontology_lookup_table["standard_resource_labels"]
         self.assertDictEqual(expected_resource_labels, actual_resource_labels)
-
-
-class TestClassification(unittest.TestCase):
-    """Tests processes of classification of samples into buckets.
-
-    This differs from the black-box approach taken in TestPipeline, as
-    we are concerned with the mechanics behind the classification.
-    """
-    classification_table_path = os.path.join(ROOT, "resources", "classification_lookup_table.json")
-
-    @classmethod
-    def setUp(cls):
-        # Remove classification lookup table
-        if os.path.exists(cls.classification_table_path):
-            os.remove(cls.classification_table_path)
-
-    @staticmethod
-    def run_pipeline_with_args(bucket=None):
-        """Run pipeline with some default arguments."""
-
-        # Path to input file used in all tests
-        small_simple_path = os.path.join(ROOT, "tests", "test_input", "small_simple.csv")
-
-        pipeline.run(argparse.Namespace(input_file=small_simple_path, config=None, full=None,
-                                        output=None, version=False, bucket=bucket, no_cache=False,
-                                        profile=None))
-
-    def get_classification_lookup_table(self):
-        with open(self.classification_table_path) as fp:
-            return json.load(fp)
-
-    def test_generate_classification_table(self):
-        self.run_pipeline_with_args()
-        self.assertFalse(os.path.exists(self.classification_table_path))
-
-        self.run_pipeline_with_args(bucket=True)
-        self.assertTrue(os.path.exists(self.classification_table_path))
-
-    def test_classification_table_keys(self):
-        self.run_pipeline_with_args(bucket=True)
-        classification_table = self.get_classification_lookup_table()
-
-        expected_keys = ["non_standard_resource_ids", "standard_resource_labels",
-                         "standard_resource_label_permutations", "synonyms", "abbreviations",
-                         "non_english_words", "spelling_mistakes", "inflection_exceptions",
-                         "stop_words", "suffixes", "parents", "buckets_ifsactop",
-                         "buckets_lexmapr", "ifsac_labels", "ifsac_refinement", "ifsac_default"]
-
-        self.assertCountEqual(expected_keys, classification_table.keys())
 
 
 if __name__ == '__main__':
