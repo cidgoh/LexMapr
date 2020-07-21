@@ -355,13 +355,13 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
 
                     lookup_table["synonyms"][synonym] = resource_label
 
-            if "oboInOwl:hasBroadSynonym" in resource:
-                synonyms = resource["oboInOwl:hasBroadSynonym"]
-                for synonym in synonyms:
-                    # Standardize synonym
-                    synonym = punctuation_treatment(synonym.lower())
-
-                    lookup_table["synonyms"][synonym] = resource_label
+            # if "oboInOwl:hasBroadSynonym" in resource:
+            #     synonyms = resource["oboInOwl:hasBroadSynonym"]
+            #     for synonym in synonyms:
+            #         # Standardize synonym
+            #         synonym = punctuation_treatment(synonym.lower())
+            #
+            #         lookup_table["synonyms"][synonym] = resource_label
 
             if "oboInOwl:hasNarrowSynonym" in resource:
                 synonyms = resource["oboInOwl:hasNarrowSynonym"]

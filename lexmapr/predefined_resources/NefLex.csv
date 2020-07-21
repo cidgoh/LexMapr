@@ -4,7 +4,7 @@ aam,mango,Indian
 adarak,ginger,Indian
 adrak,ginger,Indian
 adrak,ginger,Indian
-ajwain,Apiaceae,Indian
+ajwain,apiaceae,Indian
 ajwain,carom seeds,Indian
 aloo,potato,Indian
 aloo chole,potato and chick peas,Indian
@@ -24,9 +24,9 @@ bagar,spice and herb tempering,Indian
 bahare,stuffed,Indian
 baklava,dessert,Persian
 bento,meal,Indian
-bhelpuri,Indian snack,Indian
+bhelpuri,indian snack,Indian
 bhojan,meal,Indian
-bhujia,Indian snack,Indian
+bhujia,fried snack,Indian
 bhuna,roasted,Indian
 biryani,spiced saffron cooked rice,Indian
 biryani pulav,spiced saffron cooked rice,Indian
@@ -45,7 +45,7 @@ dahivada,snack food,Indian
 dal,lentil,Indian
 dalchini,cinnamon,Indian
 dalmoth,lentil,Indian
-deggi mirch,chili Powder,Indian
+deggi mirch,chili powder,Indian
 deshi puti,freshwater fish,
 dhana jeera,spice mixture,Indian
 dhanajeera,spice mixture,Indian
@@ -97,8 +97,8 @@ magaz,melon seeds,Indian
 makhan,white butter,Indian
 makhanwala,buttered,Indian
 masala,spice mixture,Indian
-mathi,Indian snack,Indian
-mathiya,Indian snack,Indian
+mathi,indian snack,Indian
+mathiya,indian snack,Indian
 meetha,sweet,Indian
 methe,fenugreek,Indian
 methi,fenugreek,Indian
@@ -110,29 +110,29 @@ nimboo masala,lemon spice mixture,Indian
 nimbu,lemon,Indian
 pakwan,food,Indian
 palak,spinach,Indian
-paneer,Indian cottage cheese,Indian
+paneer,indian cottage cheese,Indian
 paneer tikka,cottage cheese food product,Indian
-pani puri,Indian snack,Indian
-panipure,Indian snack,Indian
-panipuree,Indian snack,Indian
-panipuri,Indian snack,Indian
+pani puri,indian snack,Indian
+panipure,indian snack,Indian
+panipuree,indian snack,Indian
+panipuri,indian snack,Indian
 parantha,cooked flatbread,Indian
 paratha,cooked flatbread,Indian
 piaj,onion,Indian
 prantha,cooked flatbread,Indian
 pulav,cooked rice,Indian
-ras malai,Indian dessert,Indian
+ras malai,indian dessert,Indian
 rasam,south indian vegetable soup,Indian
-rasmalai,Indian dessert,Indian
+rasmalai,indian dessert,Indian
 rewadi,sweets,Indian
-rossomalai,Indian dessert,Indian
+rossomalai,indian dessert,Indian
 saaru,south indian vegetable soup,Indian
 sabji,vegetable,Indian
 sambar,lentil curry,Indian
 saunf,fennel,Indian
 sawayan,vermicelli dessert,Persian
-sev,Indian snack,Indian
-sev stick,Indian snack,Indian
+sev,indian snack,Indian
+sev stick,indian snack,Indian
 Sewian,vermicelli dessert,Persian
 sheer,milk,Persian
 sheer khorma,milk with dates,Persian
@@ -160,3 +160,22 @@ barbus chola,freshwater fish,
 cha om,acacia,
 da bu cha,herbal tea,
 dahon ng saging,banana leaf,
+pakoda,fried snack,Indian
+pakora,fried snack,Indian
+ponako,fried snack,Indian
+pakodi,fried snack,Indian
+pakori,fried snack,Indian
+pav bhaji,vegetable curry with soft bread roll,Indian
+pav,soft bread roll,Indian
+bhaji,vegetable curry,Indian
+degi mirch,chili powder,Indian
+soan papdi,dessert,Indian
+patisa,dessert,Indian
+son papri,dessert,Indian
+sohan papdi,dessert,Indian
+shonpapdi,dessert,Indian
+ghee,butter oil,Indian
+goudam,cheese,Indian
+neem,azadirachta indica,Indian
+nim,azadirachta indica,Indian
+nimtree,azadirachta indica,Indian

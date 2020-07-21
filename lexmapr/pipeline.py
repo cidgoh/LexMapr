@@ -33,6 +33,10 @@ def run(args):
     #  terms from online ontologies to lookup tables.
     lookup_table = pipeline_resources.get_predefined_resources()
 
+    # Scientific names dictionary fetched from lookup tables.
+    # Todo: Move to ontology_lookup_table later
+    scientific_names_dict = pipeline_resources.get_resource_dict("foodon_ncbi_synonyms.csv")
+
     # To contain resources fetched from online ontologies, if any.
     # Will eventually be added to ``lookup_table``.
     ontology_lookup_table = None
@@ -57,14 +61,20 @@ def run(args):
     output_fields = [
         "Sample_Id",
         "Sample_Desc",
-        "Cleaned_Sample",
+        "Processed_Sample",
+        "Processed_Sample (With Scientific Name)",
         "Matched_Components"
     ]
 
     if args.full:
         output_fields += [
             "Match_Status(Macro Level)",
-            "Match_Status(Micro Level)"
+            "Match_Status(Micro Level)",
+            "Sample_Transformations"
+        ]
+    else:
+        output_fields += [
+                "Match_Status(Macro Level)"
         ]
 
     if args.bucket:
@@ -100,6 +110,7 @@ def run(args):
         sample_id = row[0].strip()
         original_sample = " ".join(row[1:]).strip()
         cleaned_sample = ""
+        cleaned_sample_scientific_name=""
         matched_components = []
         macro_status = "No Match"
         micro_status = []
@@ -107,6 +118,7 @@ def run(args):
         lexmapr_bucket = []
         third_party_bucket = []
         third_party_classification = []
+        sample_conversion_status = {}
 
         # Standardize sample to lowercase and with punctuation
         # treatment.
@@ -127,15 +139,21 @@ def run(args):
             lemma = helpers.spelling_correction(lemma, lookup_table, micro_status)
             lemma = helpers.abbreviation_normalization_token(lemma, lookup_table, micro_status)
             lemma = helpers.non_English_normalization_token(lemma, lookup_table, micro_status)
-
+            if not tkn == lemma:
+               sample_conversion_status[tkn] = lemma
             cleaned_sample = helpers.get_cleaned_sample(cleaned_sample, lemma, lookup_table)
             cleaned_sample = re.sub(' +', ' ', cleaned_sample)
             cleaned_sample = helpers.abbreviation_normalization_phrase(cleaned_sample,
                                                                        lookup_table, micro_status)
             cleaned_sample = helpers.non_English_normalization_phrase(cleaned_sample, lookup_table,
                                                                       micro_status)
+            cleaned_sample_scientific_name = helpers.get_annotated_sample(cleaned_sample_scientific_name,
+                                                                               lemma, scientific_names_dict)
+            cleaned_sample_scientific_name = re.sub(' +', ' ', cleaned_sample_scientific_name)
 
-        cleaned_sample = helpers.remove_duplicate_tokens(cleaned_sample)
+        if "gallus gallus" not in sample:  # not to remove duplicate from sample containing gallus gallus
+            cleaned_sample = helpers.remove_duplicate_tokens(cleaned_sample)
+        cleaned_sample_scientific_name = helpers.remove_duplicate_tokens(cleaned_sample_scientific_name)
 
         # Attempt full term match
         full_term_match = helpers.map_term(sample, lookup_table)
@@ -248,18 +266,23 @@ def run(args):
                 third_party_bucket = classification_result["ifsac_final_buckets"]
                 third_party_classification = classification_result["ifsac_final_labels"]
 
-        # Write to row
+        #  Write to row
+        matched_components = helpers.get_matched_component_standardized(matched_components)
+        if "gallus" in sample or ("dog" in sample
+                and not "companion animal" in str(third_party_classification)):
+            cleaned_sample_scientific_name = cleaned_sample
+
         fw.write("\n" + sample_id + "\t" + original_sample + "\t" + cleaned_sample + "\t"
-                 + str(matched_components))
+                 + cleaned_sample_scientific_name + "\t" + str(matched_components)+"\t" + macro_status)
 
         if args.full:
-            fw.write("\t" + macro_status + "\t" + str(micro_status))
+            fw.write("\t" + str(micro_status)+"\t" + str(sample_conversion_status))
 
         if args.bucket:
             if args.full:
                 fw.write("\t" + str(lexmapr_classification) + "\t" + str(lexmapr_bucket)
                          + "\t" + str(third_party_bucket))
-            fw.write("\t" + str(sorted(third_party_classification)))
+            fw.write("\t" + str((third_party_classification)))
 
     fw.write('\n')
     # Output files closed

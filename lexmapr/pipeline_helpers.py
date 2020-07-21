@@ -8,6 +8,7 @@ from dateutil.parser import parse
 import inflection
 from nltk.tokenize import word_tokenize
 from nltk.tokenize.treebank import TreebankWordDetokenizer
+from nltk import pos_tag
 
 
 def singularize_token(tkn, lookup_table, micro_status):
@@ -71,7 +72,6 @@ def get_cleaned_sample(cleaned_sample,lemma, lookup_table):
 
         cleaned_sample = cleaned_sample + " " + lemma
     return cleaned_sample
-
 
 def remove_duplicate_tokens(input_string):
     refined_phrase_list = []
@@ -289,7 +289,9 @@ def get_term_parent_hierarchies(term_id, lookup_table):
         hierarchy = hierarchies[i]
         node = hierarchy[-1]
 
-        if node in lookup_table["parents"]:
+        if str(node) == 'bfo_0000001':  # To break the cycle
+            break
+        elif node in lookup_table["parents"] :
             node_parents = lookup_table["parents"][node]
             for node_parent in node_parents:
                 hierarchies.append(hierarchy + [node_parent])
@@ -373,3 +375,149 @@ def _map_term_helper(term, lookup_table):
         }
     else:
         return None
+
+
+def get_annotated_sample(annotated_sample, lemma, scientific_names_dict):
+    """ Embed scientific name in the sample, if available.
+
+    """
+    if (not annotated_sample):
+        annotated_sample = lemma
+    else:
+        annotated_sample = annotated_sample + " " + lemma
+    if lemma in scientific_names_dict.keys():
+        scintific_name = scientific_names_dict[lemma]
+        annotated_sample = annotated_sample + "  {" + scintific_name + "}"
+    if annotated_sample in scientific_names_dict.keys():
+        scintific_name = scientific_names_dict[annotated_sample]
+        annotated_sample = annotated_sample + "  {" + scintific_name + "}"
+
+    return annotated_sample
+
+
+def get_matched_component_standardized(matched_component):
+    """ Converts the matched component to standard Upper case Ontology Ids.
+
+    """
+    updated_matched_component_list =[]
+    if len(matched_component)>0:
+        for item in matched_component:
+            matched_component_item = str(item).split(":")
+            matched_component_first = matched_component_item[0]
+            matched_component_second = matched_component_item[1]
+            matched_component_second_standard = matched_component_second.upper()
+            updated_matched_component = matched_component_first+":"+matched_component_second_standard
+            updated_matched_component_list.append(updated_matched_component)
+
+    return updated_matched_component_list
+
+
+def get_head_noun(text_segment):
+    # FOR FUTURE USE
+    """Get nouns from a given text segment.
+
+    :param str text_segment: See
+        Takes a text_segment (phrase, word or sentence)
+    :type text_segment: str
+    :return: The nouns in the text segment
+    :rtype: list
+    """
+    # Check if noun (=NN)
+    isNoun = lambda pos: pos[:2] == 'NN'
+    # Tokenise text and keep only nouns
+    tokenized_text = word_tokenize(text_segment)
+    nouns = [word for (word, pos) in pos_tag(tokenized_text) if isNoun(pos)]
+
+    return nouns
+
+def calculate_penalty_weight(micro_status, confidence_weight_penalty_dict):
+    # FOR FUTURE USE
+    """Calculate ``total penalty`` for usage of rules in case of no ``direct match``.
+
+    :param list micro_status: The list showing different rules applied to the sample
+    :param dict[str, str] confidence_weight_penalty_dict: See
+        Dictionary of penalty sc ore for different rules affecting confidence
+    :returns: A score of total penalty to be used for calculating overall confidence score
+    :rtype: float
+    """
+
+    total_penalty_weight = 0.0
+    # This applies penalty weight according to the rules applied
+    for applied_rule in micro_status:
+        applied_rule_string = str(applied_rule).lower()
+        for key, value in confidence_weight_penalty_dict.items():
+            if key in applied_rule_string:
+                penalty_weight = int(value)
+                total_penalty_weight = total_penalty_weight + int(penalty_weight)
+
+    return total_penalty_weight
+
+
+def decode_confidence_level(confidence_score):
+    # FOR FUTURE USE
+    """ Decodes the confidence level from confidence score
+
+    :param  float confidence_score: See
+        Takes a final calculated confidence score
+    :type confidence_score: float
+    :return: The assigned confidence level
+    :rtype: str
+    """
+
+    if confidence_score > 89.0:
+        confidence_level = "Highest"
+    elif confidence_score > 79.0:
+        confidence_level = "High"
+    elif confidence_score > 69.0:
+        confidence_level = "Moderately High"
+    elif confidence_score > 59.0:
+        confidence_level = "Medium"
+    else:
+        confidence_level = "Low"
+
+    return confidence_level
+
+
+def assign_confidence_level(sample_tokens, match_status, micro_status,
+                            confidence_weight_penalty_dict, sample_covered_tokens, head_nouns):
+    # FOR FUTURE USE
+    """Calculate ``confidence level`` for term mapping using ``confidence score`` by
+    incorporating penalty weight according to the rules applied to term mapping for sample
+    :param list sample_tokens: The list of tokens in the sample
+    :param str match_status: The type of match for sample
+    :param list micro_status: The list showing different rules applied to the sample
+    :param dict[str, str] confidence_weight_penalty_dict: See
+        Dictionary of penalty sc ore for different rules affecting confidence
+    :param set sample_covered_tokens: The set of covered tokens from all the tokens
+    :param list head_nouns: The list of head nouns found in the sample
+    :returns: A confidence level for the term mapping of sample
+    :rtype: str
+    """
+    confidence_score = 0
+    total_penalty_weight = calculate_penalty_weight(micro_status, confidence_weight_penalty_dict)
+    if "Full Term Match" in match_status:
+        confidence_score = 100
+        confidence_score = confidence_score - total_penalty_weight
+    elif "Component Match" in match_status:
+        confidence_score = 90
+        not_covered_tokens= set()
+        not_covered_head_nouns = set()
+        for token in head_nouns:
+            if token not in str(sample_covered_tokens):
+                not_covered_head_nouns.add(token)
+        for token in sample_tokens:
+            if token not in str(sample_covered_tokens) and token not in str(not_covered_head_nouns):
+                not_covered_tokens.add(token)    # Why this
+        length_of_not_covered_tokens = len(not_covered_tokens)
+        length_of_not_covered_head_nouns = len(not_covered_head_nouns)
+        component_penalty_weight = length_of_not_covered_tokens * 6    # Why this
+        head_nouns_penalty_weight = length_of_not_covered_head_nouns * 10   # Why this
+        confidence_score = confidence_score - total_penalty_weight - component_penalty_weight \
+                           - head_nouns_penalty_weight
+    elif "No Match" in match_status:
+        confidence_score = 0
+
+    confidence_level = decode_confidence_level(confidence_score)
+    assigned_confidence = confidence_level + " (" + str(confidence_score) +"%)"
+
+    return assigned_confidence

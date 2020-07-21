@@ -1,0 +1,16 @@
+[
+  {"http://purl.obolibrary.org/obo/UBERON.owl": "http://purl.obolibrary.org/obo/UBERON_0001062"},
+  {"https://raw.githubusercontent.com/Public-Health-Bioinformatics/LexMapr/development/lexmapr/tests/test_ontologies/under_curation.owl": "http://genepio.org/ontology/lexmapr/IFSAC_0000001"},
+  {"https://raw.githubusercontent.com/GenEpiO/genepio/master/genepio.owl": "http://purl.obolibrary.org/obo/BFO_0000001"},
+  {"https://raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl": "http://purl.obolibrary.org/obo/FOODON_00001002"},
+  {"https://raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl": "http://purl.obolibrary.org/obo/FOODON_03480020"},
+  {"https://raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl": "http://purl.obolibrary.org/obo/FOODON_03510136"},
+  {"https://raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl": "http://purl.obolibrary.org/obo/FOODON_03490100"},
+  {"https://raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl": "http://purl.obolibrary.org/obo/FOODON_03430154"},
+  {"https://raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl": "http://purl.obolibrary.org/obo/FOODON_00002470"},
+  {"https://raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl": "http://purl.obolibrary.org/obo/FOODON_03420116"},
+  {"https://raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl": "http://purl.obolibrary.org/obo/FOODON_00002451"},
+  {"https://raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl": "http://purl.obolibrary.org/obo/FOODON_03411564"},
+  {"https://raw.githubusercontent.com/FoodOntology/foodon/master/src/ontology/foodon-merged.owl": "http://purl.obolibrary.org/obo/PO_0009011"},
+  {"http://purl.obolibrary.org/obo/envo.owl":  "http://purl.obolibrary.org/obo/BFO_0000001"}
+ ]
