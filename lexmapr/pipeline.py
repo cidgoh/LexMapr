@@ -12,7 +12,7 @@ import sys
 from nltk.tokenize import word_tokenize
 
 import lexmapr.pipeline_resources as pipeline_resources
-from lexmapr.pipeline_classification import classify_sample
+from lexmapr.pipeline_classification import classify_term
 import lexmapr.pipeline_helpers as helpers
 
 
@@ -51,7 +51,8 @@ def run(args):
     # To contain resources used in classification.
     classification_lookup_table = None
     if args.bucket:
-        classification_lookup_table = pipeline_resources.get_classification_resources()
+        lookup_table["bucket_labels"] = \
+            pipeline_resources.get_classification_resources(args.bucket, args.no_cache)
 
     # Output file Column Headings
     output_fields = [
@@ -68,17 +69,9 @@ def run(args):
         ]
 
     if args.bucket:
-        if args.full:
-            output_fields += [
-                "LexMapr Classification (Full List)",
-                "LexMapr Bucket",
-                "Third Party Bucket",
-                "Third Party Classification"
-            ]
-        else:
-            output_fields += [
-                "Third Party Classification"
-            ]
+        output_fields += [
+            "Third Party Classification"
+        ]
 
     fw = open(args.output, 'w') if args.output else sys.stdout     # Main output file
     fw.write('\t'.join(output_fields))
@@ -163,13 +156,9 @@ def run(args):
             micro_status += full_term_match["status"]
 
             if args.bucket:
-                classification_result = classify_sample(
-                    sample, matched_components, lookup_table, classification_lookup_table
-                )
-                lexmapr_classification = classification_result["lexmapr_hierarchy_buckets"]
-                lexmapr_bucket = classification_result["lexmapr_final_buckets"]
-                third_party_bucket = classification_result["ifsac_final_buckets"]
-                third_party_classification = classification_result["ifsac_final_labels"]
+                classification_result = \
+                    classify_term(full_term_match["id"], args.bucket, lookup_table)
+                third_party_classification = classification_result
         else:
             # Attempt various component matches
             component_matches = []
@@ -240,13 +229,11 @@ def run(args):
                 macro_status = "Component Match"
 
             if args.bucket:
-                classification_result = classify_sample(
-                    sample, matched_components, lookup_table, classification_lookup_table
-                )
-                lexmapr_classification = classification_result["lexmapr_hierarchy_buckets"]
-                lexmapr_bucket = classification_result["lexmapr_final_buckets"]
-                third_party_bucket = classification_result["ifsac_final_buckets"]
-                third_party_classification = classification_result["ifsac_final_labels"]
+                classification_result = []
+                for matched_component in matched_components:
+                    classification_result += \
+                        classify_term(matched_component.split(":")[1], args.bucket, lookup_table)
+                third_party_classification = classification_result
 
         # Write to row
         fw.write("\n" + sample_id + "\t" + original_sample + "\t" + cleaned_sample + "\t"

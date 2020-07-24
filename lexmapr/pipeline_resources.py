@@ -6,10 +6,12 @@ from itertools import permutations
 import json
 import os
 import sys
+import tempfile
 
 from nltk import word_tokenize
 
 from lexmapr.definitions import ROOT
+from lexmapr.ontobucket import OntologyBuckets
 from lexmapr.ontofetch import Ontology
 from lexmapr.pipeline_helpers import punctuation_treatment
 
@@ -141,28 +143,52 @@ def get_config_resources(path, no_cache):
     return ontology_lookup_table
 
 
-def get_classification_resources():
-    """Get lookup table with resources used in bucket classification.
+def get_classification_resources(scheme, no_cache):
+    """TODO: document function"""
+    # Make scheme folder if it does not already exist
+    scheme_dir_path = os.path.join(ROOT, "resources", "classification", scheme)
+    if not os.path.isdir(scheme_dir_path):
+        os.mkdir(scheme_dir_path)
 
-    Retrieves from disk if possible. Otherwise, creates from scratch
-    and adds to disk.
+    bucket_labels_path = os.path.join(scheme_dir_path, "labels.json")
+    bucket_rules_path = os.path.join(scheme_dir_path, "lexmapr.json")
 
-    :rtype: dict[str, dict]
-    """
-    classification_lookup_table_path =\
-        os.path.join(ROOT, "resources", "classification_lookup_table.json")
+    # If labels or rules are missing, or no_cache, regenerate them.
+    if no_cache or \
+            (not os.path.exists(bucket_labels_path) or not os.path.exists(bucket_rules_path)):
+        lexmapr_ontology_path = os.path.join(ROOT, "resources", "classification", "lexmapr.owl")
+        if scheme == "narms":
+            root = "http://genepio.org/ontology/LEXMAPR_0000001"
 
-    if os.path.exists(classification_lookup_table_path):
-        with open(classification_lookup_table_path) as fp:
-            classification_lookup_table = json.load(fp)
-    else:
-        classification_lookup_table = create_lookup_table_skeleton()
-        classification_lookup_table = \
-            add_classification_resources_to_lookup_table(classification_lookup_table)
-        with open(classification_lookup_table_path, "w") as fp:
-            json.dump(classification_lookup_table, fp)
+        # Regenerate bucket labels
+        with tempfile.TemporaryDirectory() as tmp_dir_path:
+            bucket_labels = {}
 
-    return classification_lookup_table
+            sys.argv = ["", lexmapr_ontology_path, "-o", tmp_dir_path + "/", "-r", root]
+            ontofetch = Ontology()
+            ontofetch.__main__()
+
+            with open(os.path.join(tmp_dir_path, "lexmapr.json")) as fp:
+                lexmapr_ontology_contents = json.load(fp)
+            for spec in lexmapr_ontology_contents["specifications"].values():
+                if "id" in spec and "label" in spec:
+                    spec_label = spec["label"].lower()
+                    # No need to standardize id values, as we want
+                    # them to remain consistent with the output of
+                    # ``ontobucket.py``.
+                    spec_id = spec["id"]
+                    bucket_labels[spec_id] = spec_label
+
+        with open(bucket_labels_path, "w") as fp:
+            json.dump(bucket_labels, fp)
+
+        # Regenerate bucket rules
+        sys.argv = ["", lexmapr_ontology_path, "-o", scheme_dir_path + "/", "-r", root]
+        ontobucket = OntologyBuckets()
+        ontobucket.__main__()
+
+    with open(bucket_labels_path) as fp:
+        return json.load(fp)
 
 
 def create_lookup_table_skeleton():
@@ -195,7 +221,8 @@ def create_lookup_table_skeleton():
         "buckets_lexmapr": {},
         "ifsac_labels": {},
         "ifsac_refinement": {},
-        "ifsac_default": {}
+        "ifsac_default": {},
+        "bucket_labels": {}
         }
 
 

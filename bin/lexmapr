@@ -39,8 +39,8 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--config",
                         help="Path to JSON file containing the IRI of ontologies to fetch terms "
                              "from"),
-    parser.add_argument("-b", "--bucket", action="store_true",
-                        help="Classify samples into pre-defined buckets")
+    parser.add_argument("-b", "--bucket", choices=["narms"],
+                        help="TODO: describe parameter")
     parser.add_argument("--no-cache", action="store_true",
                         help="Ignore or replace online cached resources, if there are any.")
     parser.add_argument("-v", "--version", action="version",

@@ -1,0 +1,8 @@
+Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Third Party Classification
+small_simple1	bean food product	bean food product	['bean food product:foodon_00001635']	['beans']
+small_simple2	bean substance	bean substance	['bean substance:foodon_03301467']	['beans']
+small_simple3	beef food product	beef food product	['beef food product:foodon_00001041']	['beef']
+small_simple4	bovine meat food product	bovine meat food product	['bovine meat food product:foodon_00001134']	['beef']
+small_simple5	cattle	cattle	['cattle:foodon_03411161']	['beef', 'cow']
+small_simple6	nut food product	nut food product	['nut food product:foodon_00001172']	['nuts']
+small_simple7	peanut butter	peanut butter	['peanut butter:foodon_03306867']	[]
