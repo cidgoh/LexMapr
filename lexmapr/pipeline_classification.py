@@ -313,8 +313,10 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("veterinary clinical/research")
 
     disambiguation_words = {'ground', 'scraps', 'cut', 'smoke', 'moon', 'plain'}
-    if "environmental" in ret and (ret.intersection(animal_categories) or ret.intersection(plant_categories) or "dairy" in ret)\
-            and sample_tokens_set.intersection(disambiguation_words) :
+    if "environmental" in ret \
+            and (ret.intersection(animal_categories) or ret.intersection(plant_categories) 
+                 or "dairy" in ret) \
+            and sample_tokens_set.intersection(disambiguation_words):
         ret.remove("environmental")
     # Retains the general class (only animal feed)
     if "animal feed" in ret:
