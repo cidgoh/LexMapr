@@ -124,7 +124,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         and ret.intersection(plant_categories | other_plant_food_category) \
         and not ("swab" in sample or "clinical" in sample):
         ret.remove("clinical/research")
-    if "clinical/research" in ret  and "swab sub" in sample:
+    if "clinical/research" in ret and "swab sub" in sample:
         ret.clear()
         ret.add("environmental")
     if "clinical/research" in ret and "scat" in sample:
