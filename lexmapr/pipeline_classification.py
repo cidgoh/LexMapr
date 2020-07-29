@@ -266,8 +266,11 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "environmental-abattoir" in ret and "environmental-factory/production facility" in ret:
         ret.remove("environmental-factory/production facility")
 
-    if not ("clinical/research" in ret or "veterinary clinical/research" in ret or "animal feed" in ret
-            or "human" in ret or "environmental" in ret or ret.intersection(environmental_categories)) \
+    exclusions = {
+        'clinical/research', 'veterinary clinical/research', 'animal feed', 'human',
+        'environmental'
+    }
+    if not (ret.intersection(exclusions) or ret.intersection(environmental_categories)) \
             and len(ret) >= 3:
         ret.add("multi-ingredient")   # **********
 
