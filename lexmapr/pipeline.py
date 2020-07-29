@@ -147,8 +147,8 @@ def run(args):
                                                                        lookup_table, micro_status)
             cleaned_sample = helpers.non_English_normalization_phrase(cleaned_sample, lookup_table,
                                                                       micro_status)
-            cleaned_sample_scientific_name = helpers.get_annotated_sample(cleaned_sample_scientific_name,
-                                                                               lemma, scientific_names_dict)
+            cleaned_sample_scientific_name = helpers.get_annotated_sample(
+                cleaned_sample_scientific_name, lemma, scientific_names_dict)
             cleaned_sample_scientific_name = re.sub(' +', ' ', cleaned_sample_scientific_name)
 
         if "gallus gallus" not in sample:  # not to remove duplicate from sample containing gallus gallus
