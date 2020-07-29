@@ -56,7 +56,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     """Get the refined final labels after application of customized rules.
     :param str sample: sample
     :param set ifsac_final_labels: the final labels set
-    :param dict label_refinements: the dictionary of label refinement resource
+    :param dict label_refinements: the dictionary of label refinement 
+        resource
     :rtype: set
     """
     # Caution: Rules are sequential - changing the order might change results
