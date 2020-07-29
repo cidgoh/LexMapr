@@ -153,7 +153,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     # Dealing with "dairy", "cow" and "beef" cases
     if "dairy" in ret and "cow" in ret:
         ret.remove("cow")
-    if "beef" in ret and "dairy" in ret and "milk" in sample :
+    if "beef" in ret and "dairy" in ret and "milk" in sample:
         ret.remove("beef")
     beef_keywords = ["raw cow", "raw veal", "raw calf", "meat", "beef",
                      "cow lung", "cow liver", "cow heart"]
