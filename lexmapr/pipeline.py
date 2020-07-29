@@ -140,7 +140,7 @@ def run(args):
             lemma = helpers.abbreviation_normalization_token(lemma, lookup_table, micro_status)
             lemma = helpers.non_English_normalization_token(lemma, lookup_table, micro_status)
             if not tkn == lemma:
-               sample_conversion_status[tkn] = lemma
+                sample_conversion_status[tkn] = lemma
             cleaned_sample = helpers.get_cleaned_sample(cleaned_sample, lemma, lookup_table)
             cleaned_sample = re.sub(' +', ' ', cleaned_sample)
             cleaned_sample = helpers.abbreviation_normalization_phrase(cleaned_sample,
