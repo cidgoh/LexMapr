@@ -283,7 +283,7 @@ def run(args):
             if args.full:
                 fw.write("\t" + str(lexmapr_classification) + "\t" + str(lexmapr_bucket)
                          + "\t" + str(third_party_bucket))
-            fw.write("\t" + str((third_party_classification)))
+            fw.write("\t" + str(third_party_classification))
 
     fw.write('\n')
     # Output files closed
