@@ -149,7 +149,8 @@ def run(args):
                                                                       micro_status)
             cleaned_sample_scientific_name = helpers.get_annotated_sample(
                 cleaned_sample_scientific_name, lemma, scientific_names_dict)
-            cleaned_sample_scientific_name = re.sub(' +', ' ', cleaned_sample_scientific_name)
+            cleaned_sample_scientific_name = \
+                re.sub(' +', ' ', cleaned_sample_scientific_name)
 
         if "gallus gallus" not in sample:  # not to remove duplicate from sample containing gallus gallus
             cleaned_sample = helpers.remove_duplicate_tokens(cleaned_sample)
