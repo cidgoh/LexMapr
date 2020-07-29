@@ -120,8 +120,9 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("animal feed")
 
     # Deals with "clinical/research" class
-    if "clinical/research" in ret and ret.intersection((plant_categories
-            | other_plant_food_category)) and not ("swab" in sample or "clinical" in sample):
+    if "clinical/research" in ret \
+        and ret.intersection(plant_categories | other_plant_food_category) \
+        and not ("swab" in sample or "clinical" in sample):
         ret.remove("clinical/research")
     if "clinical/research" in ret  and "swab sub" in sample:
         ret.clear()
