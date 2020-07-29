@@ -461,8 +461,9 @@ def calculate_penalty_weight(micro_status, confidence_weight_penalty_dict):
 
 
 def decode_confidence_level(confidence_score):
-    # FOR FUTURE USE
     """ Decodes the confidence level from confidence score
+    
+    This function is for future use.
 
     :param  float confidence_score: See
         Takes a final calculated confidence score
