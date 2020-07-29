@@ -487,15 +487,20 @@ def decode_confidence_level(confidence_score):
 
 def assign_confidence_level(sample_tokens, match_status, micro_status,
                             confidence_weight_penalty_dict, sample_covered_tokens, head_nouns):
-    # FOR FUTURE USE
     """Calculate ``confidence level`` for term mapping using ``confidence score`` by
     incorporating penalty weight according to the rules applied to term mapping for sample
+    
+    This function is for future use.
+    
     :param list sample_tokens: The list of tokens in the sample
     :param str match_status: The type of match for sample
-    :param list micro_status: The list showing different rules applied to the sample
+    :param list micro_status: The list showing different rules applied 
+        to the sample
     :param dict[str, str] confidence_weight_penalty_dict: See
-        Dictionary of penalty sc ore for different rules affecting confidence
-    :param set sample_covered_tokens: The set of covered tokens from all the tokens
+        Dictionary of penalty sc ore for different rules affecting 
+        confidence
+    :param set sample_covered_tokens: The set of covered tokens from 
+        all the tokens
     :param list head_nouns: The list of head nouns found in the sample
     :returns: A confidence level for the term mapping of sample
     :rtype: str
