@@ -134,7 +134,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "clinical/research" in ret and "environmental" in ret \
             and not ("tissue" in sample or "biologicl" in sample):
         ret.remove("clinical/research")
-    if "clinical/research" in ret  and ret.intersection(environmental_categories):
+    if "clinical/research" in ret and ret.intersection(environmental_categories):
         ret.remove("clinical/research")
     if "clinical/research" in ret and (ret.intersection(plant_categories)
                                        or ret.intersection(animal_categories)):
