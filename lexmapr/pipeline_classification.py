@@ -189,7 +189,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("poultry")
     if "fish" in ret and "other poultry" in ret:
         ret.remove("other poultry")
-    if ("poultry" in ret and "eggs" in ret):
+    if "poultry" in ret and "eggs" in ret:
         ret.remove("poultry")
 
     # Dealing with "pig", "pork" and "meat" cases
