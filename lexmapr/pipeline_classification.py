@@ -14,14 +14,14 @@ def customize_order_of_labels(ifsac_final_labels):
     :rtype: list
     """
     ret = set(ifsac_final_labels)
-    priority_listing_categories = {"multi-ingredient","veterinary clinical/research",
-                                   "environmental","environmental-water", "environmental-farm",
-                                "environmental-restaurant", "environmental-retail",
-                                "environmental-abattoir", "environmental-warehouse",
-                                "environmental-researchfacility",
-                                "environmental-pasture", "environmental-animal housing",
-                                "environmental-factory/production facility",
-                                "environmental-vehicle", "environmental-construction"}
+    priority_listing_categories = {"multi-ingredient", "veterinary clinical/research",
+                                   "environmental", "environmental-water", "environmental-farm",
+                                   "environmental-restaurant", "environmental-retail",
+                                   "environmental-abattoir", "environmental-warehouse",
+                                   "environmental-researchfacility",
+                                   "environmental-pasture", "environmental-animal housing",
+                                   "environmental-factory/production facility",
+                                   "environmental-vehicle", "environmental-construction"}
 
     revised_final_labels_list = []
     ifsac_final_labels_list = list(ifsac_final_labels)
