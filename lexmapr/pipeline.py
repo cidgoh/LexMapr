@@ -110,7 +110,7 @@ def run(args):
         sample_id = row[0].strip()
         original_sample = " ".join(row[1:]).strip()
         cleaned_sample = ""
-        cleaned_sample_scientific_name=""
+        cleaned_sample_scientific_name = ""
         matched_components = []
         macro_status = "No Match"
         micro_status = []
