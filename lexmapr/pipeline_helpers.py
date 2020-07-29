@@ -291,7 +291,7 @@ def get_term_parent_hierarchies(term_id, lookup_table):
 
         if str(node) == 'bfo_0000001':  # To break the cycle
             break
-        elif node in lookup_table["parents"] :
+        elif node in lookup_table["parents"]:
             node_parents = lookup_table["parents"][node]
             for node_parent in node_parents:
                 hierarchies.append(hierarchy + [node_parent])
