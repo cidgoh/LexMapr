@@ -117,7 +117,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
 
     # Customized rules for refinement of class labels
     # Deals with "animal feed" class
-    if "animal feed" in ret and "by" in sample and not "by product" in sample:
+    if "animal feed" in ret and "by" in sample and "by product" not in sample:
         ret.remove("animal feed")
 
     # Deals with "clinical/research" class
