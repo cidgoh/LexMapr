@@ -399,7 +399,7 @@ def get_matched_component_standardized(matched_component):
     """ Converts the matched component to standard Upper case Ontology Ids.
 
     """
-    updated_matched_component_list =[]
+    updated_matched_component_list = []
     if len(matched_component)>0:
         for item in matched_component:
             matched_component_item = str(item).split(":")
