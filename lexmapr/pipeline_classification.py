@@ -296,8 +296,9 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.add("environmental-farm")
     if "eggs" in ret and "veterinary clinical/research" in ret:
         ret.remove("veterinary clinical/research")
-    if "environmental" in ret and ("multi-ingredient" in ret or ret.intersection(plant_categories))\
-            and not ("swab" in sample or "environmental" in sample):
+    if "environmental" in ret \
+        and ("multi-ingredient" in ret or ret.intersection(plant_categories)) 
+        and not ("swab" in sample or "environmental" in sample):
         ret.remove("environmental")
 
     food_anatomical_parts = {'heart','liver','lung', 'leg', 'shell-on','shell', 'soft shell', 'tail','hlso','shellon',
