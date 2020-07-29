@@ -432,14 +432,19 @@ def get_head_noun(text_segment):
 
     return nouns
 
-def calculate_penalty_weight(micro_status, confidence_weight_penalty_dict):
-    # FOR FUTURE USE
-    """Calculate ``total penalty`` for usage of rules in case of no ``direct match``.
 
-    :param list micro_status: The list showing different rules applied to the sample
+def calculate_penalty_weight(micro_status, confidence_weight_penalty_dict):
+    """Calculate ``total penalty`` for usage of rules in case of no ``direct match``.
+    
+    This function is for future use.
+
+    :param list micro_status: The list showing different rules applied 
+        to the sample
     :param dict[str, str] confidence_weight_penalty_dict: See
-        Dictionary of penalty sc ore for different rules affecting confidence
-    :returns: A score of total penalty to be used for calculating overall confidence score
+        dictionary of penalty score for different rules affecting 
+        confidence
+    :returns: A score of total penalty to be used for calculating 
+        overall confidence score
     :rtype: float
     """
 
