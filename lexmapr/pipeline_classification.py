@@ -282,8 +282,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "food" in ret and ret.intersection(animal_categories | plant_categories |
                             other_animal_food_category| other_plant_food_category |{"plant","animal"}):
         ret.remove("food")
-    if "food" in ret and ("dairy" in ret or "environmental" in ret or
-                        "clinical/research" in ret or "veterinary clinical/research" in ret):
+    if "food" in ret and ("dairy" in ret or "environmental" in ret or "clinical/research" in ret 
+                          or "veterinary clinical/research" in ret):
         ret.remove("food")
 
     # Dealing with addtional/unique cases
