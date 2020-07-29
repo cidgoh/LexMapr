@@ -109,8 +109,9 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
                         "seeds"}
     plant_categories |= vegetable_categories | fruit_categories
 
-    other_plant_food_category = {"other (food additive)", "dietary supplement", "other (sweetener)",
-                                 "other (flavoring and seasoning", "other (confectionary)"}
+    other_plant_food_category = {"other (food additive)", "dietary supplement", 
+                                 "other (sweetener)", "other (flavoring and seasoning", 
+                                 "other (confectionary)"}
     other_animal_food_category = {"meat", "other meat", "beef", "pork"}
 
     # Customized rules for refinement of class labels
