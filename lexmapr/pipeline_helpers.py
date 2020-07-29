@@ -381,7 +381,7 @@ def get_annotated_sample(annotated_sample, lemma, scientific_names_dict):
     """ Embed scientific name in the sample, if available.
 
     """
-    if (not annotated_sample):
+    if not annotated_sample:
         annotated_sample = lemma
     else:
         annotated_sample = annotated_sample + " " + lemma
