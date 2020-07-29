@@ -97,7 +97,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     root_underground_categories = {"root/underground (roots)", "root/underground (tubers)",
                                    "root/underground (bulbs)", "root/underground (other)"}
     seeded_vegetable_categories = {"seeded vegetables (vine-grown)",
-                                   "seeded vegetables (solanaceous)", "seeded vegetables (legumes)",
+                                   "seeded vegetables (solanaceous)", 
+                                   "seeded vegetables (legumes)",
                                    "seeded vegetables (other)"}
     vegetable_categories = {"fungi", "sprouts", "root/underground", "seeded vegetables", "herbs",
                             "vegetable row crops (flower)", "vegetable row crops (stem)",
