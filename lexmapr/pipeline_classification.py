@@ -305,8 +305,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
                              'tail', 'hlso', 'shellon', 'beef', 'pork', 'meat', 'porcine',
                              'shell on'}
 
-    body_part_for_food_animal_categories = aquatic_animal_categories | shellfish_categories \
-                                           | poultry_categories |{"cow"}
+    body_part_for_food_animal_categories = \
+        aquatic_animal_categories | shellfish_categories | poultry_categories | {"cow"}
     if "veterinary clinical/research" in ret and ret.intersection(body_part_for_food_animal_categories)\
         and sample_tokens_set.intersection(food_anatomical_parts) and not "swab" in sample:
         ret.remove("veterinary clinical/research")
