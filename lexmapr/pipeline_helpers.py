@@ -414,8 +414,9 @@ def get_matched_component_standardized(matched_component):
 
 
 def get_head_noun(text_segment):
-    # FOR FUTURE USE
     """Get nouns from a given text segment.
+    
+    This function is for future use.
 
     :param str text_segment: See
         Takes a text_segment (phrase, word or sentence)
