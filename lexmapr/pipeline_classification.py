@@ -85,8 +85,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
                          "beef", "pork", "other meat", "cow", "pig"}
     animal_categories |= avian_categories | aquatic_animal_categories | {"other animal"}
     veterinary_categories = avian_categories | aquatic_animal_categories | {"other animal"}
-    veterinary_categories |= {"animal", "avian", "companion animal", "aquatic animals", "wild animal",
-                                "beef", "pork", "other meat", "cow", "pig"}
+    veterinary_categories |= {"animal", "avian", "companion animal", "aquatic animals", 
+                              "wild animal", "beef", "pork", "other meat", "cow", "pig"}
     environmental_categories = {"environmental-water", "environmental-farm",
                                 "environmental-restaurant", "environmental-retail",
                                 "environmental-abattoir", "environmental-warehouse",
