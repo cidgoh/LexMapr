@@ -268,8 +268,8 @@ def run(args):
 
         #  Write to row
         matched_components = helpers.get_matched_component_standardized(matched_components)
-        if "gallus" in sample or ("dog" in sample
-                and not "companion animal" in str(third_party_classification)):
+        if "gallus" in sample \
+                or ("dog" in sample and "companion animal" not in str(third_party_classification)):
             cleaned_sample_scientific_name = cleaned_sample
 
         fw.write("\n" + sample_id + "\t" + original_sample + "\t" + cleaned_sample + "\t"
