@@ -425,10 +425,10 @@ def get_head_noun(text_segment):
     :rtype: list
     """
     # Check if noun (=NN)
-    isNoun = lambda pos: pos[:2] == 'NN'
+    def is_noun(pos): return pos[:2] == 'NN'
     # Tokenise text and keep only nouns
     tokenized_text = word_tokenize(text_segment)
-    nouns = [word for (word, pos) in pos_tag(tokenized_text) if isNoun(pos)]
+    nouns = [word for (word, pos) in pos_tag(tokenized_text) if is_noun(pos)]
 
     return nouns
 
