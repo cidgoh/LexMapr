@@ -204,7 +204,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.add("pig")
     if "meat" in ret and ("veterinary clinical/research" in ret or "engineering  seafood" in ret):
         ret.remove("meat")
-    if ret.intersection(specific_meat_categories) and "meat" in ret:  #sample has also to be considered
+    if ret.intersection(specific_meat_categories) and "meat" in ret:
         ret.remove("meat")
 
     #  when clinical/research is there and meats are there
