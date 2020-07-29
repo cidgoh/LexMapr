@@ -406,7 +406,8 @@ def get_matched_component_standardized(matched_component):
             matched_component_first = matched_component_item[0]
             matched_component_second = matched_component_item[1]
             matched_component_second_standard = matched_component_second.upper()
-            updated_matched_component = matched_component_first+":"+matched_component_second_standard
+            updated_matched_component = \
+                matched_component_first + ":" + matched_component_second_standard
             updated_matched_component_list.append(updated_matched_component)
 
     return updated_matched_component_list
