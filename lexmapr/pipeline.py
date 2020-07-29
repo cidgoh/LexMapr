@@ -273,7 +273,8 @@ def run(args):
             cleaned_sample_scientific_name = cleaned_sample
 
         fw.write("\n" + sample_id + "\t" + original_sample + "\t" + cleaned_sample + "\t"
-                 + cleaned_sample_scientific_name + "\t" + str(matched_components)+"\t" + macro_status)
+                 + cleaned_sample_scientific_name + "\t" + str(matched_components) + "\t" 
+                 + macro_status)
 
         if args.full:
             fw.write("\t" + str(micro_status)+"\t" + str(sample_conversion_status))
