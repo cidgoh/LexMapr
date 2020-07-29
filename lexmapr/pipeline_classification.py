@@ -254,7 +254,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "nut" in ret and "seeds" in ret and len(ret) == 2:
         ret.remove("seeds")
     if "environment-water" in ret and "fish" in ret and len(ret) == 2:
-         ret.remove("environment-water")
+        ret.remove("environment-water")
 
     # Retains the specific (more granular) environmental classes
     if "environmental" in ret and ret.intersection(environmental_categories):
