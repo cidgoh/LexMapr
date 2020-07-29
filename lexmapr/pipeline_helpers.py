@@ -400,7 +400,7 @@ def get_matched_component_standardized(matched_component):
 
     """
     updated_matched_component_list = []
-    if len(matched_component)>0:
+    if len(matched_component) > 0:
         for item in matched_component:
             matched_component_item = str(item).split(":")
             matched_component_first = matched_component_item[0]
