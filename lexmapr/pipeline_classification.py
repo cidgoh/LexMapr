@@ -26,7 +26,7 @@ def customize_order_of_labels(ifsac_final_labels):
     revised_final_labels_list = []
     ifsac_final_labels_list = list(ifsac_final_labels)
     if ret.intersection(priority_listing_categories):
-        priority_category =  (ret.intersection(priority_listing_categories)).pop()
+        priority_category = (ret.intersection(priority_listing_categories)).pop()
         revised_final_labels_list.insert(0, str(priority_category))
         ifsac_final_labels_list.remove(str(priority_category))
     for item in sorted(ifsac_final_labels_list):
