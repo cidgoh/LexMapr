@@ -220,7 +220,6 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if not ret.intersection(animal_categories) and ("veterinary clinical/research" in ret):
         ret.add("other animal")
 
-
     # Retains the specific (more granular) animal classes
     if "mollusks" in ret and ret.intersection(mollusk_categories):
         ret.remove("mollusks")
