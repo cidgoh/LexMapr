@@ -170,7 +170,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("cow")
     if "beef" in ret and "fish" in ret and ("fillet" in sample or "filet" in sample):
         ret.remove("beef")
-    if "beef" in ret and ("veterinary clinical/research" in ret ):
+    if "beef" in ret and ("veterinary clinical/research" in ret):
         ret.remove("beef")
         ret.add("cow")
     if "oils" in ret and "in oil" in sample:
