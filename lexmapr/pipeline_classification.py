@@ -63,7 +63,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     # Caution: Rules are sequential - changing the order might change 
     # results.
     ret = set(ifsac_final_labels)
-    sample =  sample = helpers.punctuation_treatment(sample)
+    sample = helpers.punctuation_treatment(sample)
     sample_tokens = word_tokenize(sample)
     sample_tokens_set = set(sample_tokens)
 
