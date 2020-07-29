@@ -69,7 +69,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
 
     for label, refined_label in label_refinements.items():
         label_tokens = word_tokenize(label)
-        if not (set(label_tokens) - set(sample_tokens)) or re.search (r"\b"+label+r"\b",sample):
+        if not (set(label_tokens) - set(sample_tokens)) or re.search(r"\b"+label+r"\b", sample):
             ret.add(refined_label)
             break
 
