@@ -60,7 +60,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         resource
     :rtype: set
     """
-    # Caution: Rules are sequential - changing the order might change results
+    # Caution: Rules are sequential - changing the order might change 
+    # results.
     ret = set(ifsac_final_labels)
     sample =  sample = helpers.punctuation_treatment(sample)
     sample_tokens = word_tokenize(sample)
