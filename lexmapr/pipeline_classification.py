@@ -301,8 +301,9 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         and not ("swab" in sample or "environmental" in sample):
         ret.remove("environmental")
 
-    food_anatomical_parts = {'heart','liver','lung', 'leg', 'shell-on','shell', 'soft shell', 'tail','hlso','shellon',
-                             'beef','pork','meat','porcine','shell on'}
+    food_anatomical_parts = {'heart', 'liver', 'lung', 'leg', 'shell-on', 'shell', 'soft shell',
+                             'tail', 'hlso', 'shellon', 'beef', 'pork', 'meat', 'porcine',
+                             'shell on'}
 
     body_part_for_food_animal_categories = aquatic_animal_categories | shellfish_categories \
                                            | poultry_categories |{"cow"}
