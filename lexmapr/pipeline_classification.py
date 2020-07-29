@@ -138,7 +138,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("clinical/research")
     if "clinical/research" in ret and (ret.intersection(plant_categories)
                                        or ret.intersection(animal_categories)):
-        if ("shell" in sample or  "shell on" in sample or "shellon" in sample):
+        if "shell" in sample or "shell on" in sample or "shellon" in sample:
             ret.remove("clinical/research")
     if "clinical/research" in ret and ret.intersection(veterinary_categories):
         ret.remove("clinical/research")
