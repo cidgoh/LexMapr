@@ -277,7 +277,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "other meat" in ret and "other animal" in ret:
         ret.remove("other animal")
     if "meat" in ret and ret.intersection(animal_categories):
-        if len(ret) == 3 and "multi-ingredient" in ret :
+        if len(ret) == 3 and "multi-ingredient" in ret:
             ret.remove("multi-ingredient")
             ret.remove("meat")
         else:
