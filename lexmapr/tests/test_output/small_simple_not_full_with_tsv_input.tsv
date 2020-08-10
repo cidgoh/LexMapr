@@ -1,6 +1,6 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components
-small_simple1	Chicken Breast	chicken breast	['breast:uberon_0000310']
-small_simple2	Baked Potato	baked potato	[]
-small_simple3	Canned Corn	canned corn	[]
-small_simple4	Frozen Yogurt	frozen yogurt	['frozen:pato_0001985']
-small_simple5	Apple Pie	apple pie	[]
+Sample_Id	Sample_Desc	Processed_Sample	Processed_Sample (With Scientific Name)	Matched_Components	Match_Status(Macro Level)
+small_simple1	Chicken Breast	chicken breast	chicken {gallus gallus} breast	['breast:UBERON_0000310']	Component Match
+small_simple2	Baked Potato	baked potato	baked potato {solanum tuberosum}	[]	No Match
+small_simple3	Canned Corn	canned corn	canned corn {zea mays subsp. mays}	[]	No Match
+small_simple4	Frozen Yogurt	frozen yogurt	frozen yogurt	['frozen:PATO_0001985']	Component Match
+small_simple5	Apple Pie	apple pie	apple {malus domestica} pie	[]	No Match

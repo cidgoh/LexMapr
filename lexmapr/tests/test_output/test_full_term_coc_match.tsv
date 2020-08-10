@@ -1,7 +1,7 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	Baked Potato	baked potato	[]	No Match	[]
-small_simple2	Chicken Pie	chicken pie	[]	No Match	[]
-small_simple3	ameiurus catus	ameiurus catus	['ameiurus catus:ncbitaxon_66911']	Full Term Match	['A Direct Match']
-small_simple4	Baked Potatoes	baked potato	[]	No Match	['Inflection (Plural) Treatment: potatoes']
-small_simple5	Chicken Pie's	chicken pie	[]	No Match	[]
-small_simple6	ameiurus. catus	ameiurus catus	['ameiurus catus:ncbitaxon_66911']	Full Term Match	['Used Cleaned Sample', 'A Direct Match']
+Sample_Id	Sample_Desc	Processed_Sample	Processed_Sample (With Scientific Name)	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)	Sample_Transformations
+small_simple1	Baked Potato	baked potato	baked potato {solanum tuberosum}	[]	No Match	[]	{}
+small_simple2	Chicken Pie	chicken pie	chicken {gallus gallus} pie	[]	No Match	[]	{}
+small_simple3	ameiurus catus	ameiurus catus	ameiurus catus	['ameiurus catus:NCBITAXON_66911']	Full Term Match	['A Direct Match']	{}
+small_simple4	Baked Potatoes	baked potato	baked potato {solanum tuberosum}	[]	No Match	['Inflection (Plural) Treatment: potatoes']	{'potatoes': 'potato'}
+small_simple5	Chicken Pie's	chicken pie	chicken {gallus gallus} pie	[]	No Match	[]	{}
+small_simple6	ameiurus. catus	ameiurus catus	ameiurus catus	['ameiurus catus:NCBITAXON_66911']	Full Term Match	['Used Cleaned Sample', 'A Direct Match']	{}

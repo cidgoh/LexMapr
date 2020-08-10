@@ -1,10 +1,10 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	avocado	avocado	[]	No Match	[]
-small_simple2	Baked Potato	baked potato	[]	No Match	[]
-small_simple3	avocaco	avocado	[]	No Match	['Spelling Correction Treatment: avocado']
-small_simple4	desicated avocaco	desiccated avocado	[]	No Match	['Spelling Correction Treatment: desiccated', 'Spelling Correction Treatment: avocado']
-small_simple5	desiccated avocaco	desiccated avocado	[]	No Match	['Spelling Correction Treatment: avocado']
-small_simple6	laboratroy	laboratory	[]	No Match	['Spelling Correction Treatment: laboratory']
-small_simple7	enlish laboratroy	english, enlist laboratory	[]	No Match	['Spelling Correction Treatment: english, enlist', 'Spelling Correction Treatment: laboratory']
-small_simple8	Pie enlish	pie english, enlist	[]	No Match	['Spelling Correction Treatment: english, enlist']
-small_simple9	enlish avocaco	english, enlist avocado	[]	No Match	['Spelling Correction Treatment: english, enlist', 'Spelling Correction Treatment: avocado']
+Sample_Id	Sample_Desc	Processed_Sample	Processed_Sample (With Scientific Name)	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)	Sample_Transformations
+small_simple1	avocado	avocado	avocado {persea americana}	[]	No Match	[]	{}
+small_simple2	Baked Potato	baked potato	baked potato {solanum tuberosum}	[]	No Match	[]	{}
+small_simple3	avocaco	avocado	avocado {persea americana}	[]	No Match	['Spelling Correction Treatment: avocado']	{'avocaco': 'avocado'}
+small_simple4	desicated avocaco	desiccated avocado	desiccated avocado {persea americana}	[]	No Match	['Spelling Correction Treatment: desiccated', 'Spelling Correction Treatment: avocado']	{'desicated': 'desiccated', 'avocaco': 'avocado'}
+small_simple5	desiccated avocaco	desiccated avocado	desiccated avocado {persea americana}	[]	No Match	['Spelling Correction Treatment: avocado']	{'avocaco': 'avocado'}
+small_simple6	laboratroy	laboratory	laboratory	[]	No Match	['Spelling Correction Treatment: laboratory']	{'laboratroy': 'laboratory'}
+small_simple7	enlish laboratroy	english, enlist laboratory	english, enlist laboratory	[]	No Match	['Spelling Correction Treatment: english, enlist', 'Spelling Correction Treatment: laboratory']	{'enlish': 'english, enlist', 'laboratroy': 'laboratory'}
+small_simple8	Pie enlish	pie english, enlist	pie english, enlist	[]	No Match	['Spelling Correction Treatment: english, enlist']	{'enlish': 'english, enlist'}
+small_simple9	enlish avocaco	english, enlist avocado	english, enlist avocado {persea americana}	[]	No Match	['Spelling Correction Treatment: english, enlist', 'Spelling Correction Treatment: avocado']	{'enlish': 'english, enlist', 'avocaco': 'avocado'}
