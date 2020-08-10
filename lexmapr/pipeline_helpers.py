@@ -83,7 +83,7 @@ def abbreviation_normalization_phrase(
     :rtype: str
     """
 
-    if (phrase in lookup_table["abbreviations"].keys()):
+    if phrase in lookup_table["abbreviations"]:
         phrase = lookup_table["abbreviations"][phrase]
         micro_status.append("Abbreviation-Acronym Treatment: " + phrase)
     return phrase
