@@ -33,7 +33,7 @@ def singularize_token(token, lookup_table, micro_status):
         if token.endswith(char):
             lemma = token
 
-    if (token != lemma):  # if inflection makes some changes in lemma
+    if token != lemma:  # if inflection makes some changes in lemma
         micro_status.append("Inflection (Plural) Treatment: " + token)
 
     return lemma
