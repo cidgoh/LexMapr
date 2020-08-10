@@ -1,18 +1,20 @@
-"""Functions used for bucket classification."""
+"""Functions used for third party classification using ontology-based buckets."""
 
 from inflection import singularize
 from nltk import word_tokenize
 import re
 
-from lexmapr.pipeline_helpers import get_term_parent_hierarchies
 import lexmapr.pipeline_helpers as helpers
 
 
 def customize_order_of_labels(ifsac_final_labels):
     """Get the final labels in a customized order.
+
     :param set ifsac_final_labels: the final labels set to be ordered
+    :return: returned list of labels in cutomized order
     :rtype: list
     """
+
     ret = set(ifsac_final_labels)
     priority_listing_categories = {"multi-ingredient", "veterinary clinical/research",
                                    "environmental", "environmental-water", "environmental-farm",
@@ -37,9 +39,12 @@ def customize_order_of_labels(ifsac_final_labels):
 
 def decode_multi_class_labels(ifsac_final_labels):
     """Decodes the multi class label values in bucket labels.
-    :param set ifsac_final_labels: the final labels set to be ordered
+
+    :param set ifsac_final_labels: the final labels set to be decoded
+    :return: returned list of labels after decoding
     :rtype: list
     """
+
     revised_final_labels = set()
     for label in ifsac_final_labels:
         if ";" in label:
@@ -52,14 +57,18 @@ def decode_multi_class_labels(ifsac_final_labels):
     return revised_final_labels_list
 
 
-def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
-    """Get the refined final labels after application of customized rules.
+def refine_ifsac_final_labels(sample, ifsac_final_labels,
+                              label_refinements):
+    """Gets refined final labels after application of customized rules.
+
     :param str sample: sample
     :param set ifsac_final_labels: the final labels set
     :param dict label_refinements: the dictionary of label refinement 
         resource
+    :return set of refined final labels
     :rtype: set
     """
+
     # Caution: Rules are sequential - changing the order might change 
     # results.
     ret = set(ifsac_final_labels)
@@ -73,14 +82,13 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
             ret.add(refined_label)
             break
 
-    # Definining different groups/ categories
+    # Defines different groups/ categories of classes
     specific_meat_categories = {"pork", "chicken", "beef", "fish", "game", "poultry", "turkey"}
     mollusk_categories = {"mollusks (non-bi-valve)", "mollusks (bi-valve)"}
     shellfish_categories = {"crustaceans", "mollusks"} | mollusk_categories
     aquatic_animal_categories = {"fish", "other aquatic animals"} | shellfish_categories
     poultry_categories = {"other poultry", "chicken", "turkey"}
     avian_categories = {"other poultry", "game", "poultry"} | poultry_categories
-
     animal_categories = {"human",  "companion animal", "aquatic animals", "wild animal",
                          "beef", "pork", "other meat", "cow", "pig"}
     animal_categories |= avian_categories | aquatic_animal_categories | {"other animal"}
@@ -109,7 +117,6 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     plant_categories = {"oils", "vegetables", "fruits", "grains", "beans", "nuts",
                         "seeds"}
     plant_categories |= vegetable_categories | fruit_categories
-
     other_plant_food_category = {"other (food additive)", "dietary supplement", 
                                  "other (sweetener)", "other (flavoring and seasoning", 
                                  "other (confectionary)"}
@@ -122,8 +129,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
 
     # Deals with "clinical/research" class
     if "clinical/research" in ret \
-        and ret.intersection(plant_categories | other_plant_food_category) \
-        and not ("swab" in sample or "clinical" in sample):
+            and ret.intersection(plant_categories | other_plant_food_category) \
+            and not ("swab" in sample or "clinical" in sample):
         ret.remove("clinical/research")
     if "clinical/research" in ret and "swab sub" in sample:
         ret.clear()
@@ -132,7 +139,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("clinical/research")
         ret.add("environmental")
     if "clinical/research" in ret and "environmental" in ret \
-            and not ("tissue" in sample or "biologicl" in sample):
+            and not ("tissue" in sample or "biological" in sample):
         ret.remove("clinical/research")
     if "clinical/research" in ret and ret.intersection(environmental_categories):
         ret.remove("clinical/research")
@@ -146,11 +153,12 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "veterinary clinical/research" in ret and "animal" in ret:
         ret.remove("animal")
 
+    # Converts animal not defined to other animal, if not general animal class
     if "animal" in ret and sample != "animal":
         ret.remove("animal")
         ret.add("other animal")
 
-    # Dealing with "dairy", "cow" and "beef" cases
+    # Deals with "dairy", "cow" and "beef" cases
     if "dairy" in ret and "cow" in ret:
         ret.remove("cow")
     if "beef" in ret and "dairy" in ret and "milk" in sample:
@@ -162,11 +170,11 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
             ret.remove("cow")
             ret.add("beef")
     pork_keywords = ["raw pig", "raw swine", "meat", "pork", "porcine"]
-    for entry in beef_keywords:
+    for entry in pork_keywords:
         if entry in sample and "pig" in ret:
             ret.remove("pig")
             ret.add("pork")
-    if "cow" in ret and "beef" in ret:  #REMOVE
+    if "cow" in ret and "beef" in ret:
         ret.remove("cow")
     if "beef" in ret and "fish" in ret and ("fillet" in sample or "filet" in sample):
         ret.remove("beef")
@@ -178,7 +186,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "other (sweetener)" in ret and "sugar free" in sample:
         ret.remove("other (sweetener)")
 
-    # Dealing with "fish", "shellfish" and "eggs" cases
+    # Deals with "fish", "shellfish" and "eggs" cases
     if "shellfish" in ret and "fish" in ret:
         ret.remove("fish")
     if "fish" in ret and "eggs" in ret:
@@ -192,7 +200,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "poultry" in ret and "eggs" in ret:
         ret.remove("poultry")
 
-    # Dealing with "pig", "pork" and "meat" cases
+    # Deals with "pig", "pork" and "meat" cases
     if ("pork" in ret or "pork" in sample) and ("pig" in ret):
         ret.remove("pig")
         ret.add("pork")
@@ -207,7 +215,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if ret.intersection(specific_meat_categories) and "meat" in ret:
         ret.remove("meat")
 
-    #  when clinical/research is there and meats are there
+    # Deals with cases when clinical/research is there and meats are there
     if not ret.intersection(animal_categories) and "other meat" in ret \
             and ("veterinary clinical/research" in ret or "clinical/research" in ret):
         ret.remove("other meat")
@@ -239,6 +247,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("aquatic animals")
     if ("engineered seafood" in ret or "companion animal" in ret) and "other animal" in ret:
         ret.remove("other animal")
+
     # Retains the specific (more granular) plant classes
     if "root/underground" in ret and ret.intersection(root_underground_categories):
         ret.remove("root/underground")
@@ -251,6 +260,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "plant" in ret and ret.intersection(plant_categories):
         ret.remove("plant")
 
+    # Deals with "nut", and "seeds", and "environment-water" and "fish" case
     if "nut" in ret and "seeds" in ret and len(ret) == 2:
         ret.remove("seeds")
     if "environment-water" in ret and "fish" in ret and len(ret) == 2:
@@ -265,15 +275,17 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
         ret.remove("environmental-factory/production facility")
     if "environmental-abattoir" in ret and "environmental-factory/production facility" in ret:
         ret.remove("environmental-factory/production facility")
-
     exclusions = {
         'clinical/research', 'veterinary clinical/research', 'animal feed', 'human',
         'environmental'
     }
+
+    # Assigns multi-ingredient to the cases where multiple food ingredients have been tagged
     if not (ret.intersection(exclusions) or ret.intersection(environmental_categories)) \
             and len(ret) >= 3:
-        ret.add("multi-ingredient")   # **********
+        ret.add("multi-ingredient")   # To be revisted and revised as per evaluation
 
+    # Deals with some specific cases
     if "other meat" in ret and "other animal" in ret:
         ret.remove("other animal")
     if "meat" in ret and ret.intersection(animal_categories):
@@ -292,7 +304,7 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
                           or "veterinary clinical/research" in ret):
         ret.remove("food")
 
-    # Dealing with addtional/unique cases
+    # Deals with addtional/unique cases
     if "food" in ret and "environmental" in ret and "leaf" in sample:
         ret.remove("environmental")
     if "environmental-animal housing" in ret and "finished" in sample:
@@ -304,14 +316,14 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
     if "eggs" in ret and "veterinary clinical/research" in ret:
         ret.remove("veterinary clinical/research")
     if "environmental" in ret \
-        and ("multi-ingredient" in ret or ret.intersection(plant_categories)) 
-        and not ("swab" in sample or "environmental" in sample):
+            and ("multi-ingredient" in ret or ret.intersection(plant_categories)) \
+            and not ("swab" in sample or "environmental" in sample):
         ret.remove("environmental")
 
+    # Deals with body parts that are food for specific animal categories and not clinical/research
     food_anatomical_parts = {'heart', 'liver', 'lung', 'leg', 'shell-on', 'shell', 'soft shell',
                              'tail', 'hlso', 'shellon', 'beef', 'pork', 'meat', 'porcine',
                              'shell on'}
-
     body_part_for_food_animal_categories = \
         aquatic_animal_categories | shellfish_categories | poultry_categories | {"cow"}
     if "veterinary clinical/research" in ret \
@@ -319,17 +331,20 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels, label_refinements):
             and sample_tokens_set.intersection(food_anatomical_parts) and "swab" not in sample:
         ret.remove("veterinary clinical/research")
 
+    # Deals with very specific disambiguation tokens
     disambiguation_words = {'ground', 'scraps', 'cut', 'smoke', 'moon', 'plain'}
     if "environmental" in ret \
             and (ret.intersection(animal_categories) or ret.intersection(plant_categories) 
                  or "dairy" in ret) \
             and sample_tokens_set.intersection(disambiguation_words):
         ret.remove("environmental")
+
     # Retains the general class (only animal feed)
     if "animal feed" in ret:
         ret.clear()
         ret.add("animal feed")
 
+    # Deals with multi-ingredient case
     if ("multi-ingredient" in ret or "food supplement" in ret) and "food" in ret:
         ret.remove("food")
     if "food" in ret and len(ret) < 2:
@@ -372,7 +387,7 @@ def classify_sample(sample, matched_terms_with_ids, lookup_table, classification
     if matched_terms_with_ids:
         for matched_term_with_id in matched_terms_with_ids:
             [_, term_id] = matched_term_with_id.split(":", 1)
-            matched_term_hierarchies = get_term_parent_hierarchies(term_id, lookup_table)
+            matched_term_hierarchies = helpers.get_term_parent_hierarchies(term_id, lookup_table)
 
             for matched_term_hierarchy in matched_term_hierarchies:
                 lexmapr_hierarchy_bucket = \
