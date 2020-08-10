@@ -216,7 +216,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels,
     if ret.intersection(specific_meat_categories) and "meat" in ret:
         ret.remove("meat")
 
-    # Deals with cases when clinical/research is there and meats are there
+    # Deals with cases when clinical/research is there and meats are 
+    # there.
     if not ret.intersection(animal_categories) and "other meat" in ret \
             and ("veterinary clinical/research" in ret or "clinical/research" in ret):
         ret.remove("other meat")
