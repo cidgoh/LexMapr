@@ -49,7 +49,7 @@ def spelling_correction(token, lookup_table, micro_status):
     :rtype: str
     """
 
-    if (token in lookup_table["spelling_mistakes"].keys()):
+    if token in lookup_table["spelling_mistakes"]:
         token = lookup_table["spelling_mistakes"][token]
         micro_status.append("Spelling Correction Treatment: " + token)
     return token
