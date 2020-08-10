@@ -283,7 +283,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels,
         'environmental'
     }
 
-    # Assigns multi-ingredient to the cases where multiple food ingredients have been tagged
+    # Assigns multi-ingredient to the cases where multiple food 
+    # ingredients have been tagged.
     if not (ret.intersection(exclusions) or ret.intersection(environmental_categories)) \
             and len(ret) >= 3:
         ret.add("multi-ingredient")   # To be revisted and revised as per evaluation
