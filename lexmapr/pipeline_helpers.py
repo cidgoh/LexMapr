@@ -118,7 +118,7 @@ def non_English_normalization_phrase(
     :rtype: str
     """
 
-    if (phrase in lookup_table["non_english_words"].keys()):
+    if phrase in lookup_table["non_english_words"]:
         phrase = lookup_table["non_english_words"][phrase]
         micro_status.append("Non English Language Words Treatment: "
                             + phrase)
