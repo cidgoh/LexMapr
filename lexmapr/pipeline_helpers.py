@@ -100,7 +100,7 @@ def non_English_normalization_token(
     :rtype: str
     """
 
-    if (token in lookup_table["non_english_words"].keys()):
+    if token in lookup_table["non_english_words"]:
         token = lookup_table["non_english_words"][token]
         micro_status.append("Non English Language Words Treatment: "
                             + token)
