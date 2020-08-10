@@ -270,7 +270,8 @@ def run(args):
         # Write to row
         matched_components = helpers.get_matched_component_standardized(matched_components)
 
-        # Get post-processed cleaned sample with embedded scientific name
+        # Get post-processed cleaned sample with embedded scientific 
+        # name.
         cleaned_sample_scientific_name = helpers.refine_sample_sc_name(
             sample, cleaned_sample, cleaned_sample_scientific_name,
             third_party_classification)
