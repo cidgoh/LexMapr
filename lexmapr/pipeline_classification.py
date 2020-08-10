@@ -1,4 +1,4 @@
-"""Functions used for third party classification using ontology-based buckets."""
+"""3rd-party classification functions using ontology-based buckets."""
 
 from inflection import singularize
 from nltk import word_tokenize
