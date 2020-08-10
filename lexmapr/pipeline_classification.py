@@ -262,7 +262,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels,
     if "plant" in ret and ret.intersection(plant_categories):
         ret.remove("plant")
 
-    # Deals with "nut", and "seeds", and "environment-water" and "fish" case
+    # Deals with "nut", and "seeds", and "environment-water" and "fish" 
+    # case.
     if "nut" in ret and "seeds" in ret and len(ret) == 2:
         ret.remove("seeds")
     if "environment-water" in ret and "fish" in ret and len(ret) == 2:
