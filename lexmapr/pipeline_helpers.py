@@ -66,7 +66,7 @@ def abbreviation_normalization_token(
     :rtype: str
     """
 
-    if (token in lookup_table["abbreviations"].keys()):
+    if token in lookup_table["abbreviations"]:
         token = lookup_table["abbreviations"][token]
         micro_status.append("Abbreviation-Acronym Treatment: " + token)
     return token
