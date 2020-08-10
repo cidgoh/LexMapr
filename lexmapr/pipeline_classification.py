@@ -153,7 +153,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels,
     if "veterinary clinical/research" in ret and "animal" in ret:
         ret.remove("animal")
 
-    # Converts animal not defined to other animal, if not general animal class
+    # Converts animal not defined to other animal, if not general 
+    # animal class.
     if "animal" in ret and sample != "animal":
         ret.remove("animal")
         ret.add("other animal")
