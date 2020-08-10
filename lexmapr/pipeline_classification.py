@@ -299,7 +299,8 @@ def refine_ifsac_final_labels(sample, ifsac_final_labels,
         else:
             ret.remove("meat")
 
-    # Retains the specific (more granular) classes and removing the general "food" class
+    # Retains the specific (more granular) classes and removing the 
+    # general "food" class.
     if "food" in ret and ret.intersection(animal_categories | plant_categories 
                                           | other_animal_food_category | other_plant_food_category 
                                           | {"plant", "animal"}):
