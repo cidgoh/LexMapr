@@ -1,6 +1,6 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	Breast	breast	['breast:uberon_0000310']	Full Term Match	['A Direct Match']
-small_simple2	Baked Potato	baked potato	[]	No Match	[]
-small_simple3	aachar	indian pickle	['indian:ancestro_0487']	Component Match	['Non English Language Words Treatment: indian pickle', "{indian: ['A Direct Match']}"]
-small_simple4	aam aachar	mango indian pickle	['indian:ancestro_0487']	Component Match	['Non English Language Words Treatment: mango', 'Non English Language Words Treatment: indian pickle', "{indian: ['A Direct Match']}"]
-small_simple5	aam apple	mango apple	[]	No Match	['Non English Language Words Treatment: mango']
+Sample_Id	Sample_Desc	Processed_Sample	Processed_Sample (With Scientific Name)	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)	Sample_Transformations
+small_simple1	Breast	breast	breast	['breast:UBERON_0000310']	Full Term Match	['A Direct Match']	{}
+small_simple2	Baked Potato	baked potato	baked potato {solanum tuberosum}	[]	No Match	[]	{}
+small_simple3	aachar	indian pickle	indian pickle	['indian:ANCESTRO_0487']	Component Match	['Non English Language Words Treatment: indian pickle', "{indian: ['A Direct Match']}"]	{'aachar': 'indian pickle'}
+small_simple4	aam aachar	mango indian pickle	mango {mangifera indica} indian pickle	['indian:ANCESTRO_0487']	Component Match	['Non English Language Words Treatment: mango', 'Non English Language Words Treatment: indian pickle', "{indian: ['A Direct Match']}"]	{'aam': 'mango', 'aachar': 'indian pickle'}
+small_simple5	aam apple	mango apple	mango {mangifera indica} apple {malus domestica}	[]	No Match	['Non English Language Words Treatment: mango']	{'aam': 'mango'}

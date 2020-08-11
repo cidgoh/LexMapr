@@ -132,8 +132,8 @@ class TestPipelineHelpers(unittest.TestCase):
         # Multi-token input string with number and punctuation
         self.assertEqual(pipeline_helpers.punctuation_treatment("a-b -1"), "a b 1")
 
-    def test_retainedPhrase(self):
-        """Tests retainedPhrase.
+    def test_retain_phrase(self):
+        """Tests retain_phrase.
 
         TODO:
             * Cannot test empty term list, because retainedPhrase
@@ -163,43 +163,43 @@ class TestPipelineHelpers(unittest.TestCase):
         """
         # Single-term list
         self.assertCountEqual(
-            pipeline_helpers.retainedPhrase(['foo:bar']),
+            pipeline_helpers.retain_phrase(['foo:bar']),
             ["foo:bar"])
         # Multi-term list
         self.assertCountEqual(
-            pipeline_helpers.retainedPhrase(['foo:bar', 'hello:world']),
+            pipeline_helpers.retain_phrase(['foo:bar', 'hello:world']),
             ["foo:bar", "hello:world"])
         # Multi-term list with "="
         self.assertCountEqual(
-            pipeline_helpers.retainedPhrase(['foo:b=ar', 'he=llo:world']),
-            ["foo:b=ar", "he,llo:world"])
+            pipeline_helpers.retain_phrase(['foo:b=ar', 'he=llo:world']),
+            ["foo:b=ar", "he=llo:world"])
         # Key substring of a key
         self.assertCountEqual(
-            pipeline_helpers.retainedPhrase(['foo:bar', 'foofoo:bar']),
+            pipeline_helpers.retain_phrase(['foo:bar', 'foofoo:bar']),
             ["foofoo:bar"])
         # Key substring of a compound key (multi-word)
         self.assertCountEqual(
-            pipeline_helpers.retainedPhrase(['foo:bar', 'foo bar:bar']),
+            pipeline_helpers.retain_phrase(['foo:bar', 'foo bar:bar']),
             ["foo bar:bar"])
         # Compound key substring of a compound key
         self.assertCountEqual(
-            pipeline_helpers.retainedPhrase(['foo bar hello:world', 'foo bar:bar']),
+            pipeline_helpers.retain_phrase(['foo bar hello:world', 'foo bar:bar']),
             ["foo bar hello:world"])
         # Compound key overlapping, but not substring of a compound key
         self.assertCountEqual(
-            pipeline_helpers.retainedPhrase(['foo hello:world', 'foo bar:bar']),
+            pipeline_helpers.retain_phrase(['foo hello:world', 'foo bar:bar']),
             ["foo hello:world", "foo bar:bar"])
         # Compound key substring of a compound key (no differing words)
         self.assertEqual(
-            pipeline_helpers.retainedPhrase(['foo bar:bar', 'foo bar bar:bar']),
+            pipeline_helpers.retain_phrase(['foo bar:bar', 'foo bar bar:bar']),
             [])
         # Identical keys, but different values
         self.assertEqual(
-            pipeline_helpers.retainedPhrase(['foo:bar', 'foo:foo']),
-            ["foo:bar", "foo:foo"])
+            pipeline_helpers.retain_phrase(['foo:bar', 'foo:foo']),
+            ["foo:foo"])
         self.assertEqual(
-            pipeline_helpers.retainedPhrase(['foo bar:bar', 'foo bar:foo']),
-            ["foo bar:bar", "foo bar:foo"])
+            pipeline_helpers.retain_phrase(['foo bar:bar', 'foo bar:foo']),
+            ["foo bar:foo"])
 
     def test_merge_lookup_tables(self):
         self.assertRaises(ValueError, pipeline_helpers.merge_lookup_tables, {}, {"a": {}})
@@ -707,8 +707,6 @@ class TestOntologyMapping(unittest.TestCase):
         ontology_lookup_table = self.get_ontology_lookup_table("lookup_bfo_varying_synonyms.json")
 
         expected_synonyms = {
-            "temporal instant.": "zero dimensional temporal region",
-            "temporal instant..": "zero dimensional temporal region",
             "lonely dimensional continuant fiat boundary.":
                 "two dimensional continuant fiat boundary",
             "lonely dimensional continuant fiat boundary..":

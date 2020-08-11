@@ -7,7 +7,7 @@ food material,FOODON_00002403,(Not-IFSAC) Food Material,,numerical data value,OB
 anatomical entity,UBERON_0001062,(Not-IFSAC) Anatomical Entity,,food product by consumer group,,,,,,,,,,
 organism,OBI_0100026,(Not-IFSAC) Organism,,organism kingdom,,"bacteria, fungi etc...",,,,,,,,
 quality,PATO_0000001 ,(Not-IFSAC) Quality,,organism typing,"(serovar, antogen etc.)",,,,,,,,,400
-process,BFO_0000015 ,(Not-IFSAC) Process,,food consumer group,"(animal feed, human feed)",,,,,,,,,
+process,BFO_0000015,(Not-IFSAC) Process,,food consumer group,"(animal feed, human feed)",,,,,,,,,
 environmental material,ENVO_00010483,(Not-IFSAC) Environmental Material,,,,,,,,,,,,
 food product by consumer group,FOODON_00002147,(Not-IFSAC) Food Product - By Consumer Group,,,,,,,,,,,,
 food material (vide food product type),FOODON_03400361,(Not-IFSAC) Food Material,,,,,,,,,,,,

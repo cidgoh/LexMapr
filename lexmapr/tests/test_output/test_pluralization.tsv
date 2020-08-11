@@ -1,10 +1,10 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	Svecia	svecia	[]	No Match	[]
-small_simple2	Baked Potato	baked potato	[]	No Match	[]
-small_simple3	Ricotta Cheese	ricotta cheese	[]	No Match	[]
-small_simple4	Noodles	noodle	[]	No Match	['Inflection (Plural) Treatment: noodles']
-small_simple5	Apple Pie	apple pie	[]	No Match	[]
-small_simple6	Hummus	hummus	[]	No Match	[]
-small_simple7	Frosted Cornflakes	frosted cornflakes	[]	No Match	[]
-small_simple8	Mashed potatoes	mashed potato	[]	No Match	['Inflection (Plural) Treatment: potatoes']
-small_simple9	Apples	apple	[]	No Match	['Inflection (Plural) Treatment: apples']
+Sample_Id	Sample_Desc	Processed_Sample	Processed_Sample (With Scientific Name)	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)	Sample_Transformations
+small_simple1	Svecia	svecia	svecia	[]	No Match	[]	{}
+small_simple2	Baked Potato	baked potato	baked potato {solanum tuberosum}	[]	No Match	[]	{}
+small_simple3	Ricotta Cheese	ricotta cheese	ricotta cheese	[]	No Match	[]	{}
+small_simple4	Noodles	noodle	noodle	[]	No Match	['Inflection (Plural) Treatment: noodles']	{'noodles': 'noodle'}
+small_simple5	Apple Pie	apple pie	apple {malus domestica} pie	[]	No Match	[]	{}
+small_simple6	Hummus	hummus	hummus	[]	No Match	[]	{}
+small_simple7	Frosted Cornflakes	frosted cornflakes	frosted cornflakes	[]	No Match	[]	{}
+small_simple8	Mashed potatoes	mashed potato	mashed potato {solanum tuberosum}	[]	No Match	['Inflection (Plural) Treatment: potatoes']	{'potatoes': 'potato'}
+small_simple9	Apples	apple	apple {malus domestica}	[]	No Match	['Inflection (Plural) Treatment: apples']	{'apples': 'apple'}

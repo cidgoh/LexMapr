@@ -1,10 +1,10 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	Breast	breast	['breast:uberon_0000310']	Full Term Match	['A Direct Match']
-small_simple2	Baked Potato	baked potato	[]	No Match	[]
-small_simple3	fld	fluid	[]	No Match	['Abbreviation-Acronym Treatment: fluid']
-small_simple4	froz fld	frozen fluid	['frozen:pato_0001985']	Component Match	['Abbreviation-Acronym Treatment: frozen', 'Abbreviation-Acronym Treatment: fluid', "{frozen: ['A Direct Match']}"]
-small_simple5	fld apple	fluid apple	[]	No Match	['Abbreviation-Acronym Treatment: fluid']
-small_simple6	csf	cerebrospinal fluid	['cerebrospinal fluid:envo_02000029']	Full Term Match	['Used Cleaned Sample', 'Abbreviation-Acronym Treatment: cerebrospinal fluid', 'A Direct Match']
-small_simple7	csf f	cerebrospinal fluid fahrenheit	['cerebrospinal fluid:envo_02000029']	Component Match	['Abbreviation-Acronym Treatment: cerebrospinal fluid', 'Abbreviation-Acronym Treatment: fahrenheit', "{cerebrospinal fluid: ['A Direct Match']}"]
-small_simple8	Pie csf	pie cerebrospinal fluid	['cerebrospinal fluid:envo_02000029']	Component Match	['Abbreviation-Acronym Treatment: cerebrospinal fluid', "{cerebrospinal fluid: ['A Direct Match']}"]
-small_simple9	csf fld	cerebrospinal fluid	['cerebrospinal fluid:envo_02000029']	Full Term Match	['Used Cleaned Sample', 'Abbreviation-Acronym Treatment: cerebrospinal fluid', 'Abbreviation-Acronym Treatment: fluid', 'A Direct Match']
+Sample_Id	Sample_Desc	Processed_Sample	Processed_Sample (With Scientific Name)	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)	Sample_Transformations
+small_simple1	Breast	breast	breast	['breast:UBERON_0000310']	Full Term Match	['A Direct Match']	{}
+small_simple2	Baked Potato	baked potato	baked potato {solanum tuberosum}	[]	No Match	[]	{}
+small_simple3	fld	fluid	fluid	[]	No Match	['Abbreviation-Acronym Treatment: fluid']	{'fld': 'fluid'}
+small_simple4	froz fld	frozen fluid	frozen fluid	['frozen:PATO_0001985']	Component Match	['Abbreviation-Acronym Treatment: frozen', 'Abbreviation-Acronym Treatment: fluid', "{frozen: ['A Direct Match']}"]	{'froz': 'frozen', 'fld': 'fluid'}
+small_simple5	fld apple	fluid apple	fluid apple {malus domestica}	[]	No Match	['Abbreviation-Acronym Treatment: fluid']	{'fld': 'fluid'}
+small_simple6	csf	cerebrospinal fluid	cerebrospinal fluid	['cerebrospinal fluid:ENVO_02000029']	Full Term Match	['Used Cleaned Sample', 'Abbreviation-Acronym Treatment: cerebrospinal fluid', 'A Direct Match']	{'csf': 'cerebrospinal fluid'}
+small_simple7	csf f	cerebrospinal fluid fahrenheit	cerebrospinal fluid fahrenheit	['cerebrospinal fluid:ENVO_02000029']	Component Match	['Abbreviation-Acronym Treatment: cerebrospinal fluid', 'Abbreviation-Acronym Treatment: fahrenheit', "{cerebrospinal fluid: ['A Direct Match']}"]	{'csf': 'cerebrospinal fluid', 'f': 'fahrenheit'}
+small_simple8	Pie csf	pie cerebrospinal fluid	pie cerebrospinal fluid	['cerebrospinal fluid:ENVO_02000029']	Component Match	['Abbreviation-Acronym Treatment: cerebrospinal fluid', "{cerebrospinal fluid: ['A Direct Match']}"]	{'csf': 'cerebrospinal fluid'}
+small_simple9	csf fld	cerebrospinal fluid	cerebrospinal fluid	['cerebrospinal fluid:ENVO_02000029']	Full Term Match	['Used Cleaned Sample', 'Abbreviation-Acronym Treatment: cerebrospinal fluid', 'Abbreviation-Acronym Treatment: fluid', 'A Direct Match']	{'csf': 'cerebrospinal fluid', 'fld': 'fluid'}

@@ -1,233 +1,236 @@
-Bucket,IFSAC Label,,,,,
-production facility,Environmental-Factory/Production Facility/Abattoir,,,,,
-seagull,Game,,,,,
-whole pit fruit,Sub-Tropical Fruit,,,,,
-seasoning,Herbs,,,,,
-potato salad,Multi-Ingredient,,,,,
-salad sand,Multi-Ingredient,,,,,
-Alpaca,Other Animal,,,,,
-basil,Herbs,,,,,
-salmon,Fish,,,,,
-pepper,Seeded Vegetables (Solanaceous),,Confirm?,,,
-drag swab,Environmental,,Fx,,,
-chicken salad,Multi-Ingredient,,,,,
-nutritional powder,Multi-Ingredient,,,,,"Dog, Cat, Horse, Guinea Pig, Snake, Bird, Fish (only if indicated as a pet)"
-pistachio,Nuts,,,,,
-lasagna,Multi-Ingredient,,,,,
-sandwich,Multi-Ingredient,,,,,"Wild bird, Giraffe, Fish (but only if it's wild and there's no indication that's it's for food."
-ham,Pork,,,,,
-swabs,Clinical/Research,,,,,
-swab,Clinical/Research,,,,,
-nuts,Nuts,,,,,
-suet,Clinical/Research,,,,,
-rumen,Clinical/Research,,,,,
-bedding,Environmental,,,,,
-gallus,Chicken,,,,,
-chicken strip,Chicken,,,,,
-environment,Environmental,,,,,
-cecal,Clinical/Research,,,,,
-cecum,Clinical/Research,,,,,
-chicken manure,Clinical/Research,,,,,
-veggie booty,Vegetables,,,,,
-apple snail,Mollusks (non-bi-valve),,,,,
-fish,Fish,,,,,
-shellfish,Shellfish,,,,,
-sugar,Sugars,,,,,
-oil,Oils,,,,,
-vegetable,Vegetables,,,,,
-grain,Grains,,,,,
-bean,Beans,,,,,
-seed,Seeds,,,,,
-herb,Herbs,,,,,
-fruit,Fruits,,,,,
-clam,mollusks (bi-valve),,,,,
-mussel (food source),mollusks (bi-valve),,,,,
-oyster,mollusks (bi-valve),,,,,
-scallop,mollusks (bi-valve),,,,,
-abalone,mollusks (non-bi-valve),,,,,
-chitin,mollusks (non-bi-valve),,,,,
-limpet,mollusks (non-bi-valve),,,,,
-octopus,mollusks (non-bi-valve),,,,,
-snail,mollusks (non-bi-valve),,,,,
-squid,mollusks (non-bi-valve),,,,,
-whelk,mollusks (non-bi-valve),,,,,
-whale,Other Aquatic Animals,,,,,
-seal meat,Other Aquatic Animals,,,,,
-frog,Other Aquatic Animals,,,,,
-porcine,Pork,,,,,
-beef,Beef,,,,,
-pork,Pork,,,,,
-sheep,Other Animal,,,,,
-goat,Other Animal,,,,,
-lamb,Other Animal,,,,,
-horse,Other Animal,,,,,
-chicken,Chicken,,,,,
-turkey,Turkey,,,,,
-duck,Other Poultry,,,,,
-goose,Other Poultry,,,,,
-pigeon,Other Poultry,,,,,
-ratite,Other Poultry,,,,,
-antelope,Game,,,,,
-bison,Game,,,,,
-buffalo,Game,,,,,
-elk,Game,,,,,
-pheasant,Game,,,,,
-rabbit,Game,,,,,
-snake,Game,,,,,
-fungal,Fungi,,,,,
-sprout,Sprouts,Companion Animal?,,,,
-ginger,root/underground (other),,,,,
-taro,root/underground (other),,,,,
-solanaceous,Seeded Vegetables (Solanaceous),,,,,
-legume,seeded vegetables (legumes),,,,,
-okra vegetable,Seeded Vegetables (Other),,,,,
-tea,Herbs,,,,,
-leafy vegetable,Vegetable Row Crops (leafy),,,,,
-melon fruit,melon fruit,,,,,
-pomaceous fruit,Pome fruit,,,,,
-stone fruit,Stone Fruit,,,,,
-blackberry,Small Fruit,,,,,
-blueberry,Small Fruit,,,,,
-cranberry,Small Fruit,,,,,
-grape,Small Fruit,,,,,
-kiwifruit,Small Fruit,,,,,
-raspberry,Small Fruit,,,,,
-strawberry,Small Fruit,,,,,
-banana,Tropical Fruit,,,,,
-papaya,Tropical Fruit,,,,,
-mango,Tropical Fruit,,,,,
-pineapple,Tropical Fruit,,,,,
-avocado,Sub-Tropical Fruit,,,,,
-orange,Sub-Tropical Fruit,,,,,
-grapefruit,Sub-Tropical Fruit,,,,,
-lemon,Sub-Tropical Fruit,,,,,
-tangerine,Sub-Tropical Fruit,,,,,
-kumquat,Sub-Tropical Fruit,,,,,
-date,Sub-Tropical Fruit,,,,,
-fig,Sub-Tropical Fruit,,,,,
-lychee,Sub-Tropical Fruit,,,,,
-persimmon,Sub-Tropical Fruit,,,,,
-pomegranate,Sub-Tropical Fruit,,,,,
-flour,Grains,,,,,
-plant seed,Seeds,,,,,
-cereal,Grains,,Flour-based Products,,,
-plant stem,Vegetable Row Crops (Flower),,,,,
-peanut,Nuts,,,,,
-rice,Grains,,,,,
-spice,Herbs,,,,,
-peanut butter,Nuts,,,,,
-cow,Beef,,,,,
-corn,Seeded Vegetables (Other),,,,,
-crab,Crustaceans,,,,,
-zucchini,Seeded Vegetables (Vine-Grown),,,,,
-plant leaf,Vegetable Row Crops (leafy),,,,,
-spear vegetable,vegetable row crops (stem),,,,,
-sus scrofa,Pig,,,,,
-animal feed,Animal Feed,,,,,
-gallus gallus,Chicken,,,,,
-milk,Dairy,,,,,
-onion,root/underground (bulbs),,,,,
-garlic,root/underground (bulbs),,,,,
-potato,root/underground (tubers),,,,,
-carrot,root/underground (roots),,,,,
-beet,root/underground (roots),,,,,
-yam,root/underground (tubers),,,,,
-taro,root/underground (other),,,,,
-plant root,root/underground,,,,,
-reptile,Wild Animal,,,,,
-cow milk,Dairy,,,,,
-skim milk,Dairy,,Other Animal-Wild Animal,,,
-whole milk,Dairy,,,,,
-soft cheese,Dairy,,,,,
-hard cheese,Dairy,,,,,
-amphibian,Wild Animal,,,,,
-calf meat,Beef,,,,,
-fresh water,Environmental-Water,,Other Animal-Wild Animal,,,
-water,Environmental-Water,,,,,
-farm,Environmental-Farm,,,,,
-shrimp,Crustaceans,,,,,
-siluriform,fish,,,,,
-spice or herb,Herbs,,,,,
-restaurant,Environmental-Restaurant,,,,,
-shop,Environmental-Store,,,,,
-warehouse,Environmental-Warehouse,,,,,
-factory,Environmental-Factory,,,,,
-abattoir,Environmental-Abattoir,,,,,
-research facility,Environmental-ResearchFacility,,,,,
-pasture,Environmental-Pasture,,,,,
-chemical entity,Clinical/Research,,,,,
-construction,Environmental-Construction,,,,,
-environmental feature,Environmental,,,,,
-food product by consumer group,Food,,,,,
-anatomical entity,Clinical/Research,,,,,
-environmental material,Environmental,,,,,
-organism substance,Clinical/Research,,,,,
-avian food product,Avian,,,,,
-fungus,Fungi,,Check,,,
-nut producing plant,Nuts,,,,,
-cattle feed,Animal Feed,,,,,
-pet food,Animal Feed,,,,,
-poultry meal,Animal Feed,,,,,
-dog food,Animal Feed,,,,,
-dog treats,Animal Feed,,,,,
-cat food,Animal Feed,,,,,
-treat nibblets,Animal Feed,,,,,
-cat treats,Animal Feed,,,,,
-pet treats,Animal Feed,,,,,
-for dogs,Animal Feed,,,,,
-for cats,Animal Feed,,,,,
-for pets,Animal Feed,,,,,
-pet foods,Animal Feed,,,,,
-cat foods,Animal Feed,,,,,
-dog foods,Animal Feed,,,,,
-pet treat,Animal Feed,,,,,
-cat treat,Animal Feed,,,,,
-dog treat,Animal Feed,,,,,
-waste water,Environmental-Water,,,,,
-river water,Environmental-Water,,,,,
-caecum,Clinical/Research,,,,,
-threadfin,Fish,,,,,
-barramundi,Fish,,,,,
-bos taurus,Cow,,,,,
-tri-tip,Beef,,,,,
-blue cheese,Dairy,,,,,
-psittacine,Other Poultry,in SynLex,,,,
-Guinea Pig,Companion Animal,Link break,Obsolte Class,,,
-bird,Companion Animal,,,,,
-parrot,Companion Animal,,,,,
-wild bird,Wild Animal,,,,,
-wild fish,Wild Animal,,,,,
-pet fish,Companion Animal,,,,,
-girrafe,Wild Animal,,,,,
-mouse,Other Animal,,,,,
-rectal content,Clinical/Research,,,,,
-cow-lung,Clinical/Research,,,,,
-soynut butter,Beans,,,,,
-tote,Environmental,,,,,
-sponge,Environmental,,,,,
-toad,Other Aquatic Animals
-lettuce,Vegetable Row Crops (leafy),,,,,
-conveyor,Environmental,,,,,
-slicing machine,Environmental,,,,,
-Ukazi,Vegetable Row Crops (leafy),,,,,
-dairy,Dairy,,,,,
-meat,meat,,,,,
-poultry,Poultry,,,,,
-egg,Eggs,,,,,
-musculus,Other Animal,,,,,
-Coconut flakes,Nuts,,,,,
-cottonseed feed,Animal Feed,,,,,
-kafta,meat,,,,,
-lox,Fish,,,,,
-parakeet,Companion Animal,,,,,
-pine siskin,Companion Animal,,,,,
-pollack roe,Fish,,,,,
-rawhide,Animal,,,,,
-Salami,meat,,,,,
-sausage,meat,,,,,
-chili,Seeded Vegetables (Solanaceous),,,,,
-washroom,Environmental,,,,,
-vacuum cleaner,Environmental,,,,,
-deli case,Environmental,,,,,
-food mixture,Multi-Ingredient,,,,,
-freshwater,Environmental-Water,,,,,
+Bucket,IFSAC Label
+pogona,wild animal
+girrafe,wild animal
+veggie booty,vegetables
+ukazi,vegetable row crops (leafy)
+macdamia,nuts
+teriyaki,multi-ingredient
+taquitos,multi-ingredient
+sub,multi-ingredient
+dinner,multi-ingredient
+kafta,meat
+mucuna pruriens,herbs
+bitterleaf,herbs
+arnica,herbs
+siluriform,fish
+finfish,fish
+codfish,fish
+wheels,environmental-factory/production facility
+wheel,environmental-factory/production facility
+washroom,environmental-factory/production facility
+valf,environmental-factory/production facility
+utensils,environmental-factory/production facility
+utensil,environmental-factory/production facility
+ultrafiltration backflush,environmental-factory/production facility
+trolley,environmental-factory/production facility
+tray,environmental-factory/production facility
+transport rack,environmental-factory/production facility
+traffic pathway,environmental-factory/production facility
+toolbox,environmental-factory/production facility
+tool,environmental-factory/production facility
+switch,environmental-factory/production facility
+surface computer screen,environmental-factory/production facility
+surface,environmental-factory/production facility
+strainer,environmental-factory/production facility
+storage hopper,environmental-factory/production facility
+step to mixer,environmental-factory/production facility
+squeegie,environmental-factory/production facility
+squeegee,environmental-factory/production facility
+spongesicles,environmental-factory/production facility
+sponge of conveyor belt,environmental-factory/production facility
+sponge enrichment,environmental-factory/production facility
+sponge,environmental-factory/production facility
+spinner,environmental-factory/production facility
+slicer conveyor,environmental-factory/production facility
+slicer,environmental-factory/production facility
+sink interior,environmental-factory/production facility
+sink handle,environmental-factory/production facility
+screen,environmental-factory/production facility
+scraper near floor,environmental-factory/production facility
+rough floor seam,environmental-factory/production facility
+restroom,environmental-factory/production facility
+refuse,environmental-factory/production facility
+rack,environmental-factory/production facility
+pvc piping,environmental-factory/production facility
+pump,environmental-factory/production facility
+production facility,environmental-factory/production facility
+product hopper,environmental-factory/production facility
+product discharge chute,environmental-factory/production facility
+processing equipment,environmental-factory/production facility
+processing environment,environmental-factory/production facility
+press,environmental-factory/production facility
+pipeline interior,environmental-factory/production facility
+picnic pack,environmental-factory/production facility
+peeler,environmental-factory/production facility
+pallet & floor,environmental-factory/production facility
+pallet,environmental-factory/production facility
+packing machine,environmental-factory/production facility
+overhead piping,environmental-factory/production facility
+overhead pipe,environmental-factory/production facility
+operational sponge,environmental-factory/production facility
+mop,environmental-factory/production facility
+mixer surface,environmental-factory/production facility
+milking equipment,environmental-factory/production facility
+maintenance tool,environmental-factory/production facility
+loading dock,environmental-factory/production facility
+livestock trailer floor,environmental-abattoir
+knife,environmental-factory/production facility
+irrigation,environmental-factory/production facility
+incubator,environmental-factory/production facility
+hose,environmental-factory/production facility
+hopper,environmental-factory/production facility
+holding vat and tank,environmental-factory/production facility
+hind end,environmental-factory/production facility
+hatchery,environmental-factory/production facility
+hallway,environmental-factory/production facility
+from manufacturing process,environmental-factory/production facility
+freezer surface,environmental-factory/production facility
+freezer,environmental-factory/production facility
+forklift,environmental-factory/production facility
+floor under shelving,environmental-factory/production facility
+floor seam in cooler,environmental-factory/production facility
+floor scrubber,environmental-factory/production facility
+floor or floor mat-entrance,environmental-factory/production facility
+floor mat,environmental-factory/production facility
+floor juncture,environmental-factory/production facility
+floor crack,environmental-factory/production facility
+floor cleaning tool,environmental-factory/production facility
+floor,environmental-factory/production facility
+filter,environmental-factory/production facility
+filler hopper,environmental-factory/production facility
+filler,environmental-factory/production facility
+feeder,environmental-abattoir
+facility,environmental-factory/production facility
+evironmental sponge,environmental-factory/production facility
+equipment housing,environmental-factory/production facility
+equipment framework,environmental-factory/production facility
+equipment control panel,environmental-factory/production facility
+equipment,environmental-factory/production facility
+environmental surface wipe,environmental-factory/production facility
+environmental sponges from cooler,environmental-factory/production facility
+environmental sponges,environmental-factory/production facility
+environmental sponge sticks,environmental-factory/production facility
+environmental sponge stick,environmental-factory/production facility
+environmental sponge from scissors,environmental-factory/production facility
+environmental sponge from refrigerated storage,environmental-factory/production facility
+environmental sponge from floor,environmental-factory/production facility
+environmental sponge from door,environmental-factory/production facility
+environmental sponge from compactor hall,environmental-factory/production facility
+environmental sponge,environmental-factory/production facility
+environmental floor,environmental-factory/production facility
+environmental facility,environmental-factory/production facility
+environmental culture,environmental-factory/production facility
+environmental (forests),environmental-factory/production facility
+environmenal sponge,environmental-factory/production facility
+entry access way,environmental-factory/production facility
+ductwork,environmental-factory/production facility
+droppings,environmental-abattoir
+drip shield and housing,environmental-factory/production facility
+door assembly,environmental-factory/production facility
+door,environmental-factory/production facility
+disposable shoes covers,environmental-factory/production facility
+disposable boot covers,environmental-factory/production facility
+discharge chute,environmental-factory/production facility
+dicer,environmental-factory/production facility
+dehydrator tray,environmental-factory/production facility
+cracked floor,environmental-factory/production facility
+crack in floor,environmental-factory/production facility
+crack floor,environmental-factory/production facility
+cooler,environmental-factory/production facility
+conveyor belt and scraper,environmental-factory/production facility
+conveyor belt and bucket,environmental-factory/production facility
+conveyor belt,environmental-factory/production facility
+conveyor,environmental-factory/production facility
+conveyer belt,environmental-factory/production facility
+control panel,environmental-factory/production facility
+condensate drip pan,environmental-factory/production facility
+compactor hall,environmental-factory/production facility
+butcherblock,environmental-factory/production facility
+butcher block,environmental-factory/production facility
+brush inside of dryer,environmental-factory/production facility
+broom,environmental-factory/production facility
+bowl,environmental-factory/production facility
+boots,environmental-factory/production facility
+bin wheel,environmental-factory/production facility
+bin liner,environmental-factory/production facility
+bin,environmental-factory/production facility
+belt,environmental-factory/production facility
+bedding,environmental-factory/production facility
+shed,environmental-animal housing
+washroom,environmental
+vacuum cleaner,environmental
+tote,environmental
+sponge,environmental
+slicing machine,environmental
+environmental,environmental
+conveyor,environmental
+bedding,environmental
+provalone,dairy
+jong gouda,dairy
+graskaas gouda,dairy
+boerenkass gouda,dairy
+wound,clinical/research
+vaginal,clinical/research
+ulcer,clinical/research
+tract,clinical/research
+thoracentesis,clinical/research
+surgical,clinical/research
+surgery,clinical/research
+suet,clinical/research
+strain,clinical/research
+stall gauze ,clinical/research
+sinus,clinical/research
+septicemia ,clinical/research
+rinse,environmental
+rectal,clinical/research
+preputial ,clinical/research
+post-intervention,clinical/research
+pooled,clinical/research
+platyrhynchos,clinical/research
+peritoneal ,clinical/research
+pericardial ,clinical/research
+necropsy,clinical/research
+nasal,clinical/research
+nares,clinical/research
+lymphnode,clinical/research
+lesion,clinical/research
+laboratory,clinical/research
+lab,clinical/research
+intistine,clinical/research
+intestinal,clinical/research
+incision,clinical/research
+implant,clinical/research
+hair,clinical/research
+gastrointestinal,clinical/research
+from thoracentesis,clinical/research
+fetal ,clinical/research
+encephalitis ,clinical/research
+discharge,clinical/research
+dialysis,clinical/research
+dialysate,clinical/research
+culturette,clinical/research
+culture,clinical/research
+crusting lesion ,clinical/research
+colostrium,clinical/research
+cloacae,clinical/research
+clinical,clinical/research
+cecal,clinical/research
+cartilage,clinical/research
+carpus,clinical/research
+bursa,clinical/research
+booties,clinical/research
+bacterial strain,clinical/research
+anserini,clinical/research
+anal ,clinical/research
+aliquot,clinical/research
+airsacswab ,clinical/research
+airsac,clinical/research
+acilla,clinical/research
+abortion ,clinical/research
+abdominal ,clinical/research
+beefhide,beef
+petite treat,animal feed
+for pets,animal feed
+for pet,animal feed
+feeding stuff,animal feed
+by product,animal feed

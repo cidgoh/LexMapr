@@ -1,11 +1,11 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1	chicken pie	chicken pie	[]	No Match	[]
-small_simple2	Baked Potato	baked potato	[]	No Match	[]
-small_simple3	taco shell	taco shell	['shell:uberon_0006612']	Component Match	["{shell: ['A Direct Match']}"]
-small_simple4	Mango Milkshake	mango milkshake	[]	No Match	[]
-small_simple5	table salt	table salt	['table:envo_01000584', 'salt:chebi_24866']	Component Match	["{table: ['A Direct Match']}", "{salt: ['A Direct Match']}"]
-small_simple6	chicken. pie	chicken pie	[]	No Match	[]
-small_simple7	Baked Potato	baked potato	[]	No Match	[]
-small_simple8	taco shell's	taco shell	['shell:uberon_0006612']	Component Match	["{shell: ['A Direct Match']}"]
-small_simple9	aam milkshake	mango milkshake	[]	No Match	['Non English Language Words Treatment: mango']
-small_simple10	tables salt	table salt	['table:envo_01000584', 'salt:chebi_24866']	Component Match	['Inflection (Plural) Treatment: tables', "{table: ['A Direct Match']}", "{salt: ['A Direct Match']}"]
+Sample_Id	Sample_Desc	Processed_Sample	Processed_Sample (With Scientific Name)	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)	Sample_Transformations
+small_simple1	chicken pie	chicken pie	chicken {gallus gallus} pie	[]	No Match	[]	{}
+small_simple2	Baked Potato	baked potato	baked potato {solanum tuberosum}	[]	No Match	[]	{}
+small_simple3	taco shell	taco shell	taco shell	['shell:UBERON_0006612']	Component Match	["{shell: ['A Direct Match']}"]	{}
+small_simple4	Mango Milkshake	mango milkshake	mango {mangifera indica} milkshake	[]	No Match	[]	{}
+small_simple5	table salt	table salt	table salt	['salt:CHEBI_24866', 'table:ENVO_01000584']	Component Match	["{table: ['A Direct Match']}", "{salt: ['A Direct Match']}"]	{}
+small_simple6	chicken. pie	chicken pie	chicken {gallus gallus} pie	[]	No Match	[]	{}
+small_simple7	Baked Potato	baked potato	baked potato {solanum tuberosum}	[]	No Match	[]	{}
+small_simple8	taco shell's	taco shell	taco shell	['shell:UBERON_0006612']	Component Match	["{shell: ['A Direct Match']}"]	{}
+small_simple9	aam milkshake	mango milkshake	mango {mangifera indica} milkshake	[]	No Match	['Non English Language Words Treatment: mango']	{'aam': 'mango'}
+small_simple10	tables salt	table salt	table salt	['salt:CHEBI_24866', 'table:ENVO_01000584']	Component Match	['Inflection (Plural) Treatment: tables', "{table: ['A Direct Match']}", "{salt: ['A Direct Match']}"]	{'tables': 'table'}

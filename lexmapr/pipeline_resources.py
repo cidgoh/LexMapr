@@ -241,7 +241,7 @@ def add_predefined_resources_to_lookup_table(lookup_table):
         # more than 7 tokens, as permutating too many tokens can be
         # costly. We also ignore NCBI taxon terms, as there are
         # ~160000 such terms.
-        if len(label_tokens)<7 and "ncbitaxon" not in resource_id:
+        if len(label_tokens) <7 and "ncbitaxon" not in resource_id:
             label_permutations = get_resource_label_permutations(label)
             for permutation in label_permutations:
                 lookup_table["standard_resource_label_permutations"][permutation] = resource_id
@@ -349,14 +349,6 @@ def add_fetched_ontology_to_lookup_table(lookup_table, fetched_ontology):
 
             if "oboInOwl:hasSynonym" in resource:
                 synonyms = resource["oboInOwl:hasSynonym"]
-                for synonym in synonyms:
-                    # Standardize synonym
-                    synonym = punctuation_treatment(synonym.lower())
-
-                    lookup_table["synonyms"][synonym] = resource_label
-
-            if "oboInOwl:hasBroadSynonym" in resource:
-                synonyms = resource["oboInOwl:hasBroadSynonym"]
                 for synonym in synonyms:
                     # Standardize synonym
                     synonym = punctuation_treatment(synonym.lower())

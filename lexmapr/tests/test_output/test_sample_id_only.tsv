@@ -1,6 +1,6 @@
-Sample_Id	Sample_Desc	Cleaned_Sample	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)
-small_simple1			[]	No Match	[]
-small_simple2	Baked Potato	baked potato	[]	No Match	[]
-small_simple3	Canned Corn	canned corn	[]	No Match	[]
-small_simple4			[]	No Match	[]
-small_simple5	Apple Pie	apple pie	[]	No Match	[]
+Sample_Id	Sample_Desc	Processed_Sample	Processed_Sample (With Scientific Name)	Matched_Components	Match_Status(Macro Level)	Match_Status(Micro Level)	Sample_Transformations
+small_simple1				[]	No Match	[]	{}
+small_simple2	Baked Potato	baked potato	baked potato {solanum tuberosum}	[]	No Match	[]	{}
+small_simple3	Canned Corn	canned corn	canned corn {zea mays subsp. mays}	[]	No Match	[]	{}
+small_simple4				[]	No Match	[]	{}
+small_simple5	Apple Pie	apple pie	apple {malus domestica} pie	[]	No Match	[]	{}
