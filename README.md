@@ -29,8 +29,10 @@ Install [Conda](https://docs.conda.io/en/latest/miniconda.html).
 Create a LexMapr environment:
 
 ```
-$ conda create --name LexMapr
+$ conda create --name LexMapr python=3.10
 ```
+
+(Python 3.11+ at moment doesn't work due to some core module changes).
 
 Install LexMapr into your conda environment:
 ```
