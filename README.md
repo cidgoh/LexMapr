@@ -37,7 +37,7 @@ $ conda create --name LexMapr python=3.10
 Install LexMapr into your conda environment:
 ```
 $ conda activate LexMapr
-$ git clone https://github.com/Public-Health-Bioinformatics/LexMapr.git
+$ git clone https://github.com/cidgoh/LexMapr.git
 $ cd LexMapr
 $ pip install .
 $ python -m nltk.downloader all
