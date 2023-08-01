@@ -17,7 +17,7 @@ Set up [Bioconda](https://bioconda.github.io/), if you haven't already!
 Then:
 
 ```
-$ conda create -n LexMapr lexmapr
+$ conda create -n LexMapr lexmapr python=3.7
 $ conda activate LexMapr
 $ python -m nltk.downloader all
 ```
