@@ -104,10 +104,10 @@ class Ontology(object):
 					OPTIONAL {?id rdfs:label ?label}.
 	 				OPTIONAL {?id GENEPIO:0000006 ?ui_label}. # for ordering
 					OPTIONAL {?id owl:deprecated ?deprecatedAnnot.
-						BIND(xsd:string(?deprecatedAnnot) As ?deprecated).
+						BIND(xmls:string(?deprecatedAnnot) As ?deprecated).
 					}.
 					OPTIONAL {?id IAO:0100001 ?replaced_byAnnot.
-						BIND(xsd:string(?replaced_byAnnot) As ?replaced_by).
+						BIND(xmls:string(?replaced_byAnnot) As ?replaced_by).
 					}.	
 				}
 				ORDER BY ?parent_id ?ui_label ?label 
