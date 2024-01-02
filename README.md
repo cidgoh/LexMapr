@@ -17,7 +17,7 @@ Set up [Bioconda](https://bioconda.github.io/), if you haven't already!
 Then:
 
 ```
-$ conda create -n LexMapr lexmapr python=3.7
+$ conda create -n LexMapr lexmapr python=3.11
 $ conda activate LexMapr
 $ python -m nltk.downloader all
 ```
@@ -29,7 +29,7 @@ Install [Conda](https://docs.conda.io/en/latest/miniconda.html).
 Create a LexMapr environment:
 
 ```
-$ conda create --name LexMapr python=3.7
+$ conda create --name LexMapr python=3.11
 ```
 
 (Python 3.11+ at moment doesn't work due to some core module changes).
@@ -60,7 +60,8 @@ small_simple5,Apple Pie
 `small_simple_config.json`
 ```javascript
 [
-  {"http://purl.obolibrary.org/obo/foodon.owl": "http://purl.obolibrary.org/obo/BFO_0000001"}
+  {"http://purl.obolibrary.org/obo/foodon.owl": "http://purl.obolibrary.org/obo/BFO_0000040"},
+  {"http://purl.obolibrary.org/obo/foodon.owl": "http://purl.obolibrary.org/obo/BFO_0000015"}
 ]
 ```
 
